@@ -1,0 +1,207 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Python obspy
+{% endblock %}
+
+{% block extcss %}
+
+<style>
+    #wave-one-line {
+        position: relative;
+        top: 67px;
+    }
+
+    #title-section {
+        margin-bottom: 100px;
+    }
+
+  #noise-transitioned-div {
+    transform: translateX(400px);
+    transition: transform 1s, opacity 1s;
+    opacity: 0;
+  }
+
+  #noise-transitioned-div.active {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  #graph-section {
+    display: none;
+  }
+
+  #remove-noise-button {
+    display: none;
+  }
+
+  /* button {
+    width: 95px;
+  } */
+
+  #computeFourierButton {
+    width: 150px;
+  }
+
+  #upload-section-div {
+    padding: 200px 100px;
+  }
+
+  .button-same-width {
+    width: 100px;
+  }
+
+
+    
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="mb-5">
+
+        <section id="title-section">
+            <div class="bg-light fs-2 p-5">
+                <div class="container-lg">
+                    <p class="display-2 text-center mb-5">Fourier Spectra</p>
+                    <div id="joke-div">
+                        <p class="text-center fs-3 text-muted">Calculate the Fourier spectra on a window</p>
+                    </div>
+                    
+                    <img src="/static/img/signal-processing-images/single-line-wave.png" class="img-fluid" id="wave-one-line">
+                </div>
+            </div>
+        </section>
+
+        <section id="description-section" class="">
+            <div class="container-lg  p-5 rounded fs-4">
+                <p class="text-start">
+                    Upload an MSEED file and compute the Fourier Spectra. You can choose to calculate it on the whole time series
+                    or at a window with a configurable length. This window can be the signal area window and/or the noise area window. If you choose
+                    to calculate both the singnal and noise area fourier spectra, its windows will have the same length. You can configure both the
+                    length of the window, as well as the starting point (left side) of the signal window and the ending point (right side) of the noise
+                    area window.
+                </p>
+            </div>
+        </section>
+        
+        <section id="upload-section">
+            <div class="container-lg rounded fs-4 bg-secondary" id="upload-section-div">
+                <p class="text-center fs-2">Start by <button class="btn btn-dark btn-lg" id="upload-file-button">uploading</button> an mseed file...</p>
+                <input type="file" id="upload-file-input" value="upload-file-input" name="upload-file-input" style="display: none;">
+                <p class="text-center fs-5 mt-5">or  <button class="btn btn-dark btn-sm" id="load-button">load</button> one to test the program.</p>
+                
+            </div>
+        </section>
+
+        <section id="graph-section">
+            <div class="container-lg text-bg-dark rounded p-5">
+
+
+
+               
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                      <button class="nav-link active" id="time-series-tab" data-bs-toggle="tab" data-bs-target="#time-series-tab-pane" type="button" role="tab" aria-controls="time-series-tab-pane" aria-selected="true">Time Series</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                      <button class="nav-link"        id="fourier-tab"     data-bs-toggle="tab" data-bs-target="#fourier-tab-pane"     type="button" role="tab" aria-controls="fourier-tab-pane"     aria-selected="false" disabled>Fourier Spectra</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link"        id="upload-tab"     data-bs-toggle="tab" data-bs-target="#upload-tab-pane"     type="button" role="tab" aria-controls="upload-tab-pane"     aria-selected="false">Upload</button>
+                      </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="time-series-tab-pane" role="tabpanel" aria-labelledby="time-series-tab" tabindex="0">
+                        <div id="time-series-graph">
+
+                        </div>
+                    </div>
+                    <div class="tab-pane fade"             id="fourier-tab-pane"     role="tabpanel" aria-labelledby="fourier-tab"     tabindex="1">
+                        <div class="row justify-content-center align-items-center">
+                            <div class="col">
+                                <div id="fourier-graph">
+
+                                </div>
+                            </div>
+                            <div class="col text-center">
+                                <p class="display-6">Download:</p>
+                                <button class="btn btn-lg btn-primary d-inline" id="download-graph-button">Graph</button>
+                                <button class="btn btn-lg btn-danger d-inline" id="download-data-button">Data</button>
+                               
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade"             id="upload-tab-pane"     role="tabpanel" aria-labelledby="upload-tab"     tabindex="2">
+                        <div>
+                            <p class="text-center m-5"><button class="btn btn-success" id="upload-another-file-button">Upload</button> another file...</p>
+                            <input type="file" id="upload-another-file-input" value="upload-file-input" name="upload-file-input" style="display: none;">
+                        </div>
+                    </div>
+                </div>
+              
+
+                <div id="options-menu" class="mt-3">
+                    <div class="text-center mt-5 bg-dark text-dark" id="spinner-div">
+                        <div class="spinner-border spinner-border-xl text-warning" role="status">
+                          <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    <p class="text-start">Signal window left side <span class="badge rounded-pill text-bg-warning" id="signal-left-side-badge">1 sec</span></p>
+                    <input style="width: 100%" type="range" min="0" max="100" value="50" step="1" id="signal-window-left-side-slider">
+                    <p class="text-start mt-3">Window length <span class="badge rounded-pill text-bg-warning" id="window-length-badge">1 sec</span></p>
+                    <input style="width: 100%" type="range" min="0" max="100" value="50" step="1" id="window-length-slider">
+
+                    
+                    <div class="row justify-content-start align-items-center  mt-3">
+                        <div class="col-5">
+                            <p>Use the whole time series as the window</p>
+                        </div>
+                        <div class="col-5">
+                            <button id="whole-signal-button" class="btn btn-secondary button-same-width">apply</button>
+                        </div>
+                    </div>
+
+                    <div class="row justify-content-start align-items-center  mt-3">
+                        <div class="col-5">
+                            <p>Add a noise window</p>
+                        </div>
+                        <div class="col-5">
+                            <button id="add-noise-button" class="btn btn-success button-same-width">Add +</button>
+                            <button id="remove-noise-button" class="btn btn-danger button-same-width">Remove</button>
+                        </div>
+                    </div>
+
+                    <div id="noise-transitioned-div">
+                        <p class="text-start">Noise window right side <span class="badge rounded-pill text-bg-warning" id="noise-right-side-badge">1 sec</span></p>
+                        <input style="width:100%" type="range" min="0" max="100" value="50" step="1" id="noise-window-right-side-slider">
+                    </div>
+
+                    <div id="liveAlertPlaceholder"></div>
+
+                    <div class="row justify-content-center align-items-center text-center">
+                        <div class="col-12">
+                            <button class="btn btn-primary p-3 mt-5" id="computeFourierButton">Compute Fourier</button>
+                        </div>
+                    </div>
+
+                    
+                    
+                    
+                </div>
+                
+            </div>
+        </section>
+
+
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="/static/js/fourier.js"></script>
+ 
+
+
+        
+
+{% endblock %}

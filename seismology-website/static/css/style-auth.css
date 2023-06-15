@@ -1,0 +1,7 @@
+body {
+    background-color: #f0f5f1;
+    background-image: url("/static/img/auth-images/output3.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position:  bottom 100px right 20px;
+}

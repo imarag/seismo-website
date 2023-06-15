@@ -1,0 +1,42 @@
+{% extends 'base-auth.html' %}
+
+{% block content %}
+    <form id="myForm" action="{{ url_for('auth.login') }}" method="POST" novalidate>
+        <h1 class="display-6 text-center mb-5">Login</h1>
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-9 col-8">
+                <label for="email" class="col-form-label text-start">Email</label>
+                <input type="email" class="form-control mb-3" name="email" id="email" required>
+                <div class="invalid-feedback">
+                    Please enter a valid email
+                </div>
+                <label for="password" class="col-form-label text-start">Password</label>
+                <input type="password" class="form-control" name="password" id="password" required>
+                <div class="invalid-feedback">
+                    Please enter a password
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center align-items-center mt-2">
+            <div class="col-4 text-center">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="remember-me" value="remember-me" id="remember-me-checkbox" checked>
+                    <label class="form-check-label" for="remember-me-checkbox">
+                        Remember me
+                    </label>
+                </div>
+            </div>
+            <div class="col-4  text-center">
+                <a href="#" class="link-primary">forgot password</a>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col text-center">
+                <button type="submit" class="btn btn-primary mt-5 px-5 rounded-pill">Login</button>
+            </div>
+        </div>
+
+        <p class="text-muted text-center mt-5">Need an account ?<a href="{{ url_for('auth.register') }}" class="ps-2 link-primary">Sign-up</a></p>
+        
+    </form>
+{% endblock %}       
