@@ -56,16 +56,16 @@ def login():
         ).fetchone()
 
         if not user:
-            error = 'Incorrect username'
+            error_message = 'Incorrect username'
         elif not check_password_hash(user['password'], password):
-            error = 'Incorrect password'
+            error_message = 'Incorrect password'
         
-        if error is None:
+        if error_message is None:
             session.clear()
             session['user_id'] = user['id']
             return redirect(url_for('home'))
         
-        flash(error)
+        flash(error_message)
 
     return render_template('auth/login.html')
     
@@ -78,6 +78,8 @@ def load_logged_in_user():
         g.user = get_db().execute(
             'SELECT * FROM user WHERE id = ?', (user_id,)
         ).fetchone()
+
+
 
 
 @bp.route('/logout')

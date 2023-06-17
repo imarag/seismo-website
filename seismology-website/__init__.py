@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, g, redirect, url_for
+from flask import Flask, render_template, g, redirect, url_for, session
 from . import db
 from . import auth
 from . import fourier
@@ -7,6 +7,7 @@ from . import pick_arrivals
 from . import ascii_to_mseed
 from . import signal_processing
 from .auth import login_required
+from .db import get_db
 
 def create_app(test_config=None):
 
@@ -36,7 +37,20 @@ def create_app(test_config=None):
 
     @app.route('/home', methods=['GET'])
     def home():
-        return render_template('home.html')
+        # if g.user:
+        #     return render_template('home.html')
+        # else:
+        #     return redirect(url_for('auth.login'))
+        user_id = session.get('user_id')
+        db = get_db()
+        user = db.execute('SELECT * FROM user WHERE id = ?', (user_id,)).fetchone()
+
+        if user:
+            fullname = user['fullname']
+        else:
+            fullname = 'Anonymous'
+        return render_template('home.html', fullname=fullname)
+        
     
     
     
