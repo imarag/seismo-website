@@ -1,25 +1,14 @@
-#menu-left {
-    width:20%;
+
+
+.bg-light2 {
+    background-color: #f2f2f2;
 }
 
-#home-left-menu-interactive-text:hover, 
-#home-left-menu-static-text:hover,
-#home-left-menu-logout-text:hover {
-    color: white !important;
+.bg-dark2 {
+    background-color: #575756;
 }
 
-
-#navbarNavDropdown a:hover {
-    color: white !important;
-    
+.bg-navy {
+    background-color: #27285C;
 }
 
-#main-section {
-    margin-left: calc(20%);
-}
-
-@media (max-width: 1250px) {
-    #main-section {
-        margin-left: 0px;
-    }
-  }

@@ -15,7 +15,7 @@
 
     <body>
         
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark d-xl-none d-block">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark  fixed-top">
             <div class="container-fluid">
               <a class="navbar-brand" href="#">
                 <img src="{{ url_for('static', filename='img/logo6.png') }}" class="img-fluid" style="height: 60px">
@@ -41,7 +41,7 @@
 
         
 
-        <aside class="d-none d-xl-block">
+        <!-- <aside class="d-none d-xl-block">
             
             <div class="position-fixed left-0 top-0 bottom-0 bg-dark" id="menu-left">
                 <div class="text-center my-4">
@@ -93,53 +93,190 @@
                 </div>
 
             </div>
-        </aside>
+        </aside> -->
 
-        <main id="main-section">
-            <div class="bg-secondary text-light fwt-bold ms-auto">
+        <main>
+            
+            <section class="bg-light2 py-5" id="intro-section">
+                <div class="container-lg" id="main-section">
+             
+                    
+                    <div class="text-center my-5">  
+                        <p class="my-0"><img src="/static/img/home-images/house-fill.svg" class="img-fluid" alt="read topic" style="width:100px;"></p>
+                        <p class=" display-1 my-0">Home page</p>
+                        
+                    </div>  
+                    <br> 
+                    <br> 
+                    <br> 
+                    </div>
+                    <div class="row justify-content-center align-items-center mb-5">
+                        <div class="col-3 col-md-2">
+                            <img src="/static/img/home-images/book-read.svg" class="img-fluid" alt="read topic">
+                        </div>
+                        <div class="col-7 col-md-4">
+                            <p class="text-muted fs-4">Get started with the <a href="#" class="link-primary">seismic topics</a> to learn more about the science of Seismology</p>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center align-items-center">
+                        <div class="col-7 col-md-4">
+                            <p class="text-muted fs-4">Or use one of the <a href="#" class="link-primary">interactive tools</a> to process and analyze real seismological data</p>
+                        </div>
+                        <div class="col-3 col-md-2">
+                            <img src="/static/img/home-images/interactive.svg" class="img-fluid" alt="read topic">
+                        </div>
+                    </div>
+
+                </div>
+                
+            </section>
+
+            <section class="bg-secondary text-light py-5">
+                <div class="container-lg">
+                    <p class="display-5 text-center">Seismological topics</p>
+                    <hr class="mb-5">
+                    <div class="row justify-content-center align-items-center text-center">
+                        <div class="col-md-5 col-lg-4 col-6">
+                            <p class="text-dark fs-3">Fault type</p>
+                            <a href="/templates/fault-type-page.html"><img src="/static/img/index-images/fault-type-image.png" class="img-fluid rounded opacity-75" alt="fault representation"></a>
+                            <p class="text-dark fs-5 mt-3">Information about the different fault types</p>
+                        </div>
+                        <div class="w-100 d-block d-lg-none"></div>
+                        <div class="col-md-5 col-lg-4 col-6">
+                            <p class="text-dark  fs-3">Obspy library</p>
+                            <a href="/templates/obspy-page.html"><img src="/static/img/index-images/obspy-image.png" class="img-fluid rounded opacity-75" alt="Python Obspy library"></a>
+                            <p class="text-dark fs-5 mt-3">A tutorial about the Python Obspy library</p>
+                        </div>
+                        <div class="w-100 d-block d-lg-none"></div>
+                        <div class="col-md-5 col-lg-4 col-6">
+                            <p class="text-dark fs-3">Site effect</p>
+                            <a href="#"><img src="/static/img/index-images/site-effect-image.png" class="img-fluid rounded opacity-75" alt="site effect"></a>
+                            <p class="text-dark fs-5 mt-3">The effect of the underground Geology</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="bg-dark reveal-r" id="interactive-section">
+                <div class="container-lg pt-5 py-5">
+                    <p class="text-center display-5 text-light">Try the interactive seismological tools</p>
+                    <p class="fs-5 text-secondary  text-center mt-5"><span class="badge bg-info">Load</span> an MSEED file </p>
+                    <p class="fs-5 text-secondary  text-center mb-5">or use a <a href="#" class="link-info">file converter</a> to convert <span class="badge bg-success">MSEED</span> files to <span class="badge bg-success">ASCII</span></p>
+
+                    
+                    <div class="row justify-content-around align-items-center my-5">
+                        <div class="col-5 col-lg-4 text-center">
+                            <p class="display-4 text-md-start text-center text-muted">Arrival picking</p>
+                        </div>
+                        <div class="col-6 col-lg-6 text-center">
+                            <a href="/templates/obspy-page.html"><img src="/static/img/home-images/picking.png" class="img-fluid rounded opacity-75" alt="Python Obspy library"></a>
+                        </div>
+                    </div>
+                    <div class="row justify-content-around align-items-center my-4">
+                        <div class="col-5 col-lg-4 text-center">
+                            <p class="display-4 text-md-start text-center text-muted">Signal processing</p>
+                        </div>
+                        <div class="col-6 col-lg-6 text-center">
+                            <a href="/templates/obspy-page.html"><img src="/static/img/home-images/processing.png" class="img-fluid rounded opacity-75" alt="Python Obspy library"></a>
+                        </div>
+                    </div>
+                    <div class="row justify-content-around align-items-center">
+                        <div class="col-5 col-lg-4 text-center">
+                            <p class="display-4 text-md-start text-center text-muted">Fourier Spectra</p>
+                        </div>
+                        <div class="col-6 col-lg-6 text-center">
+                            <a href="/templates/obspy-page.html"><img src="/static/img/home-images/fourier.png" class="img-fluid rounded opacity-75" alt="Python Obspy library"></a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <footer class="bg-navy text-light py-5">
+                <div class="container-lg">
+                    <h1 class="mb-4 display-4 text-center">Maragkakis Ioannis</h1>
+                    <div class="row align-items-center justify-content-center">
+                        <div class="col-lg-4 col-10 text-center">
+                            
+                            <img src="/static/img/footer-images/myface.jpg" style="width: 300px" class="rounded-circle img-fluid">
+                            
+                        </div>
+                        <div class="col-lg-4 col-12 text-center text-lg-start">
+                            
+                            <p class="mb-4"><img src="/static/img/footer-images/geology.png" style="width:35px" class="me-3" >Mineral Resource Engineer</p>
+                            <p class="mb-4"><img src="/static/img/footer-images/data-science.png" style="width:35px" class="me-3">Data Scientist</p>
+                            <p class="mb-4"><img src="/static/img/footer-images/activity.png" style="width:35px" class="me-3">Seismology enthusiast</p>
+                            <p class="mb-4"><img src="/static/img/footer-images/volleyball.png" style="width:35px" class="me-3">Beach volley player</p>
+       
+                        </div>
+                    </div>
+    
+                    <div class="row align-items-center justify-content-center">
+                        <hr class="d-block d-lg-none">
+                        <div class="col-lg-6 text-center col-xl-6 col-12">
+                            <p>
+                                <span><img src="/static/img/footer-images/media/telephone.png" style="width:25px" class="mb-2"> 6982972144 </span>
+                                <span><img src="/static/img/footer-images/media/mail.png"      style="width:25px" class=""> giannis.marar@hotmail.com</span>
+                            </p>
+                        </div>
+                        <div class="col-4">
+       
+                        </div>
+                    </div>
+    
+                    
+                    
+                    
+                </div>
+            </footer>
+
+            
+
+
+
+            <!-- <div class="bg-secondary text-light fwt-bold ms-auto">
                 <section class="bg-light py-4 mb-0 fs-4">
-                    <div class="container-lg">
+                    <div class="container-sm">
                         <h1 class="display-4 text-muted text-center">Seismological topics</h1>
-                        <div>
-                            <div class="row my-5 align-items-center justify-content-center" id="cards-parent" >
-        
-                                <div class="col-8 col-lg-4 mb-4">
-                                    <div class="card text-center">
-                                        <a href="/templates/fault-type-page.html" class="img--hover-action"><img src="/static/img/index-images/fault-type-image.png" class="img-thumbnail img-fluid" alt="fault representation"></a>
-                                        <div class="card-body">
-                                            <h5 class="card-title display-6">Fault types</h5>
-                                            <p class="card-text">This section presents the three different types of faults along with different parameters used to recognize each type.</p>
-                                            <a href="/templates/fault-type-page.html" class="btn btn-primary">Go to the page</a>
-                                        </div>
+                       
+                        <div class="row my-5 align-items-center justify-content-center" id="cards-parent" >
+    
+                            <div class="col-8 col-lg-4 mb-4">
+                                <div class="card text-center">
+                                    <a href="/templates/fault-type-page.html" class="img--hover-action"><img src="/static/img/index-images/fault-type-image.png" class="img-thumbnail img-fluid" alt="fault representation"></a>
+                                    <div class="card-body">
+                                        <h5 class="card-title display-6">Fault types</h5>
+                                        <p class="card-text">This section presents the three different types of faults along with different parameters used to recognize each type.</p>
+                                        <a href="/templates/fault-type-page.html" class="btn btn-primary">Go to the page</a>
                                     </div>
                                 </div>
-                                <div class="col-8 col-lg-4 mb-4">
-                                    <div class="card text-center">
-                                        <a href="/templates/obspy-page.html" class="img--hover-action"><img src="/static/img/index-images/obspy-image.png" class="img-thumbnail img-fluid" alt="Python Obspy library"></a>
-                                        <div class="card-body">
-                                            <h5 class="card-title display-6">Python Obspy</h5>
-                                            <p class="card-text">This section refers to the Obspy library of the Python programming language and its use in real seismological problems.</p>
-                                            <a href="/templates/obspy-page.html" class="btn btn-primary">Go to the page</a>
-                                        </div>
+                            </div>
+                            <div class="col-8 col-lg-4 mb-4">
+                                <div class="card text-center">
+                                    <a href="/templates/obspy-page.html" class="img--hover-action"><img src="/static/img/index-images/obspy-image.png" class="img-thumbnail img-fluid" alt="Python Obspy library"></a>
+                                    <div class="card-body">
+                                        <h5 class="card-title display-6">Python Obspy</h5>
+                                        <p class="card-text">This section refers to the Obspy library of the Python programming language and its use in real seismological problems.</p>
+                                        <a href="/templates/obspy-page.html" class="btn btn-primary">Go to the page</a>
                                     </div>
                                 </div>
-                                <div class="col-8 col-lg-4 mb-4">
-                                    <div class="card text-center">
-                                        <a href="#" class="img--hover-action"><img src="/static/img/index-images/site-effect-image.png" class="img-thumbnail img-fluid" alt="site effect"></a>
-                                        <div class="card-body">
-                                            <h5 class="card-title display-6">Site effects</h5>
-                                            <p class="card-text">This section describes the effect of the underground Geology in amplitude of the seismic waves and its consequences.</p>
-                                            <a href="#" class="btn btn-primary">Go to the page</a>
-                                        </div>
+                            </div>
+                            <div class="col-8 col-lg-4 mb-4">
+                                <div class="card text-center">
+                                    <a href="#" class="img--hover-action"><img src="/static/img/index-images/site-effect-image.png" class="img-thumbnail img-fluid" alt="site effect"></a>
+                                    <div class="card-body">
+                                        <h5 class="card-title display-6">Site effects</h5>
+                                        <p class="card-text">This section describes the effect of the underground Geology in amplitude of the seismic waves and its consequences.</p>
+                                        <a href="#" class="btn btn-primary">Go to the page</a>
                                     </div>
                                 </div>
-        
+                            </div>
+    
                         </div>
                     </div>
         
                     <p class="text-muted text-center fs-3">Check <a href="/templates/all-topics-page.html">here</a> for more topics.</p> 
                 </section>
-            </div>
+            </div> -->
            
         </main>
 
