@@ -26,12 +26,6 @@ def init_db():
     with current_app.open_resource('schema.sql') as f:
         db.executescript(f.read().decode('utf8'))
 
-# @bp.route('/show-database')
-# def show_database():
-#     db = get_db()
-#     users = db.execute('SELECT * FROM user').fetchall()
-#     for user_info in users:
-#         print(user_info)
 
 @click.command('show-db')
 def show_db_command():

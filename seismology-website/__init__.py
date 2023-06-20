@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, g, redirect, url_for, session
+from flask import Flask, render_template, g, redirect, url_for, session, flash, get_flashed_messages, request
 from . import db
 from . import auth
 from . import fourier
@@ -36,25 +36,13 @@ def create_app(test_config=None):
         return render_template('index.html')
 
     @app.route('/home', methods=['GET'])
+    @login_required
     def home():
-        # if g.user:
-        #     return render_template('home.html')
-        # else:
-        #     return redirect(url_for('auth.login'))
-        user_id = session.get('user_id')
-        db = get_db()
-        user = db.execute('SELECT * FROM user WHERE id = ?', (user_id,)).fetchone()
+        user_fullname = request.args.get('user_fullname')
+        return render_template('home.html', fullname=user_fullname)
+    
 
-        if user:
-            fullname = user['fullname']
-        else:
-            fullname = 'Anonymous'
-        return render_template('home.html', fullname=fullname)
-        
     
-    
-    
-    # @login_required
     @app.route('/topics/<page>', methods=['GET'])
     def topics(page):
         if g.user:

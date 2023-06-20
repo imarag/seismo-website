@@ -35,6 +35,7 @@ def register():
             except db.IntegrityError:
                 error_message = f"User {fullname} is already registered!"
             else:
+                flash('you have succesfully registered!')
                 return redirect(url_for('auth.login')) 
 
         flash(error_message)
@@ -63,11 +64,30 @@ def login():
         if error_message is None:
             session.clear()
             session['user_id'] = user['id']
-            return redirect(url_for('home'))
+            user_fullname = user['fullname']
+            flash(f'Welcome home, {user_fullname}!')
+            return redirect(url_for('home', user_fullname=user_fullname))
+        
         
         flash(error_message)
 
     return render_template('auth/login.html')
+
+@bp.route('/admin', methods=['GET'])
+def admin():
+
+    user_id = session.get('user_id', None)
+    user = get_db().execute(
+            'SELECT * FROM user WHERE id = ?', (user_id,)
+        ).fetchone()
+    
+    email = user['email']
+    password = user['password']
+    if email != 'giannis.marar@hotmail.com':
+        flash("You don't have the right to access the admin page!")
+        return redirect(url_for('home'))
+
+    return render_template('auth/admin.html')
     
 @bp.before_app_request
 def load_logged_in_user():
@@ -85,6 +105,7 @@ def load_logged_in_user():
 @bp.route('/logout')
 def logout():
     session.clear()
+    flash('You have succesfully logged out!')
     return redirect(url_for('index'))
 
 def login_required(view):

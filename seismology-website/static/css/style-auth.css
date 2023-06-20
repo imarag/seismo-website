@@ -5,3 +5,12 @@ body {
     background-size: cover;
     background-position:  bottom 100px right 20px;
 }
+
+.flash-message {
+    background-color: rgb(243, 253, 166);
+    color: black;
+    padding: 10px;
+    margin: 10px 0px;
+    text-align: center;
+
+}

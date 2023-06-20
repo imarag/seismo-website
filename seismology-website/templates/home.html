@@ -26,80 +26,46 @@
               <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav">
                   <li class="nav-item">
-                    <a class="nav-link  text-secondary" aria-current="page" href="#">interactive pages</a>
+                    <a class="nav-link  text-secondary anchor-underline" aria-current="page" href="#">interactive pages</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link text-secondary" aria-current="page" href="#">static topics</a>
+                    <a class="nav-link text-secondary anchor-underline" aria-current="page" href="#">static topics</a>
                   </li>
                 </ul>
-                <a class="nav-link ms-auto  text-secondary" aria-current="page" href="{{ url_for('auth.logout') }}" id="home-top-menu-logout-anchor">
-                    logout <img src="/static/img/login-images/box-arrow-left.svg" class="img-fluid me-3 ms-2" style="width:30px;"  id="home-top-menu-logout-icon">
+                <div class="nav-item dropdown ms-auto me-3">
+                    <a class="nav-link dropdown-toggle text-secondary anchor-underline" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                         <img src="/static/img/home-images/person-circle.svg" class="img-fluid me-2" style="width:30px;"  id="home-top-menu-logout-icon">
+                         {{ fullname }}
+                    </a>
+                    <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">Action</a></li>
+                    <li><a class="dropdown-item" href="#">Another action</a></li>
+                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul>
+                </div>
+                
+                <a class="nav-link text-secondary me-3 anchor-underline" aria-current="page" href="{{ url_for('auth.logout') }}" id="home-top-menu-logout-anchor">
+                    <img src="/static/img/login-images/box-arrow-left.svg" class="img-fluid me-2" style="width:30px;"  id="home-top-menu-logout-icon">
+                    logout
                 </a>
               </div>
             </div>
           </nav>
 
         
-
-        <!-- <aside class="d-none d-xl-block">
-            
-            <div class="position-fixed left-0 top-0 bottom-0 bg-dark" id="menu-left">
-                <div class="text-center my-4">
-                    <p class="text-center fs-1 text-secondary">Home</p>
-                    <a href="{{ url_for('home') }}">
-                        <img src="{{ url_for('static', filename='img/logo6.png') }}" class="img-fluid" style="height: 80px">
-                    </a>
-                </div>
-                <p class="text-center text-secondary fs-5 mt-5 mb-0">Welcome {{ fullname }}</p>
-                <hr class="bg-secondary text-secondary my-5">
-
-                <div class="text-center my-3">
-                    <a href="{{ url_for('auth.login') }}" class="text-decoration-none my-5" id="home-left-menu-interactive-anchor">
-                        <div class="row justify-content-center align-items-center">
-                            <div class="col-2 text-center  my-0">
-                                <img src="/static/img/login-images/diagram-3.svg" class="img-fluid" style="width:30px;"  id="home-left-menu-interactive-icon">
-                            </div>
-                            <div class="col-7 text-center">
-                                <p id="home-left-menu-interactive-text" class="text-secondary my-0 fs-5">interactive pages</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="text-center my-3">
-                    <a href="{{ url_for('auth.register') }}" class="text-decoration-none my-5" id="home-left-menu-static-anchor">
-                        <div class="row justify-content-center align-items-center">
-                            <div class="col-2 text-center  my-0">
-                                <img src="/static/img/login-images/book.svg" class="img-fluid" style="width:30px;"  id="home-left-menu-static-icon">
-                            </div>
-                            <div class="col-7 text-center">
-                                <p id="home-left-menu-static-text" class="text-secondary my-0 fs-5">static topics</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <hr class="bg-secondary text-secondary my-5">
-                <div class="text-center my-3">
-                    <a href="{{ url_for('auth.logout') }}" class="text-decoration-none my-5" id="home-left-menu-logout-anchor">
-                        <div class="row justify-content-center align-items-center">
-                            <div class="col-2 text-center  my-0">
-                                <img src="/static/img/login-images/box-arrow-left.svg" class="img-fluid" style="width:30px;"  id="home-left-menu-logout-icon">
-                            </div>
-                            <div class="col-7 text-center">
-                                <p id="home-left-menu-logout-text" class="text-secondary my-0 fs-5">logout</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-            </div>
-        </aside> -->
-
         <main>
-            
             <section class="bg-light2 py-5" id="intro-section">
                 <div class="container-lg" id="main-section">
-             
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            <div class="flash-message">
+                                {% for message in messages %}
+                                    {{ message }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+                    
                     
                     <div class="text-center my-5">  
                         <p class="my-0"><img src="/static/img/home-images/house-fill.svg" class="img-fluid" alt="read topic" style="width:100px;"></p>
@@ -131,9 +97,9 @@
                 
             </section>
 
-            <section class="bg-secondary text-light py-5">
+            <section class="bg-light2 text-light py-5">
                 <div class="container-lg">
-                    <p class="display-5 text-center">Seismological topics</p>
+                    <p class="display-5 text-center text-dark">Seismological topics</p>
                     <hr class="mb-5">
                     <div class="row justify-content-center align-items-center text-center">
                         <div class="col-md-5 col-lg-4 col-6">
@@ -157,40 +123,44 @@
                 </div>
             </section>
 
-            <section class="bg-dark reveal-r" id="interactive-section">
+          
+            <section class="bg-light2 reveal-r" id="interactive-section">
                 <div class="container-lg pt-5 py-5">
-                    <p class="text-center display-5 text-light">Try the interactive seismological tools</p>
+                    <p class="text-center display-5 text-dark">Try the interactive seismological tools</p>
                     <p class="fs-5 text-secondary  text-center mt-5"><span class="badge bg-info">Load</span> an MSEED file </p>
                     <p class="fs-5 text-secondary  text-center mb-5">or use a <a href="#" class="link-info">file converter</a> to convert <span class="badge bg-success">MSEED</span> files to <span class="badge bg-success">ASCII</span></p>
 
                     
-                    <div class="row justify-content-around align-items-center my-5">
-                        <div class="col-5 col-lg-4 text-center">
-                            <p class="display-4 text-md-start text-center text-muted">Arrival picking</p>
+                    <div class="row justify-content-between align-items-center my-5 gy-5">
+                        <div class="col-md-5 col-lg-4 text-center">
+                            <p class="display-6  text-center text-muted">Arrival picking</p>
+                            <a class="btn btn-success" href="/templates/obspy-page.html">Go to the page</a>
                         </div>
-                        <div class="col-6 col-lg-6 text-center">
-                            <a href="/templates/obspy-page.html"><img src="/static/img/home-images/picking.png" class="img-fluid rounded opacity-75" alt="Python Obspy library"></a>
-                        </div>
-                    </div>
-                    <div class="row justify-content-around align-items-center my-4">
-                        <div class="col-5 col-lg-4 text-center">
-                            <p class="display-4 text-md-start text-center text-muted">Signal processing</p>
-                        </div>
-                        <div class="col-6 col-lg-6 text-center">
-                            <a href="/templates/obspy-page.html"><img src="/static/img/home-images/processing.png" class="img-fluid rounded opacity-75" alt="Python Obspy library"></a>
+                        <div class="col-md-5 col-lg-6 text-center">
+                            <img src="/static/img/home-images/picking.png" class="img-fluid rounded opacity-75" alt="Python Obspy library">
                         </div>
                     </div>
-                    <div class="row justify-content-around align-items-center">
-                        <div class="col-5 col-lg-4 text-center">
-                            <p class="display-4 text-md-start text-center text-muted">Fourier Spectra</p>
+                    <div class="row justify-content-between align-items-center my-4 gy-5">
+                        <div class="col-md-5 col-lg-4 text-center">
+                            <p class="display-6  text-center text-muted">Signal processing</p>
+                            <a class="btn btn-success" href="/templates/obspy-page.html">Go to the page</a>
                         </div>
-                        <div class="col-6 col-lg-6 text-center">
-                            <a href="/templates/obspy-page.html"><img src="/static/img/home-images/fourier.png" class="img-fluid rounded opacity-75" alt="Python Obspy library"></a>
+                        <div class="col-md-5 col-lg-6 text-center">
+                            <img src="/static/img/home-images/processing.png" class="img-fluid rounded opacity-75" alt="Python Obspy library">
+                        </div>
+                    </div>
+                    <div class="row justify-content-between align-items-center  gy-5">
+                        <div class="col-md-5 col-lg-4 text-center">
+                            <p class="display-6  text-center text-muted">Fourier Spectra</p>
+                            <a class="btn btn-success" href="/templates/obspy-page.html">Go to the page</a>
+                        </div>
+                        <div class="col-md-5 col-lg-6 text-center">
+                            <img src="/static/img/home-images/fourier.png" class="img-fluid rounded opacity-75" alt="Python Obspy library">
                         </div>
                     </div>
                 </div>
             </section>
-
+            <div class="vertical-line"></div>
             <footer class="bg-navy text-light py-5">
                 <div class="container-lg">
                     <h1 class="mb-4 display-4 text-center">Maragkakis Ioannis</h1>

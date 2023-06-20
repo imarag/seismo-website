@@ -1,6 +1,7 @@
 {% extends 'base-auth.html' %}
 
 {% block content %}
+    
     <form id="myForm" action="{{ url_for('auth.login') }}" method="POST" novalidate>
         <h1 class="display-6 text-center mb-5">Login</h1>
         <div class="row justify-content-center">
