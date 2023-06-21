@@ -48,46 +48,108 @@
         
 
             
-        <section id="main-index-background-image">
+        <section>
+            <div id="main-index-background-image">
 
-            <div class="container-lg">
-                {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    <div class="flash-message">
-                        {% for message in messages %}
-                            {{ message }}
-                        {% endfor %}
-                    </div>
-                {% endif %}
-                {% endwith %}
-                <h2 class="pt-5 text-center text-light fw-bold display-1">Want to learn more about the science of <span >Seismology</span> ?</h2>
-                <div class="display-6 shadow-lg p-3 mb-0 bg-white rounded" id="index-questions-div-position">
-                    <div class="row align-items-center justify-content-between mx-0 my-0 gy-4 gy-lg-0" style="font-size: 38px;">
-                        <div class="col-lg-4 align-self-start">
-                            About the selection of the P and S body wave arrival times ?
+                <div class="container-lg">
+                    {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <div class="flash-message">
+                            {% for message in messages %}
+                                {{ message }}
+                            {% endfor %}
                         </div>
-                        <div class="col-lg-4 align-self-start">
-                            About the contribution of the Python programming language to seismology ?
+                    {% endif %}
+                    {% endwith %}
+                    <br>
+                    <br>
+                    <h2 class="py-5 text-center text-light fw-bold display-1">Want to learn more about the science of <span >Seismology</span> ?</h2>
+                    <!-- <div class="display-6 d-none d-lg-block shadow-lg p-3 mb-0 bg-white rounded" id="index-questions-div-position">
+                        <div class="row align-items-center justify-content-between mx-0 my-0 gy-4 gy-lg-0" style="font-size: 38px;">
+                            <div class="col-lg-4 align-self-start">
+                                About the selection of the P and S body wave arrival times ?
+                            </div>
+                            <div class="col-lg-4 align-self-start">
+                                About the contribution of the Python programming language to seismology ?
+                            </div>
+                            <div class="col-lg-4 align-self-start">
+                                About the impact of the underground Geology to the surface ?
+                            </div>
                         </div>
-                        <div class="col-lg-4 align-self-start">
-                            About the impact of the underground Geology to the surface ?
-                        </div>
-                    </div>
+                    </div> -->
+                    <br>
+                    <br>
                 </div>
             </div>
 
             
         </section>
 
+        <section>
+            <div class="container-lg">
+                <h1 class="text-muted text-center fs-4">Navigate through the <a href="{{ url_for('home') }}" class="link-primary">Home</a> page to discover more about the different aspects of the site</h1>
+            </div>
+        </section>
+
+        <section>
+            <div class="container-lg" style="border-left: solid grey 7px; padding-left: 60px;">
+                <div class="row justify-content-center align-items-center text-center">
+                    <div class="col-lg-6  reveal-r">
+                        <h2 class="display-4 text-muted text-center">Learn about the Site Effect<br><span class="text-muted display-6">(hover to the image)</span></h2>
+                    </div>
+                    <div class="col-lg-6  reveal-l">
+                        <img src="/static/img/index-images/site-effect-animation-start.jpg" alt="Site effect"  class="img-fluid" id="site-effect-animation">
+                    </div>
+                </div>
+            </div>
+        </section>
     
+        <section class="bg-light">
+            <div class="container-lg reveal-r">
+                <h2 class="display-4 text-muted text-center">Learn about the P and S wave arrivals and the different phases</h2>
+                <canvas id="line-chart-arrivals" class="mt-5"></canvas>
+            </div>
+        </section>
     
-        
-    
+        <section>
+            <div class="container-lg">
+                <div class="row justify-content-center align-items-center text-center">
+                    <div class="col-lg-6">
+                        <h2 class="display-4 text-muted text-center">Learn about the elastic rebound theory<br><span class="text-muted display-6">(hover to the image)</span></h2>
+                    </div>
+                    <div class="col-lg-6">
+                        <img src="/static/img/index-images/fault-animation-start.jpg" alt="elastic rebound theory" class="img-fluid" id="fault-animation">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-dark">
+            <div class="container-lg pt-5">
+                <h2 class="display-4 text-muted text-center mb-5">Try the interactive tools</h2>
+                <div class="row justify-content-center align-items-stretch text-center">
+                    <div class="col-4 col-lg-3 p-3  bg-info rounded div-col-hover">
+                        <p class="text-light fs-4" id="trim-hover">Trim the waveforms</p>
+                    </div>
+                    <div class="col-4 col-lg-3  border-start border-end border-dark  rounded p-3  bg-info rounded  div-col-hover">
+                        <p class="text-light fs-4" id="taper-hover">Apply Taper techniques</p>
+                    </div>
+                    <div class="col-4 col-lg-3 p-3  bg-info rounded  div-col-hover">
+                        <p class="text-light fs-4" id="picking-hover">Select wave arrivals</p>
+                    </div>
+                    
+                </div>
+                <div class="row justify-content-center align-items-stretch text-center my-2">
+                    <div class="col-12 col-lg-9">
+                        <img class="img-fluid rounded mb-4" id="image-hover">
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section id="index-second-section-margin">
             <div class="container-lg">
-                <div>
-                    <h1 class="text-muted text-center fs-3" id="index-div-margin">Start by taking a look at the different seismological topics <a href="#cards-parent">below</a> or learn about general concepts of seismology <a href="/templates/seismology-intro-page.html">here</a></h1>
-                </div>
+                
                 <h2 class="display-5 text-muted pb-5">Check out the different Seismological sites to learn more.</h2>
                 <div class="row align-items-center justify-content-center">
                     <div class="col-lg-5  col-7 text-center">
@@ -140,140 +202,10 @@
             </div>
             
         </section>
-
-
-    
-    
-        <section class="bg-light">
-            <div class="container-lg reveal-r">
-                <h2 class="display-4 text-muted text-center">Learn about the P and S wave arrivals and the different phases</h2>
-                <canvas id="line-chart-arrivals" class="mt-5"></canvas>
-            </div>
-        </section>
-    
-    
-    
-        <section>
-            <div class="container-lg" style="border-left: solid grey 7px; padding-left: 60px;">
-                <div class="row align-items-center">
-                    <div class="col-lg-6 reveal-r">
-                        <h2 class="display-4 text-muted text-start">Learn about the elastic rebound theory<br><span class="text-muted display-6">(hover to the image)</span></h2>
-                    </div>
-                    <div class="col-lg-6 reveal-l">
-                        <img src="/static/img/index-images/fault-animation-start.jpg" alt="elastic rebound theory" class="img-fluid" id="fault-animation">
-                    </div>
-                </div>
-                
-            </div>
-        </section>
-    
-        <section>
-            <div class="container-lg" style="border-left: solid grey 7px; padding-left: 60px;">
-                <div class="row justify-content-around align-items-center">
-                    <div class="col-lg-6  reveal-r">
-                        <h2 class="display-4 text-muted text-start">Learn about the Site Effect<br><span class="text-muted display-6">(hover to the image)</span></h2>
-                    </div>
-                    <div class="col-lg-6  reveal-l">
-                        <img src="/static/img/index-images/site-effect-animation-start.jpg" alt="Site effect"  class="img-fluid" id="site-effect-animation">
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="bg-dark reveal-r" id="interactive-section">
-            <div class="container-lg pt-5">
-                <p class="text-center display-4 text-light">Try the interactive seismological tools</p>
-                <div class="row pt-5 pb-5 justify-content-between align-items-center">
-                    <div class="col-4">
-                        <div class="list-group">
-                            <a href="#" id="trim-hover" class="list-group-item list-group-item-action text-bg-info border-bottom border-dark" aria-current="true">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h5 class="mb-1 p-5 display-6">Trim the waveform</h5>
-                            </div>
-                            </a>
-                            <a href="#" id="taper-hover" class="list-group-item list-group-item-action  text-bg-info  border-bottom border-dark">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h5 class="mb-1 p-5 display-6">Apply taper techniques</h5>
-                            </div>
-                            </a>
-                            <a href="#" id="picking-hover" class="list-group-item list-group-item-action  text-bg-info">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h5 class="mb-1 p-5 display-6">Select the P and S arrivals</h5>
-                            </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-8">
-                        <img class="img-fluid rounded" id="image-hover">
-                        <p class="text-center text-light display-3" id="hover-to-display-paragraph">Hover left to display</p>
-                    </div>
-                </div>
-                
-            </div>
-        </section>
-
-        <section>
-        
-
-            <div class="shadow fs-3 p-3 mb-5 bg-white rounded container-lg bg-light">
-                <figure">
-                    <blockquote>
-                        <p>They joy of being a seismologist comes to you, when you find something new about the earth's interior from the observation of seismic waves obtained on the surface, and realize that you did it without penetrating the earth or touching or examining it directly.</p>
-                    </blockquote>
-                    <figcaption class="fs-5">—Keiti Aki, <cite>presidential address to the Seismological Society of America, 1980</cite></figcaption>
-                </figure>
-            </div>
-        </section>
-
-    
-
-        <section class="bg-light py-4 mb-0 fs-4">
-            <div class="container-lg">
-                <h1 class="display-4 text-muted text-center">Seismological topics</h1>
-                <div>
-                    <div class="row my-5 align-items-center justify-content-center" id="cards-parent" >
-
-                        <div class="col-8 col-lg-4 mb-4">
-                            <div class="card text-center">
-                                <a href="/templates/fault-type-page.html" class="img--hover-action"><img src="/static/img/index-images/fault-type-image.png" class="img-thumbnail img-fluid" alt="fault representation"></a>
-                                <div class="card-body">
-                                    <h5 class="card-title display-6">Fault types</h5>
-                                    <p class="card-text">This section presents the three different types of faults along with different parameters used to recognize each type.</p>
-                                    <a href="/templates/fault-type-page.html" class="btn btn-primary">Go to the page</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-8 col-lg-4 mb-4">
-                            <div class="card text-center">
-                                <a href="/templates/obspy-page.html" class="img--hover-action"><img src="/static/img/index-images/obspy-image.png" class="img-thumbnail img-fluid" alt="Python Obspy library"></a>
-                                <div class="card-body">
-                                    <h5 class="card-title display-6">Python Obspy</h5>
-                                    <p class="card-text">This section refers to the Obspy library of the Python programming language and its use in real seismological problems.</p>
-                                    <a href="/templates/obspy-page.html" class="btn btn-primary">Go to the page</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-8 col-lg-4 mb-4">
-                            <div class="card text-center">
-                                <a href="#" class="img--hover-action"><img src="/static/img/index-images/site-effect-image.png" class="img-thumbnail img-fluid" alt="site effect"></a>
-                                <div class="card-body">
-                                    <h5 class="card-title display-6">Site effects</h5>
-                                    <p class="card-text">This section describes the effect of the underground Geology in amplitude of the seismic waves and its consequences.</p>
-                                    <a href="#" class="btn btn-primary">Go to the page</a>
-                                </div>
-                            </div>
-                        </div>
-
-                </div>
-            </div>
-
-            <p class="text-muted text-center fs-3">Check <a href="/templates/all-topics-page.html">here</a> for more topics.</p> 
-        </section>
-
         
 
         </main>
-
+        
         <footer class="bg-dark text-light py-5">
             <div class="container-lg">
                 <h1 class="mb-4 display-4 text-center">Maragkakis Ioannis</h1>
@@ -310,7 +242,7 @@
                 
                 
             </div>
-        </footer>
+        </footer> 
        
         <script src="https://cdn.jsdelivr.net/npm/chart.js@4.0.1/dist/chart.umd.min.js"></script>
         <script src="/static/js/index-script.js"></script>

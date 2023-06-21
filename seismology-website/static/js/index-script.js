@@ -238,19 +238,17 @@ let imageHover = document.querySelector('#image-hover');
 let divTrimHover = document.querySelector("#trim-hover");
 let divTaperHover = document.querySelector("#taper-hover");
 let divPickingHover = document.querySelector("#picking-hover");
-let hoverToDisplayParagraph = document.querySelector("#hover-to-display-paragraph");
+imageHover.src = "/static/img/index-images/trim-gif.gif";
 
 divTrimHover.addEventListener('mouseover', () => {
   imageHover.src = "/static/img/index-images/trim-gif.gif";
-  hoverToDisplayParagraph.style.display = 'none';
 })
 
 divTaperHover.addEventListener('mouseover', () => {
   imageHover.src = "/static/img/index-images/taper-gif.gif";
-  hoverToDisplayParagraph.style.display = 'none';
 })
 
 divPickingHover.addEventListener('mouseover', () => {
   imageHover.src = "/static/img/index-images/picking-gif.gif";
-  hoverToDisplayParagraph.style.display = 'none';
 })
+

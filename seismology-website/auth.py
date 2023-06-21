@@ -1,5 +1,5 @@
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, session, url_for
+    Blueprint, flash, g, redirect, render_template, request, session, url_for, jsonify
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -87,7 +87,22 @@ def admin():
         flash("You don't have the right to access the admin page!")
         return redirect(url_for('home'))
 
-    return render_template('auth/admin.html')
+    users = get_db().execute('SELECT * FROM user').fetchall()
+    return render_template('auth/admin.html', users=users)
+
+@bp.route('/delete-user', methods=['GET'])
+def delete_user():
+    user_id = request.args.get('userID')
+    db = get_db()
+    user = db.execute(
+        'DELETE FROM user WHERE id = ?', (user_id,)
+    )
+    db.commit()
+    return jsonify({'message': 'User deleted successfully'})
+    
+    # return {'message': 'succesfully removed the user'}
+    
+    
     
 @bp.before_app_request
 def load_logged_in_user():
