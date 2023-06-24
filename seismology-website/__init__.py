@@ -31,25 +31,24 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    @app.route('/index', methods=['GET'])
-    def index():
-        return render_template('index.html')
+    # @app.route('/index', methods=['GET'])
+    # def index():
+    #     return render_template('index.html')
 
     @app.route('/home', methods=['GET'])
-    @login_required
     def home():
-        user_fullname = request.args.get('user_fullname')
-        return render_template('home.html', fullname=user_fullname)
+        return render_template('home.html')
+    
+
+    @app.route('/test', methods=['GET'])
+    def test():
+        return render_template('test.html')
     
 
     
     @app.route('/topics/<page>', methods=['GET'])
+    @login_required
     def topics(page):
-        if g.user:
-            return 'Welcome to the protected page!'
-        else:
-            return redirect(url_for('auth.login'))
-        
         template_full_path = os.path.join(app.root_path, 'templates', 'topics', page)
         if os.path.exists(template_full_path):
             return render_template(f'topics/{page}')
@@ -66,6 +65,21 @@ def create_app(test_config=None):
 
 
     return app
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # @app.route("/load-test-mseed-file", methods=["GET"])

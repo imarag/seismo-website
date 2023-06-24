@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+
+  <section class="bg-dark" style="height:200px;">
+    <div id="main-index-background-image">
+      <div class="container-lg">
+          {% if messages %}
+              <div class="flash-message">
+                  {% for message in messages %}
+                      {{ message }}
+                  {% endfor %}
+              </div>
+          {% endif %}
+          <h2 class="text-center text-light fw-bold display-1" id="home-main-title">
+              Want to learn more about the science of 
+              <span>
+                  Seismology ?
+              </span> 
+          </h2>
+      </div>
+    </div>
+  </section>
+
+    
+  
+  <section class="bg-light2 py-5 my-0">
+      <div class="container-lg">  
+          <div class="row justify-content-center align-items-center mb-5">
+              <div class="col-3 col-md-2">
+                  <img src="/static/img/home-images/book-read.svg" class="img-fluid" alt="read topic">
+              </div>
+              <div class="col-7 col-md-4">
+                  <p class="text-muted fs-4">Get started with the <a href="#seismological-topics" class="link-primary">seismic topics</a> to learn more about the science of Seismology</p>
+              </div>
+          </div>
+          <div class="row justify-content-center align-items-center">
+              <div class="col-7 col-md-4">
+                  <p class="text-muted fs-4">Or use one of the <a href="#interactive-tools" class="link-primary">interactive tools</a> to process and analyze real seismological data</p>
+              </div>
+              <div class="col-3 col-md-2">
+                  <img src="/static/img/home-images/interactive.svg" class="img-fluid" alt="read topic">
+              </div>
+          </div>
+      </div>
+  </section>
+
+    <section>
+      <div class="container-lg" style="border-left: solid grey 7px; padding-left: 60px;">
+          <div class="row justify-content-center align-items-center text-center">
+              <div class="col-lg-6  reveal-r">
+                  <h2 class="display-4 text-muted text-center">Learn about the Site Effect<br><span class="text-muted display-6">(hover to the image)</span></h2>
+              </div>
+              <div class="col-lg-6  reveal-l">
+                  <img src="/static/img/index-images/site-effect-animation-start.jpg" alt="Site effect"  class="img-fluid" id="site-effect-animation">
+              </div>
+          </div>
+      </div>
+  </section>
+
+  <section class="bg-light">
+      <div class="container-lg reveal-r">
+          <h2 class="display-4 text-muted text-center">Learn about the P and S wave arrivals and the different phases</h2>
+          <canvas id="line-chart-arrivals" class="mt-5"></canvas>
+      </div>
+  </section>
+
+  <section>
+      <div class="container-lg">
+          <div class="row justify-content-center align-items-center text-center">
+              <div class="col-lg-6">
+                  <h2 class="display-4 text-muted text-center">Learn about the elastic rebound theory<br><span class="text-muted display-6">(hover to the image)</span></h2>
+              </div>
+              <div class="col-lg-6">
+                  <img src="/static/img/index-images/fault-animation-start.jpg" alt="elastic rebound theory" class="img-fluid" id="fault-animation">
+              </div>
+          </div>
+      </div>
+  </section>
+
+  <section class="bg-dark">
+      <div class="container-lg pt-5">
+          <h2 class="display-4 text-muted text-center mb-5">Try the interactive tools</h2>
+          <p class="text-center display-5 text-dark">Try the interactive seismological tools</p>
+          <p class="fs-5 text-secondary  text-center mt-5"><span class="badge bg-info">Load</span> an MSEED file </p>
+          <p class="fs-5 text-secondary  text-center mb-5">or use a <a href="#" class="link-info">file converter</a> to convert <span class="badge bg-success">MSEED</span> files to <span class="badge bg-success">ASCII</span></p>
+
+          <div class="row justify-content-center align-items-stretch text-center">
+              <div class="col-4 col-lg-3 p-3  bg-info rounded div-col-hover">
+                  <p class="text-light fs-4" id="trim-hover">Trim the waveforms</p>
+              </div>
+              <div class="col-4 col-lg-3  border-start border-end border-dark  rounded p-3  bg-info rounded  div-col-hover">
+                  <p class="text-light fs-4" id="taper-hover">Apply Taper techniques</p>
+              </div>
+              <div class="col-4 col-lg-3 p-3  bg-info rounded  div-col-hover">
+                  <p class="text-light fs-4" id="picking-hover">Select wave arrivals</p>
+              </div>
+              
+          </div>
+          <div class="row justify-content-center align-items-stretch text-center my-2">
+              <div class="col-12 col-lg-9">
+                  <img class="img-fluid rounded mb-4" id="image-hover">
+              </div>
+          </div>
+      </div>
+  </section>
+
+    <section class="bg-info">
+      <div class="container-lg">
+        <h2 class="display-5 text-muted pb-5 text-center text-lg-start">
+            Check out the different Seismological sites to learn more.
+        </h2>
+        <div class="row align-items-center justify-content-center">
+            <div class="col-lg-5  col-7 text-center">
+                <img src="/static/img/index-images/earthquakes/earthquakes1.png" alt="seismographic-network" class="img-fluid rounded d-none d-lg-block">
+            </div>
+            <div class="col-lg-7">
+                <div class="accordion" id="accordionExample">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button collapsed text-bg-light p-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                <img src="/static/img/index-images/iris-tn.jpg" class="img-fluid pe-5">
+                                <span class="display-6">Incorporated Research Institutions for Seismology</span>
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <strong>IRIS</strong> is a university research consortium dedicated to exploring the Earth's interior through the collection and distribution of seismographic data. RIS's Education and Public Outreach Program offers animations, videos, lessons, software, posters, and fact sheets to help teachers and the general public learn more about seismology and earth science and understand it better.  
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed text-bg-light p-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                <img src="/static/img/index-images/ssa-tn.jpg" class="img-fluid pe-5">
+                                <span class="display-6">Seismological Society of America</span>
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                The <strong>Seismological Society of America</strong> is an international scientific society devoted to the advancement of seismology and the understanding of earthquakes for the benefit of society. Founded in 1906, the society has members throughout the world representing seismologists and other geophysicists, geologists, engineers, insurers, and policy-makers in preparedness and safety.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingThree">
+                            <button class="accordion-button collapsed text-bg-light p-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                <img src="/static/img/index-images/emsc-tn.jpg" class="img-fluid pe-5">
+                                <spa class="display-6"n>European-Mediterranean Seismological Centre</span>
+                            </button>
+                        </h2>
+                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                The <strong>European-Mediterranean Seismological Centre</strong> is an international, non-governmental and not-for-profit organisation. The European-Mediterranean region is prone to destructive earthquakes. When an earthquake occurs, a scientific organisation is needed to determine, as quickly as possible, the characteristics of the seismic event. 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </section>
+
+{% endblock %}

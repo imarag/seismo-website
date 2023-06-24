@@ -1,0 +1,51 @@
+.anchor-underline {
+    position: relative;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.anchor-underline::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    right: 50%;
+    bottom: -2px;
+    height: 2px;
+    border-bottom: 2px solid red;
+    transition: right 0.3s, left 0.3s;
+}
+
+.anchor-underline:hover::before {
+    right: 0;
+    left: 0;
+}
+
+#main-index-background-image {
+    background-image: url("/static/img/index-images/main-background-image.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+}
+
+#home-main-title {
+    padding-top: 150px;
+    padding-bottom: 150px;
+}
+
+.bg-light2 {
+    background-color: #f2f2f2;
+}
+
+.bg-dark2 {
+    background-color: #575756;
+}
+
+.bg-navy {
+    background-color: #27285C;
+}
+
+#interactive-example-section li:hover {
+    background-color: #212529 !important;
+    color: #54B4D3 !important;
+}
+

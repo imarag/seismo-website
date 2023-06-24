@@ -1,5 +1,5 @@
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, session, url_for, jsonify
+    Blueprint, flash, g, redirect, render_template, request, session, url_for, jsonify, get_flashed_messages
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -25,7 +25,7 @@ def register():
         elif not password:
             error_message = 'Password is required!'
 
-        if not error_message:
+        if error_message is None:
             try:
                 db.execute(
                     'INSERT INTO user (fullname, email, password) VALUES (?, ?, ?)',
@@ -37,10 +37,11 @@ def register():
             else:
                 flash('you have succesfully registered!')
                 return redirect(url_for('auth.login')) 
-
+            
         flash(error_message)
 
-    return render_template('auth/register.html')
+    messages = get_flashed_messages()
+    return render_template('auth/register.html', messages = messages)
 
 
 @bp.route('/login', methods=['GET', 'POST'])
@@ -64,14 +65,13 @@ def login():
         if error_message is None:
             session.clear()
             session['user_id'] = user['id']
-            user_fullname = user['fullname']
-            flash(f'Welcome home, {user_fullname}!')
-            return redirect(url_for('home', user_fullname=user_fullname))
+            return redirect(url_for('home'))
         
         
         flash(error_message)
 
-    return render_template('auth/login.html')
+    messages = get_flashed_messages()
+    return render_template('auth/login.html', messages = messages)
 
 @bp.route('/admin', methods=['GET'])
 def admin():
@@ -120,15 +120,12 @@ def load_logged_in_user():
 @bp.route('/logout')
 def logout():
     session.clear()
-    flash('You have succesfully logged out!')
-    return redirect(url_for('index'))
+    return redirect(url_for('home'))
 
 def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         if g.user is None:
             return redirect(url_for('auth.login'))
-
         return view(**kwargs)
-
     return wrapped_view

@@ -21,15 +21,13 @@
 
         <main>
             <div class="container-lg">
-                {% with messages = get_flashed_messages() %}
-                    {% if messages %}
-                        <div class="flash-message">
-                            {% for message in messages %}
-                                {{ message }}
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                {% endwith %}
+                {% if messages %}
+                    <div class="flash-message">
+                        {% for message in messages %}
+                            {{ message }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
                 <div class="row justify-content-center align-items-center my-5 ">
                     <div class="col-12 col-md-8 col-lg-6 bg-white rounded  py-3 shadow-lg">
                         {% block content %}{% endblock %}
@@ -38,22 +36,6 @@
                 
             </div>
         </main>
-        <script>
-          
-            // Fetch the form element
-            let form = document.getElementById('myForm');
-    
-            // Add event listener for form submission
-            form.addEventListener('submit', function(event) {
-            if (!form.checkValidity()) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
-            form.classList.add('was-validated');
-            });
-            
-          </script>
-
     </body>
 
 </html>
