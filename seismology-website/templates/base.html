@@ -27,14 +27,20 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link active text-secondary anchor-underline" aria-current="page" href="#">
-                                    Interactive pages
+                                    all topics
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-secondary anchor-underline" href="#">
-                                    Static pages
-                                </a>
-                            </li>
+                            {% if g.user and g.user['email'] == 'giannis.marar@hotmail.com' %}
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        topics
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="{{ url_for('topics.show_topics_table') }}">show topics</a></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('users.show_users_table') }}">show users</a></li>
+                                    </ul>
+                                </li>
+                            {% endif %}
                         </ul>
                         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                             {% if g.user %}

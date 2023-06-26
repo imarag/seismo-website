@@ -1,11 +1,13 @@
 import os
-from flask import Flask, render_template, g, redirect, url_for, session, flash, get_flashed_messages, request
+from flask import Flask, render_template, g, redirect, jsonify, url_for, session, flash, get_flashed_messages, request
 from . import db
 from . import auth
 from . import fourier
 from . import pick_arrivals
 from . import ascii_to_mseed
 from . import signal_processing
+from . import topics_table
+from . import users_table
 from .auth import login_required
 from .db import get_db
 
@@ -31,22 +33,17 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    # @app.route('/index', methods=['GET'])
-    # def index():
-    #     return render_template('index.html')
 
     @app.route('/home', methods=['GET'])
+    @app.route('/', methods=['GET'])
     def home():
         return render_template('home.html')
-    
 
-    @app.route('/test', methods=['GET'])
-    def test():
-        return render_template('test.html')
-    
+    # @app.route('/test', methods=['GET'])
+    # def test():
+    #     return render_template('test.html')
 
-    
-    @app.route('/topics/<page>', methods=['GET'])
+    @app.route('/page/<page>', methods=['GET'])
     @login_required
     def topics(page):
         template_full_path = os.path.join(app.root_path, 'templates', 'topics', page)
@@ -62,6 +59,8 @@ def create_app(test_config=None):
     app.register_blueprint(pick_arrivals.bp)
     app.register_blueprint(ascii_to_mseed.bp)
     app.register_blueprint(signal_processing.bp)
+    app.register_blueprint(topics_table.bp)
+    app.register_blueprint(users_table.bp)
 
 
     return app

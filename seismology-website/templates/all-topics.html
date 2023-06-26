@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+
+    <section>
+
+    </section>
+
+    <section>
+        <div id="all-topics-left-menu" class="bg-dark position-absolute top-0 start-0 bottom-0">
+            
+        </div>
+        <div id="all-topics-container">
+            {% for tmp in templates %}
+                <div>
+                    <h2>{{ template.title }}</h2>
+                    <p>{{ template.content }}</p>
+                    <!-- <img src="{{ template.image_url }}" alt="Template Image"> -->
+                </div>
+            {% enfor %}
+        </div>
+    </section>
+
+    <script src="{{ url_for('static', filename='js/all-topics.js') }}"></script>
+            
+{% endblock %}

@@ -49,3 +49,10 @@
     color: #54B4D3 !important;
 }
 
+#all-topics-left-menu {
+    width: 20%;
+}
+
+#all-topics-container {
+    margin-left: calc(20%)
+}
