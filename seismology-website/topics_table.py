@@ -19,9 +19,10 @@ def add_topic():
     topic_title = request.form.get('topic-title-input')
     topic_description = request.form.get('topic-description-input')
     topic_image_name = request.form.get('topic-image-name-input')
+    topic_type = request.form.get('topic-type-input')
     database = get_db()
-    database.execute("INSERT INTO topics (title, description, image_name) VALUES (?, ?, ?)",
-        (topic_title, topic_description, topic_image_name)
+    database.execute("INSERT INTO topics (title, description, image_name, topic_type) VALUES (?, ?, ?, ?)",
+        (topic_title, topic_description, topic_image_name, topic_type)
     )
     database.commit()
     return redirect(url_for('topics.show_topics_table'))
@@ -37,9 +38,10 @@ def edit_topic():
     topic_description = request.form.get('topic-description-input')
     topic_image_name = request.form.get('topic-image-name-input')
     topic_id = request.form.get('topic-id')
+    topic_type = request.form.get('topic-type-input')
     database = get_db()
-    database.execute("UPDATE topics SET title=?, description=?, image_name=? WHERE id=?",
-        (topic_title, topic_description, topic_image_name, topic_id)
+    database.execute("UPDATE topics SET title=?, description=?, image_name=?, topic_type=? WHERE id=?",
+        (topic_title, topic_description, topic_image_name, topic_type, topic_id)
     )
     database.commit()
     return redirect(url_for('topics.show_topics_table'))

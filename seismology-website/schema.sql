@@ -11,5 +11,6 @@ CREATE TABLE topics (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT NOT NULL,
     description TEXT NOT NULL,
-    image_name TEXT NOT NULL
-    );
+    image_name TEXT NOT NULL,
+    topic_type TEXT NOT NULL
+);

@@ -30,6 +30,12 @@
                 </div>
                 <div class="row justify-content-center align-items-center my-5">
                     <div class="col text-center">
+                        <label for="topic-type-input">image url</label><br>
+                        <input type="text" id="topic-type-input" name="topic-type-input" value="{{ topic['topic_type'] }}" readonly>
+                    </div>
+                </div>
+                <div class="row justify-content-center align-items-center my-5">
+                    <div class="col text-center">
                         <label for="topic-description-input">description</label><br>
                         <textarea rows="4" cols="50" id="topic-description-input" name="topic-description-input">{{ topic['description'] }}</textarea>
                     </div>

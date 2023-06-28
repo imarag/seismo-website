@@ -10,12 +10,12 @@
 
     <body>
         <header>
-            <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
                 <div class="container-fluid">
-                    <a class="navbar-brand" href="#">
+                    <a class="navbar-brand" href="{{ url_for('home') }}">
                         <img src="{{ url_for('static', filename='img/logo6.png') }}" class="img-fluid" style="height: 60px">
                     </a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbarNavDropdown">
@@ -26,7 +26,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link active text-secondary anchor-underline" aria-current="page" href="#">
+                                <a class="nav-link active text-secondary anchor-underline" aria-current="page" href="{{ url_for('all_topics') }}">
                                     all topics
                                 </a>
                             </li>

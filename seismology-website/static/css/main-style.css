@@ -56,3 +56,12 @@
 #all-topics-container {
     margin-left: calc(20%)
 }
+
+#all-topics-card {
+    transition: transform 0.5s;
+}
+
+#all-topics-card:hover {
+    transform: rotate(3deg) scale(1.1);
+    border: 3px solid black;
+}

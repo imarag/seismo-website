@@ -10,7 +10,6 @@
     <div class="container-lg" id="all-templates-div">
         <a href="{{ url_for('topics.add_topic_template') }}" class="btn btn-primary">add new topic +</a>
         <div class="bg-dark text-light p-4">
-        {% for topic in all_topics %}
             <div class="row justify-content-center align-items-center fs-3 text-light rounded">
                 <div class="col-2 text-center">
                     <p>id</p>
@@ -25,31 +24,36 @@
                     <p>image name</p>
                 </div>
             </div>
-            <hr class="border-2 border-top">
-            <div class="row justify-content-center align-items-center fs-5 bg-info text-dark rounded">
-                <div class="col-2 text-center">
-                    <p>{{ topic['id'] }}</p>
+            {% for topic in all_topics %}
+                <hr class="border-2 border-top">
+                {% if topic['topic_type'] == 'static' %}
+                    <div class="row justify-content-center align-items-center fs-5 bg-info text-dark rounded">
+                {% else %}
+                    <div class="row justify-content-center align-items-center fs-5 bg-warning text-dark rounded">
+                {% endif %}
+                    <div class="col-2 text-center">
+                        <p>{{ topic['id'] }}</p>
+                    </div>
+                    <div class="col-2 text-center">
+                        <p>{{ topic['title'] }}</p>
+                    </div>
+                    <div class="col-6 text-center">
+                        <p style="max-width: 100%; max-height: 100px;" class="overflow-auto">{{ topic['description'] }}</p>
+                    </div>
+                    <div class="col-2 text-center">
+                        <p>{{ topic['image_name'] }}</p>
+                    </div>
                 </div>
-                <div class="col-2 text-center">
-                    <p>{{ topic['title'] }}</p>
+                <div class="row justify-content-center align-items-center mb-5 my-3">
+                    <div class="col-auto text-center">
+                        <a type="submit" class="btn btn-success" href="{{ url_for('topics.edit_topic_template', topic_id = topic['id']) }}">edit</a>
+                    </div>
+                    <div class="col-auto text-center">
+                        <a type="submit" class="btn btn-danger"  href="{{ url_for('topics.delete_topic', topic_id = topic['id']) }}">delete</a>
+                    </div>
                 </div>
-                <div class="col-6 text-center">
-                    <p style="max-width: 100%; max-height: 100px;" class="overflow-auto">{{ topic['description'] }}</p>
-                </div>
-                <div class="col-2 text-center">
-                    <p>{{ topic['image_name'] }}</p>
-                </div>
-            </div>
-            <div class="row justify-content-center align-items-center mb-5 my-3">
-                <div class="col-auto text-center">
-                    <a type="submit" class="btn btn-success" href="{{ url_for('topics.edit_topic_template', topic_id = topic['id']) }}">edit</a>
-                </div>
-                <div class="col-auto text-center">
-                    <a type="submit" class="btn btn-danger"  href="{{ url_for('topics.delete_topic', topic_id = topic['id']) }}">delete</a>
-                </div>
-            </div>
-            <hr>
-        {% endfor %}
+                <hr>
+            {% endfor %}
         </div>
     </div>
 </body>

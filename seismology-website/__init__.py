@@ -8,6 +8,7 @@ from . import ascii_to_mseed
 from . import signal_processing
 from . import topics_table
 from . import users_table
+
 from .auth import login_required
 from .db import get_db
 
@@ -39,9 +40,25 @@ def create_app(test_config=None):
     def home():
         return render_template('home.html')
 
-    # @app.route('/test', methods=['GET'])
-    # def test():
-    #     return render_template('test.html')
+    @app.route('/all-topics', methods=['GET'])
+    def all_topics():
+        database = get_db()
+        all_topics = database.execute("SELECT * FROM topics").fetchall()
+        radioButtonSelectedValue = 'all topics'
+        return render_template('all-topics.html', all_topics=all_topics, selectedradiobutton=radioButtonSelectedValue)
+
+    @app.route('/topic-type-filter', methods=['POST'])
+    def topic_type_filter():
+        radioButtonSelectedValue = request.form.get('topic-type')
+        database = get_db()
+        if radioButtonSelectedValue == 'all topics':
+            all_topics = database.execute("SELECT * FROM topics").fetchall()
+        elif radioButtonSelectedValue == 'static topics':
+            all_topics = database.execute("SELECT * FROM topics WHERE topic_type = ?", ('static',)).fetchall()
+        elif radioButtonSelectedValue == 'interactive topics':
+            all_topics = database.execute("SELECT * FROM topics WHERE topic_type = ?", ('interactive', )).fetchall()
+   
+        return render_template('all-topics.html', all_topics=all_topics, selectedradiobutton=radioButtonSelectedValue)
 
     @app.route('/page/<page>', methods=['GET'])
     @login_required
@@ -61,6 +78,7 @@ def create_app(test_config=None):
     app.register_blueprint(signal_processing.bp)
     app.register_blueprint(topics_table.bp)
     app.register_blueprint(users_table.bp)
+
 
 
     return app
