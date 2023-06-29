@@ -58,7 +58,7 @@ def login():
         ).fetchone()
 
         if not user:
-            error_message = 'Incorrect username'
+            error_message = 'Incorrect email'
         elif not check_password_hash(user['password'], password):
             error_message = 'Incorrect password'
         

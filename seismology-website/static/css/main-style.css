@@ -27,9 +27,12 @@
     background-size: cover;
 }
 
-#home-main-title {
-    padding-top: 150px;
-    padding-bottom: 150px;
+.home-badge:hover {
+    transform: scale(1.1);
+}
+
+.home-badge {
+    width: 150px;
 }
 
 .bg-light2 {

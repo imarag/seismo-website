@@ -1,53 +1,9 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Python obspy
+    Ascii to mseed
 {% endblock %}
 
-{% block extcss %}
-
-<style>
-    #wave-one-line {
-        position: relative;
-        top: 67px;
-    }
-
-    #title-section {
-        margin-bottom: 100px;
-    }
-
-
-    /* .component {
-        display: inline;
-        width: 100px;
-    }
-
-    .radio-param {
-        width: 200px;
-    } */
-
-    /* #station  {
-        width: 180px;
-    }
-
-    #parameter {
-        width: 150px;
-    }
-
-    #date {
-        width: 150px;
-    }*/
-
-    /* .component {
-        width: 50px;
-        display: inline;
-    }  */
-
-
-    
-</style>
-
-{% endblock %}
 
 
 {% block content %}
@@ -57,12 +13,10 @@
         <section id="title-section">
             <div class="bg-light fs-2 p-5">
                 <div class="container-lg">
-                    <p class="display-2 text-center mb-5">Convert ASCII to MSEED</p>
+                    <p class="display-4 text-center mb-5">ASCII to MSEED</p>
                     <div>
                         <p class="text-center fs-3 text-muted">Convert raw ASCII data to seismic waveform binary data </p>
                     </div>
-                    
-                    <img src="/static/img/signal-processing-images/single-line-wave.png" class="img-fluid" id="wave-one-line">
                 </div>
             </div>
         </section>
@@ -81,69 +35,108 @@
         
         <section>
             <div class="container-lg fs-4">
-
-
-                
-
-                
-
-                <form class="row align-items-center justify-content-between border p-4 mt-5 gy-4"  action="/upload-ascii-file" method="POST" enctype="multipart/form-data">
-                    <label for="upload-file" class="form-label">Upload a file</label>
-                    <input class="form-control" type="file" name="file" id="upload-file" accept=".xlsx, .xls, .csv, .txt, .dat">
-
-                    <div class="col-md-3 col-6 text-center">
-                        <label for="date">starting date:</label>
-                    </div>
-
-                    <div class="col-md-3  col-6 text-center">
-                        <input type="datetime-local" class="form-control" id="date" name="datetime">
-                    </div>
-
-                    <div class="col-md-3 col-6 text-center">
-                        <label for="station" class="d-inline">Station name:</label>
-                    </div>
-
-                    <div class="col-md-3 col-6 text-center">
-                        <input type="text" class="form-control d-inline" id="station" name="station" placeholder="ej. SEIS">
-                    </div>
-
-                    <div class="col-md-3 col-12 text-start text-md-center">
-                        <label for="fs">Input variable:</label>
-                    </div>
-
-                    
-                    <div class="col-md-4 col-6 text-center">
- 
-                        <div style="width:100%" class="btn-group" role="group" aria-label="Basic radio toggle button group" id="parameter-div">
-                            <input type="radio" class="btn-check radio-param" name="parameter-radio" value="sampling_rate" id="fs" autocomplete="off" checked>
-                            <label class="btn btn-outline-primary" for="fs">sampling rate (Hz)</label>
-                          
-                            <input type="radio" class="btn-check radio-param" name="parameter-radio" value="delta" id="dt" autocomplete="off">
-                            <label class="btn btn-outline-primary" for="dt">Sample distance (sec)</label>
-
+                <form action="/upload-ascii-file" method="POST" enctype="multipart/form-data">
+                    <fieldset class="border mb-4 p-4">
+                        <legend class="text-center fs-2">File type options</legend>
+                        <div class="row justify-content-start">
+                            <div class="col-10">
+                                <label for="upload-file" class="form-label">Upload an ASCII file</label>
+                                <input class="form-control" type="file" name="file" id="upload-file" accept=".csv, .txt, .dat">
+                            </div>
                         </div>
-                    </div>
+                        <div class="row justify-content-start my-4">
+                            <div class="col-6 col-md-3">
+                                <label for="delimiter-select" class="form-label">delimiter</label>
+                                <select id="delimiter-select" name="delimiter" class="form-select" aria-label="Default select">
+                                    <option value="comma" name="comma" selected>Comma (,)</option>
+                                    <option value="tab" name="tab" >Tab (\t)</option>
+                                    <option value="semicolon" name="semicolon">Semicolon (;)</option>
+                                    <option value="pipe" name="pipe">Pipe (|)</option>
+                                    <option value="colon" name="colon">Colon (:)</option>
+                                    <option value="space" name="space">Space</option>
+                                </select>
+                            </div>
+                            <div class="col-3 col-md-2">
+                                <label for="skiprows-input" class="form-label">skiprows</label>
+                                <input type="number" class="form-control" id="skiprows-input" name="skiprows-input" min="0" step="1" value="0">
+                            </div>
+                            <div class="col-5 col-md-4 col-lg-3">
+                                <label for="number-of-rows-to-read-input" class="form-label"># rows to read</label>
+                                <input type="number" class="form-control" id="number-of-rows-to-read-input" name="number-of-rows-to-read-input" min="0" step="1">
+                            </div>
+                        </div>
 
-                    <div class="col-md-5 col-6 text-center">
-                        <input type="number" class="form-control" style="width:100%" id="parameter" name="parameter-value">
-                    </div>
+                        <div class="row justify-content-start">
+                            <div class="col-5 col-md-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="has-headers-checkbox" checked>
+                                    <label class="form-check-label" for="has-headers-checkbox">
+                                      has headers
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+                    </fieldset>
+                    <fieldset class="border mb-4 p-4">
+                        <div class="row align-items-center justify-content-between gy-4">
+                            <legend class="text-center fs-2">Seismic parameters options</legend>
+                            <div class="col-md-3 col-6 text-center">
+                                <label for="date">starting date:</label>
+                            </div>
+
+                            <div class="col-md-3  col-6 text-center">
+                                <input type="datetime-local" class="form-control" id="date" name="datetime">
+                            </div>
+
+                            <div class="col-md-3 col-6 text-center">
+                                <label for="station" class="d-inline">Station name:</label>
+                            </div>
+
+                            <div class="col-md-3 col-6 text-center">
+                                <input type="text" class="form-control d-inline" id="station" name="station" placeholder="ej. SEIS">
+                            </div>
+
+                            <div class="col-md-3 col-12 text-start text-md-center">
+                                <label for="fs">Input variable:</label>
+                            </div>
+
+                            
+                            <div class="col-md-4 col-6 text-center">
+        
+                                <div style="width:100%" class="btn-group" role="group" aria-label="Basic radio toggle button group" id="parameter-div">
+                                    <input type="radio" class="btn-check radio-param" name="parameter-radio" value="sampling_rate" id="fs" autocomplete="off" checked>
+                                    <label class="btn btn-outline-primary" for="fs">sampling rate (Hz)</label>
+                                
+                                    <input type="radio" class="btn-check radio-param" name="parameter-radio" value="delta" id="dt" autocomplete="off">
+                                    <label class="btn btn-outline-primary" for="dt">Sample distance (sec)</label>
+
+                                </div>
+                            </div>
+
+                            <div class="col-md-5 col-6 text-center">
+                                <input type="number" class="form-control" style="width:100%" id="parameter" name="parameter-value">
+                            </div>
 
 
-                    <div class="col-md-3 col-12 text-start text-md-center">
-                        <label for="fs">Components:</label>
-                    </div>
+                            <div class="col-md-3 col-12 text-start text-md-center">
+                                <label for="fs">Components:</label>
+                            </div>
 
-                    <div class="col-md-3 col-4 text-center">
-                        <input type="text" class="form-control component" id="compo1" name="compo1" placeholder="ej. E">
-                    </div>
+                            <div class="col-md-3 col-4 text-center">
+                                <input type="text" class="form-control component" id="compo1" name="compo1" placeholder="ej. E">
+                            </div>
 
-                    <div class="col-md-3 col-4 text-center">
-                        <input type="text" class="form-control component" id="compo2" name="compo2" placeholder="ej. N">
-                    </div>
+                            <div class="col-md-3 col-4 text-center">
+                                <input type="text" class="form-control component" id="compo2" name="compo2" placeholder="ej. N">
+                            </div>
 
-                    <div class="col-md-3 col-4 text-center">
-                        <input type="text" class="form-control component" id="compo3" name="compo3" placeholder="ej. Z">
-                    </div>
+                            <div class="col-md-3 col-4 text-center">
+                                <input type="text" class="form-control component" id="compo3" name="compo3" placeholder="ej. Z">
+                            </div>
+                        </div>
+                    </fieldset>
 
 
                     

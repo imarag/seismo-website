@@ -8,9 +8,9 @@ from . import ascii_to_mseed
 from . import signal_processing
 from . import topics_table
 from . import users_table
-
 from .auth import login_required
 from .db import get_db
+import re
 
 def create_app(test_config=None):
 
@@ -40,7 +40,9 @@ def create_app(test_config=None):
     def home():
         return render_template('home.html')
 
+   
     @app.route('/all-topics', methods=['GET'])
+    @login_required
     def all_topics():
         database = get_db()
         all_topics = database.execute("SELECT * FROM topics").fetchall()
@@ -59,6 +61,45 @@ def create_app(test_config=None):
             all_topics = database.execute("SELECT * FROM topics WHERE topic_type = ?", ('interactive', )).fetchall()
    
         return render_template('all-topics.html', all_topics=all_topics, selectedradiobutton=radioButtonSelectedValue)
+
+
+    @app.route('/home-static-filter', methods=['GET'])
+    def home_static_filter():
+        database = get_db()
+        all_topics = database.execute("SELECT * FROM topics WHERE topic_type = ?", ('static',)).fetchall()
+        return render_template('all-topics.html', all_topics=all_topics, selectedradiobutton='static topics')
+
+
+    @app.route('/home-interactive-filter', methods=['GET'])
+    def home_interactive_filter():
+        database = get_db()
+        all_topics = database.execute("SELECT * FROM topics WHERE topic_type = ?", ('interactive',)).fetchall()
+        return render_template('all-topics.html', all_topics=all_topics, selectedradiobutton='interactive topics')
+
+    @app.route('/home-all-filter', methods=['GET'])
+    def home_all_filter():
+        database = get_db()
+        all_topics = database.execute("SELECT * FROM topics").fetchall()
+        return render_template('all-topics.html', all_topics=all_topics, selectedradiobutton='all topics')
+
+
+    @app.route('/search-topic', methods=['POST'])
+    def search_topic():
+        search_param = request.form.get('search-param')
+        database = get_db()
+        all_topics = database.execute("SELECT * FROM topics").fetchall()
+        if not search_param:
+            return render_template('all-topics.html', all_topics=all_topics, selectedradiobutton='all topics')
+        else:
+            found_topics_list = []
+            for tp in all_topics:
+                lower_search_param = search_param.lower()
+                lower_description = tp['description'].lower()
+                if re.search(lower_search_param, lower_description):
+                    found_topics_list.append(tp)
+            return render_template('all-topics.html', all_topics=found_topics_list, selectedradiobutton='all topics')
+
+
 
     @app.route('/page/<page>', methods=['GET'])
     @login_required

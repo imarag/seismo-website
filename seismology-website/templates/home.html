@@ -6,7 +6,7 @@
 
     <section>
         <div id="main-index-background-image">
-            <div class="container-lg">
+            <div class="container-lg py-5">
                 {% if messages %}
                     <div class="flash-message">
                         {% for message in messages %}
@@ -14,11 +14,11 @@
                         {% endfor %}
                     </div>
                 {% endif %}
-                <h2 class="text-center text-light fw-bold display-1 my-0" id="home-main-title">
-                    Want to learn more about the science of 
-                    <span>
-                        Seismology ?
-                    </span> 
+                <h2 class="text-center text-light fw-bold display-3 my-0 " id="home-main-title">
+                    A Journey into Seismology: Unravel the secrets of the earthquakes
+                </h2>
+                <h2 class="text-center text-light fw-bold fs-1 my-5" id="home-main-subtitle">
+                    Discover Seismic Concepts, Interact with Tools, and Deepen Your Understanding
                 </h2>
             </div>
         </div>
@@ -27,19 +27,24 @@
     <section class="bg-light2 py-5 my-0">
         <div class="container-lg py-5">
             <div class="row justify-content-center align-items-center mb-5">
-                <div class="col-3 col-md-2">
+                <div class="col-4 col-sm-3 col-md-3 col-lg-2">
                     <img src="/static/img/home-images/book-read.svg" class="img-fluid" alt="read topic">
                 </div>
-                <div class="col-7 col-md-4">
-                    <p class="text-muted fs-4">Get started with the <a href="#seismological-topics" class="link-primary">seismic topics</a> to learn more about the science of Seismology</p>
+                <div class="col-8 col-md-5">
+                    <p class="text-muted fs-4">Get started with the <a href="{{ url_for('home_static_filter') }}" class="link-primary">seismic topics</a> to learn more about the science of Seismology</p>
                 </div>
             </div>
             <div class="row justify-content-center align-items-center">
-                <div class="col-7 col-md-4">
-                    <p class="text-muted fs-4">Or use one of the <a href="#interactive-tools" class="link-primary">interactive tools</a> to process and analyze real seismological data</p>
+                <div class="col-8 col-md-5">
+                    <p class="text-muted fs-4">use one of the <a href="{{ url_for('home_interactive_filter') }}" class="link-primary">interactive tools</a> to process and analyze real seismological data</p>
                 </div>
-                <div class="col-3 col-md-2">
+                <div class="col-4 col-sm-3 col-md-3 col-lg-2">
                     <img src="/static/img/home-images/interactive.svg" class="img-fluid" alt="read topic">
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col">
+                    <p class="text-center text-muted fs-4 mt-5">or <a href="{{ url_for('home_all_filter') }}">check</a> all the topics...</p>
                 </div>
             </div>
         </div>
@@ -127,6 +132,20 @@
     <section class="bg-dark py-5" id="interactive-example-section">
         <div class="container-lg">
             <h2 class="display-4 text-muted text-center mb-5">Try the interactive tools</h2>
+            <div class="row justify-content-center my-5 gy-2 text-center">
+                <div class="col-12 col-md-auto">
+                    <a class="badge bg-secondary text-dark text-decoration-none home-badge fs-6" href="{{ url_for('topics', page='fourier.html') }}">Fourier spectra</a>
+                </div>
+                <div class="col-12 col-md-auto">
+                    <a class="badge bg-danger text-dark text-decoration-none home-badge fs-6" href="{{ url_for('topics', page='signal-processing.html') }}">Signal processing</a>
+                </div>
+                <div class="col-12 col-md-auto">
+                    <a class="badge bg-success text-dark text-decoration-none home-badge fs-6" href="{{ url_for('topics', page='pick-arrivals.html') }}">Arrival picking</a>
+                </div>
+                <div class="col-12 col-md-auto">
+                    <a class="badge bg-warning text-dark text-decoration-none home-badge fs-6" href="{{ url_for('topics', page='ascii-to-mseed.html') }}">ascii to mseed</a>
+                </div>
+            </div>
             <div class="row justify-content-center align-items-center">
                 <div class="col-md-4 col-12">
                     <ul class="list-group list-group-flush rounded fs-5">
@@ -203,6 +222,7 @@
                             <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                 <div class="accordion-body">
                                     <strong>IRIS</strong> is a university research consortium dedicated to exploring the Earth's interior through the collection and distribution of seismographic data. RIS's Education and Public Outreach Program offers animations, videos, lessons, software, posters, and fact sheets to help teachers and the general public learn more about seismology and earth science and understand it better.  
+                                    <a href="https://www.iris.edu/hq/">go to the page</a>
                                 </div>
                             </div>
                         </div>
@@ -216,6 +236,7 @@
                             <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                                 <div class="accordion-body">
                                     The <strong>Seismological Society of America</strong> is an international scientific society devoted to the advancement of seismology and the understanding of earthquakes for the benefit of society. Founded in 1906, the society has members throughout the world representing seismologists and other geophysicists, geologists, engineers, insurers, and policy-makers in preparedness and safety.
+                                    <a href="https://www.seismosoc.org/">go to the page</a>
                                 </div>
                             </div>
                         </div>
@@ -229,6 +250,7 @@
                             <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
                                 <div class="accordion-body">
                                     The <strong>European-Mediterranean Seismological Centre</strong> is an international, non-governmental and not-for-profit organisation. The European-Mediterranean region is prone to destructive earthquakes. When an earthquake occurs, a scientific organisation is needed to determine, as quickly as possible, the characteristics of the seismic event. 
+                                    <a href="https://www.emsc-csem.org/">go to the page</a>
                                 </div>
                             </div>
                         </div>
