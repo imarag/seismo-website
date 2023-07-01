@@ -24,131 +24,196 @@
         <section id="description-section">
             <div class="container-lg  p-5 rounded fs-4">
                 <p class="text-start">
-                    Upload an MSEED file and compute the Fourier Spectra. You can choose to calculate it on the whole time series
-                    or at a window with a configurable length. This window can be the signal area window and/or the noise area window. If you choose
-                    to calculate both the singnal and noise area fourier spectra, its windows will have the same length. You can configure both the
-                    length of the window, as well as the starting point (left side) of the signal window and the ending point (right side) of the noise
-                    area window.
+                    If you have ASCII files that you would like to use with our tools, we offer a convenient 
+                    conversion tool that allows you to convert ASCII files to the MSEED file format which ensures 
+                    compatibility with our interactive tools.
+                    This tool supports only ASCII files and more specifically the formats: <kbd>.csv</kbd>, <kbd>.text</kbd> and <kbd>.dat</kbd> files. 
+                    Start by selecting the appropriate file parameters according to your file format (delimiter, number of rows to read, etc.) and then
+                    continue with the second set of parameters that are related to the seismological record (sampling frequency, station name, etc.).
                 </p>
             </div>
         </section>
         
-        <section>
+        <section class="bg-secondary py-4">
             <div class="container-lg fs-4">
-                <form action="/upload-ascii-file" method="POST" enctype="multipart/form-data">
-                    <fieldset class="border mb-4 p-4">
-                        <legend class="text-center fs-2">File type options</legend>
-                        <div class="row justify-content-start">
-                            <div class="col-10">
-                                <label for="upload-file" class="form-label">Upload an ASCII file</label>
-                                <input class="form-control" type="file" name="file" id="upload-file" accept=".csv, .txt, .dat">
-                            </div>
-                        </div>
-                        <div class="row justify-content-start my-4">
-                            <div class="col-6 col-md-3">
-                                <label for="delimiter-select" class="form-label">delimiter</label>
+                <fieldset class="border mb-4 p-4 bg-dark text-secondary rounded">
+                    <legend class="text-center fs-2">File type options</legend>
+                    <hr class="mb-5 mt-3 border-bottom border-secondary border-1"">
+                    <div class="row justify-content-center align-items-center">
+                        <div class="col-lg-4 col-md-5 col-6 text-center text-md-start"  style="position: relative;">
+                            <div class="my-4">
+                                <label for="delimiter-select" class="form-label">delimiter <button style="position: absolute; right:0px;" type="button" class="btn btn-warning ms-2 btn-sm text-dark" data-bs-toggle="popover" data-bs-placement="top" data-bs-custom-class="custom-popover" data-bs-title="Delimiter" data-bs-content="The data columns are separated by a separator. Use this option to define the separator of the files. Usually the separator of .csv files is the <comma> (,) which is also the default value. Use the <space> option for a single or multiple spaces (or blanks) between the columns">?</button></label></br>
                                 <select id="delimiter-select" name="delimiter" class="form-select" aria-label="Default select">
-                                    <option value="comma" name="comma" selected>Comma (,)</option>
-                                    <option value="tab" name="tab" >Tab (\t)</option>
-                                    <option value="semicolon" name="semicolon">Semicolon (;)</option>
-                                    <option value="pipe" name="pipe">Pipe (|)</option>
-                                    <option value="colon" name="colon">Colon (:)</option>
-                                    <option value="space" name="space">Space</option>
+                                    <option value="," name="comma" selected>Comma (,)</option>
+                                    <option value="\t" name="tab" >Tab (\t)</option>
+                                    <option value=";" name="semicolon">Semicolon (;)</option>
+                                    <option value="|" name="pipe">Pipe (|)</option>
+                                    <option value=":" name="colon">Colon (:)</option>
+                                    <option value="\s+" name="space">Space</option>
                                 </select>
                             </div>
-                            <div class="col-3 col-md-2">
-                                <label for="skiprows-input" class="form-label">skiprows</label>
-                                <input type="number" class="form-control" id="skiprows-input" name="skiprows-input" min="0" step="1" value="0">
-                            </div>
-                            <div class="col-5 col-md-4 col-lg-3">
-                                <label for="number-of-rows-to-read-input" class="form-label"># rows to read</label>
+                        </div>
+                    </div> 
+                    
+                    <div class="row justify-content-center align-items-center">
+                        <div class="col-lg-4 col-md-5 col-6 text-center text-md-start"  style="position: relative;">
+                            <div class="my-4">
+                                <label for="number-of-rows-to-read-input" class="form-label"># rows to read <button style="position: absolute; right:0px;" type="button" class="btn btn-warning ms-2 btn-sm text-dark" data-bs-toggle="popover" data-bs-placement="top" data-bs-custom-class="custom-popover" data-bs-title="Delimiter" data-bs-content="Insert the total number of rows that you want the program to read. If empty or zero, it is going to read all of the rows in your file.">?</button></label></br>
                                 <input type="number" class="form-control" id="number-of-rows-to-read-input" name="number-of-rows-to-read-input" min="0" step="1">
                             </div>
                         </div>
+                    </div> 
 
-                        <div class="row justify-content-start">
-                            <div class="col-5 col-md-3">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="has-headers-checkbox" checked>
-                                    <label class="form-check-label" for="has-headers-checkbox">
-                                      has headers
-                                    </label>
-                                </div>
+                    <div class="row justify-content-center align-items-center">
+                        <div class="col-lg-4 col-md-5 col-6 text-center text-md-start"  style="position: relative;">
+                            <div class="my-4">
+                                <label for="columns-to-read-input" class="form-label">columns to read <button style="position: absolute; right:0px;" type="button" class="btn btn-warning ms-2 btn-sm text-dark" data-bs-toggle="popover" data-bs-placement="top" data-bs-custom-class="custom-popover" data-bs-title="columns-to-read-input" data-bs-content="Select specific columns from your file to upload. To specify the columns, use numbers from 0 to the total length of your columns separated by commas. For example to upload just the first, third and forth columns, insert '0,2,3' without the quotes. Remember in Python we count from 0. So the first column in your file will have the number 0. If empty, it will read all of the columns from your file.">?</button></label></br>
+                                <input type="text" class="form-control" id="columns-to-read-input" >
                             </div>
                         </div>
-                        
-                        
-                    </fieldset>
-                    <fieldset class="border mb-4 p-4">
-                        <div class="row align-items-center justify-content-between gy-4">
-                            <legend class="text-center fs-2">Seismic parameters options</legend>
-                            <div class="col-md-3 col-6 text-center">
-                                <label for="date">starting date:</label>
+                    </div>
+
+                    <div class="row justify-content-center align-items-center">
+                        <div class="col-lg-4 col-md-5 col-6 text-center text-md-start"  style="position: relative;">
+                            <div class="my-4">
+                                <label for="skiprows-input" class="form-label">skiprows <button style="position: absolute; right:0px;" type="button" class="btn btn-warning ms-2 btn-sm text-dark" data-bs-toggle="popover" data-bs-placement="top" data-bs-custom-class="custom-popover" data-bs-title="Delimiter" data-bs-content="Use this option to skip a number of rows before you read the file. This can be used in case you have some information in the first few rows in your file that you don't want to be included. The default value is zero (0) that is, don't skip any rows. If empty, it is considered as zero (0).">?</button></label></br>
+                                <input type="number" class="form-control" id="skiprows-input" name="skiprows-input" min="0" step="1" value="0">
+                            </div>
+                        </div>
+                    </div> 
+
+                    <div class="row justify-content-center align-items-center">
+                        <div class="col-lg-4 col-md-5 col-6 text-center text-md-start"  style="position: relative;">
+                            <div class="my-4">
+                                <input class="form-check-input" type="checkbox" value="" id="has-headers-checkbox" checked>
+                                <label for="has-headers-checkbox" class="form-label">has headers <button style="position: absolute; right:0px;" type="button" class="btn btn-warning ms-2 btn-sm text-dark" data-bs-toggle="popover" data-bs-placement="top" data-bs-custom-class="custom-popover" data-bs-title="Delimiter" data-bs-content="Select this option if you file has headers. This option is applied after the application of the rest of the options. For example if you skip some rows from your file, then the new first row is considered as the header. If this new first row is a header, check the box, else uncheck it.">?</button></label>
+                            </div>
+                        </div>
+                    </div> 
+
+                    <div class="row justify-content-center align-items-center my-3">
+                        <div class="col-8 text-center">
+                            <p class="fs-5">For more information about these options click <a href="https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html" class="text-center link-info">here</a></p>
+                        </div>
+                    </div>
+
+                    <div class="row justify-content-center align-items-center">
+                        <div class="col-lg-8 col-12 text-center text-md-start">
+                            <label for="upload-file-button" class="form-label mt-5">Upload an ASCII file</label>
+                            <input class="form-control" type="file" name="file" id="upload-file-button" accept=".csv, .txt, .dat">
+                        </div>
+                    </div>
+
+                    <div class="row mt-5 justify-content-center">
+                        <div class="col-auto text-center" >
+                            <div id="table-container-preview">
+
+                            </div>
+                        </div>
+                    </div>
+                    
+                </fieldset>
+
+                <form action="/upload-ascii-file" method="POST" enctype="multipart/form-data">
+                    <fieldset class="border mb-4 p-4 bg-dark text-secondary rounded" id="submit-form-fieldset" disabled>
+                        <legend class="text-center fs-2">Seismic parameters options</legend>
+                        <hr class="mb-5 mt-3 border-bottom border-secondary border-1">
+                        <div class="row align-items-center justify-content-start gy-2">
+                            
+                            
+                            <div class="col-md-4 col-lg-3 col-6 text-start">
+                                <label for="date"><button  type="button" class="btn btn-warning ms-2 btn-sm text-dark" data-bs-toggle="popover" data-bs-placement="top" data-bs-custom-class="custom-popover" data-bs-title="Record starting date" data-bs-content="Insert the starting date of the seismic record. If you don't specify a value, the default value '1970-01-01' is going to be used.">?</button> starting date:</label>
                             </div>
 
-                            <div class="col-md-3  col-6 text-center">
+                            <div class="w-100 d-block d-lg-none"></div>
+
+                            <div class="col-md-4 col-lg-3 col-6 text-start">
                                 <input type="datetime-local" class="form-control" id="date" name="datetime">
                             </div>
 
-                            <div class="col-md-3 col-6 text-center">
-                                <label for="station" class="d-inline">Station name:</label>
+                            <div class="w-100 d-block d-lg-none"></div>
+
+                            <div class="col-md-4 col-lg-3 col-6 text-start">
+                                <label for="station" class="d-inline"><button  type="button" class="btn btn-warning ms-2 btn-sm text-dark" data-bs-toggle="popover" data-bs-placement="top" data-bs-custom-class="custom-popover" data-bs-title="Station name" data-bs-content="Insert the station name of your records. If empty, no station information is going to be inserted into the mseed file.">?</button> Station name:</label>
                             </div>
 
-                            <div class="col-md-3 col-6 text-center">
+                            <div class="w-100 d-block d-lg-none"></div>
+                            
+                            <div class="col-md-4 col-lg-3 col-6 text-start">
                                 <input type="text" class="form-control d-inline" id="station" name="station" placeholder="ej. SEIS">
                             </div>
 
-                            <div class="col-md-3 col-12 text-start text-md-center">
-                                <label for="fs">Input variable:</label>
+                            <div class="w-100 d-block d-lg-none"></div>
+                            
+                            <div class="col-md-4 col-lg-3 col-6 text-start">
+                                <label for="fs"><button  type="button" class="btn btn-warning ms-2 btn-sm text-dark" data-bs-toggle="popover" data-bs-placement="top" data-bs-custom-class="custom-popover" data-bs-title="Record sampling frequency/sample distance" data-bs-content="Select one of the two parameters: sampling frequency fs (Hz),  sample distance dt (sec) and insert a value for it. You cannot leave this empty!">?</button> fs/dt parameter *:</label>
                             </div>
 
+                            <div class="w-100 d-block d-lg-none"></div>
                             
-                            <div class="col-md-4 col-6 text-center">
-        
+                            <div class="col-md-4 col-lg-5 col-6 text-start">
                                 <div style="width:100%" class="btn-group" role="group" aria-label="Basic radio toggle button group" id="parameter-div">
                                     <input type="radio" class="btn-check radio-param" name="parameter-radio" value="sampling_rate" id="fs" autocomplete="off" checked>
-                                    <label class="btn btn-outline-primary" for="fs">sampling rate (Hz)</label>
+                                    <label class="btn btn-outline-info" for="fs">fs (Hz)</label>
                                 
                                     <input type="radio" class="btn-check radio-param" name="parameter-radio" value="delta" id="dt" autocomplete="off">
-                                    <label class="btn btn-outline-primary" for="dt">Sample distance (sec)</label>
-
+                                    <label class="btn btn-outline-info" for="dt">dt (sec)</label>
                                 </div>
                             </div>
 
-                            <div class="col-md-5 col-6 text-center">
-                                <input type="number" class="form-control" style="width:100%" id="parameter" name="parameter-value">
+                            <div class="col-md-4 col-lg-4 col-6 text-start">
+                                <input type="number" class="form-control" style="width:100%" id="parameter" name="parameter-value" required>
                             </div>
 
+                            <div class="w-100 d-block d-lg-none"></div>
 
-                            <div class="col-md-3 col-12 text-start text-md-center">
-                                <label for="fs">Components:</label>
+                            <div class="col-md-4 col-lg-3 col-6 text-start">
+                                <label for="fs"><button  type="button" class="btn btn-warning ms-2 btn-sm text-dark" data-bs-toggle="popover" data-bs-placement="top" data-bs-custom-class="custom-popover" data-bs-title="Record commponents" data-bs-content="Fill in the components name of the record, in the same row as the uploaded file columns.">?</button> Components:</label>
                             </div>
 
-                            <div class="col-md-3 col-4 text-center">
+                            <div class="w-100 d-block d-lg-none"></div>
+
+                            <div class="col-sm-3 col-md-2 col-lg-2 col-4 text-start">
                                 <input type="text" class="form-control component" id="compo1" name="compo1" placeholder="ej. E">
                             </div>
 
-                            <div class="col-md-3 col-4 text-center">
+                            <div class="col-sm-3 col-md-2 col-lg-2 col-4 text-start">
                                 <input type="text" class="form-control component" id="compo2" name="compo2" placeholder="ej. N">
                             </div>
 
-                            <div class="col-md-3 col-4 text-center">
+                            <div class="col-sm-3 col-md-2 col-lg-2 col-4 text-start">
                                 <input type="text" class="form-control component" id="compo3" name="compo3" placeholder="ej. Z">
                             </div>
                         </div>
+                        <p class="text-start fs-6 text-secondary my-5">The fields denoted by an asterisc (*) must be filled in </p>
+                        <div class="col-12 mt-5 text-center">
+                            <button type="submit" class="btn btn-success btn-lg" id="submit-button">convert to mseed</button>
+                        </div>
                     </fieldset>
-
-
-                    
-                    <div class="col-12 mt-5 text-center">
-                        <button type="submit" class="btn btn-primary" id="submit-button">Submit</button>
-                    </div>
                 </form>
 
-                
-                
+                <div class="modal fade" id="modalErrorMessage" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header bg-danger">
+                          <h1 class="modal-title fs-5 bg-danger text-dark" id="modal-title">Modal title</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p id="modal-message" class="fs-5"></p>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#modalErrorMessage" id="model-button-triger">
+                    modal example
+                </button>
+
+
             </div>
-            
         </section>
 
         <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>

@@ -101,14 +101,15 @@ def create_app(test_config=None):
 
 
 
-    @app.route('/page/<page>', methods=['GET'])
-    @login_required
-    def topics(page):
-        template_full_path = os.path.join(app.root_path, 'templates', 'topics', page)
-        if os.path.exists(template_full_path):
-            return render_template(f'topics/{page}')
-        else:
-            return render_template('page-not-found.html')
+
+    # @app.route('/page/<page>', methods=['GET'])
+    # @login_required
+    # def topics(page):
+    #     template_full_path = os.path.join(app.root_path, 'templates', 'topics', page)
+    #     if os.path.exists(template_full_path):
+    #         return render_template(f'topics/{page}')
+    #     else:
+    #         return render_template('page-not-found.html')
     
     db.init_app(app)
 
