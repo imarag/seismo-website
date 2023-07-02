@@ -9,14 +9,35 @@ import numpy as np
 import pandas as pd
 import uuid
 import io
+import datetime
+from .db import get_db
 
 bp = Blueprint('asciitomseed', __name__, url_prefix = '/ascii-to-mseed')
 
+def save_file_to_data_file():
+    # Define the folder name where you want to save the CSV file
+    folder_name = 'data_files'
+    # Get the root path of the Flask application
+    root_path = current_app.root_path
+    # Create the folder path by combining the root path and folder name
+    folder_path = os.path.join(root_path, folder_name)
+    # Create the folder if it doesn't exist
+    os.makedirs(folder_path, exist_ok=True)
+    # get the user id to save from the session
+    user_id = session.get('user_id', None)
+    
+    # Generate the current date and time
+    current_datetime = datetime.datetime.now()
+    # Format the date and time as a string
+    date_string = current_datetime.strftime('%Y-%m-%d-%H-%M-%S')
+    # Save the DataFrame to a CSV file in the specified folder
+    file_path = os.path.join(folder_path, date_string + '_' + str(user_id) + '_' + 'ascii-to-mseed' + '.csv')
+    return file_path
 
+    
 
 def generate_error_response(message):
-    response = jsonify({'error-message': message})
-    response.status_code = 400
+    response = make_response(jsonify({'error_message':message}), 400)
     return response
 
 
@@ -58,41 +79,41 @@ def read_ascii_file():
     skip_rows = request.form.get('skip-rows')
     had_headers = request.form.get('has-headers')
     columns_to_read = request.form.get('columns-to-read')
+    
 
     if not uploaded_ascii_file:
-        error_message = 'No file uploaded'
-        response = make_response(jsonify({'error_message':error_message}), 400)
-        return response
+        return generate_error_response('No file uploaded')
     
-    if had_headers == 'false':
-        header_param = None
-    elif had_headers == 'true':
-        header_param = 0
-
+    # if empty or 0 then nrows=None else nrows=int(rows_to_read)
     if not rows_to_read:
         nrows_param = None
-    elif int(rows_to_read) == 0:
-        nrows_param = None
     else:
-        nrows_param = int(rows_to_read)
+        if int(rows_to_read) == 0:
+            nrows_param = None
+        else:
+            nrows_param = int(rows_to_read)
+
+    if not columns_to_read:
+        usecols_param = None
+    else:
+        regex_patt = "^[0-9] *, *[0-9] *,? *[0-9]?$"
+        
+        if not re.search(regex_patt, columns_to_read.strip(' ,')):
+            return generate_error_response('The "columns to read" option must be in the form n1,n2 or n1,n2,n3 where n, the column number. For example: 1,3 or 1,2,4')
+        
+        usecols_param = columns_to_read.split(',')
+        usecols_param = [int(el.strip()) for el in usecols_param]
 
     if not skip_rows:
         skiprows_param = None
     else:
         skiprows_param = int(skip_rows)
-   
-    if not columns_to_read:
-        usecols_param = None
-    else:
-        regex_patt = "^[0-9] *, *[0-9] *,? *[0-9]?$"
-        if not re.search(regex_patt, columns_to_read.strip(' ,')):
-            error_message = 'The option to select specific column in your file, must be in the form [0,1,3]'
-            response = make_response(jsonify({'error_message':error_message}), 400)
-            return response
-        usecols_param = columns_to_read.split(',')
-        usecols_param = [int(el.strip() )for el in usecols_param]
 
-    
+    if had_headers == 'false':
+        header_param = None
+    elif had_headers == 'true':
+        header_param = 0
+
     try:
         df = pd.read_csv(
             uploaded_ascii_file,
@@ -103,135 +124,93 @@ def read_ascii_file():
             usecols = usecols_param
         )
     except Exception as e:
-        error_message = str(e)
-        response = make_response(jsonify({'error_message':error_message}), 400)
-        return response
-        
+        return generate_error_response(str(e))
 
     if len(df.columns) not in [2, 3]:
-        error_message = 'You can only upload two or three columns from your file. Each of these columns represents the record data for each component (you can also upload just two columns in case your have just one horizontal and one vertical component). This error may be caused by an incorrect delimiter selection, check the separator of your columns. Also check the <columns to read> option. You should include two or three columns to upload (ej. 1,3 or 1,2,3 or 1,4). Another possible reason that triggers this error, is if you try to read the whole file and the file has one or more than three columns.'
-        response = make_response(jsonify({'error_message':error_message}), 400)
-        return response
+        return generate_error_response('You can only upload two or three columns from your file. Each of these columns represents the record data for each component. The two columns are in case your record has just one horizontal and one vertical component. This error may be caused by an incorrect delimiter selection, check the separator of your columns. Also check the <columns to read> option. You should include two or three columns to upload (ej. 1,3 or 1,2,3 or 1,4) not more or less. Another possible reason that triggers this error, is if you try to read the whole file and the file has one or more than three columns.')
     
     if df.empty:
-        error_message = 'Your file is empty or you skipped too many rows.'
-        response = make_response(jsonify({'error_message':error_message}), 400)
-        return response
+        return generate_error_response('Your file is empty or you skipped too many rows.')
 
     # Get the first 5 rows
     first_5_rows = df.head()
 
     # Convert the first 5 rows to HTML table
     table_html = first_5_rows.to_html().replace('class="dataframe"', 'class="table text-secondary"').replace('style="text-align: right;"', '')
-
-    ############################3
-        # na swsw to ascii sto server gia na to xrhsimopoihsw meta na kanw to convert to mseed
-        # na dw ti onoma tha tou dwsw gia na einai unique. Na exei username, date, tool used that created it na kanw kai kamia analush sto telos
-    ############################3
-    # save the uploaded ascii file to the server to use it later in the seismic parameters
-    df.to_csv('')
-
-    return table_html
-
-
-
-@bp.route('/upload-mseed-file', methods=['GET', 'POST'])
-def upload():
-    global unique_session_id
-   
-    # check if file exists
-    if 'file' not in request.files or len(request.files) < 1:
-        generate_error_response('No file uploaded!')
-
-    # Get the uploaded file from the request
-    mseed_file = request.files['file']
-
-    # Read the MSeed file using obspy
-    try:
-        stream = read(mseed_file)
-    except Exception as e:
-        generate_error_response(str(e))
-
-    # if the stream has 0 or more that 3 traces abort
-    if len(stream) <= 0 or len(stream) > 3:
-        error_message = f'The stream must contain up to three traces. Your stream contains {len(stream)} traces!'
-        generate_error_response(error_message)
-
-    # if at least one of the traces is empty abort
-    for tr in stream:
-        if len(tr.data) == 0:
-            error_message = 'One or more of your traces in the stream object, is empty.'
-            generate_error_response(error_message)
-
-    # if the user hasn't defined nor the fs neither the delta, then error
-    if stream[0].stats['sampling_rate'] == 1 and stream[0].stats['delta'] == 1:
-        error_message = 'Neither sampling rate (fs[Hz]) nor sample distance (delta[sec]) are specified in the trace objects. Consider including them in the stream traces, for the correct x-axis time representation!'
-        generate_error_response(error_message)
-
-    unique_session_id = uuid.uuid4()
-
-    session['user-unique-id'] = unique_session_id
-  
-    # define the path of the written uploaded file
-    raw_mseed_file_path = os.path.join(current_app.root_path, "static-data", f"user-{session['user-unique-id']}-mseed-file.mseed")
-    # write the uploaded file
-    stream.write(raw_mseed_file_path)
-
-    # convert the uploaded mseed file to json
-    json_data = convert_mseed_to_json(stream)
-    return json_data
-
-
-
-
-
-@bp.route('/upload-ascii-file', methods=['POST'])
-def upload_file():
-    uploaded_file = request.files.get('file')
     
-    if not uploaded_file:
-        return 'No file uploaded'
+    # inser the data file name to save in the data_files folder
+    file_path = save_file_to_data_file()
+
+    df.to_csv(file_path, index=False)
+
+    return jsonify({'table-html': table_html, 'file-name-uploaded': file_path })
+
+
+@bp.route('/convert-ascii-to-mseed', methods=['POST'])
+def convert_ascii_to_mseed():
 
     station = request.form.get('station')
+    datetime = request.form.get('datetime')
     parameterRadioOn = request.form.get('parameter-radio')
     parameterValue = request.form.get('parameter-value')
+    ascii_file_name_uploaded = request.form.get('uploaded-ascii-file-input')
     compo1 = request.form.get('compo1')
     compo2 = request.form.get('compo2')
     compo3 = request.form.get('compo3')
-    datetime = request.form.get('datetime')
-    
+    compos = [compo1, compo2, compo3]
 
-    compos = [c for c in [compo1, compo2, compo3] if c]
+    saved_ascii_file_name_no_ext = ascii_file_name_uploaded.rsplit(".", 1)[0]
+    saved_ascii_file_extension = ascii_file_name_uploaded.rsplit(".", 1)[1]    
+    params_dict = {}
 
-    filename, file_extension = os.path.splitext(uploaded_file.filename)
-    file_extension = file_extension.lower()
-    
-    if file_extension == '.xlsx' or file_extension == '.xls':
-        df = pd.read_excel(uploaded_file)
-    elif file_extension == '.csv':
-        df = pd.read_csv(uploaded_file)
+    if not station:
+        station_param = ''
     else:
-        return 'Unsupported file type'
+        if not re.search('^[A-Z]{3,5}[0-9]?$', station.upper().strip()):
+            return generate_error_response('The station name should contain three to five letters from a-z or A-Z, and optionally one number at the end.')
+        station_param = station.upper()
+    params_dict['station'] = station_param
+
+    if not datetime:
+        params_dict['starttime'] = ''
+    else:
+        params_dict['starttime'] = UTCDateTime(datetime)
+
+    if not parameterValue:
+        return generate_error_response('You need to insert a value for the parameter (fs/dt)')
+    
+    if parameterRadioOn == 'fs':
+        params_dict['sampling_rate'] = float(parameterValue)
+    else:
+        params_dict['delta'] = float(parameterValue)
+
+    for c in compos:
+        if not c:
+            return generate_error_response('You need to insert a name for the components')
+        if not re.search('^[A-Z]{2,3}[0-9]?$', c.upper().strip()):
+            return generate_error_response('The name of the components must contain one or two characters.')
+
+    df = pd.read_csv(
+        os.path.join(current_app.root_path, 'data_files', ascii_file_name_uploaded ))
+ 
     df.columns = compos
-    lt_compos = []
-    for col in df.columns:
-        trace_data = df[col].astype(int).to_numpy().astype(np.int32)
+    lt_traces = []
+    for compo in compos:
+        trace_data = df[compo].astype(float).to_numpy()
+        params_dict['channel'] = compo
         trace = Trace(
             data=trace_data, 
-            header={
-                'station': station, 
-                parameterRadioOn: float(parameterValue), 
-                'npts': len(trace_data), 
-                'channel': col,
-                'starttime': UTCDateTime(datetime)
-                })
-        lt_compos.append(trace)
-    
-    st = Stream(lt_compos)
+            header=params_dict
+        )
+        lt_traces.append(trace)
+    st = Stream(lt_traces)
 
-    st.write('stream.mseed', format='MSEED')
+    mseed_file_save_path = os.path.join(current_app.root_path, 'data_files', saved_ascii_file_name_no_ext + '.mseed') 
+    st.write(
+        mseed_file_save_path
+    )
 
     mime_type = 'application/vnd.fdsn.mseed'
 
-    return send_file(st, as_attachment=True,  mimetype=mime_type, download_name='stream.mseed')
+    return send_file(mseed_file_save_path, as_attachment=True,  mimetype=mime_type, download_name='stream.mseed')
 

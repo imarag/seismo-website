@@ -1,22 +1,17 @@
 
 const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
 const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+const uploadFileInput = document.querySelector("#upload-file-input");
+const uploadFileButton = document.querySelector("#upload-file-button");
+const uploadedFileURL = document.querySelector("#uploaded-file-url");
 
-let uploadFileButton = document.querySelector("#upload-file-button");
-let submitFormFieldset = document.querySelector("#submit-form-fieldset");
-let tableContainerPreview = document.querySelector("#table-container-preview");
+uploadFileButton.addEventListener('click', () => {
+  uploadFileInput.click()
+})
 
-let delimiterElement = document.querySelector("#delimiter-select");
-let rowsToReadElement = document.querySelector("#number-of-rows-to-read-input");
-let skipRowsElement = document.querySelector("#skiprows-input");
-let hasHeadersElement = document.querySelector("#has-headers-checkbox");
-let columnsToReadElement = document.querySelector("#columns-to-read-input");
+uploadFileInput.addEventListener('change', handleFileUpload);
 
-let modalMessage = document.querySelector("#modal-message");
-let modalTitle = document.querySelector("#modal-title");
-let modelButtonTriger = document.querySelector("#model-button-triger");
 
-uploadFileButton.addEventListener('change', handleFileUpload);
 
 function handleFileUpload(event) {
 
@@ -28,21 +23,22 @@ function handleFileUpload(event) {
     return;
   }
   else {
+    // get the uploaded file
     uploaded_file = files[0];
   }
-
-  // activate the fieldset
-  submitFormFieldset.disabled = false;
+  uploadedFileURL.textContent = `File name: ${uploaded_file.name}`;
+  // activate the second parametes set, fieldset
+  document.querySelector("#submit-form-fieldset").disabled = false;
 
   // create the form data to upload to the POST
   const formData = new FormData();
   formData.append('file', uploaded_file);
-  formData.append('delimiter', delimiterElement.value);
-  formData.append('rows-to-read', rowsToReadElement.value);
-  formData.append('skip-rows', skipRowsElement.value);
-  formData.append('has-headers', hasHeadersElement.checked);
-  formData.append('columns-to-read', columnsToReadElement.value);
-  
+  formData.append('delimiter', document.querySelector("#delimiter-select").value);
+  formData.append('rows-to-read', document.querySelector("#number-of-rows-to-read-input").value);
+  formData.append('skip-rows', document.querySelector("#skiprows-input").value);
+  formData.append('has-headers', document.querySelector("#has-headers-checkbox").checked);
+  formData.append('columns-to-read', document.querySelector("#columns-to-read-input").value);
+
   // read the file at the server with pandas and show
   // a preview of it 
   fetch('/ascii-to-mseed/read-ascii-file', {
@@ -54,25 +50,29 @@ function handleFileUpload(event) {
   .then(response => {
     if (!response.ok) {
       return response.json().then(errorMessage => {
-        modalMessage.textContent = errorMessage['error_message'];
-        modalTitle.textContent = 'An error has occured!'
-        modelButtonTriger.click()
-        uploadFileButton.value = null;
+        document.querySelector("#modal-message").textContent = errorMessage['error_message'];
+        document.querySelector("#modal-title").textContent = 'An error has occured!'
+        document.querySelector("#model-button-triger").click()
+        uploadFileInput.value = null;
+        uploadedFileURL.textContent = '';
         throw new Error(errorMessage);
       })
     }
-    return response.text()
+    return response.json()
   }) 
   .then(data => {
+    let tableHTML = data['table-html']
+    document.querySelector("#ascii-file-name-uploaded").value = data['file-name-uploaded'];
+    
     let headerTop = `
-    <p class="text-center text-secondary fs-3">First five (5) rows of the file</p>
+    <p class="text-center text-secondary fs-3">First five (5) rows of your file</p>
     <hr>
     `
-    tableContainerPreview.innerHTML = headerTop + data ;
-
+    document.querySelector("#table-container-preview").innerHTML = headerTop + tableHTML ;
+    
     // set the upload input value to null so that the user
     // can select the same file
-    uploadFileButton.value = null;
+    uploadFileInput.value = null;
 
   })
   .catch(error => {
