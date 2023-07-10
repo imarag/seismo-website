@@ -12,20 +12,15 @@ import io
 import datetime
 from .db import get_db
 
-bp = Blueprint('asciitomseed', __name__, url_prefix = '/ascii-to-mseed')
+bp = Blueprint('BP_ascii_to_mseed', __name__, url_prefix = '/ascii-to-mseed')
 
 def save_file_to_data_file():
-    # Define the folder name where you want to save the CSV file
-    folder_name = 'data_files'
-    # Get the root path of the Flask application
-    root_path = current_app.root_path
     # Create the folder path by combining the root path and folder name
-    folder_path = os.path.join(root_path, folder_name)
+    folder_path = os.path.join(current_app.root_path, 'data_files')
     # Create the folder if it doesn't exist
     os.makedirs(folder_path, exist_ok=True)
     # get the user id to save from the session
     user_id = session.get('user_id', None)
-    
     # Generate the current date and time
     current_datetime = datetime.datetime.now()
     # Format the date and time as a string

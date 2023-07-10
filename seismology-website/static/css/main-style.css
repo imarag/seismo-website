@@ -40,7 +40,7 @@
 }
 
 .bg-dark2 {
-    background-color: #575756;
+    background-color: #391932;
 }
 
 .bg-navy {
@@ -67,4 +67,17 @@
 #all-topics-card:hover {
     transform: rotate(3deg) scale(1.1);
     border: 3px solid black;
+}
+
+#arrival-picking-menu button, select {
+    height: 34px;
+}
+
+#picking-left-filter, #picking-right-filter {
+    width:120px;
+    display: inline;
+}
+
+#picking-graph-container {
+    height: 480px;
 }

@@ -16,16 +16,15 @@ uploadFileInput.addEventListener('change', handleFileUpload);
 function handleFileUpload(event) {
 
   let files = event.target.files;
-  let uploaded_file;
 
   // if no file is uploaded return
   if (files.length === 0) {
     return;
   }
-  else {
-    // get the uploaded file
-    uploaded_file = files[0];
-  }
+  
+  // get the uploaded file
+  uploaded_file = files[0];
+  
   uploadedFileURL.textContent = `File name: ${uploaded_file.name}`;
   // activate the second parametes set, fieldset
   document.querySelector("#submit-form-fieldset").disabled = false;
@@ -53,8 +52,7 @@ function handleFileUpload(event) {
         document.querySelector("#modal-message").textContent = errorMessage['error_message'];
         document.querySelector("#modal-title").textContent = 'An error has occured!'
         document.querySelector("#model-button-triger").click()
-        uploadFileInput.value = null;
-        uploadedFileURL.textContent = '';
+        .value = null;
         throw new Error(errorMessage);
       })
     }

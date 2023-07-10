@@ -140,10 +140,10 @@
                     <a class="badge bg-danger text-dark text-decoration-none home-badge fs-6" href="#">Signal processing</a>
                 </div>
                 <div class="col-12 col-md-auto">
-                    <a class="badge bg-success text-dark text-decoration-none home-badge fs-6" href="#">Arrival picking</a>
+                    <a class="badge bg-success text-dark text-decoration-none home-badge fs-6" href="{{ url_for('BP_pick_arrivals.show_template') }}">Arrival picking</a>
                 </div>
                 <div class="col-12 col-md-auto">
-                    <a class="badge bg-warning text-dark text-decoration-none home-badge fs-6" href="{{ url_for('asciitomseed.show_template') }}">ascii to mseed</a>
+                    <a class="badge bg-warning text-dark text-decoration-none home-badge fs-6" href="{{ url_for('BP_ascii_to_mseed.show_template') }}">ascii to mseed</a>
                 </div>
             </div>
             <div class="row justify-content-center align-items-center">
