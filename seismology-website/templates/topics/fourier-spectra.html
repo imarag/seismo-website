@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Fourier Spectra
+{% endblock %}
+
+
+
+{% block content %}
+
+    <div class="mb-5">
+
+        <section id="title-section" class="mb-5">
+            <div class="bg-light fs-2 p-5">
+                <div class="container-lg">
+                    <p class="display-4 text-center mb-5">Fourier Spectra</p>
+                    <div>
+                        <p class="text-center fs-3 text-muted">Calculate the Fourier spectra between a window on the waveform</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="description-section" class="">
+            <div class="container-lg  p-5 rounded fs-4">
+                <p class="text-start">
+                    Calculate the Fourier Spectra between a window on the seismic record. Start by uploading an <code>mseed</code> file. Then select 
+                    the signal window to calculate the Fourier Spectra using the <code>signal window left side</code> and the <code>window length</code>
+                    option to move the left window side and increase/decrease the window length, respectively. Add an additional window on the records
+                    to calculate the Fourier Spectra for the noise too. The noise window will have the same length as the signal window. When you have defined 
+                    the window(s), select the <kbd>compute</kbd> button to compute the Fourier Spectra. Navigate to the <kbd>Fourier Spectra</kbd> tab to
+                    see the result.
+                </p>
+            </div>
+        </section>
+
+        <p class="d-none" id="record-name-paragraph"></p>
+        
+        <section id="graph-section">
+            
+            <div class="container-lg text-bg-dark rounded p-5">
+                
+                <div class="mb-4">
+                    <button class="btn btn-outline-info" id="upload-file-button">Upload</button>
+                    <input type="file" id="upload-file-input" value="upload-file-input" name="upload-file-input" style="display: none;">
+                    <a class="btn btn-outline-info" href="{{ url_for('BP_fourier_spectra.get_the_code') }}">get the script</a>
+                
+                </div>
+                        
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                      <button class="nav-link active" id="time-series-tab" data-bs-toggle="tab" data-bs-target="#time-series-tab-pane" type="button" role="tab" aria-controls="time-series-tab-pane" aria-selected="true" disabled>Time Series</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                      <button class="nav-link"        id="fourier-tab"     data-bs-toggle="tab" data-bs-target="#fourier-tab-pane"     type="button" role="tab" aria-controls="fourier-tab-pane"     aria-selected="false" disabled>Fourier Spectra</button>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="time-series-tab-pane" role="tabpanel" aria-labelledby="time-series-tab" tabindex="0">
+                        <div class="row justify-content-center align-items-center"  id="fourier-spectra-start-by-upload-container">
+                            <div class="col text-center">
+                                <p class="fs-3">Start by <button class="btn btn-outline-info" id="upload-another-file-button">uploading</button> an mseed file</p>
+                                <input type="file" id="upload-another-file-input" value="upload-another-file-input" name="upload-file-input" style="display: none;">
+                            </div>
+                        </div>
+                        <div id="time-series-graph">
+                        
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade"             id="fourier-tab-pane"     role="tabpanel" aria-labelledby="fourier-tab"     tabindex="1">
+                        <div class="row justify-content-center align-items-center">
+                            <div class="col-12 col-lg-8 text-center">
+                                <div id="fourier-graph">
+
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-4 text-center">
+                                <p class="display-6">Download:</p>
+                                <a href="{{ url_for('BP_fourier_spectra.download', what_output='graph') }}" class="btn btn-lg btn-primary d-inline" id="download-graph-button">Graph</a>
+                                <a href="{{ url_for('BP_fourier_spectra.download', what_output='data') }}" class="btn btn-lg btn-danger d-inline" id="download-data-button">Data</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              
+                
+                <div id="options-menu" class="mt-3">
+                    <p class="text-start">Signal window left side <span class="badge rounded-pill text-bg-warning" id="signal-left-side-badge">1 sec</span></p>
+                    <input style="width: 100%" type="range" min="0" max="100" value="50" step="1" id="signal-window-left-side-slider">
+                    <p class="text-start mt-3">Window length <span class="badge rounded-pill text-bg-warning" id="window-length-badge">1 sec</span></p>
+                    <input style="width: 100%" type="range" min="0" max="100" value="50" step="1" id="window-length-slider">
+
+                    
+                    <div class="row justify-content-start align-items-center  mt-3">
+                        <div class="col-5">
+                            <p>Use the whole time series as the window</p>
+                        </div>
+                        <div class="col-5">
+                            <button id="whole-signal-button" class="btn btn-secondary">apply</button>
+                        </div>
+                    </div>
+
+                    <div class="row justify-content-start align-items-center  mt-3">
+                        <div class="col-5">
+                            <p>Add a noise window</p>
+                        </div>
+                        <div class="col-5">
+                            <button id="add-noise-button" class="btn btn-success">Add +</button>
+                            <button id="remove-noise-button" class="btn btn-danger">Remove</button>
+                        </div>
+                    </div>
+
+                    <div id="noise-slider-div">
+                        <p class="text-start">Noise window right side <span class="badge rounded-pill text-bg-warning" id="noise-right-side-badge">1 sec</span></p>
+                        <input style="width:100%" type="range" min="0" max="100" value="50" step="1" id="noise-window-right-side-slider">
+                    </div>
+
+                    <div class="row justify-content-center align-items-center text-center">
+                        <div class="col-12">
+                            <button class="btn btn-primary p-3 mt-5" id="computeFourierButton">Compute Fourier</button>
+                        </div>
+                    </div>  
+                </div>
+
+                <div class="text-center  bg-red text-red mt-3" id="spinner-div">
+                    <div class="spinner-border spinner-border-xl text-warning" role="status">
+                      <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="modal fade" id="modalErrorMessage" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header" id="modal-header">
+                      <h1 class="modal-title fs-5 text-dark" id="modal-title">Modal title</h1>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="modal-body">
+                        <p id="modal-message" class="fs-5"></p>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#modalErrorMessage" id="modal-button-triger">
+                modal
+            </button>
+        </section>
+
+
+
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="/static/js/fourier.js"></script>
+ 
+
+
+        
+
+{% endblock %}

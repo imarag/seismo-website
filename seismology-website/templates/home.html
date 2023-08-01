@@ -36,7 +36,7 @@
             </div>
             <div class="row justify-content-center align-items-center">
                 <div class="col-8 col-md-5">
-                    <p class="text-muted fs-4">use one of the <a href="{{ url_for('home_interactive_filter') }}" class="link-primary">interactive tools</a> to process and analyze real seismological data</p>
+                    <p class="text-muted fs-4">Try the <a href="{{ url_for('home_interactive_filter') }}" class="link-primary">interactive tools</a> to process and analyze real seismological data</p>
                 </div>
                 <div class="col-4 col-sm-3 col-md-3 col-lg-2">
                     <img src="/static/img/home-images/interactive.svg" class="img-fluid" alt="read topic">
@@ -49,6 +49,19 @@
             </div>
         </div>
     </section>
+
+    <!-- <section class="bg-secondary">
+        <div class="container-lg py-5">
+            <div class="row">
+                <div class="col">
+                    <img src="{{ url_for('static', filename='img/templates-icons.obspy-icon.png') }}" class="img-fluid">
+                </div>
+                <div class="col">
+                    <p></p>
+                </div>
+            </div>
+        </div>
+    </section> -->
 
     <!-- <section class="bg-light2 text-light py-5" id="seismological-topics">
         <div class="container-lg">
@@ -78,6 +91,29 @@
 
     <section>
         <div class="container-lg py-5">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-12 col-md-6 col-lg-7 text-center">
+                    <div class="row justify-content-center align-items-center">
+                        <div class="col-3 d-none d-lg-block">
+                            <img src="{{ url_for('static', filename='img/home-images/obspy-image.png') }}" alt="obspy example code" class="img-fluid">
+                        </div>
+                        <div class="col-9">
+                            <p class="text-center text-lg-start display-4 text-muted">Delve into the Python Obspy library</p>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col-9 col-md-6 col-lg-5 text-center">
+                    <img src="{{ url_for('static', filename='img/home-images/obspy-script-example.gif') }}" alt="obspy example code" class="img-fluid">
+                </div>
+            </div>
+        </div>
+        <p class="text-muted fs-4 text-center ">click <a href="#">here</a> to learn more...</p>
+    </section>
+
+    <section>
+        <div class="container-lg py-5 mt-5">
             <div class="row justify-content-center align-items-center text-center">
                 <div class="col-12 col-md-10 col-lg-6">
                     <h2 class="display-4 text-muted text-center border-start border-secondary border-4 ps-3">Learn about the Site Effect<br><span class="text-muted display-6">(hover to the image)</span></h2>
@@ -134,10 +170,10 @@
             <h2 class="display-4 text-muted text-center mb-5">Try the interactive tools</h2>
             <div class="row justify-content-center my-5 gy-2 text-center">
                 <div class="col-12 col-md-auto">
-                    <a class="badge bg-secondary text-dark text-decoration-none home-badge fs-6" href="#">Fourier spectra</a>
+                    <a class="badge bg-secondary text-dark text-decoration-none home-badge fs-6" href="{{ url_for('BP_fourier_spectra.show_template') }}">Fourier spectra</a>
                 </div>
                 <div class="col-12 col-md-auto">
-                    <a class="badge bg-danger text-dark text-decoration-none home-badge fs-6" href="#">Signal processing</a>
+                    <a class="badge bg-danger text-dark text-decoration-none home-badge fs-6" href="{{ url_for('BP_signal_processing.show_template') }}">Signal processing</a>
                 </div>
                 <div class="col-12 col-md-auto">
                     <a class="badge bg-success text-dark text-decoration-none home-badge fs-6" href="{{ url_for('BP_pick_arrivals.show_template') }}">Arrival picking</a>

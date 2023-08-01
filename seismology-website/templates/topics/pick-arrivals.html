@@ -39,13 +39,13 @@
     </section>
 
 
-    <section id="graph-section">
+    <section id="graph-section" style="position: relative;">
         <div class="container-lg">
             <div class="row bg-dark2 p-3 mt-5">
                 <div class="col">
                     <button class="btn btn-outline-info me-3" id="upload-file-button">Upload</button>
                     <input type="file" id="upload-file-input" style="display:none;">
-                    <button class="btn btn-outline-success" id="save-arrivals-button" disabled>Show arrivals</button>
+                    <button class="btn btn-outline-success" id="save-arrivals-button" disabled>Save arrivals</button>
                 </div>
             </div>
             <div class="row bg-dark p-3 align-items-center">
@@ -56,8 +56,8 @@
                     <input type="radio" id="s-wave-radio" name="ps-wave-radio" disabled>
                 </div>
                 <div class="col-4 text-start">
-                    <button class="btn btn-danger d-none" id="remove-p-wave-button"  disabled>del P</button>
-                    <button class="btn btn-danger d-none"  id="remove-s-wave-button" disabled>del S</button>
+                    <button class="btn btn-danger" id="remove-p-wave-button">del P</button>
+                    <button class="btn btn-danger"  id="remove-s-wave-button">del S</button>
                 </div>
                 <div class="col-5 col-sm-4 col-md-3 col-lg-3 col-xl-2 text-center">
                     <select class="form-select" aria-label="filter-dropdown" id="filters-dropdown" disabled>
@@ -72,13 +72,7 @@
                 </div>
             </div>
 
-            <div id="spinner-div" style="display:none;">
-                <div class="text-center">
-                    <div class="spinner-border my-3" role="status" >
-                    <span class="visually-hidden">Loading...</span>
-                    </div>
-                </div>
-            </div>
+            <p class="d-none" id="record-name-paragraph"></p>
             
             <div class="row bg-secondary border-start border-end border-dark border-5">
                 <div class="col-12 text-center ms-0 ps-0" id="picking-graph-container">
@@ -87,19 +81,26 @@
             </div>
             <div class="row bg-dark mb-5">
                 <div class="col-12 text-center text-md-end p-3">
-                    <input class="rounded" type="number" id="left-filter-input" placeholder="eg. 0.1" disabled>
-                    <input class="rounded" type="number" id="right-filter-input" placeholder="eg. 1" disabled>
+                    <input class="rounded" type="number" id="left-filter-input" placeholder="eg. 0.1"  disabled>
+                    <input class="rounded" type="number" id="right-filter-input" placeholder="eg. 1"  disabled>
                 </div>
             </div>
         
+        </div>
+        <div id="spinner-div" style="display:none; position: absolute; top: 50%; left: 50%;">
+            <div class="text-center">
+                <div class="spinner-border my-3" role="status" >
+                <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
         </div>
     </section>
 
     <div class="modal fade" id="modalErrorMessage" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
-            <div class="modal-header bg-danger">
-              <h1 class="modal-title fs-5 bg-danger text-dark" id="modal-title">Modal title</h1>
+            <div class="modal-header" id="modal-header">
+              <h1 class="modal-title fs-5 text-dark" id="modal-title">Modal title</h1>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -112,7 +113,7 @@
         </div>
     </div>
     <button type="button" class="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#modalErrorMessage" id="model-button-triger">
-        modal example
+        modal
     </button>
 
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>

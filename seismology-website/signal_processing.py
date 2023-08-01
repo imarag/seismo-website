@@ -1,34 +1,58 @@
-from flask import Flask, Blueprint, current_app, render_template, url_for, abort, request, jsonify, session, Response, session, send_from_directory, send_file, redirect
+from flask import Flask, Blueprint, current_app, make_response, render_template, url_for, abort, request, jsonify, session, Response, session, send_from_directory, send_file, redirect
 import os
 from flask_session import Session
 from obspy.core import read, UTCDateTime
 from obspy.core.trace import Trace
 from obspy.core.stream import Stream
 import numpy as np
-import pandas as pd
-import uuid
-import io
 
-bp = Blueprint('signal-processing', __name__, url_prefix = '/signal-processing')
+bp = Blueprint('BP_signal_processing', __name__, url_prefix = '/signal-processing')
 
 
 def generate_error_response(message):
-    response = jsonify({'error-message': message})
-    response.status_code = 400
+    response = make_response(jsonify({'error_message':message}), 400)
     return response
+
+
+def generate_mseed_save_file_path():
+    # Create the folder path by combining the root path and folder name
+    folder_path = os.path.join(current_app.root_path, 'data_files')
+    # Create the folder if it doesn't exist
+    os.makedirs(folder_path, exist_ok=True)
+    # get the user id to save from the session
+    user_id = session.get('user_id', 'test')
+    # Save the DataFrame to a CSV file in the specified folder
+    file_path = os.path.join(folder_path, str(user_id) + '_' + 'signal-processing' + '.mseed')
+    return file_path
+
+def generate_processed_mseed_save_file_path():
+    # Create the folder path by combining the root path and folder name
+    folder_path = os.path.join(current_app.root_path, 'data_files')
+    # Create the folder if it doesn't exist
+    os.makedirs(folder_path, exist_ok=True)
+    # get the user id to save from the session
+    user_id = session.get('user_id', 'test')
+    # Save the DataFrame to a CSV file in the specified folder
+    file_path = os.path.join(folder_path, "processed_" + str(user_id) + '_' + 'signal-processing' + '.mseed')
+    return file_path
 
 
 def convert_mseed_to_json(stream):
     traces_data_dict = {}
     first_trace = stream[0]
-    starttime = first_trace.stats["starttime"].isoformat()
+    starttime = first_trace.stats["starttime"]
     fs = float(first_trace.stats["sampling_rate"])
     station = first_trace.stats["station"]
+    rec_name = str(starttime.date) + "_" + str(starttime.time) + "_" + station
+    rec_name = rec_name.replace(":", "").replace("-", "")
+    starttime = starttime.isoformat()
+
     for n, trace in enumerate(stream):
         ydata = trace.data.tolist()
         xdata = trace.times().tolist()
 
         trace_data = {
+            'record-name': rec_name,
             'ydata': ydata,
             'xdata': xdata,
             'stats': {
@@ -39,75 +63,79 @@ def convert_mseed_to_json(stream):
             },
             }
         traces_data_dict[f'trace-{n}'] = trace_data
-   
     return jsonify(traces_data_dict)
 
+@bp.route('/show-template', methods=['GET'])
+def show_template():
+   return render_template('topics/signal-processing.html')
 
-@bp.route('/upload-mseed-file', methods=['GET', 'POST'])
-def upload():
-    global unique_session_id
-   
+
+
+@bp.route('/upload-mseed-file', methods=['POST'])
+def upload_mseed_file():
+
+    files = request.files
+
     # check if file exists
-    if 'file' not in request.files or len(request.files) < 1:
-        generate_error_response('No file uploaded!')
+    if 'file' not in files or len(files) < 1:
+        return generate_error_response('No file uploaded!')
 
     # Get the uploaded file from the request
-    mseed_file = request.files['file']
+    mseed_file = files['file']
 
     # Read the MSeed file using obspy
     try:
         stream = read(mseed_file)
     except Exception as e:
-        generate_error_response(str(e))
+        return generate_error_response(str(e))
 
-    # if the stream has 0 or more that 3 traces abort
-    if len(stream) <= 0 or len(stream) > 3:
-        error_message = f'The stream must contain up to three traces. Your stream contains {len(stream)} traces!'
-        generate_error_response(error_message)
+    # if the stream has 0, 1 or more that 3 traces abort
+    if len(stream) <= 1 or len(stream) > 3:
+        error_message = f'The stream must contain two or three traces. Your stream contains {len(stream)} traces!'
+        return generate_error_response(error_message)
 
     # if at least one of the traces is empty abort
     for tr in stream:
         if len(tr.data) == 0:
             error_message = 'One or more of your traces in the stream object, is empty.'
-            generate_error_response(error_message)
+            return generate_error_response(error_message)
 
     # if the user hasn't defined nor the fs neither the delta, then error
     if stream[0].stats['sampling_rate'] == 1 and stream[0].stats['delta'] == 1:
         error_message = 'Neither sampling rate (fs[Hz]) nor sample distance (delta[sec]) are specified in the trace objects. Consider including them in the stream traces, for the correct x-axis time representation!'
-        generate_error_response(error_message)
+        return generate_error_response(error_message)
 
-    unique_session_id = uuid.uuid4()
+    # get the file path to save the mseed file on the server
+    mseed_save_file_path = generate_mseed_save_file_path()
 
-    session['user-unique-id'] = unique_session_id
-    
-    processed_mseed_file_path = os.path.join(current_app.root_path, "static-data", f"user-{session['user-unique-id']}-mseed-file-processed.mseed")
-    stream.write(processed_mseed_file_path)
-    
-    # define the path of the written uploaded file
-    raw_mseed_file_path = os.path.join(current_app.root_path, "static-data", f"user-{session['user-unique-id']}-mseed-file.mseed")
+    # get the file path of the processed mseed
+    mseed_processed_file_path = generate_processed_mseed_save_file_path()
+
     # write the uploaded file
-    stream.write(raw_mseed_file_path)
+    stream.write(mseed_save_file_path)
+
+    # write the processed file
+    stream.write(mseed_processed_file_path)
 
     # convert the uploaded mseed file to json
     json_data = convert_mseed_to_json(stream)
+
     return json_data
 
 
 
-
-        
-
-
-
-bp.route("/apply-processing-taper", methods=["GET"])
+@bp.route("/apply-processing-taper", methods=["GET"])
 def process_signal_taper():
 
-    processed_mseed_file_path = os.path.join(current_app.root_path, "static-data", f"user-{session['user-unique-id']}-mseed-file-processed.mseed")
+    # get the file path of the processed mseed
+    mseed_processed_file_path = generate_processed_mseed_save_file_path()
     
-    mseed_data = read(processed_mseed_file_path)
+    mseed_data = read(mseed_processed_file_path)
+
     starttime = mseed_data[0].stats.starttime
     total_seconds = mseed_data[0].stats.endtime - starttime
 
+    # get the user selected options
     taper_length = request.args.get('taper-length-input')
     taper_side = request.args.get('taper-side-select')
     taper_type = request.args.get('taper-type-select')
@@ -115,59 +143,106 @@ def process_signal_taper():
     if not taper_length:
         taper_length = 0.3
 
-    mseed_data.taper(float(taper_length), type=taper_type, side=taper_side)
-    mseed_data.write(processed_mseed_file_path)
+    try:
+        # taper the mseed file
+        mseed_data.taper(float(taper_length), type=taper_type, side=taper_side)
+    except Exception as e:
+        generate_error_response(str(e))
+
+    # write the tapered file to the processed mseed file
+    mseed_data.write(mseed_processed_file_path)
+
+    # convert the uploaded mseed file to json
     json_data = convert_mseed_to_json(mseed_data)
+
     return json_data
 
-bp.route("/apply-processing-detrend", methods=["GET"])
+
+@bp.route("/apply-processing-detrend", methods=["GET"])
 def process_signal_detrend():
     
-    processed_mseed_file_path = os.path.join(current_app.root_path, "static-data", f"user-{session['user-unique-id']}-mseed-file-processed.mseed")
-    
-    mseed_data = read(processed_mseed_file_path)
-    starttime = mseed_data[0].stats.starttime
-    total_seconds = mseed_data[0].stats.endtime - starttime
-    
-    
+    # get the file path of the processed mseed
+    mseed_processed_file_path = generate_processed_mseed_save_file_path()
+
+    mseed_data = read(mseed_processed_file_path)
+
+    # get the user selected detrend type
     detrend_type = request.args.get('detrend-type-select')
-    mseed_data.detrend(type=detrend_type)
-    mseed_data.write(processed_mseed_file_path)
+
+    # detrend the mseed file
+    try:
+        mseed_data.detrend(type=detrend_type)
+    except Exception as e:
+        generate_error_response(str(e))
+
+    # write the detrended file to the processed mseed file
+    mseed_data.write(mseed_processed_file_path)
+
+    # convert the uploaded mseed file to json
     json_data = convert_mseed_to_json(mseed_data)
+
     return json_data
 
 
 
-bp.route("/apply-processing-trim", methods=["GET"])
+
+@bp.route("/apply-processing-trim", methods=["GET"])
 def process_signal_trim():
     
-    processed_mseed_file_path = os.path.join(current_app.root_path, "static-data", f"user-{session['user-unique-id']}-mseed-file-processed.mseed")
+    # get the file path of the processed mseed
+    mseed_processed_file_path = generate_processed_mseed_save_file_path()
+
+    # read the mseed file (the processed mseed file)
+    mseed_data = read(mseed_processed_file_path)
     
-    mseed_data = read(processed_mseed_file_path)
     starttime = mseed_data[0].stats.starttime
     total_seconds = mseed_data[0].stats.endtime - starttime
+
+    # get the user selected options
     trim_left_side = request.args.get('trim-left-side-input')
     trim_right_side = request.args.get('trim-right-side-input')
 
+    # because some elements are input number, the user can leave it empty
     if not trim_left_side:
         trim_left_side = 0
     if not trim_right_side:
         trim_right_side = total_seconds
 
+    # a constraint about the trim
     if float(trim_left_side) >= float(trim_right_side):
         error_message = 'The left side cannot be greater or equal to the right side!'
         generate_error_response(error_message)
+    elif float(trim_left_side) < 0:
+        generate_error_response("The left filter cannot be less than zero!")
+    elif float(trim_right_side) > total_seconds:
+        generate_error_response("The right filter cannot be greater than the total seconds of the time series!")
     
-    mseed_data.trim(starttime=starttime+float(trim_left_side), endtime=starttime+float(trim_right_side))
-    mseed_data.write(processed_mseed_file_path)
+    # trim the mseed file
+    try:
+        mseed_data.trim(starttime=starttime+float(trim_left_side), endtime=starttime+float(trim_right_side))
+    except Exception as e:
+        generate_error_response(str(e))
+                                
+    # write the detrended file to the processed mseed file
+    mseed_data.write(mseed_processed_file_path)
+
+    # convert the uploaded mseed file to json
     json_data = convert_mseed_to_json(mseed_data)
+
     return json_data
 
-bp.route("/delete-applied-filter", methods=["GET"])
+
+@bp.route("/delete-applied-filter", methods=["GET"])
 def delete_filter():
-    raw_mseed_file_path = os.path.join(current_app.root_path, "static-data", f"user-{session['user-unique-id']}-mseed-file.mseed")
-    
-    mseed_data = read(raw_mseed_file_path)
+
+    # get the initial raw mseed file path
+    mseed_save_file_path = generate_mseed_save_file_path()
+
+    # get the file path of the processed mseed
+    mseed_processed_file_path = generate_processed_mseed_save_file_path()
+
+
+    mseed_data = read(mseed_save_file_path)
     starttime = mseed_data[0].stats.starttime
     total_seconds = mseed_data[0].stats.endtime - starttime
     
@@ -188,8 +263,7 @@ def delete_filter():
             trim_right_side = float(filt.split('-')[2].strip())
             mseed_data.trim(starttime=starttime+float(trim_left_side), endtime=starttime+float(trim_right_side))
     
-    processed_mseed_file_path = os.path.join(current_app.root_path, "static-data", f"user-{session['user-unique-id']}-mseed-file-processed.mseed")
-    mseed_data.write(processed_mseed_file_path)
+    mseed_data.write(mseed_processed_file_path)
     
     json_data = convert_mseed_to_json(mseed_data)
     return json_data

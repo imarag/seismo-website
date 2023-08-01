@@ -19,7 +19,7 @@ def generate_mseed_save_file_path():
     # Create the folder if it doesn't exist
     os.makedirs(folder_path, exist_ok=True)
     # get the user id to save from the session
-    user_id = session.get('user_id', None)
+    user_id = session.get('user_id', 'test')
     # Save the DataFrame to a CSV file in the specified folder
     file_path = os.path.join(folder_path, str(user_id) + '_' + 'pick-arrivals' + '.mseed')
     return file_path
@@ -28,14 +28,19 @@ def generate_mseed_save_file_path():
 def convert_mseed_to_json(stream):
     traces_data_dict = {}
     first_trace = stream[0]
-    starttime = first_trace.stats["starttime"].isoformat()
+    starttime = first_trace.stats["starttime"]
     fs = float(first_trace.stats["sampling_rate"])
     station = first_trace.stats["station"]
+    rec_name = str(starttime.date) + "_" + str(starttime.time) + "_" + station
+    rec_name = rec_name.replace(":", "").replace("-", "")
+    starttime = starttime.isoformat()
+
     for n, trace in enumerate(stream):
         ydata = trace.data.tolist()
         xdata = trace.times().tolist()
 
         trace_data = {
+            'record-name': rec_name,
             'ydata': ydata,
             'xdata': xdata,
             'stats': {
@@ -48,7 +53,7 @@ def convert_mseed_to_json(stream):
         traces_data_dict[f'trace-{n}'] = trace_data
     return jsonify(traces_data_dict)
 
-@bp.route('/show-template', methods=['GET', 'POST'])
+@bp.route('/show-template', methods=['GET'])
 def show_template():
    return render_template('topics/pick-arrivals.html')
 
@@ -71,9 +76,9 @@ def upload():
     except Exception as e:
         return generate_error_response(str(e))
 
-    # if the stream has 0 or more that 3 traces abort
-    if len(stream) <= 0 or len(stream) > 3:
-        error_message = f'The stream must contain two or three records. Your stream contains {len(stream)} traces!'
+    # if the stream has 0, 1 or more that 3 traces abort
+    if len(stream) <= 1 or len(stream) > 3:
+        error_message = f'The stream must contain two or three traces. Your stream contains {len(stream)} traces!'
         return generate_error_response(error_message)
 
     # if at least one of the traces is empty abort
@@ -87,13 +92,13 @@ def upload():
         error_message = 'Neither sampling rate (fs[Hz]) nor sample distance (delta[sec]) are specified in the trace objects. Consider including them in the stream traces, for the correct x-axis time representation!'
         return generate_error_response(error_message)
 
-    # inser the data file name to save in the data_files folder
+    # get the file path to save the mseed file on the server
     mseed_save_file_path = generate_mseed_save_file_path()
 
     # write the uploaded file
     stream.write(mseed_save_file_path)
-    # convert the uploaded mseed file to json (i also provide the mseed file path so that
-    # i can add it to the json object later).
+
+    # convert the uploaded mseed file to json
     json_data = convert_mseed_to_json(stream)
 
     return json_data
@@ -103,19 +108,32 @@ def upload():
 @bp.route("/apply-filter", methods=["GET"])
 def apply_filter():
 
+    # get the filter value
     filter_value = request.args.get('filter')
+
+    # get the uploaded mseed file to apply the filter to it
     file_location_path = generate_mseed_save_file_path()
+    
+    # read it
     mseed_data = read(file_location_path)
     
+    # according to the filter value, apply a filter to it
+    # if the filter is "initial" then don't do any filter, just return the raw values
     if filter_value != 'initial':
         freqmin = filter_value.split('-')[0]
         freqmax = filter_value.split('-')[1]
         if freqmin and not freqmax:
+            if float(freqmin) < 0.01 or float(freqmin) > 100:
+                return generate_error_response("The acceptable filter range is from 0.01 to 100 Hz!")
+            
             try:
                 mseed_data.filter("highpass", freq=float(freqmin))
             except Exception as e:
                 return generate_error_response(str(e))
         elif not freqmin and freqmax:
+            if float(freqmax) < 0.01 or float(freqmax) > 100:
+                return generate_error_response("The acceptable filter range is from 0.01 to 100 Hz!")
+            
             try:
                 mseed_data.filter("lowpass", freq=float(freqmax))
             except Exception as e:
@@ -125,6 +143,8 @@ def apply_filter():
         else:
             if float(freqmin) >= float(freqmax):
                 return generate_error_response('The left filter cannot be greater or equal to the right filter!')
+            elif float(freqmin) < 0.01 or float(freqmin) > 100 or float(freqmax) < 0.01 or float(freqmax) > 100:
+                return generate_error_response("The acceptable filter range is from 0.01 to 100 Hz!")
             
             try:
                 mseed_data.filter("bandpass", freqmin=float(freqmin), freqmax=float(freqmax))
@@ -137,3 +157,42 @@ def apply_filter():
     
 
 
+@bp.route("/save-arrivals", methods=["GET"])
+def save_arrivals():
+    
+    Parr = request.args.get('Parr')
+    Sarr = request.args.get('Sarr')
+
+    if Parr == "null" and Sarr == "null":
+        return generate_error_response("You need to select at least one arrival to save them!")
+    elif Parr != "null" and Sarr == "null":
+        dict_arrivals = {"P": float(Parr)}
+    elif Parr == "null" and Sarr != "null":
+        dict_arrivals = {"S": float(Sarr)}
+    else:
+        dict_arrivals = {"P": float(Parr), "S": float(Sarr)}
+
+
+    mseed_file_path = generate_mseed_save_file_path()
+    mseed_file_parent = os.path.dirname(mseed_file_path)
+
+    df = read(mseed_file_path)
+
+    station = df[0].stats.station
+    starttime = df[0].stats.starttime
+
+    arrivals_file_name = str(starttime.date) + "_" + str(starttime.time) + "_" + station + ".txt"
+    arrivals_file_name = arrivals_file_name.replace(":", "").replace("-", "")
+    arrivals_file_path = os.path.join(mseed_file_parent, arrivals_file_name)
+    
+    with open(arrivals_file_path, "w") as fw:
+        for pick_label in dict_arrivals:
+            fw.write(pick_label + " ")
+        fw.write("\n")
+
+        for pick_label in dict_arrivals:
+            fw.write(str(dict_arrivals[pick_label]) + " ")
+        fw.write("\n")
+    
+    return send_file(arrivals_file_path, mimetype=None, as_attachment=True, download_name=arrivals_file_name)
+            

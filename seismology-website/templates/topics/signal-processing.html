@@ -1,85 +1,104 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Python obspy
+    Signal processing
 {% endblock %}
 
-{% block extcss %}
-    <link rel="stylesheet" href="/static/css/signal-processing-style.css">
-{% endblock %}
+
 
 
 {% block content %}
 
-<div>
 
-    <section id="title-section">
-        <div class="bg-light fs-2" id="title-div">
+
+    <section id="title-section" class="mb-5">
+        <div class="bg-light fs-2 p-5">
             <div class="container-lg">
-                <p class="display-1 text-center mb-5">Signal Processing</p>
-                <p class="text-center display-6   bg-secondary text-light shadow-lg  fw-bold rounded p-3 mb-5" id="text-intro">A tool to process the seismogram signals according to your needs. Try the interactive tool below  </p>
+                <p class="display-4 text-center mb-5">Signal processing</p>
+                <div>
+                    <p class="text-center fs-3 text-muted">Upload a seismic record to process it using the available tools</p>
+                </div>
             </div>
-            <img src="/static/img/output3.svg" class="img-fluid" id="wave-one-line">
         </div>
     </section>
 
     <section id="explanation-section">
         <div class="container-lg fs-4">
             <p>
-                Upload an mseed file to process it using the available options.
+                Start by uploading an <kbd>mseed</kbd> file. Select the <kbd>P</kbd> or <kbd>S</kbd> wave option and click anywhere on the waveforms to
+                pick the arrival time of the selected wave. Use the <kbd>del P</kbd> and <kbd>del S</kbd> buttons to remove the applied arrival.
+                Fill free to use the filter dropdown 
+                to apply a filter to the waveforms, to facilite your picking. Using the entry boxes on the bottom 
+                you can manually insert a filter in addition to the pre-defined ones in the dropdown. If you fill in a value just for the left
+                entry box, a highpass filter is going to be applied with frequency, the one you specified.
+                If you insert a value just for the right entry box, a lowpass
+                filter is going to be applied with frequency, the one you specified.
+                If both are filled, a bandpass filter is applied. Use the <kbd>&ltenter&gt</kbd>
+                key to apply the manual filters.
             </p>
-            
         </div>
     </section>
 
-    
-    
 
-    <section id="options-section">
-        <div class="container-lg fs-4 bg-info rounded" id="option-menu">
-            <div class="row justify-content-center align-items-center text-center" id="option-row">
-                <div class="col-4  rounded relative-pos">
-                    <div class="d-lg-none d-block">
-                        <button class="btn btn-info dropdown-toggle" id="detrend-expanding-button-main" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="/static/img/signal-processing-images/detrend.png" class="img-fluid">
-                            <p class=" text-dark">Detrend</p>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <div class="p-3 text-center">
-                                <form  action="/apply-processing-detrend" method="GET" id="detrend-form-element-expanding">
-                                    <div class="row justify-content-center text-center">
-                                        <div class="col-12">
-                                            <p class="fs-4 text-center  mb-3  fw-bold">Detrend</p>
-                                            <hr>
-                                            <label for="detrend-type-select-expanding" class="form-label">type</label>
-                                            <select class="form-select" name="detrend-type-select" aria-label="Default select example" id="detrend-type-select-expanding">
-                                                <option value="simple" name="simple">simple</option>
-                                                <option value="linear" name="linear">linear</option>
-                                                <option value="constant" name="constant">constant</option>
-                                                <option value="polynomial" name="polynomial"">polynomial</option>
-                                                <option value="spline" name="spline">spline</option>
-                                            </select>
-                                            <button type="submit" class="btn btn-primary mt-3" id="detrend-apply-button-expanding">apply</button>
+   
+    <section>  
+        <div class="container-lg">
+            <div class="px-4 py-2 border-bottom border-dark mb-4 mt-5">
+                <button class="btn btn-light" id="upload-file-button">
+                    <img src="{{ url_for('static', filename='img/signal-processing-images/upload-file.png') }}" class="img-fluid signal-processing-icon">
+                    Upload
+                </button>
+                <input type="file" id="upload-file-input" value="upload-file-input" name="upload-file-input" style="display: none;">
+            </div>
+        </div>
+    </section>
+
+    <section>
+       
+        <div class="container-lg" id="signal-processing-option-menu">
+            <div class="bg-info rounded py-2 px-3">
+                <div class="row justify-content-center align-items-center text-center" id="option-row">
+                    <div class="col-4  rounded relative-pos">
+                        <div class="d-lg-none d-block">
+                            <button class="btn btn-info dropdown-toggle" id="detrend-expanding-button-main" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="/static/img/signal-processing-images/detrend.png" class="img-fluid signal-processing-icon">
+                                <p class="text-dark">Detrend</p>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <div class="p-3 text-center">
+                                    <form  action="{{ url_for('BP_signal_processing.process_signal_detrend') }}" method="GET" id="detrend-form-element-expanding">
+                                        <div class="row justify-content-center text-center">
+                                            <div class="col-12">
+                                                <p class="text-center  mb-3  fw-bold">Detrend</p>
+                                                <hr>
+                                                <label for="detrend-type-select-expanding" class="form-label">type</label>
+                                                <select class="form-select" name="detrend-type-select" aria-label="Default select example" id="detrend-type-select-expanding">
+                                                    <option value="simple" name="simple">simple</option>
+                                                    <option value="linear" name="linear">linear</option>
+                                                    <option value="constant" name="constant">constant</option>
+                                                    <option value="polynomial" name="polynomial"">polynomial</option>
+                                                    <option value="spline" name="spline">spline</option>
+                                                </select>
+                                                <button class="btn btn-primary mt-3" id="detrend-apply-button-expanding">apply</button>
+                                            </div>
                                         </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </ul>
-                    </div>
-                    <div class="d-none d-lg-block">
-                        <div class="row align-items-center">
-                            <div class="col">
-                                <img src="/static/img/signal-processing-images/detrend.png" class="img-fluid my-0 py-0">
-                            </div>
-                            <div class="col">
-                                <p class="fs-5 text-center  my-0 py-0 fw-bold">Detrend</p>
-                            </div>
+                                    </form>
+                                </div>
+                            </ul>
                         </div>
-                        <hr class="mt-1 mb-1">
-                        <form  action="/apply-processing-detrend" method="GET" id="detrend-form-element">
+                        <div class="d-none d-lg-block">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <img src="/static/img/signal-processing-images/detrend.png" class="img-fluid my-0 py-0 signal-processing-icon">
+                                </div>
+                                <div class="col">
+                                    <p class="text-center  my-0 py-0 fw-bold">Detrend</p>
+                                </div>
+                            </div>
+                            <hr class="mt-1 mb-1">
                             <div class="row justify-content-center align-items-start text-center d-none d-lg-block">
                                 <div class="col-4">
-                                    <label for="detrend-type-select" class="form-label  fs-6">type</label>
+                                    <label for="detrend-type-select" class="form-label">type</label>
                                     <select class="form-select form-element" name="detrend-type-select" aria-label="Default select example" id="detrend-type-select">
                                         <option value="simple" name="simple">simple</option>
                                         <option value="linear" name="linear">linear</option>
@@ -95,22 +114,20 @@
 
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-success mt-3 absolute-pos" id="detrend-apply-button">apply</button>
-                        </form>
+                            <button class="btn btn-dark mt-3 absolute-pos" id="detrend-apply-button">apply</button>
+                        </div>
                     </div>
-                </div>
-                <div class="col-4  border-start border-light border-1 relative-pos">
-                    <div class="d-lg-none d-block">
-                        <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="/static/img/signal-processing-images/taper.png" class="img-fluid">
-                            <p class=" text-dark">Taper</p>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <div class="p-3 text-center">
-                                <form action="/apply-processing-taper"  method="GET" id="taper-form-element-expanding">
+                    <div class="col-4  border-start border-light border-1 relative-pos">
+                        <div class="d-lg-none d-block">
+                            <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="/static/img/signal-processing-images/taper.png" class="img-fluid signal-processing-icon">
+                                <p class=" text-dark">Taper</p>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <div class="p-3 text-center">
                                     <div class="row justify-content-center text-center">
                                         <div class="col-12">
-                                            <p class="fs-4 text-center  mb-3  fw-bold">Taper</p>
+                                            <p class="text-center  mb-3  fw-bold">Taper</p>
                                             <hr>
                                             <label for="taper-type-select-expanding" class="form-label">type</label>
                                             <select class="form-select" aria-label="Default select example" name="taper-type-select" id="taper-type-select-expanding">
@@ -142,27 +159,25 @@
                                             </select>
                                             <label for="taper-length-input-expanding" class="form-label">length %</label>
                                             <input id="taper-length-input-expanding" name="taper-length-input" class="form-control form-control-sm"  type="number" min="0" max="50" step="1" value="30"> 
-                                            <button type="submit" class="btn btn-primary  mt-3 " id="taper-apply-button-expanding">apply</button>
+                                            <button class="btn btn-primary  mt-3 " id="taper-apply-button-expanding">apply</button>
                                         </div>
                                     </div>
-                                </form>
-                            </div>
-                        </ul>
-                    </div>
-                    <div class="d-none d-lg-block">
-                        <div class="row align-items-center">
-                            <div class="col">
-                                <img src="/static/img/signal-processing-images/taper.png" class="img-fluid my-0 py-0">
-                            </div>
-                            <div class="col">
-                                <p class="fs-5 text-center  my-0 py-0 fw-bold">Taper</p>
-                            </div>
+                                </div>
+                            </ul>
                         </div>
-                        <hr class="mt-1 mb-1">
-                        <form action="/apply-processing-taper"  method="GET" id="taper-form-element">
+                        <div class="d-none d-lg-block">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <img src="/static/img/signal-processing-images/taper.png" class="img-fluid my-0 py-0 signal-processing-icon">
+                                </div>
+                                <div class="col">
+                                    <p class="text-center  my-0 py-0 fw-bold">Taper</p>
+                                </div>
+                            </div>
+                            <hr class="mt-1 mb-1">
                             <div class="row justify-content-center align-items-start text-center">
                                 <div class="col-4">
-                                    <label for="taper-type-select" class="form-label  fs-6">type</label>
+                                    <label for="taper-type-select" class="form-label">type</label>
                                     <select class="form-select form-element" name="taper-type-select" aria-label="Default select example" id="taper-type-select">
                                         <option value="cosine"           name="cosine"          >cosine</option>
                                         <option value="barthann"         name="barthann"        >barthann</option>
@@ -186,7 +201,7 @@
                                     </select>
                                 </div>
                                 <div class="col-4">
-                                    <label for="taper-side-select" class="form-label fs-6">side</label>
+                                    <label for="taper-side-select" class="form-label">side</label>
                                     <select class="form-select form-element" aria-label="Default select example" name="taper-side-select" id="taper-side-select">
                                         <option value="left"             name="left"           >left</option>
                                         <option value="right"            name="right"          >right</option>
@@ -194,131 +209,133 @@
                                     </select>
                                 </div>
                                 <div class="col-4">
-                                    <label for="taper-length-input" class="form-label fs-6">length %</label>
+                                    <label for="taper-length-input" class="form-label">length %</label>
                                     <input id="taper-length-input" name="taper-length-input" class="form-control form-control-sm form-element"  type="number" min="0" max="50" step="1" value="30"> 
                                 </div>
                                 
                             </div>
-                            <button type="submit" class="btn btn-success mt-3 absolute-pos" id="taper-apply-button">apply</button>
-                        </form>
+                            <button class="btn btn-dark mt-3 absolute-pos" id="taper-apply-button">apply</button>
+                         
+                        </div>
+                        
                     </div>
                     
-                </div>
-                
-                <div class="col-4 border-start border-light border-1  relative-pos">
-                    <div class="d-lg-none d-block">
-                        <button class="btn btn-info dropdown-toggle" id="trim-expanding-button-main" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="/static/img/signal-processing-images/trim.png" class="img-fluid">
-                            <p class=" text-dark">Trim</p>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <div class="p-3 text-center">
-                                <form action="/apply-processing-trim" method="GET" id="trim-form-element-expanding">
+                    <div class="col-4 border-start border-light border-1  relative-pos">
+                        <div class="d-lg-none d-block">
+                            <button class="btn btn-info dropdown-toggle" id="trim-expanding-button-main" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="/static/img/signal-processing-images/trim.png" class="img-fluid signal-processing-icon">
+                                <p class=" text-dark">Trim</p>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <div class="p-3 text-center">
                                     <div class="row justify-content-center text-center">
                                         <div class="col-12">
-                                            <p class="fs-4 text-center  mb-3  fw-bold">Trim</p>
+                                            <p class="text-center  mb-3  fw-bold">Trim</p>
                                             <hr>
                                             <label for="trim-left-side-input-expanding" class="form-label">left side</label>
                                             <input id="trim-left-side-input-expanding" name="trim-left-side-input" class="form-control form-control-sm"  type="number" min="0"  step="1" value="5">
                                             <label for="trim-right-side-input-expanding" class="form-label">right side</label>
                                             <input id="trim-right-side-input-expanding" name="trim-right-side-input" class="form-control form-control-sm"  type="number" min="0"  step="1" value="10">
-                                            <button type="submit" class="btn btn-primary mt-3" id="trim-apply-button-expanding">apply</button>
+                                            <button class="btn btn-primary mt-3" id="trim-apply-button-expanding">apply</button>
                                         </div>
                                     </div>
-                                </form>
-                            </div>
-                        </ul>
-                    </div>
-                    
-                    <div class="d-none d-lg-block">
-                        
-                        <div class="row align-items-center">
-                            <div class="col">
-                                <img src="/static/img/signal-processing-images/trim.png" class="img-fluid my-0 py-0">
-                            </div>
-                            <div class="col">
-                                <p class="fs-5 text-center  my-0 py-0 fw-bold">Trim</p>
-                            </div>
+                                
+                                </div>
+                            </ul>
                         </div>
-                        <hr class="mt-1 mb-1">
-                        <form action="/apply-processing-trim" method="GET" id="trim-form-element">
+                        
+                        <div class="d-none d-lg-block">
+                            
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <img src="/static/img/signal-processing-images/trim.png" class="img-fluid my-0 py-0 signal-processing-icon">
+                                </div>
+                                <div class="col">
+                                    <p class="text-center  my-0 py-0 fw-bold">Trim</p>
+                                </div>
+                            </div>
+                            <hr class="mt-1 mb-1">
                             <div class="row justify-content-center align-items-start text-center">
                                 <div class="col-4">
-                                    <label for="trim-left-side-input" class="form-label fs-6">left side</label>
+                                    <label for="trim-left-side-input" class="form-label">left side</label>
                                     <input id="trim-left-side-input" name="trim-left-side-input" class="form-control form-control-sm form-element"  type="number" min="0"  step="1" value="5"> 
                                 </div>
                                 <div class="col-4">
-                                    <label for="trim-right-side-input" class="form-label fs-6">right side</label>
+                                    <label for="trim-right-side-input" class="form-label">right side</label>
                                     <input id="trim-right-side-input" name="trim-right-side-input" class="form-control form-control-sm form-element"  type="number" min="0"  step="1" value="10"> 
                                 </div>
                                 <div class="col-4">
                                     
                                 </div>
                             </div>
-                            <button class="btn btn-success mt-3 absolute-pos" type="submit" id="trim-apply-button">apply</button>
-                        </form>
+                            <button class="btn btn-dark mt-3 absolute-pos" id="trim-apply-button">apply</button>
+                         
+                        </div>
+                        
                     </div>
+                </div>
+            </div>
+        </div>
+  
+    </section> 
+
+
+
+    <section>
+        <div class="container-lg mb-5">
+
+            <div class="bg-dark">
+                <div class="row gx-2 justify-content-center" id="processing-pills-container">
+        
+                </div> 
+
+                <div id="spinner-div">
+                    <div class="text-center">
+                        <div class="spinner-border my-3  bg-warning" role="status" >
+                        <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row justify-content-center align-items-center"  id="signal-processing-start-by-upload-container">
+                    <div class="col text-center text-light">
+                        <p class="fs-3">Start by <button class="btn btn-outline-info" id="upload-another-file-button">uploading</button> an mseed file</p>
+                        <input type="file" id="upload-another-file-input" value="upload-another-file-input" name="upload-file-input" style="display: none;">
+                    </div>
+                </div>
+          
+                <div id="time-series-graph">
                     
                 </div>
             </div>
         </div>
-            
 
-       
-    </section>
-
-    <section id="processing-pills-section">
-        <div class="container-lg">
-            <div class="row gx-2 justify-content-center" id="processing-pills-container">
-
-            </div>  
-        </div>
-    </section>
-
-
-
-
-    <section id="graph-section">
-        <div class="container-lg bg-dark text-light rounded mb-5 ps-0 pe-0" id="graph-area-div">
-            
-            <div class="text-center mt-5 bg-white text-dark" id="spinner-div">
-                <div class="spinner-border spinner-border-xl" role="status">
-                  <span class="visually-hidden">Loading...</span>
+        <div class="modal fade" id="modalErrorMessage" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header" id="modal-header">
+                  <h1 class="modal-title fs-5 text-dark" id="modal-title">Modal title</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-            </div>
-            <div id="graph">
-                <div id="upload-file-paragraph">
-                    <p class="text-center fs-2 lead" >Start by 
-                        <input type="file" id="upload-input" value="upload-input" name="upload-input" style="display: none;">
-                        <button class="btn btn-info upload-button" id="upload-button-bottom">uploading</button> 
-                        an <code>mseed</code> file...
-                        
-                    </p>
-                    <p class="text-center fs-5 lead">or <button class="btn btn-info upload-button" id="load-button-bottom">load</button> an existing one, to test it.</p>
+                <div class="modal-body" id="modal-body">
+                    <p id="modal-message" class="fs-5"></p>
                 </div>
-                
-                
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
             </div>
         </div>
+        <button type="button" class="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#modalErrorMessage" id="modal-button-triger">
+            modal
+        </button>
         
+        <p class="d-none" id="record-name-paragraph"></p>
     </section>
 
-    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-        <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header">
-                <strong class="me-auto">Notification</strong>
-                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-            <div id="toast-body">
-            Hello, world! This is a toast message.
-            </div>
-        </div>
-    </div>
 
         
-       
-    
-</div>
+        
 
 
 

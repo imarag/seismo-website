@@ -1,0 +1,66 @@
+
+#*****************************Fourier spectra calculation*****************************
+
+# read the stream object
+mseed_data = read(mseed_file_path)
+
+# get the first trace
+first_trace = mseed_data[0]
+
+# get the starttime of the all the traces
+starttime = first_trace.stats.starttime
+
+# get the station name
+station = first_trace.stats.station
+
+# get the sampling frequency (fs) and the sample distance (dt)
+fs = first_trace.stats["sampling_rate"]
+dt = first_trace.stats["delta"]
+
+# calculate the nyquist frequency
+fnyq = fs / 2
+
+# loop through the number of uploaded traces in the stream object (mseed_data)
+for i in range(len(mseed_data)):
+
+	# get a copy of the trace for the signal Fourier calculation
+	df_s = mseed_data[i].copy()
+
+	# get the current trace channel
+	channel = df_s.stats.channel
+
+	# trim the waveform between the user selected window
+	df_s.trim(
+		starttime = starttime + float(signal_window_left_side), 
+		endtime=starttime + float(signal_window_left_side) + float(window_length)
+	)
+	
+	# get the number of sample points after the trim
+	npts = df_s.stats["npts"]
+
+	# calculate the number of frequencies on the frequency domain
+	sl = int(npts / 2)
+
+	# calculate the frequnecy array to plot the fourier spectra
+	freq_x = np.linspace(0 , fnyq , sl)
+
+	# compute the fft of the signal using the numpy fft function
+	yf_s = np.fft.fft(df_s.data[:npts]) 
+	
+	# get the absolute value of the previously calculated spectra and multiply by dt
+	y_write_s = dt * np.abs(yf_s)[0:sl]
+
+	# if the user also added the noise
+	if noise_selected == 'true':
+		# get a copy of the trace for the noise spectra
+		df_p = mseed_data[i].copy()
+
+		# trim it
+		df_p.trim(
+		starttime = starttime + float(noise_window_right_side) - float(window_length), 
+		endtime=starttime + float(noise_window_right_side)
+		)
+		
+		# calculate the fourier for the noise window (just like we need earlier)
+		yf_p = np.fft.fft(df_p.data[:npts]) 
+		y_write_p = dt * np.abs(yf_p)[0:sl]

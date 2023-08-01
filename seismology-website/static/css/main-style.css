@@ -81,3 +81,24 @@
 #picking-graph-container {
     height: 480px;
 }
+
+#fourier-spectra-start-by-upload-container {
+    height: 380px;
+    position: relative;
+}
+
+#signal-processing-start-by-upload-container {
+    height: 450px;
+    position: relative;
+}
+
+.signal-processing-icon {
+    width: 30px;
+    height: 30px;
+}
+
+#signal-processing-option-menu {
+    font-size: 15px;
+}
+
+

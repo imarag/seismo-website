@@ -1,40 +1,44 @@
 
+let uploadFileInput = document.querySelector('#upload-file-input');
+let filtersDropdown = document.querySelector("#filters-dropdown");
+let leftFilterEntry = document.querySelector("#left-filter-input");
+let rightFilterEntry = document.querySelector("#right-filter-input");
 let removePWaveButton = document.querySelector("#remove-p-wave-button");
 let removeSWaveButton = document.querySelector("#remove-s-wave-button");
 let PWaveRadio = document.querySelector("#p-wave-radio");
 let SWaveRadio = document.querySelector("#s-wave-radio");
-let filtersDropdown = document.querySelector("#filters-dropdown");
-let leftFilterEntry = document.querySelector("#left-filter-input");
-let rightFilterEntry = document.querySelector("#right-filter-input");
-let uploadFileInput = document.querySelector('#upload-file-input');
 let saveArrivals = document.querySelector("#save-arrivals-button");
 let spinnerDiv = document.querySelector("#spinner-div");
 
-let verticalLinesList;
-let annotationsList;
-let annotationsText = ['P', 'S'];
-let PSArrivalValues;
-let wavesPicked;
-let layout;
-let config;
-
 let listDisabled = [
-    PWaveRadio, SWaveRadio, saveArrivals, leftFilterEntry, rightFilterEntry, filtersDropdown
+    PWaveRadio, SWaveRadio, saveArrivals, 
+    leftFilterEntry, rightFilterEntry, filtersDropdown
 ];
+
+for (el of listDisabled) {
+    el.disabled = true;
+}
+
+let verticalLinesList;
+let annotationsList;   
+let wavesPicked;
+let PSArrivalValues;
+
+removePWaveButton.style.display = 'none';
+removeSWaveButton.style.display = 'none';
 
 document.querySelector("#upload-file-button").addEventListener('click', function() {
     uploadFileInput.click();
 });
 
 uploadFileInput.addEventListener('change', (ev) => {
-    const fileInput = ev.target;
-    const files = fileInput.files;
+    let files = ev.target.files;
 
     if (files.length === 0) {
-        return
+        return;
     }
 
-    const mseedFile = files[0];
+    let mseedFile = files[0];
 
     // create the formData
     let formData = new FormData();
@@ -45,41 +49,51 @@ uploadFileInput.addEventListener('change', (ev) => {
     // activate the spinner
     spinnerDiv.style.display = 'block';
 
+    // clear the Input with type "file" so that the user can re-load the same file
+    uploadFileInput.value = null;
+
     fetch('/pick-arrivals/upload-mseed-file', {
         method: 'POST',
         body: formData
       })
         .then(response => { 
-            // clear the Input with type "file" so that the user can re-load the same file
-            uploadFileInput.value = null;
 
             if (!response.ok) {
-                return response.json().then(errorMessage => {
-                    document.querySelector("#modal-message").textContent = errorMessage['error_message'];
-                    document.querySelector("#modal-title").textContent = 'An error has occured!'
-                    document.querySelector("#model-button-triger").click()
-                    throw new Error(errorMessage);
-                })
+                // deactivate spinner
+                spinnerDiv.style.display = 'none';
+                return response.json()
+                    .then(errorMessage => {
+                        document.querySelector("#modal-message").textContent = errorMessage['error_message'];
+                        document.querySelector("#modal-title").textContent = 'An error has occured!'
+                        document.querySelector("#modal-header").style.backgroundColor = "red";
+                        document.querySelector("#model-button-triger").click()
+                        throw new Error(errorMessage);
+                    })
               }
-              return response.json()
+            
+            return response.json()
         })
         .then(mseedData => {
             // deactivate spinner
             spinnerDiv.style.display = 'none';
-            // here i change the value of this dummy paragraph so that i save the filename path
-            // because i don't want to recompute the datetime.now()
+
+            // rename the dummy paragraph to have the record name
+            document.querySelector("#record-name-paragraph").textContent = mseedData["trace-0"]["record-name"];
+
+            // convert returned json object to a form that i can use to plot the graph
             let convertedMseedData = prepareTracesList(mseedData);
+            
+            // initialize some parameters
             initializeParameters();
+
+            // create the plot
             createNewPlot(convertedMseedData);
-            uploadFileInput.value = null;
         })
         .catch(error => {
           // Handle any errors during the upload process
           console.error('Error uploading MSeed file:', error);
         });
 })
-
-
 
 
 filtersDropdown.addEventListener('change', () => {
@@ -99,6 +113,43 @@ rightFilterEntry.addEventListener('keydown', (e) => {
 })
 
 
+function applyFilterPost(filterValue) {
+    // activate the spinner
+    spinnerDiv.style.display = 'block';
+
+    fetch(`/pick-arrivals/apply-filter?filter=${filterValue}`)
+    .then(response => {
+        if (!response.ok) {
+            // deactivate the spinner
+            spinnerDiv.style.display = 'none';
+
+            return response.json()
+                .then(errorMessage => {
+                    document.querySelector("#modal-message").textContent = errorMessage['error_message'];
+                    document.querySelector("#modal-header").style.backgroundColor = "red";
+                    document.querySelector("#modal-title").textContent = 'An error has occured!'
+                    document.querySelector("#model-button-triger").click();
+                    throw new Error(errorMessage);
+                })
+        }
+        return response.json()
+    })
+    .then(mseedData => {
+        // deactivate the spinner
+        spinnerDiv.style.display = 'none';
+
+        // get the mseed and convert them to plot them
+        let convertedMseedData = prepareTracesList(mseedData);
+        
+        // create the plot
+        createNewPlot(convertedMseedData);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+
 function initializeParameters() {
     verticalLinesList  = [];
     annotationsList = [];   
@@ -109,6 +160,7 @@ function initializeParameters() {
     filtersDropdown.value = 'initial';
     leftFilterEntry.value = '';
     rightFilterEntry.value = '';
+    PWaveRadio.checked = true;
 
     config = {
         scrollZoom: true,
@@ -141,25 +193,125 @@ function initializeParameters() {
 }
 
 
+function prepareTracesList(mseedDataObject) {
+    let xData;
+    let yData;
+    let tracesList = [];
+    let metr = 1;
+    let colors = ['#3e3efa', '#f5e027', '#77f754'];
 
-saveArrivals.addEventListener('click', function() {
-    if (!PSArrivalValues['P'] && !PSArrivalValues['S']) {
-        alert("You must select at least one arrival to use this option!");
-    }
-    else {
-        let text = `The arrivals saved are: P --> ${PSArrivalValues['P']} and S --> ${PSArrivalValues['S']}`
-        alert(text);
-    }
-})
+    for (tr in mseedDataObject) {
+        tracesList.push(
+            { 
+                x: mseedDataObject[tr]['xdata'], 
+                y: mseedDataObject[tr]['ydata'], 
+                type: 'scatter', 
+                mode: 'lines', 
+                name: `${mseedDataObject[tr]['stats']['channel']}` , 
+                xaxis:`x${metr}`, 
+                yaxis: `y${metr}`,
+                line: {color: colors[metr-1]}
+            }
+    );
+        metr += 1;
+    };
+    return tracesList;
+}
+
+
+
+function createNewPlot(tracesList) {
+    
+    Plotly.newPlot('picking-graph-container', tracesList, layout, config).then(function(graph) {
+
+        graph.on('plotly_doubleclick', function() {
+            Plotly.d3.event.preventDefault();
+        }).on('plotly_click', function(data) {
+            const xClick = data.points[0].x;
+
+            if (wavesPicked.length === 2) {
+                return;
+            }
+
+            let currentSelectedWave;
+            if (PWaveRadio.checked){
+                PWaveRadio.disabled = true;
+                wavesPicked.push('P');
+                PSArrivalValues['P'] = xClick;
+                removePWaveButton.style.display = 'inline';
+                SWaveRadio.checked = true;
+                currentSelectedWave = 'P';
+            }
+            else {
+                SWaveRadio.disabled = true;
+                wavesPicked.push('S');
+                PSArrivalValues['S'] = xClick;
+                removeSWaveButton.style.display = 'inline';
+                PWaveRadio.checked = true;
+                currentSelectedWave = 'S';
+            }
+            
+            for (let i=0; i<tracesList.length; i++) {
+                let yValues = tracesList[i]["y"].map(value => Number(value));
+                let yMin = Math.min(...yValues);
+                let yMax = Math.max(...yValues);
+
+
+                verticalLinesList.push(
+                    {
+                        type: 'line',
+                        x0: xClick,
+                        x1: xClick,
+                        y0: yMin,
+                        y1: yMax,
+                        xref: `x${i+1}`,
+                        yref: `y${i+1}`,
+                        which: currentSelectedWave,
+                        line: {color: 'black', width: 3.3, dash: 'dot'}
+                    }
+                );
+            
+            annotationsList.push(
+                {
+                    x: xClick,
+                    y: yMax/1.5,
+                    xref: `x${i+1}`,
+                    yref: `y${i+1}`,
+                    text: currentSelectedWave,
+                    which: currentSelectedWave,
+                    showarrow: false,
+                    font: {
+                        color: 'black', 
+                        size: 25, 
+                    },
+                    borderwidth: 0,
+                    borderpad: 2,
+                    bgcolor: '#3fcafc',
+                    opacity: 0.9
+                });
+            }
+
+
+            Plotly.relayout('picking-graph-container', {
+            shapes: verticalLinesList, annotations: annotationsList
+            }, config)
+
+        });
+    })
+}
+
+
 
 
 removePWaveButton.addEventListener('click', () => {
     
-    removePWaveButton.disabled = true;
+    removePWaveButton.style.display = 'none';
+    PWaveRadio.disabled = false;
+    PWaveRadio.checked = true;
+
     PSArrivalValues['P'] = null;
     
     wavesPicked = wavesPicked.filter(item => item !== 'P');
-
 
     let newVerticalLinesList = [];
     let newAnnotationsList = [];
@@ -186,7 +338,9 @@ removePWaveButton.addEventListener('click', () => {
 });
 
 removeSWaveButton.addEventListener('click', () => {
-    removeSWaveButton.disabled = true;
+    removeSWaveButton.style.display = 'none';
+    SWaveRadio.disabled = false;
+    SWaveRadio.checked = true;
     
     PSArrivalValues['S'] = null;
 
@@ -221,148 +375,54 @@ removeSWaveButton.addEventListener('click', () => {
 });
 
 
-function prepareTracesList(mseedDataObject) {
-    let xData;
-    let yData;
-    let tracesList = [];
-    let metr = 1;
 
-    for (tr in mseedDataObject) {
-        // in the server i also return the mseed file path. I dont want to use this here
-        if (tr === 'file-location-path') {
-            continue
-        }
-        console.log(mseedDataObject, tr);
-        tracesList.push(
-            { 
-                x: mseedDataObject[tr]['xdata'], 
-                y: mseedDataObject[tr]['ydata'], 
-                type: 'scatter', 
-                mode: 'lines', 
-                name: `Channel: ${mseedDataObject[tr]['stats']['channel']}` , 
-                xaxis:`x${metr}`, 
-                yaxis: `y${metr}`,
-                line: {color: '#367AFA'}
-            }
-    );
-        metr += 1;
-    };
-    return tracesList;
-}
+saveArrivals.addEventListener('click', () => {
 
-
-
-function applyFilterPost(filterValue) {
+    // activate the spinner
     spinnerDiv.style.display = 'block';
-    fetch(`/pick-arrivals/apply-filter?filter=${filterValue}`)
-    .then(response => {
-        if (!response.ok) {
-            return response.json().then(errorMessage => {
-                document.querySelector("#modal-message").textContent = errorMessage['error_message'];
-                document.querySelector("#modal-title").textContent = 'An error has occured!'
-                document.querySelector("#model-button-triger").click();
-                spinnerDiv.style.display = 'none';
-                throw new Error(errorMessage);
-            })
-          }
-        return response.json()
-        
-    })
-    .then(mseedData => {
-            spinnerDiv.style.display = 'none';
-            let convertedMseedData = prepareTracesList(mseedData);
-            createNewPlot(convertedMseedData);
-        })
-    .catch(error => {
-            console.error('Error:', error);
-        });
-}
-
-
-
-function createNewPlot(tracesList) {
     
-    Plotly.newPlot('picking-graph-container', tracesList, layout, config).then(function(graph) {
+    fetch(`/pick-arrivals/save-arrivals?Parr=${PSArrivalValues["P"]}&Sarr=${PSArrivalValues["S"]}`)
+        .then(response => { 
 
-        graph.on('plotly_doubleclick', function() {
-            Plotly.d3.event.preventDefault();
-        }).on('plotly_click', function(data) {
-            const xClick = data.points[0].x;
-
-            if (wavesPicked.length === 2) {
-                return;
-            }
-
-            let currentSelectedWave;
-            if (PWaveRadio.checked){
-                currentSelectedWave = 'P';
-            }
-            else {
-                currentSelectedWave = 'S';
-            }
-
-            if (currentSelectedWave === 'P') {
-                PWaveRadio.disabled = true;
-                wavesPicked.push('P');
-                PSArrivalValues['P'] = xClick;
-            }
-            else {
-                SWaveRadio.disabled = true;
-                wavesPicked.push('S');
-                PSArrivalValues['S'] = xClick;
-            }
-
-            if (wavesPicked.length === 2) {
-                PWaveRadio.disabled = true;
-                SWaveRadio.disabled = true; 
-            }
-
+            if (!response.ok) {
+                // deactivate spinner
+                spinnerDiv.style.display = 'none';
+                return response.json()
+                    .then(errorMessage => {
+                        document.querySelector("#modal-message").textContent = errorMessage['error_message'];
+                        document.querySelector("#modal-header").style.backgroundColor = "red";
+                        document.querySelector("#modal-title").textContent = 'An error has occured!'
+                        document.querySelector("#model-button-triger").click();
+                        throw new Error(errorMessage);
+                    })
+              }
             
-            for (let i=0; i<tracesList.length; i++) {
-                const yValues = tracesList[i]["y"].map(value => Number(value));
-                const yMin = Math.min(...yValues);
-                const yMax = Math.max(...yValues);
-            verticalLinesList.push(
-                {
-                    type: 'line',
-                    x0: xClick,
-                    x1: xClick,
-                    y0: yMin,
-                    y1: yMax,
-                    xref: `x${i+1}`,
-                    yref: `y${i+1}`,
-                    which: currentSelectedWave,
-                    line: {color: 'black', width: 4}
-                });
+            return response.blob()
+        })
+        .then(blobData => {
+            // deactivate spinner
+            spinnerDiv.style.display = 'none';
+
+            // Get the desired filename and file path from the JSON response
+            const blobURL = URL.createObjectURL(blobData);
+
+            // Create a temporary link to initiate the download
+            const link = document.createElement('a');
+            link.href = blobURL;
+
+            // Set the desired filename for the download
+            link.download = document.querySelector("#record-name-paragraph").textContent + ".txt";
+            link.click();
             
-            annotationsList.push(
-                {
-                    x: xClick-2,
-                    y: yMax/1.5,
-                    xref: `x${i+1}`,
-                    yref: `y${i+1}`,
-                    text: currentSelectedWave,
-                    which: currentSelectedWave,
-                    showarrow: false,
-                    font: {color: 'red', size: 40}
-                });
-            }
-
-
-            Plotly.relayout('picking-graph-container', {
-            shapes: verticalLinesList, annotations: annotationsList
-            }, config)
-
-            if (currentSelectedWave == 'P') {
-                currentSelectedWave = 'S';
-                removePWaveButton.disabled = false;
-            }
-            else {
-                currentSelectedWave = 'P';
-                removeSWaveButton.disabled = false;
-            }
-
+        })
+        .catch(error => {
+          // Handle any errors during the upload process
+          console.error('Error uploading MSeed file:', error);
         });
-    })
-}
+    
+})
+
+
+
+
 
