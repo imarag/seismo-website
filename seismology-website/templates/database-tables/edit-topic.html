@@ -8,11 +8,17 @@
     </head>
     <body>
         <h1 class="text-center display-1">Add Topic</h1>
-        <form  method="POST" action="{{ url_for('topics.edit_topic') }}">
+        <form  method="POST" action="{{ url_for('BP_topics_database.edit_topic', topic_id=topic['id']) }}">
             <div class="container-lg my-5 bg-dark text-light p-5 rounded">
                 <div class="row justify-content-center align-items-center">
+                    <div class="row justify-content-center align-items-center my-5">
+                        <div class="col text-center">
+                            <label for="topic-id">Topic id</label><br>
+                            <input type="text" id="topic-id" name="topic-id" value="{{ topic['id'] }}" readonly>
+                        </div>
+                    </div>
                     <div class="col text-center">
-                        <label for="topic-title-input">title</label><br>
+                        <label for="topic-title-input">topic title</label><br>
                         <input type="text" id="topic-title-input" name="topic-title-input" value="{{ topic['title'] }}">
                     </div>
                 </div>
@@ -24,14 +30,14 @@
                 </div>
                 <div class="row justify-content-center align-items-center my-5">
                     <div class="col text-center">
-                        <label for="topic-id">image url</label><br>
-                        <input type="text" id="topic-id" name="topic-id" value="{{ topic['id'] }}" readonly>
+                        <label for="topic-type-input">Topic type</label><br>
+                        <input type="text" id="topic-type-input" name="topic-type-input" value="{{ topic['type'] }}">
                     </div>
                 </div>
                 <div class="row justify-content-center align-items-center my-5">
                     <div class="col text-center">
-                        <label for="topic-type-input">image url</label><br>
-                        <input type="text" id="topic-type-input" name="topic-type-input" value="{{ topic['topic_type'] }}" readonly>
+                        <label for="topic-template-name-input">template name</label><br>
+                        <input type="text" id="topic-template-name-input" name="topic-template-name-input" value="{{ topic['template_name'] }}">
                     </div>
                 </div>
                 <div class="row justify-content-center align-items-center my-5">
@@ -40,6 +46,7 @@
                         <textarea rows="4" cols="50" id="topic-description-input" name="topic-description-input">{{ topic['description'] }}</textarea>
                     </div>
                 </div>
+                
                 <div class="row justify-content-center align-items-center">
                     <div class="col text-center">
                         <button type="submit" class="btn btn-success my-5" id="edit-topic-button">Update</button>

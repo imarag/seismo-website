@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Account details
+{% endblock %}
+
+
+
+{% block content %}
+
+    <div class="my-5">
+        <div class="container-lg fs-5 text-muted">
+            <p class="text-muted display-4 text-center my-5">Account information</p>
+            <div class="row justify-content-center align-items-center gy-3">
+                <div class="col-2 col-md-3 col-lg-2 text-center">
+                    <img src="{{ url_for('static', filename='img/user-account/person-vcard.svg') }}" class="img-fluid" alt="">
+                </div>
+                <div class="col-4 col-md-3 col-lg-2 text-center">
+                    <p class="my-0 fw-bold">fullname:</p>
+                </div>
+                <div class="col-12 col-sm-6  text-center">
+                    <p class="my-0">{{  user['fullname'] }}</p>
+                </div>
+            </div>
+            <hr class="mb-4">
+            <div class="row justify-content-center align-items-center gy-3">
+                <div class="col-2 col-md-3 col-lg-2 text-center">
+                    <img src="{{ url_for('static', filename='img/user-account/envelope.svg') }}" class="img-fluid" alt="">
+                </div>
+                <div class="col-4 col-md-3 col-lg-2 text-center">
+                    <p class="my-0 fw-bold">email:</p>
+                </div>
+                <div class="col-12 col-sm-6  text-center">
+                    <p class="my-0">{{ user['email'] }}</p>
+                </div>
+            </div>
+            <hr class="mb-4">
+            <div class="row justify-content-center align-items-center gy-3">
+                <div class="col-2 col-md-3 col-lg-2 text-center">
+                    <img src="{{ url_for('static', filename='img/user-account/calendar.svg') }}" class="img-fluid" alt="">
+                </div>
+                <div class="col-4 col-md-3 col-lg-2 text-center">
+                    <p class="my-0 fw-bold">registered date:</p>
+                </div>
+                <div class="col-12 col-sm-6  text-center">
+                    <p class="my-0">{{ user['registered_date'] }}</p>
+                </div>
+            </div>
+            <hr class="mb-4">
+            <div class="row justify-content-center align-items-center gy-3">
+                <div class="col-2 col-md-3 col-lg-2 text-center">
+                    <img src="{{ url_for('static', filename='img/user-account/calendar.svg') }}" class="img-fluid" alt="">
+                </div>
+                <div class="col-4 col-md-3 col-lg-2 text-center">
+                    <p class="my-0 fw-bold">last login date:</p>
+                </div>
+                <div class="col-12 col-sm-6  text-center">
+                    <p class="my-0">{{ user['last_login'] }}</p>
+                </div>
+            </div>
+            <hr class="mb-4">
+            
+
+        </div>
+    </div>
+
+{% endblock %}

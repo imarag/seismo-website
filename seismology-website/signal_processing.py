@@ -9,11 +9,6 @@ import numpy as np
 bp = Blueprint('BP_signal_processing', __name__, url_prefix = '/signal-processing')
 
 
-def generate_error_response(message):
-    response = make_response(jsonify({'error_message':message}), 400)
-    return response
-
-
 def generate_mseed_save_file_path():
     # Create the folder path by combining the root path and folder name
     folder_path = os.path.join(current_app.root_path, 'data_files')
@@ -46,7 +41,7 @@ def convert_mseed_to_json(stream):
     rec_name = str(starttime.date) + "_" + str(starttime.time) + "_" + station
     rec_name = rec_name.replace(":", "").replace("-", "")
     starttime = starttime.isoformat()
-
+    
     for n, trace in enumerate(stream):
         ydata = trace.data.tolist()
         xdata = trace.times().tolist()
@@ -65,6 +60,9 @@ def convert_mseed_to_json(stream):
         traces_data_dict[f'trace-{n}'] = trace_data
     return jsonify(traces_data_dict)
 
+
+
+
 @bp.route('/show-template', methods=['GET'])
 def show_template():
    return render_template('topics/signal-processing.html')
@@ -78,7 +76,8 @@ def upload_mseed_file():
 
     # check if file exists
     if 'file' not in files or len(files) < 1:
-        return generate_error_response('No file uploaded!')
+        error_message = 'No file uploaded!'
+        abort(400, description=error_message)
 
     # Get the uploaded file from the request
     mseed_file = files['file']
@@ -87,23 +86,24 @@ def upload_mseed_file():
     try:
         stream = read(mseed_file)
     except Exception as e:
-        return generate_error_response(str(e))
+        error_message = str(e)
+        abort(400, description=error_message)
 
     # if the stream has 0, 1 or more that 3 traces abort
     if len(stream) <= 1 or len(stream) > 3:
         error_message = f'The stream must contain two or three traces. Your stream contains {len(stream)} traces!'
-        return generate_error_response(error_message)
+        abort(400, description=error_message)
 
     # if at least one of the traces is empty abort
     for tr in stream:
         if len(tr.data) == 0:
             error_message = 'One or more of your traces in the stream object, is empty.'
-            return generate_error_response(error_message)
+            abort(400, description=error_message)
 
     # if the user hasn't defined nor the fs neither the delta, then error
     if stream[0].stats['sampling_rate'] == 1 and stream[0].stats['delta'] == 1:
         error_message = 'Neither sampling rate (fs[Hz]) nor sample distance (delta[sec]) are specified in the trace objects. Consider including them in the stream traces, for the correct x-axis time representation!'
-        return generate_error_response(error_message)
+        abort(400, description=error_message)
 
     # get the file path to save the mseed file on the server
     mseed_save_file_path = generate_mseed_save_file_path()
@@ -147,7 +147,8 @@ def process_signal_taper():
         # taper the mseed file
         mseed_data.taper(float(taper_length), type=taper_type, side=taper_side)
     except Exception as e:
-        generate_error_response(str(e))
+        error_message = str(e)
+        abort(400, description=error_message)
 
     # write the tapered file to the processed mseed file
     mseed_data.write(mseed_processed_file_path)
@@ -173,7 +174,8 @@ def process_signal_detrend():
     try:
         mseed_data.detrend(type=detrend_type)
     except Exception as e:
-        generate_error_response(str(e))
+        error_message = str(e)
+        abort(400, description=error_message)
 
     # write the detrended file to the processed mseed file
     mseed_data.write(mseed_processed_file_path)
@@ -211,17 +213,20 @@ def process_signal_trim():
     # a constraint about the trim
     if float(trim_left_side) >= float(trim_right_side):
         error_message = 'The left side cannot be greater or equal to the right side!'
-        generate_error_response(error_message)
+        abort(400, description=error_message)
     elif float(trim_left_side) < 0:
-        generate_error_response("The left filter cannot be less than zero!")
+        error_message = "The left filter cannot be less than zero!"
+        abort(400, description=error_message)
     elif float(trim_right_side) > total_seconds:
-        generate_error_response("The right filter cannot be greater than the total seconds of the time series!")
+        error_message = "The right filter cannot be greater than the total seconds of the time series!"
+        abort(400, description=error_message)
     
     # trim the mseed file
     try:
         mseed_data.trim(starttime=starttime+float(trim_left_side), endtime=starttime+float(trim_right_side))
     except Exception as e:
-        generate_error_response(str(e))
+        error_message = str(e)
+        abort(400, description=error_message)
                                 
     # write the detrended file to the processed mseed file
     mseed_data.write(mseed_processed_file_path)

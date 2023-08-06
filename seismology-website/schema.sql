@@ -12,5 +12,6 @@ CREATE TABLE topics (
     title TEXT NOT NULL,
     description TEXT NOT NULL,
     image_name TEXT NOT NULL,
-    topic_type TEXT NOT NULL
+    type TEXT NOT NULL,
+    template_name TEXT NOT NULL
 );

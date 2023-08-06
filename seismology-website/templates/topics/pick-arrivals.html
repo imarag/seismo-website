@@ -71,8 +71,6 @@
                     </select>
                 </div>
             </div>
-
-            <p class="d-none" id="record-name-paragraph"></p>
             
             <div class="row bg-secondary border-start border-end border-dark border-5">
                 <div class="col-12 text-center ms-0 ps-0" id="picking-graph-container">
@@ -96,25 +94,6 @@
         </div>
     </section>
 
-    <div class="modal fade" id="modalErrorMessage" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header" id="modal-header">
-              <h1 class="modal-title fs-5 text-dark" id="modal-title">Modal title</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p id="modal-message" class="fs-5"></p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-    </div>
-    <button type="button" class="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#modalErrorMessage" id="model-button-triger">
-        modal
-    </button>
 
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="/static/js/pick-arrivals.js"></script>

@@ -9,10 +9,6 @@ import pandas as pd
 
 bp = Blueprint('BP_pick_arrivals', __name__, url_prefix = '/pick-arrivals')
 
-def generate_error_response(message):
-    response = make_response(jsonify({'error_message':message}), 400)
-    return response
-
 def generate_mseed_save_file_path():
     # Create the folder path by combining the root path and folder name
     folder_path = os.path.join(current_app.root_path, 'data_files')
@@ -34,7 +30,7 @@ def convert_mseed_to_json(stream):
     rec_name = str(starttime.date) + "_" + str(starttime.time) + "_" + station
     rec_name = rec_name.replace(":", "").replace("-", "")
     starttime = starttime.isoformat()
-
+    
     for n, trace in enumerate(stream):
         ydata = trace.data.tolist()
         xdata = trace.times().tolist()
@@ -53,6 +49,7 @@ def convert_mseed_to_json(stream):
         traces_data_dict[f'trace-{n}'] = trace_data
     return jsonify(traces_data_dict)
 
+
 @bp.route('/show-template', methods=['GET'])
 def show_template():
    return render_template('topics/pick-arrivals.html')
@@ -65,7 +62,8 @@ def upload():
 
     # check if file exists
     if 'file' not in files or len(files) < 1:
-        return generate_error_response('No file uploaded!')
+        error_message="No file uploaded!"
+        abort(400, description=error_message)
 
     # Get the uploaded file from the request
     mseed_file = files['file']
@@ -74,23 +72,24 @@ def upload():
     try:
         stream = read(mseed_file)
     except Exception as e:
-        return generate_error_response(str(e))
+        error_message=str(e)
+        abort(400, description=error_message)
 
     # if the stream has 0, 1 or more that 3 traces abort
     if len(stream) <= 1 or len(stream) > 3:
         error_message = f'The stream must contain two or three traces. Your stream contains {len(stream)} traces!'
-        return generate_error_response(error_message)
+        abort(400, description=error_message)
 
     # if at least one of the traces is empty abort
     for tr in stream:
         if len(tr.data) == 0:
             error_message = 'One or more of your traces in the stream object, is empty.'
-            return generate_error_response(error_message)
+            abort(400, description=error_message)
 
     # if the user hasn't defined nor the fs neither the delta, then error
     if stream[0].stats['sampling_rate'] == 1 and stream[0].stats['delta'] == 1:
         error_message = 'Neither sampling rate (fs[Hz]) nor sample distance (delta[sec]) are specified in the trace objects. Consider including them in the stream traces, for the correct x-axis time representation!'
-        return generate_error_response(error_message)
+        abort(400, description=error_message)
 
     # get the file path to save the mseed file on the server
     mseed_save_file_path = generate_mseed_save_file_path()
@@ -102,7 +101,6 @@ def upload():
     json_data = convert_mseed_to_json(stream)
 
     return json_data
-
 
 
 @bp.route("/apply-filter", methods=["GET"])
@@ -124,32 +122,42 @@ def apply_filter():
         freqmax = filter_value.split('-')[1]
         if freqmin and not freqmax:
             if float(freqmin) < 0.01 or float(freqmin) > 100:
-                return generate_error_response("The acceptable filter range is from 0.01 to 100 Hz!")
+                error_message="The acceptable filter range is from 0.01 to 100 Hz!"
+                abort(400, description=error_message)
             
             try:
                 mseed_data.filter("highpass", freq=float(freqmin))
             except Exception as e:
-                return generate_error_response(str(e))
+                error_message = str(e)
+                abort(400, description=error_message)
+
         elif not freqmin and freqmax:
             if float(freqmax) < 0.01 or float(freqmax) > 100:
-                return generate_error_response("The acceptable filter range is from 0.01 to 100 Hz!")
+                error_message = "The acceptable filter range is from 0.01 to 100 Hz!"
+                abort(400, description=error_message)
             
             try:
                 mseed_data.filter("lowpass", freq=float(freqmax))
             except Exception as e:
-                return generate_error_response(str(e))
+                error_message = str(e)
+                abort(400, description=error_message)
+
         elif not freqmin and not freqmax:
             pass
         else:
             if float(freqmin) >= float(freqmax):
-                return generate_error_response('The left filter cannot be greater or equal to the right filter!')
+                error_message = 'The left filter cannot be greater or equal to the right filter!'
+                abort(400, description=error_message)
+
             elif float(freqmin) < 0.01 or float(freqmin) > 100 or float(freqmax) < 0.01 or float(freqmax) > 100:
-                return generate_error_response("The acceptable filter range is from 0.01 to 100 Hz!")
+                error_message = "The acceptable filter range is from 0.01 to 100 Hz!"
+                abort(400, description=error_message)
             
             try:
                 mseed_data.filter("bandpass", freqmin=float(freqmin), freqmax=float(freqmax))
             except Exception as e:
-                return generate_error_response(str(e))
+                error_message = str(e)
+                abort(400, description=error_message)
     
     json_data = convert_mseed_to_json(mseed_data)
 
@@ -164,7 +172,8 @@ def save_arrivals():
     Sarr = request.args.get('Sarr')
 
     if Parr == "null" and Sarr == "null":
-        return generate_error_response("You need to select at least one arrival to save them!")
+        error_message = "You need to select at least one arrival to save them!"
+        abort(400, description=error_message)
     elif Parr != "null" and Sarr == "null":
         dict_arrivals = {"P": float(Parr)}
     elif Parr == "null" and Sarr != "null":

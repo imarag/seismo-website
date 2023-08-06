@@ -1,18 +1,34 @@
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, session, url_for, jsonify, get_flashed_messages
+    Blueprint, flash, redirect, render_template, request, url_for
 )
-from werkzeug.security import check_password_hash, generate_password_hash
-
 from .db import get_db
-import functools
 
-bp = Blueprint('topics', __name__, url_prefix = '/topics')
 
-@bp.route('/show-topics-table', methods=['GET', 'POST'])
-def show_topics_table():
+bp = Blueprint('BP_topics_database', __name__, url_prefix = '/topics-database')
+
+@bp.route('/show-all-topics', methods=['GET'])
+def show_all_topics():
     database = get_db()
-    all_topics = database.execute("SELECT * FROM topics").fetchall()
-    return render_template('database-tables/show-topics.html', all_topics=all_topics)
+    topics = database.execute("SELECT * FROM topics").fetchall()
+    return render_template('database-tables/show-topics.html', topics=topics)
+
+
+@bp.route('/show_add_template_page', methods=['GET'])
+def show_add_template_page():
+    return render_template('database-tables/add-topic.html')
+
+
+@bp.route('/show-edit-template-page/<topic_id>', methods=['GET'])
+def show_edit_template_page(topic_id):
+    database = get_db()
+    topic = database.execute("SELECT * FROM topics WHERE id = ?", (topic_id,)
+    ).fetchone()
+    return render_template('database-tables/edit-topic.html', topic = topic)
+
+
+
+
+
 
 @bp.route('/add-topic', methods=['GET', 'POST'])
 def add_topic():
@@ -20,48 +36,38 @@ def add_topic():
     topic_description = request.form.get('topic-description-input')
     topic_image_name = request.form.get('topic-image-name-input')
     topic_type = request.form.get('topic-type-input')
+    topic_template_name = request.form.get('topic-template-name-input')
+
     database = get_db()
-    database.execute("INSERT INTO topics (title, description, image_name, topic_type) VALUES (?, ?, ?, ?)",
-        (topic_title, topic_description, topic_image_name, topic_type)
+    database.execute("INSERT INTO topics (title, description, image_name, type, template_name) VALUES (?, ?, ?, ?, ?)",
+        (topic_title, topic_description, topic_image_name, topic_type, topic_template_name)
     )
     database.commit()
-    return redirect(url_for('topics.show_topics_table'))
-
-@bp.route('/add-topic-template', methods=['GET'])
-def add_topic_template():
-    return render_template('database-tables/add-topic.html')
+    return redirect(url_for('BP_topics_database.show_all_topics'))
 
 
-@bp.route('/edit-topic', methods=['GET', 'POST'])
-def edit_topic():
+@bp.route('/edit-topic/<topic_id>', methods=['GET', 'POST'])
+def edit_topic(topic_id):
     topic_title = request.form.get('topic-title-input')
     topic_description = request.form.get('topic-description-input')
     topic_image_name = request.form.get('topic-image-name-input')
-    topic_id = request.form.get('topic-id')
     topic_type = request.form.get('topic-type-input')
+    topic_template_name = request.form.get('topic-template-name-input')
+
     database = get_db()
-    database.execute("UPDATE topics SET title=?, description=?, image_name=?, topic_type=? WHERE id=?",
-        (topic_title, topic_description, topic_image_name, topic_type, topic_id)
+    database.execute("UPDATE topics SET title=?, description=?, image_name=?, type=?, template_name=? WHERE id=?",
+        (topic_title, topic_description, topic_image_name, topic_type, topic_template_name, topic_id)
     )
     database.commit()
-    return redirect(url_for('topics.show_topics_table'))
-
-@bp.route('/edit-topic-template', methods=['GET'])
-def edit_topic_template():
-    topic_id = request.args.get('topic_id')
-    database = get_db()
-    topic = database.execute("SELECT * FROM topics WHERE id = ?", 
-                     (topic_id,)
-    ).fetchone()
-    return render_template('database-tables/edit-topic.html', topic = topic)
+    return redirect(url_for('BP_topics_database.show_all_topics'))
 
 
-@bp.route('/delete-topic', methods=['GET', 'POST'])
-def delete_topic():
-    topic_id = request.args.get('topic_id')
+@bp.route('/delete-topic/<topic_id>', methods=['GET', 'POST'])
+def delete_topic(topic_id):
     database = get_db()
     database.execute("DELETE FROM topics WHERE id = ?",
         (topic_id,)
     )
     database.commit()
-    return redirect(url_for('topics.show_topics_table'))
+    return redirect(url_for('BP_topics_database.show_all_topics'))
+

@@ -14,54 +14,31 @@ from .db import get_db
 
 bp = Blueprint('BP_ascii_to_mseed', __name__, url_prefix = '/ascii-to-mseed')
 
-def save_file_to_data_file():
+
+def generate_ascii_save_file_path():
     # Create the folder path by combining the root path and folder name
     folder_path = os.path.join(current_app.root_path, 'data_files')
     # Create the folder if it doesn't exist
     os.makedirs(folder_path, exist_ok=True)
     # get the user id to save from the session
-    user_id = session.get('user_id', None)
-    # Generate the current date and time
-    current_datetime = datetime.datetime.now()
-    # Format the date and time as a string
-    date_string = current_datetime.strftime('%Y-%m-%d-%H-%M-%S')
+    user_id = session.get('user_id', 'test')
     # Save the DataFrame to a CSV file in the specified folder
-    file_path = os.path.join(folder_path, date_string + '_' + str(user_id) + '_' + 'ascii-to-mseed' + '.csv')
+    file_path = os.path.join(folder_path, str(user_id) + '_' + 'ascii-to-mseed' + '.csv')
     return file_path
 
-    
-
-def generate_error_response(message):
-    response = make_response(jsonify({'error_message':message}), 400)
-    return response
-
-
-def convert_mseed_to_json(stream):
-    traces_data_dict = {}
-    first_trace = stream[0]
-    starttime = first_trace.stats["starttime"].isoformat()
-    fs = float(first_trace.stats["sampling_rate"])
-    station = first_trace.stats["station"]
-    for n, trace in enumerate(stream):
-        ydata = trace.data.tolist()
-        xdata = trace.times().tolist()
-
-        trace_data = {
-            'ydata': ydata,
-            'xdata': xdata,
-            'stats': {
-                'starttime': starttime, 
-                'sampling_rate':fs, 
-                'station':station, 
-                'channel': trace.stats["channel"]
-            },
-            }
-        traces_data_dict[f'trace-{n}'] = trace_data
-   
-    return jsonify(traces_data_dict)
+def generate_processed_mseed_save_file_path():
+    # Create the folder path by combining the root path and folder name
+    folder_path = os.path.join(current_app.root_path, 'data_files')
+    # Create the folder if it doesn't exist
+    os.makedirs(folder_path, exist_ok=True)
+    # get the user id to save from the session
+    user_id = session.get('user_id', 'test')
+    # Save the DataFrame to a CSV file in the specified folder
+    file_path = os.path.join(folder_path, "processed_" + str(user_id) + '_' + 'signal-processing' + '.mseed')
+    return file_path
 
 
-@bp.route('/show-template', methods=['GET', 'POST'])
+@bp.route('/show-template', methods=['GET'])
 def show_template():
     return render_template('topics/ascii-to-mseed.html')
 
@@ -77,7 +54,8 @@ def read_ascii_file():
     
 
     if not uploaded_ascii_file:
-        return generate_error_response('No file uploaded')
+        error_message = 'No file uploaded!'
+        abort(400, description=error_message)
     
     # if empty or 0 then nrows=None else nrows=int(rows_to_read)
     if not rows_to_read:
@@ -94,7 +72,8 @@ def read_ascii_file():
         regex_patt = "^[0-9] *, *[0-9] *,? *[0-9]?$"
         
         if not re.search(regex_patt, columns_to_read.strip(' ,')):
-            return generate_error_response('The "columns to read" option must be in the form n1,n2 or n1,n2,n3 where n, the column number. For example: 1,3 or 1,2,4')
+            error_message = 'The "columns to read" option must be in the form n1,n2 or n1,n2,n3 where n, the column number. For example: 1,3 or 1,2,4'
+            abort(400, description=error_message)
         
         usecols_param = columns_to_read.split(',')
         usecols_param = [int(el.strip()) for el in usecols_param]
@@ -119,13 +98,16 @@ def read_ascii_file():
             usecols = usecols_param
         )
     except Exception as e:
-        return generate_error_response(str(e))
+        error_message = str(e)
+        abort(400, description=error_message)
 
     if len(df.columns) not in [2, 3]:
-        return generate_error_response('You can only upload two or three columns from your file. Each of these columns represents the record data for each component. The two columns are in case your record has just one horizontal and one vertical component. This error may be caused by an incorrect delimiter selection, check the separator of your columns. Also check the <columns to read> option. You should include two or three columns to upload (ej. 1,3 or 1,2,3 or 1,4) not more or less. Another possible reason that triggers this error, is if you try to read the whole file and the file has one or more than three columns.')
+        error_message = 'You can only upload two or three columns from your file. Each of these columns represents the record data for each component. The two columns are in case your record has just one horizontal and one vertical component. This error may be caused by an incorrect delimiter selection, check the separator of your columns. Also check the <columns to read> option. You should include two or three columns to upload (ej. 1,3 or 1,2,3 or 1,4) not more or less. Another possible reason that triggers this error, is if you try to read the whole file and the file has one or more than three columns.'
+        abort(400, description=error_message)
     
     if df.empty:
-        return generate_error_response('Your file is empty or you skipped too many rows.')
+        error_message = 'Your file is empty or you skipped too many rows.'
+        abort(400, description=error_message)
 
     # Get the first 5 rows
     first_5_rows = df.head()
@@ -134,7 +116,7 @@ def read_ascii_file():
     table_html = first_5_rows.to_html().replace('class="dataframe"', 'class="table text-secondary"').replace('style="text-align: right;"', '')
     
     # inser the data file name to save in the data_files folder
-    file_path = save_file_to_data_file()
+    file_path = generate_ascii_save_file_path()
 
     df.to_csv(file_path, index=False)
 
@@ -162,7 +144,8 @@ def convert_ascii_to_mseed():
         station_param = ''
     else:
         if not re.search('^[A-Z]{3,5}[0-9]?$', station.upper().strip()):
-            return generate_error_response('The station name should contain three to five letters from a-z or A-Z, and optionally one number at the end.')
+            error_message = 'The station name should contain three to five letters from a-z or A-Z, and optionally one number at the end.'
+            abort(400, description=error_message)
         station_param = station.upper()
     params_dict['station'] = station_param
 
@@ -172,7 +155,8 @@ def convert_ascii_to_mseed():
         params_dict['starttime'] = UTCDateTime(datetime)
 
     if not parameterValue:
-        return generate_error_response('You need to insert a value for the parameter (fs/dt)')
+        error_message = 'You need to insert a value for the parameter (fs/dt)'
+        abort(400, description=error_message)
     
     if parameterRadioOn == 'fs':
         params_dict['sampling_rate'] = float(parameterValue)
@@ -181,9 +165,13 @@ def convert_ascii_to_mseed():
 
     for c in compos:
         if not c:
-            return generate_error_response('You need to insert a name for the components')
+            error_message = 'You need to insert a name for the components'
+            abort(400, description=error_message)
+
         if not re.search('^[A-Z]{2,3}[0-9]?$', c.upper().strip()):
-            return generate_error_response('The name of the components must contain one or two characters.')
+            error_message = 'The name of the components must contain one or two characters.'
+            abort(400, description=error_message)
+
 
     df = pd.read_csv(
         os.path.join(current_app.root_path, 'data_files', ascii_file_name_uploaded ))

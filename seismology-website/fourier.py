@@ -9,14 +9,10 @@ import pandas as pd
 import uuid
 import io
 import matplotlib.pyplot as plt
-
+import datetime
 
 bp = Blueprint('BP_fourier_spectra', __name__, url_prefix = '/fourier-spectra')
 
-
-def generate_error_response(message):
-    response = make_response(jsonify({'error_message':message}), 400)
-    return response
 
 def generate_mseed_save_file_path():
     # Create the folder path by combining the root path and folder name
@@ -38,7 +34,7 @@ def convert_mseed_to_json(stream):
     rec_name = str(starttime.date) + "_" + str(starttime.time) + "_" + station
     rec_name = rec_name.replace(":", "").replace("-", "")
     starttime = starttime.isoformat()
-
+    
     for n, trace in enumerate(stream):
         ydata = trace.data.tolist()
         xdata = trace.times().tolist()
@@ -59,7 +55,7 @@ def convert_mseed_to_json(stream):
 
 
 
-@bp.route('/show-template', methods=['GET', 'POST'])
+@bp.route('/show-template', methods=['GET'])
 def show_template():
    return render_template('topics/fourier-spectra.html')
 
@@ -71,7 +67,8 @@ def upload():
 
     # check if file exists
     if 'file' not in files or len(files) < 1:
-        return generate_error_response('No file uploaded!')
+        error_message = 'No file uploaded!'
+        abort(400, description=error_message)
 
     # Get the uploaded file from the request
     mseed_file = files['file']
@@ -80,23 +77,24 @@ def upload():
     try:
         stream = read(mseed_file)
     except Exception as e:
-        return generate_error_response(str(e))
+        error_message = str(e)
+        abort(400, description=error_message)
     
     # if the stream has 0, 1 or more that 3 traces abort
     if len(stream) <= 1 or len(stream) > 3:
         error_message = f'The stream must contain two or three traces. Your stream contains {len(stream)} traces!'
-        return generate_error_response(error_message)
+        abort(400, description=error_message)
 
     # if at least one of the traces is empty abort
     for tr in stream:
         if len(tr.data) == 0:
             error_message = 'One or more of your traces in the stream object, is empty.'
-            return generate_error_response(error_message)
+            abort(400, description=error_message)
 
     # if the user hasn't defined nor the fs neither the delta, then error
     if stream[0].stats['sampling_rate'] == 1 and stream[0].stats['delta'] == 1:
         error_message = 'Neither sampling rate (fs[Hz]) nor sample distance (delta[sec]) are specified in the trace objects. Consider including them in the stream traces, for the correct x-axis time representation!'
-        return generate_error_response(error_message)
+        abort(400, description=error_message)
 
     # get the file path to save the mseed file on the server
     mseed_save_file_path = generate_mseed_save_file_path()
@@ -154,7 +152,7 @@ def compute_fourier():
         error_message = 'The noise window must start after the time series graph begins! Consider reducing the window side or moving the noise right side to the right'
 
     if error_message:
-        return generate_error_response(error_message)
+        abort(400, description=error_message)
 
     # i will save here the traces
     traces_data_dict = {}

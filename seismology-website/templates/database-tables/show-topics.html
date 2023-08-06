@@ -7,49 +7,57 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 </head>
 <body>
-    <div class="container-lg" id="all-templates-div">
-        <a href="{{ url_for('topics.add_topic_template') }}" class="btn btn-primary">add new topic +</a>
+    <div>
+        <a href="{{ url_for('BP_topics_database.show_add_template_page') }}" class="btn btn-primary">add new topic +</a>
         <div class="bg-dark text-light p-4">
             <div class="row justify-content-center align-items-center fs-3 text-light rounded">
-                <div class="col-2 text-center">
+                <div class="col-1 text-center">
                     <p>id</p>
                 </div>
                 <div class="col-2 text-center">
                     <p>title</p>
                 </div>
-                <div class="col-6 text-center">
+                <div class="col-3 text-center">
                     <p>description</p>
                 </div>
                 <div class="col-2 text-center">
                     <p>image name</p>
                 </div>
+                <div class="col-2 text-center">
+                    <p>type</p>
+                </div>
+                <div class="col-2 text-center">
+                    <p>template name</p>
+                </div>
             </div>
-            {% for topic in all_topics %}
+            {% for topic in topics %}
                 <hr class="border-2 border-top">
-                {% if topic['topic_type'] == 'static' %}
-                    <div class="row justify-content-center align-items-center fs-5 bg-info text-dark rounded">
-                {% else %}
-                    <div class="row justify-content-center align-items-center fs-5 bg-warning text-dark rounded">
-                {% endif %}
-                    <div class="col-2 text-center">
+                <div class="row justify-content-center align-items-center fs-5 bg-info text-dark rounded">
+                    <div class="col-1 text-center">
                         <p>{{ topic['id'] }}</p>
                     </div>
                     <div class="col-2 text-center">
                         <p>{{ topic['title'] }}</p>
                     </div>
-                    <div class="col-6 text-center">
+                    <div class="col-3 text-center">
                         <p style="max-width: 100%; max-height: 100px;" class="overflow-auto">{{ topic['description'] }}</p>
                     </div>
                     <div class="col-2 text-center">
                         <p>{{ topic['image_name'] }}</p>
                     </div>
+                    <div class="col-2 text-center">
+                        <p>{{ topic['type'] }}</p>
+                    </div>
+                    <div class="col-2 text-center">
+                        <p>{{ topic['template_name'] }}</p>
+                    </div>
                 </div>
                 <div class="row justify-content-center align-items-center mb-5 my-3">
                     <div class="col-auto text-center">
-                        <a type="submit" class="btn btn-success" href="{{ url_for('topics.edit_topic_template', topic_id = topic['id']) }}">edit</a>
+                        <a type="submit" class="btn btn-success" href="{{ url_for('BP_topics_database.show_edit_template_page', topic_id = topic['id']) }}">edit</a>
                     </div>
                     <div class="col-auto text-center">
-                        <a type="submit" class="btn btn-danger"  href="{{ url_for('topics.delete_topic', topic_id = topic['id']) }}">delete</a>
+                        <a type="submit" class="btn btn-danger"  href="{{ url_for('BP_topics_database.delete_topic', topic_id = topic['id']) }}">delete</a>
                     </div>
                 </div>
                 <hr>
