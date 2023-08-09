@@ -1,5 +1,6 @@
 import os
 from flask import Flask, render_template, g, redirect, jsonify, url_for, session, flash, get_flashed_messages, request, make_response
+from .auth import login_required
 from . import db
 from . import auth
 from . import fourier
@@ -35,15 +36,15 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-
+    
     @app.route('/home', methods=['GET'])
     @app.route('/', methods=['GET'])
     def home():
         return render_template('home.html')
     
-    @app.route('/article')
 
     @app.route('/show-article/<article_name>', methods=['GET'])
+    @login_required
     def show_article(article_name):
         return render_template(f'topics/{article_name}')
     

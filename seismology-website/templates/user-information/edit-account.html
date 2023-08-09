@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Account details
+{% endblock %}
+
+
+
+{% block content %}
+    
+    <div class="bg-light-bluel1 py-5">
+        <div class="container-lg fs-5">
+            {% for message in get_flashed_messages() %}
+                <div class="flash bg-light-yellow2 p-2 mb-3 text-center text-muted fs-4 rounded">{{ message }}</div>
+            {% endfor %}
+            <div class="row justify-content-center align-items-center text-muted rounded">
+                <div class="col-12 col-sm-9 col-md-7 col-lg-7 text-center bg-white p-5 shadow-lg rounded">
+                    <div class="mb-3">
+                        <p class="display-5 text-center mb-5 mt-3">Account information</p>
+                        <form action="{{ url_for('BP_user_account.edit_account_information') }}" method="POST">
+                            <label for="fullname-input" class="form-label">Change fullname:</label>
+                            <input type="text" class="form-control" id="fullname-input" name="fullname-input" placeholder="ioannis maragkakis" value="{{ user['fullname'] }}">
+                            
+                            <label for="email-input" class="form-label mt-4">Change email:</label>
+                            <input type="email" class="form-control" id="email-input" name="email-input" placeholder="giannis.marar@hotmail.com" value="{{ user['email'] }}">
+
+                            <button type="submit" class="btn btn-primary mt-5">Save Changes</button>
+                        </form>
+                    </div>
+                </div>
+            </div> 
+            
+            
+        </div>
+    </div>
+
+{% endblock %}
