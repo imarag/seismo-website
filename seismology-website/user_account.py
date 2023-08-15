@@ -8,6 +8,7 @@ from .db import get_db
 bp = Blueprint('BP_user_account', __name__, url_prefix = '/user-account')
 
 
+
 @bp.route('/help-and-support', methods=['GET'])
 def help_and_support():
     return render_template('user-information/help-and-support.html')
@@ -44,6 +45,7 @@ def edit_account_information():
         db.commit()
         user = db.execute("SELECT * FROM user WHERE id = ?", (user_id,)).fetchone()
         flash("You succesfully updated your account information!")
+        return redirect(url_for('BP_user_account.show_account_details'))
 
 
     return render_template('user-information/edit-account.html', user=user)
@@ -83,7 +85,7 @@ def change_password():
         )
         db.commit()
         flash("You succesfully changed your password!")
-        return redirect(url_for('BP_user_account.edit_account_information'))
+        return redirect(url_for('BP_user_account.show_account_details'))
 
 
     return render_template('user-information/change-password.html', user=user)

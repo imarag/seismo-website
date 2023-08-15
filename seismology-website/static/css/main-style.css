@@ -130,3 +130,108 @@
 .bg-royalblue {background-color: #4169e1}
 .bg-beige {background-color: #f5f5dc}
 
+
+/* ----------------------  OBSPY TUTORIAL -------------------------*/
+
+#obspy-pills-container span {
+    display: inline-block;
+    width: 75px;
+    transition: transform 0.3s, background-color 0.2s, color 0.2s;
+    background-color: rgb(169, 220, 250);
+    color: rgb(47, 45, 45);
+}
+
+#obspy-pills-container span:hover {
+    transform: scale(1.13) translateY(-6px);
+    background-color: rgb(47, 45, 45);
+    color: rgb(169, 220, 250);
+}
+
+.obspy-function-anchor {
+    color: rgb(249, 95, 113);
+    font-weight: 350;
+    text-decoration: none;
+}
+
+.obspy-reference-anchor {
+    color: rgb(55, 55, 247);
+    font-weight: 350;
+    text-decoration: none;
+}
+
+
+.input-code-block {
+    background-color: #f8f8f8;
+    color: rgb(0, 0, 0);
+    border: black 0.2px solid;
+    padding: 10px;
+    margin: 30px 0px;
+    border-radius:5px;
+
+
+}
+
+.output-code-block {
+    background-color: #3e3e3e;
+    color: rgb(210, 210, 210);
+    padding: 10px;
+    margin: 30px 0px;
+    border-radius:5px;
+
+}
+
+.comment {
+    color: rgba(166, 167, 167, 0.961);
+}
+
+.function {
+    background-color: #414141;
+    border-radius: 3px;
+    border: 1px solid #b4b4b4;
+   
+    color: #fdfdfd;
+    display: inline-block;
+    font-size: 0.85em;
+    font-weight: 500;
+    line-height: 1;
+    padding: 2px 5px;
+    white-space: nowrap;
+}
+
+.reference {
+    color: #d23871;
+    font-weight: 500;
+}
+
+
+
+.indent {
+    margin-left: 50px;
+}
+
+pre {
+    white-space: pre-line;
+    margin: 0px;
+}
+
+.python-color1 {
+    color: rgb(142, 1, 1);
+}
+
+.python-color2 {
+    color: blue;
+}
+
+
+/* ########################### seismology introduction page ####################### */
+
+#seismo-info-main-article {
+    overflow-y: scroll; 
+    height:90vh;
+}
+
+#seismo-info-main-article p {
+    text-indent: 40px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}

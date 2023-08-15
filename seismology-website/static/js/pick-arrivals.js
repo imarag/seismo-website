@@ -7,37 +7,51 @@ let removePWaveButton = document.querySelector("#remove-p-wave-button");
 let removeSWaveButton = document.querySelector("#remove-s-wave-button");
 let PWaveRadio = document.querySelector("#p-wave-radio");
 let SWaveRadio = document.querySelector("#s-wave-radio");
-let saveArrivals = document.querySelector("#save-arrivals-button");
 let spinnerDiv = document.querySelector("#spinner-div");
+let saveArrivals = document.querySelector("#save-arrivals-button");
 
+// create a list of the elements that i want to disable and enable every time
 let listDisabled = [
-    PWaveRadio, SWaveRadio, saveArrivals, 
+    PWaveRadio, SWaveRadio, saveArrivals, removePWaveButton, removeSWaveButton, 
     leftFilterEntry, rightFilterEntry, filtersDropdown
 ];
 
+// start by disabling everything
 for (el of listDisabled) {
     el.disabled = true;
 }
 
-let verticalLinesList;
-let annotationsList;   
-let wavesPicked;
-let PSArrivalValues;
-
+// display none to the remove buttons
 removePWaveButton.style.display = 'none';
 removeSWaveButton.style.display = 'none';
 
+// initialize some parameters
+let verticalLinesList; // list of dicts. Each dict is type line in plotly
+let annotationsList;  // list of dicts. Each dict has a text that is P or S
+let wavesPicked; // list of 'P' or 'S' ex. ['P', 'S']. it can only have one or two values
+let PSArrivalValues; // dict with the actual values picked {P: null, S: null}
+
+
+
+
+
+// when the upload button is clicked then click automatically the input with type file
 document.querySelector("#upload-file-button").addEventListener('click', function() {
     uploadFileInput.click();
 });
 
+// when the input with type file is changed (change event):
 uploadFileInput.addEventListener('change', (ev) => {
+
+    // get all the files (it will be just one file not multiple)
     let files = ev.target.files;
 
+    // if empty and the user did not select any return
     if (files.length === 0) {
         return;
     }
 
+    // get the selected file that is the first one
     let mseedFile = files[0];
 
     // create the formData
@@ -49,28 +63,29 @@ uploadFileInput.addEventListener('change', (ev) => {
     // activate the spinner
     spinnerDiv.style.display = 'block';
 
-    // clear the Input with type "file" so that the user can re-load the same file
+    // clear the Input with type "file" so that the user can re-load the same file if he wants
     uploadFileInput.value = null;
 
+    // post request to get the file in the flask server, read it as mseed and return its data as json
     fetch('/pick-arrivals/upload-mseed-file', {
         method: 'POST',
         body: formData
       })
         .then(response => { 
-
+            // if response ok then return the response as json else use the modal to show error
             if (!response.ok) {
                 // deactivate spinner
                 spinnerDiv.style.display = 'none';
+                // get the jsonify({'error_message': error.description}) response
                 return response.json()
                     .then(errorMessage => {
                         document.querySelector("#modal-message").textContent = errorMessage['error_message'];
                         document.querySelector("#modal-title").textContent = 'An error has occured!'
                         document.querySelector("#modal-header").style.backgroundColor = "red";
-                        document.querySelector("#model-button-triger").click()
+                        document.querySelector("#modal-button-triger").click()
                         throw new Error(errorMessage);
                     })
               }
-            
             return response.json()
         })
         .then(mseedData => {
@@ -78,6 +93,8 @@ uploadFileInput.addEventListener('change', (ev) => {
             spinnerDiv.style.display = 'none';
 
             // rename the dummy paragraph to have the record name
+            // the response is a dict with keys 'trace-0', 'trace-1' etc..and in each one, that is inside
+            // mseedData["trace-0"] and mseedData["trace-1"] i have the 'record_name'
             document.querySelector("#record-name-paragraph").textContent = mseedData["trace-0"]["record-name"];
 
             // convert returned json object to a form that i can use to plot the graph
@@ -95,40 +112,44 @@ uploadFileInput.addEventListener('change', (ev) => {
         });
 })
 
-
+// event listener for change in the filters dropdown at the top menu
 filtersDropdown.addEventListener('change', () => {
     applyFilterPost(filtersDropdown.value);
 })
 
+// event listener for enter key in the left manual filter at the bottom right position
 leftFilterEntry.addEventListener('keydown', (e) => {
     if (e.key == "Enter"){ 
         applyFilterPost(leftFilterEntry.value + '-' + rightFilterEntry.value);
     }
 })
 
+// event listener for enter key in the right manual filter at the bottom right position
 rightFilterEntry.addEventListener('keydown', (e) => {
     if (e.key == "Enter"){ 
         applyFilterPost(leftFilterEntry.value + '-' + rightFilterEntry.value);
     }
 })
 
-
+// this is the function that i call for the filters event change (top menu filter and botttom filters)
 function applyFilterPost(filterValue) {
     // activate the spinner
     spinnerDiv.style.display = 'block';
 
+    // do a get fetch request with the filterValue as the query parameter
     fetch(`/pick-arrivals/apply-filter?filter=${filterValue}`)
     .then(response => {
         if (!response.ok) {
             // deactivate the spinner
             spinnerDiv.style.display = 'none';
-
+            
+            // get the jsonify({'error_message': error.description}) response
             return response.json()
                 .then(errorMessage => {
                     document.querySelector("#modal-message").textContent = errorMessage['error_message'];
                     document.querySelector("#modal-header").style.backgroundColor = "red";
                     document.querySelector("#modal-title").textContent = 'An error has occured!'
-                    document.querySelector("#model-button-triger").click();
+                    document.querySelector("#modal-button-triger").click();
                     throw new Error(errorMessage);
                 })
         }
@@ -187,6 +208,7 @@ function initializeParameters() {
         }
     };
 
+    // enable everything
     for (el of listDisabled) {
         el.disabled = false;
     }
@@ -198,7 +220,7 @@ function prepareTracesList(mseedDataObject) {
     let yData;
     let tracesList = [];
     let metr = 1;
-    let colors = ['#3e3efa', '#f5e027', '#77f754'];
+    let colors = ['#3e3efa', '#f5e027', '#1a241c'];
 
     for (tr in mseedDataObject) {
         tracesList.push(
@@ -381,22 +403,24 @@ saveArrivals.addEventListener('click', () => {
     // activate the spinner
     spinnerDiv.style.display = 'block';
     
+    // do a fetch request to save the arrivals and return the arrivals as a downloaded file
     fetch(`/pick-arrivals/save-arrivals?Parr=${PSArrivalValues["P"]}&Sarr=${PSArrivalValues["S"]}`)
         .then(response => { 
 
             if (!response.ok) {
                 // deactivate spinner
                 spinnerDiv.style.display = 'none';
+
+                // get the jsonify({'error_message': error.description}) response
                 return response.json()
                     .then(errorMessage => {
                         document.querySelector("#modal-message").textContent = errorMessage['error_message'];
                         document.querySelector("#modal-header").style.backgroundColor = "red";
                         document.querySelector("#modal-title").textContent = 'An error has occured!'
-                        document.querySelector("#model-button-triger").click();
+                        document.querySelector("#modal-button-triger").click();
                         throw new Error(errorMessage);
                     })
               }
-            
             return response.blob()
         })
         .then(blobData => {

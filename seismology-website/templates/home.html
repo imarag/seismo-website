@@ -7,13 +7,9 @@
     <section>
         <div id="main-index-background-image">
             <div class="container-lg py-5">
-                {% if messages %}
-                    <div class="flash-message">
-                        {% for message in messages %}
-                            {{ message }}
-                        {% endfor %}
-                    </div>
-                {% endif %}
+                {% for message in get_flashed_messages() %}
+                    <div class="flash bg-light-yellow2 p-2 mb-3 text-center text-muted fs-4 rounded">{{ message }}</div>
+                {% endfor %}
                 <h2 class="text-center text-light fw-bold display-3 my-0 " id="home-main-title">
                     A Journey into Seismology: Unravel the secrets of the earthquakes
                 </h2>
@@ -244,7 +240,7 @@
             </h2>
             <div class="row align-items-center justify-content-center">
                 <div class="col-lg-5  col-7 text-center">
-                    <img src="/static/img/home-images/earthquakes/earthquakes1.png" alt="seismographic-network" class="img-fluid rounded d-none d-lg-block" id="image-id-earthquakes">
+                    <img src="/static/img/home-images/tectonic-plates-earthquakes-start.gif" alt="seismographic-network" class="img-fluid rounded d-none d-lg-block" id="image-id-earthquakes">
                 </div>
                 <div class="col-lg-7">
                     <div class="accordion" id="accordionExample">

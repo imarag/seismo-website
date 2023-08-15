@@ -19,7 +19,7 @@
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0" >
                             <li class="nav-item">
                                 <a class="nav-link active text-secondary anchor-underline" aria-current="page" href="{{ url_for('home') }}">
                                     Home
@@ -50,12 +50,12 @@
                                         <img src="/static/img/home-images/person-circle.svg" class="img-fluid" style="width:30px;"  id="home-top-menu-logout-icon">
                                     </a>
                                     <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}">Logout</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('BP_user_account.show_account_details') }}">Account details</a></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('BP_user_account.edit_account_information') }}">Edit account</a></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('BP_user_account.change_password') }}">Change password</a></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('BP_user_account.help_and_support') }}">Help & support</a></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}">Logout</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('BP_user_account.show_account_details') }}">Account details</a></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('BP_user_account.edit_account_information') }}">Edit account</a></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('BP_user_account.change_password') }}">Change password</a></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('BP_user_account.help_and_support') }}">Help & support</a></li>
                                     </ul> 
                                 </li>
                             {% else %}

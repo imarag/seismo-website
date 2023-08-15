@@ -51,7 +51,7 @@ function handleFileUpload(event) {
       return response.json().then(errorMessage => {
         document.querySelector("#modal-message").textContent = errorMessage['error_message'];
         document.querySelector("#modal-title").textContent = 'An error has occured!'
-        document.querySelector("#model-button-triger").click()
+        document.querySelector("#modal-button-triger").click()
         .value = null;
         throw new Error(errorMessage);
       })

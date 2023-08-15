@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, g, redirect, jsonify, url_for, session, flash, get_flashed_messages, request, make_response
+from flask import Flask, render_template, g, redirect, jsonify, url_for, session, flash, request, make_response
 from .auth import login_required
 from . import db
 from . import auth
@@ -13,11 +13,14 @@ from . import users_table
 from . import user_account
 from .db import get_db
 import re
+from flask_mail import Mail, Message
+
 
 def create_app(test_config=None):
 
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
+    
     app.config.from_mapping(
         SECRET_KEY='dev',
         DATABASE=os.path.join(app.instance_path, 'seismo-database.sqlite'),
@@ -36,7 +39,66 @@ def create_app(test_config=None):
     except OSError:
         pass
 
+    app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+    app.config['MAIL_PORT'] = 465
+    app.config['MAIL_USERNAME'] = 'seismoweb95@gmail.com'
+    app.config['MAIL_PASSWORD'] = 'qppnzstyxltfjcnz'
+    app.config['MAIL_USE_TLS'] = False
+    app.config['MAIL_USE_SSL'] = True
+
+
+    mail = Mail(app)
+
+
+    @app.route('/send-email', methods=['POST'])
+    def send_email():
+        # get the email from the password reset when you hit forgot password
+        user_email = request.form['email-input']
+
+        # if the user did not provide any email abort
+        if not user_email:
+            flash('You must fill an email!')
+            return redirect(url_for('auth.forgot_password'))
+        
+        # get the database
+        db = get_db()
+       
+        # search the database for the email that the user provided
+        user = db.execute(
+            'SELECT * FROM user WHERE email = ?', (user_email, )
+        ).fetchone()
+
+        # if it can't find any user with that email then abort
+        if not user:
+            flash('There is no user with that email!')
+            return redirect(url_for('auth.forgot_password'))
+
+        # create the message to send to the user email
+        msg = Message(
+            sender = app.config['MAIL_USERNAME'], 
+            recipients = [user_email])
+        
+        # i can't user jinja in the msg.html below. So i create the link url that the email message will have, here
+        # it will send the user to the reset_password. Pass also the user_email to use it later
+        reset_password_url = url_for('auth.reset_password', user_email=user_email, _external=True)
+
+        # create the message html
+        msg.html = f"""
+        <h1>Click the link below to reset your email</h1>
+        <div>
+            <a href="{reset_password_url}">Reset password</a>
+        </div>
+        """
+
+        # send the email
+        mail.send(msg)
+        
+        # when you send it, redirect to home page
+        return(redirect(url_for('home')))
     
+
+
+
     @app.route('/home', methods=['GET'])
     @app.route('/', methods=['GET'])
     def home():
@@ -69,4 +131,5 @@ def create_app(test_config=None):
 
 
     return app
+
 

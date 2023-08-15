@@ -22,22 +22,55 @@
     </section>
 
     <section id="explanation-section">
-        <div class="container-lg fs-4">
-            <p>
-                Start by uploading an <kbd>mseed</kbd> file. Select the <kbd>P</kbd> or <kbd>S</kbd> wave option and click anywhere on the waveforms to
-                pick the arrival time of the selected wave. Use the <kbd>del P</kbd> and <kbd>del S</kbd> buttons to remove the applied arrival.
-                Fill free to use the filter dropdown 
-                to apply a filter to the waveforms, to facilite your picking. Using the entry boxes on the bottom 
-                you can manually insert a filter in addition to the pre-defined ones in the dropdown. If you fill in a value just for the left
-                entry box, a highpass filter is going to be applied with frequency, the one you specified.
-                If you insert a value just for the right entry box, a lowpass
-                filter is going to be applied with frequency, the one you specified.
-                If both are filled, a bandpass filter is applied. Use the <kbd>&ltenter&gt</kbd>
-                key to apply the manual filters.
-            </p>
+        <div class="container-lg fs-4 lead">
+            <div class="accordion" id="accordionExample">
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                      User Guide
+                    </button>
+                  </h2>
+                  <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <p>
+                            The program uses MSEED file format. Begin by uploading an MSEED file using the <kbd>Upload</kbd> option. From the top menu, select either the P-wave 
+                            (<kbd>P</kbd> button) or S-wave (<kbd>S</kbd> button) option, then click anywhere on the waveforms to select the 
+                            arrival time of the chosen wave. To remove a previously applied arrival time, use the <kbd>del P</kbd> and 
+                            <kbd>del S</kbd> buttons. Feel free to utilize the filter dropdown in the top menu to apply a pre-defined filter to 
+                            the waveforms, which can streamline your picking process. Additionally, you have the option to manually input a filter 
+                            using the entry boxes located at the bottom right corner. If you input a value only in the left entry box, a highpass 
+                            filter will be applied with the specified frequency. Similarly, you input a value only in the right entry box, a 
+                            lowpass filter will be implemented using the specified frequency. Should you fill in both entry boxes, a bandpass 
+                            filter will be applied. Once the mouse focus is in the left or right box, simply press the <kbd>Enter</kbd> key to 
+                            confirm your input and apply the manual filters. Lastly, utilize the options located at the top right corner of the 
+                            plot to zoom in, zoom out, and adjust the position of the waveforms. These tools will aid you in selecting the 
+                            arrivals more effectively. 
+                        </p>
+                        <p>
+                            Take into account the following:
+                            <ul>
+                                <li><strong>Trace:</strong> Represents a single continuous seismic recording with a specific channel (e.g., E, N, or Z). It contains the waveform data and metadata, such as sampling rate, start time, channel information, and more.</li>
+                                <li><strong>Stream:</strong> A collection of one or more "Trace" objects, representing a continuous sequence of seismic traces recorded over a period of time.</li>
+                                <li>The program saves the arrivals as seconds from the start time of the record. It will automatically generate a file with the arrival values, naming it based on the start time and station name (e.g., 20150724_095834_KRL1).</li>
+                                <li>Due to the above requirements, ensure you define both the start time and the station name for each record.</li>
+                                <li>Your MSEED file should contain 2 or 3 traces. The scenario with 2 traces can occur if you have one horizontal and one vertical component record.</li>
+                                <li>It's necessary to define either the sampling frequency (fs) or the sample distance (dt) in your MSEED file, with at least one present. This ensures a correct time axis representation while picking the arrivals.</li>
+                                <li>Each trace in your MSEED file should have its channel defined. This information is essential for selecting the arrivals on the respective trace.</li>
+                            </ul>
+                        </p>
+                        <p>
+                            Don't have an MSEED file to use? Click <a href="{{ url_for('BP_ascii_to_mseed.show_template') }}">here</a> to create one using data defined in an ASCII file.
+                        </p>
+                        
+                    </div>
+                  </div>
+                </div>
+            </div>
+
+            
         </div>
     </section>
-
+    
 
     <section id="graph-section" style="position: relative;">
         <div class="container-lg">
@@ -56,8 +89,8 @@
                     <input type="radio" id="s-wave-radio" name="ps-wave-radio" disabled>
                 </div>
                 <div class="col-4 text-start">
-                    <button class="btn btn-danger" id="remove-p-wave-button">del P</button>
-                    <button class="btn btn-danger"  id="remove-s-wave-button">del S</button>
+                    <button class="btn btn-danger" id="remove-p-wave-button" disabled>del P</button>
+                    <button class="btn btn-danger"  id="remove-s-wave-button" disabled>del S</button>
                 </div>
                 <div class="col-5 col-sm-4 col-md-3 col-lg-3 col-xl-2 text-center">
                     <select class="form-select" aria-label="filter-dropdown" id="filters-dropdown" disabled>
