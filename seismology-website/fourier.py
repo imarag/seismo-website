@@ -1,15 +1,13 @@
-from flask import Flask, Blueprint, make_response, current_app, render_template, url_for, abort, request, jsonify, session, Response, session, send_from_directory, send_file, redirect
+from flask import Blueprint, current_app, render_template, abort, request, jsonify, session, send_file
 import os
 from flask_session import Session
-from obspy.core import read, UTCDateTime
+from obspy.core import read
 from obspy.core.trace import Trace
 from obspy.core.stream import Stream
 import numpy as np
 import pandas as pd
-import uuid
-import io
 import matplotlib.pyplot as plt
-import datetime
+
 
 bp = Blueprint('BP_fourier_spectra', __name__, url_prefix = '/fourier-spectra')
 
@@ -22,8 +20,20 @@ def generate_mseed_save_file_path():
     # get the user id to save from the session
     user_id = session.get('user_id', 'test')
     # Save the DataFrame to a CSV file in the specified folder
-    file_path = os.path.join(folder_path, str(user_id) + '_' + 'fourier-spectra' + '.mseed')
+    file_path = os.path.join(folder_path, str(user_id) + '_' + 'fourier-spectra-tool' + '.mseed')
     return file_path
+
+def get_record_name():
+    mseed_path = generate_mseed_save_file_path()
+    # read it
+    mseed = read(mseed_path)
+    # create the record name
+    first_trace = mseed[0]
+    starttime = first_trace.stats["starttime"]
+    station = first_trace.stats["station"]
+    rec_name = str(starttime.date) + "_" + str(starttime.time) + "_" + station
+    rec_name = rec_name.replace(":", "").replace("-", "")
+    return rec_name
 
 def convert_mseed_to_json(stream):
     traces_data_dict = {}
@@ -44,9 +54,6 @@ def convert_mseed_to_json(stream):
             'ydata': ydata,
             'xdata': xdata,
             'stats': {
-                'starttime': starttime, 
-                'sampling_rate':fs, 
-                'station':station, 
                 'channel': trace.stats["channel"]
             },
             }
@@ -143,13 +150,13 @@ def compute_fourier():
     # initialize an empty error message
     error_message = None
     if float(signal_window_left_side) + float(window_length) >= total_duration:
-        error_message = 'The signal window must ends before the time series graph ends! Consider reducing the window side or moving the signal left side to the left'
+        error_message = 'The signal window must ends before the time series graph ends! Consider reducing the window side or moving the signal left side to the left!'
     elif float(signal_window_left_side) < 0:
-        error_message = 'The signal window must start after the time series graph begins! Consider moving the signal left side to the right, inside the graph area'
+        error_message = 'The signal window must start after the time series graph begins! Consider moving the signal left side to the right, so that it is inside the graph area!'
     elif noise_selected == 'true' and float(noise_window_right_side) > total_duration:
-        error_message = 'The noise window must end before the time series graph ends! Consider moving the noise right side to the left'
+        error_message = 'The noise window must end before the time series graph ends! Consider moving the noise right side to the left!'
     elif noise_selected == 'true' and float(noise_window_right_side) - float(window_length) < 0:
-        error_message = 'The noise window must start after the time series graph begins! Consider reducing the window side or moving the noise right side to the right'
+        error_message = 'The noise window must start after the time series graph begins! Consider reducing the window side or moving the noise right side to the right!'
 
     if error_message:
         abort(400, description=error_message)
@@ -159,6 +166,7 @@ def compute_fourier():
 
     # loop through the uploaded traces
     for i in range(len(mseed_data)):
+
         # get the trace name and add it to the traces_data_dict
         trace_label = f'trace-{i}'
         traces_data_dict[trace_label] = {}
@@ -190,9 +198,6 @@ def compute_fourier():
             'ydata': y_write_s.tolist(),
             'xdata': freq_x.tolist(),
             'stats': {
-                'starttime': starttime.isoformat(), 
-                'sampling_rate':fs, 
-                'station':station, 
                 'channel': channel
             }
         }
@@ -213,16 +218,15 @@ def compute_fourier():
                 'ydata': y_write_p.tolist(),
                 'xdata': freq_x.tolist(),
                 'stats': {
-                    'starttime': starttime.isoformat(), 
-                    'sampling_rate':fs, 
-                    'station':station, 
                     'channel': channel
                 }
             }
     
     # get the file path to save the fourier data on the server
-    text_file_path = file_location_path.replace(".mseed", ".txt")
-
+    # just save it with the same name but append the _fourier_data 
+    # and change the .mseed to .txt
+    text_file_path = file_location_path.replace(".mseed", "-fourier-data.txt")
+    
     # crete a txt file to save
     with open(text_file_path, "w") as fw:
 
@@ -259,12 +263,12 @@ def compute_fourier():
             ax[n].plot(xdata, ydata, color=colors[color_i], lw=1, label=label_name)
             color_i += 1
 
-        ax[n].legend()
+        ax[n].legend(title=get_record_name())
         ax[n].set_xscale('log')
         ax[n].set_yscale('log')
         ax[n].set_xlabel("frequency [Hz]")
-
-    fig.savefig(file_location_path.replace(".mseed", ".png"))
+        
+    fig.savefig(file_location_path.replace(".mseed", "-fourier-data.png"))
 
     # return a json response with the fourier data (dictionary)
     json_data = jsonify(traces_data_dict)
@@ -274,40 +278,135 @@ def compute_fourier():
 
 
 
+@bp.route('/compute-hvsr', methods=['GET'])
+def compute_hvsr():
+
+    # get the written fourier ascii file
+    fourier_ascii_file_path = generate_mseed_save_file_path().replace(".mseed", "-fourier-data.txt")
+    
+    # get the vertical component 
+    vert_compo = request.args.get('vertical-component').lower()
+
+    # read the fourier file using pandas
+    fourier_data = pd.read_csv(fourier_ascii_file_path, sep="\s+")
+
+    # get only the hvsr columns calculated from the signal and not the noise
+    signal_cols = [c for c in fourier_data.columns if 'signal' in c]
+
+    # save the xdata somewhere
+    xdata = fourier_data['freq'].to_numpy()
+
+    # get only those columns
+    fourier_data = fourier_data[signal_cols]
+
+    # just initialize the horizontal and vertical parameters
+    horizontal_traces = []
+    vertical_traces = None
+
+    # initialize the dictionary to return
+    traces_data_dict = {}
+
+    # loop through the mseed data
+    for i, c in enumerate(fourier_data.columns):
+
+        # get the channel
+        channel = c.split("-")[0].lower()
+
+        # creat the label for the dictionary key
+        trace_label = f'trace-{i}'
+
+        # add this label
+        traces_data_dict[trace_label] = {}
+   
+        # if you find the vertical component (the one that the user specified) then set the data to the vertical_traces parameter
+        if channel == vert_compo:
+            vertical_traces = fourier_data[c].to_numpy()
+        else:
+            horizontal_traces.append(fourier_data[c].to_numpy())
+
+    # calculate the average horizontal fourier and the hvsr depending on if we have one or two horizontals
+    if len(horizontal_traces) == 1:
+        horizontal_fourier = horizontal_traces[0]
+        hvsr = horizontal_fourier / vertical_traces
+    else:
+        horizontal_fourier = horizontal_traces[0] + horizontal_traces[1]
+        hvsr = np.sqrt(horizontal_fourier / vertical_traces)
+
+    # define the dictionary to return
+    dict_data = {
+        'ydata': hvsr.tolist(),
+        'xdata': xdata.tolist(),
+    }
+
+    # crete a txt file to save
+    hvsr_data_text_file = generate_mseed_save_file_path().replace(".mseed", "-hvsr-data.txt")
+
+    with open(hvsr_data_text_file, "w") as fw:
+
+        # create the header
+        fw.write("freq hvsr\n")
+
+        for i in range(len(xdata)):
+            fw.write(f"{xdata[i]} ")
+            fw.write(f"{hvsr[i]} ")
+            fw.write("\n")
+
+    fig, ax = plt.subplots(1, 1, figsize=(12,6))
+
+    ax.plot(xdata, hvsr, color='blue', lw=1, label=f"HVSR")
+    ax.legend(title=get_record_name())
+    ax.set_xscale('log')
+    ax.set_yscale('log')
+    ax.set_xlabel("frequency [Hz]")
+    ax.set_xlabel("HVSR")
+
+    fig.savefig(generate_mseed_save_file_path().replace(".mseed", "-hvsr-data.png"))
+
+    # return a json response with the fourier data (dictionary)
+    json_data = jsonify(dict_data)
+    
+    return json_data
+        
+
+
 @bp.route('/download', methods=['GET'])
 def download():
     # get the label that tells you if the user wants to downloa the data or the values
     what_output = request.args.get('what_output')
 
-    # get the text file that i saved the fourier data on the server
+    # the "what_to_download" is either graph or data
+    # the "method_selected" is fourier or hvsr
+    what_to_download, method_selected = what_output.split("-")
+
+    # get the mseed file path
     mseed_file_path = generate_mseed_save_file_path()
+    # get the text file (the fourier data)
     text_file_path = mseed_file_path.replace(".mseed", ".txt")
+    # get the image
     graph_file_path = mseed_file_path.replace(".mseed", ".png")
-    
-    # read the stream to get the station name and the starttime
-    stream = read(mseed_file_path)
 
-    # get the filename
-    first_trace = stream[0]
-    starttime = first_trace.stats["starttime"]
-    station = first_trace.stats["station"]
-    rec_name = str(starttime.date) + "_" + str(starttime.time) + "_" + station
-    rec_name = rec_name.replace(":", "").replace("-", "")    
-
-    if what_output == "graph":
-        return send_file(
-            graph_file_path,
-            as_attachment=True,
-            download_name=f'{rec_name}_graph.png'
-        )
-    else:
-        return send_file(
-            text_file_path,
-            as_attachment=True,
-            download_name=f'{rec_name}_data.txt'
-        )
+    if method_selected == "fourier" and what_to_download == "graph":
+        file_to_download = generate_mseed_save_file_path().replace(".mseed", "-fourier-data.png")
+        name = get_record_name() + '_fourier_data' + '.png'
+    elif method_selected == "fourier" and what_to_download == "data":
+        file_to_download = generate_mseed_save_file_path().replace(".mseed", "-fourier-data.txt")
+        name = get_record_name() + '_fourier_data' + '.txt'
+    elif method_selected == "hvsr" and what_to_download == "graph":
+        file_to_download = generate_mseed_save_file_path().replace(".mseed", "-hvsr-data.png")
+        name = get_record_name() + '_hvsr_data' + '.png'
+    elif method_selected == "hvsr" and what_to_download == "data":
+        file_to_download = generate_mseed_save_file_path().replace(".mseed", "-hvsr-data.txt")
+        name = get_record_name() + '_hvsr_data' + '.txt'
 
     
+    return send_file(
+            file_to_download,
+            as_attachment=True,
+            download_name=name
+        )
+
+
+
 @bp.route('/get-the-code', methods=['GET'])
 def get_the_code():
     return send_file(

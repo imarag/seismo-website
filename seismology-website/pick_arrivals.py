@@ -53,9 +53,6 @@ def convert_mseed_to_json(stream):
             'ydata': ydata,
             'xdata': xdata,
             'stats': {
-                'starttime': starttime, 
-                'sampling_rate':fs, 
-                'station':station, 
                 'channel': trace.stats["channel"]
             },
         }
