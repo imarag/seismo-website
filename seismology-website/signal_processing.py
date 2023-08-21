@@ -9,28 +9,6 @@ import numpy as np
 bp = Blueprint('BP_signal_processing', __name__, url_prefix = '/signal-processing')
 
 
-def generate_mseed_save_file_path():
-    # Create the folder path by combining the root path and folder name
-    folder_path = os.path.join(current_app.root_path, 'data_files')
-    # Create the folder if it doesn't exist
-    os.makedirs(folder_path, exist_ok=True)
-    # get the user id to save from the session
-    user_id = session.get('user_id', 'test')
-    # Save the DataFrame to a CSV file in the specified folder
-    file_path = os.path.join(folder_path, str(user_id) + '_' + 'signal-processing' + '.mseed')
-    return file_path
-
-def generate_processed_mseed_save_file_path():
-    # Create the folder path by combining the root path and folder name
-    folder_path = os.path.join(current_app.root_path, 'data_files')
-    # Create the folder if it doesn't exist
-    os.makedirs(folder_path, exist_ok=True)
-    # get the user id to save from the session
-    user_id = session.get('user_id', 'test')
-    # Save the DataFrame to a CSV file in the specified folder
-    file_path = os.path.join(folder_path, "processed_" + str(user_id) + '_' + 'signal-processing' + '.mseed')
-    return file_path
-
 
 def convert_mseed_to_json(stream):
     traces_data_dict = {}
@@ -106,10 +84,10 @@ def upload_mseed_file():
         abort(400, description=error_message)
 
     # get the file path to save the mseed file on the server
-    mseed_save_file_path = generate_mseed_save_file_path()
+    mseed_save_file_path = os.path.join(current_app.config['DATA_FILES_FOLDER'], str(session.get("user_id", "test")) + "_signal-processing.mseed")
 
     # get the file path of the processed mseed
-    mseed_processed_file_path = generate_processed_mseed_save_file_path()
+    mseed_processed_file_path = os.path.join(current_app.config['DATA_FILES_FOLDER'], "processed_" + str(session.get("user_id", "test")) + "_signal-processing.mseed")
 
     # write the uploaded file
     stream.write(mseed_save_file_path)
@@ -128,7 +106,7 @@ def upload_mseed_file():
 def process_signal_taper():
 
     # get the file path of the processed mseed
-    mseed_processed_file_path = generate_processed_mseed_save_file_path()
+    mseed_processed_file_path = os.path.join(current_app.config['DATA_FILES_FOLDER'], "processed_" + str(session.get("user_id", "test")) + "_signal-processing.mseed")
     
     mseed_data = read(mseed_processed_file_path)
 
@@ -163,7 +141,7 @@ def process_signal_taper():
 def process_signal_detrend():
     
     # get the file path of the processed mseed
-    mseed_processed_file_path = generate_processed_mseed_save_file_path()
+    mseed_processed_file_path = os.path.join(current_app.config['DATA_FILES_FOLDER'], "processed_" + str(session.get("user_id", "test")) + "_signal-processing.mseed")
 
     mseed_data = read(mseed_processed_file_path)
 
@@ -192,7 +170,7 @@ def process_signal_detrend():
 def process_signal_trim():
     
     # get the file path of the processed mseed
-    mseed_processed_file_path = generate_processed_mseed_save_file_path()
+    mseed_processed_file_path = os.path.join(current_app.config['DATA_FILES_FOLDER'], "processed_" + str(session.get("user_id", "test")) + "_signal-processing.mseed")
 
     # read the mseed file (the processed mseed file)
     mseed_data = read(mseed_processed_file_path)
@@ -241,10 +219,10 @@ def process_signal_trim():
 def delete_filter():
 
     # get the initial raw mseed file path
-    mseed_save_file_path = generate_mseed_save_file_path()
+    mseed_save_file_path = os.path.join(current_app.config['DATA_FILES_FOLDER'], str(session.get("user_id", "test")) + "_signal-processing.mseed")
 
     # get the file path of the processed mseed
-    mseed_processed_file_path = generate_processed_mseed_save_file_path()
+    mseed_processed_file_path = os.path.join(current_app.config['DATA_FILES_FOLDER'], "processed_" + str(session.get("user_id", "test")) + "_signal-processing.mseed")
 
 
     mseed_data = read(mseed_save_file_path)

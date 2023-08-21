@@ -12,19 +12,8 @@ import matplotlib.pyplot as plt
 bp = Blueprint('BP_fourier_spectra', __name__, url_prefix = '/fourier-spectra')
 
 
-def generate_mseed_save_file_path():
-    # Create the folder path by combining the root path and folder name
-    folder_path = os.path.join(current_app.root_path, 'data_files')
-    # Create the folder if it doesn't exist
-    os.makedirs(folder_path, exist_ok=True)
-    # get the user id to save from the session
-    user_id = session.get('user_id', 'test')
-    # Save the DataFrame to a CSV file in the specified folder
-    file_path = os.path.join(folder_path, str(user_id) + '_' + 'fourier-spectra-tool' + '.mseed')
-    return file_path
-
 def get_record_name():
-    mseed_path = generate_mseed_save_file_path()
+    mseed_path = os.path.join(current_app.config['DATA_FILES_FOLDER'], str(session.get("user_id", "test")) + "_fourier-spectra-tool.mseed")
     # read it
     mseed = read(mseed_path)
     # create the record name
@@ -104,7 +93,7 @@ def upload():
         abort(400, description=error_message)
 
     # get the file path to save the mseed file on the server
-    mseed_save_file_path = generate_mseed_save_file_path()
+    mseed_save_file_path = os.path.join(current_app.config['DATA_FILES_FOLDER'], str(session.get("user_id", "test")) + "_fourier-spectra-tool.mseed")
 
     # write the uploaded file
     stream.write(mseed_save_file_path)
@@ -123,7 +112,7 @@ def upload():
 def compute_fourier():
 
     # get the uploaded mseed file to apply the filter to it
-    file_location_path = generate_mseed_save_file_path()
+    file_location_path = os.path.join(current_app.config['DATA_FILES_FOLDER'], str(session.get("user_id", "test")) + "_fourier-spectra-tool.mseed")
     
     # read it
     mseed_data = read(file_location_path)
@@ -282,7 +271,7 @@ def compute_fourier():
 def compute_hvsr():
 
     # get the written fourier ascii file
-    fourier_ascii_file_path = generate_mseed_save_file_path().replace(".mseed", "-fourier-data.txt")
+    fourier_ascii_file_path = os.path.join(current_app.config['DATA_FILES_FOLDER'], str(session.get("user_id", "test")) + "_fourier-spectra-tool-fourier-data.txt")
     
     # get the vertical component 
     vert_compo = request.args.get('vertical-component').lower()
@@ -339,7 +328,7 @@ def compute_hvsr():
     }
 
     # crete a txt file to save
-    hvsr_data_text_file = generate_mseed_save_file_path().replace(".mseed", "-hvsr-data.txt")
+    hvsr_data_text_file = os.path.join(current_app.config['DATA_FILES_FOLDER'], str(session.get("user_id", "test")) + "_fourier-spectra-tool-hvsr-data.txt")
 
     with open(hvsr_data_text_file, "w") as fw:
 
@@ -360,7 +349,7 @@ def compute_hvsr():
     ax.set_xlabel("frequency [Hz]")
     ax.set_xlabel("HVSR")
 
-    fig.savefig(generate_mseed_save_file_path().replace(".mseed", "-hvsr-data.png"))
+    fig.savefig(os.path.join(current_app.config['DATA_FILES_FOLDER'], str(session.get("user_id", "test")) + "_fourier-spectra-tool-hvsr-data.png"))
 
     # return a json response with the fourier data (dictionary)
     json_data = jsonify(dict_data)
@@ -379,23 +368,23 @@ def download():
     what_to_download, method_selected = what_output.split("-")
 
     # get the mseed file path
-    mseed_file_path = generate_mseed_save_file_path()
+    mseed_file_path = os.path.join(current_app.config['DATA_FILES_FOLDER'], str(session.get("user_id", "test")) + "_fourier-spectra-tool.mseed")
     # get the text file (the fourier data)
     text_file_path = mseed_file_path.replace(".mseed", ".txt")
     # get the image
     graph_file_path = mseed_file_path.replace(".mseed", ".png")
 
     if method_selected == "fourier" and what_to_download == "graph":
-        file_to_download = generate_mseed_save_file_path().replace(".mseed", "-fourier-data.png")
+        file_to_download = os.path.join(current_app.config['DATA_FILES_FOLDER'], str(session.get("user_id", "test")) + "_fourier-spectra-tool-fourier-data.png")
         name = get_record_name() + '_fourier_data' + '.png'
     elif method_selected == "fourier" and what_to_download == "data":
-        file_to_download = generate_mseed_save_file_path().replace(".mseed", "-fourier-data.txt")
+        file_to_download = os.path.join(current_app.config['DATA_FILES_FOLDER'], str(session.get("user_id", "test")) + "_fourier-spectra-tool-fourier-data.txt")
         name = get_record_name() + '_fourier_data' + '.txt'
     elif method_selected == "hvsr" and what_to_download == "graph":
-        file_to_download = generate_mseed_save_file_path().replace(".mseed", "-hvsr-data.png")
+        file_to_download = os.path.join(current_app.config['DATA_FILES_FOLDER'], str(session.get("user_id", "test")) + "_fourier-spectra-tool-hvsr-data.png")
         name = get_record_name() + '_hvsr_data' + '.png'
     elif method_selected == "hvsr" and what_to_download == "data":
-        file_to_download = generate_mseed_save_file_path().replace(".mseed", "-hvsr-data.txt")
+        file_to_download = os.path.join(current_app.config['DATA_FILES_FOLDER'], str(session.get("user_id", "test")) + "_fourier-spectra-tool-hvsr-data.txt")
         name = get_record_name() + '_hvsr_data' + '.txt'
 
     

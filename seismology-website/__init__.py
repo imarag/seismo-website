@@ -46,6 +46,7 @@ def create_app(test_config=None):
     app.config['MAIL_USE_TLS'] = False
     app.config['MAIL_USE_SSL'] = True
 
+    app.config['DATA_FILES_FOLDER'] = os.path.join(app.root_path, 'data_files')
 
     mail = Mail(app)
 
@@ -103,6 +104,11 @@ def create_app(test_config=None):
     @app.route('/', methods=['GET'])
     def home():
         return render_template('home.html')
+    
+
+    @app.route('/testt', methods=['GET'])
+    def test():
+        return render_template('test.html')
     
 
     @app.route('/show-article/<article_name>', methods=['GET'])

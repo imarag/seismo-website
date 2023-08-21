@@ -7,19 +7,6 @@ from obspy.core.stream import Stream
 
 bp = Blueprint('BP_pick_arrivals', __name__, url_prefix = '/pick-arrivals')
 
-def generate_mseed_save_file_path():
-    # Create the folder path by combining the root path and folder name
-    folder_path = os.path.join(current_app.root_path, 'data_files')
-
-    # Create the folder if it doesn't exist
-    os.makedirs(folder_path, exist_ok=True)
-
-    # get the user id to save from the session
-    user_id = session.get('user_id', 'test')
-
-    # create a file path for the mseed file
-    file_path = os.path.join(folder_path, str(user_id) + '_' + 'pick-arrivals' + '.mseed')
-    return file_path
 
 
 def convert_mseed_to_json(stream):
@@ -123,7 +110,7 @@ def upload():
 
 
     # get the file path to save the mseed file on the server
-    mseed_save_file_path = generate_mseed_save_file_path()
+    mseed_save_file_path = os.path.join(current_app.config['DATA_FILES_FOLDER'], str(session.get("user_id", "test")) + "_pick-arrivals.mseed")
 
     # write the uploaded file
     stream.write(mseed_save_file_path)
@@ -141,7 +128,7 @@ def apply_filter():
     filter_value = request.args.get('filter')
 
     # get the uploaded mseed file path to apply the filter to it
-    mseed_file_location_path = generate_mseed_save_file_path()
+    mseed_file_location_path = os.path.join(current_app.config['DATA_FILES_FOLDER'], str(session.get("user_id", "test")) + "_pick-arrivals.mseed")
     
     # read it
     mseed_data = read(mseed_file_location_path)
@@ -240,7 +227,7 @@ def save_arrivals():
 
     # get the mseed file path and the parent of the mseed file path
     # i am going to create a txt file and save it in than parent
-    mseed_file_path = generate_mseed_save_file_path()
+    mseed_file_path = os.path.join(current_app.config['DATA_FILES_FOLDER'], str(session.get("user_id", "test")) + "_pick-arrivals.mseed")
     mseed_file_parent = os.path.dirname(mseed_file_path)
 
     # read the mseed

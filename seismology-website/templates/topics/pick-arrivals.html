@@ -58,9 +58,6 @@
                                 <li>Each trace in your MSEED file should have its channel defined. This information is essential for selecting the arrivals on the respective trace.</li>
                             </ul>
                         </p>
-                        <p>
-                            Don't have an MSEED file to use? Click <a href="{{ url_for('BP_ascii_to_mseed.show_template') }}">here</a> to create one using data defined in an ASCII file.
-                        </p>
                         
                     </div>
                   </div>
@@ -69,6 +66,14 @@
         </div>
     </section>
     
+    <section>
+        <div class="container-lg">
+            <p class="text-muted text-center  my-5 fs-5">Don't have an MSEED file ? Click <a href="{{ url_for('BP_ascii_to_mseed.show_template') }}" class="link-info">here</a> to create one using data defined in an ASCII file
+                or <a href="{{ url_for('static', filename='static-files/test-mseed-file.mseed') }}" class="link-info">download</a> one, to try the tool.
+            
+            </p>
+        </div>
+    </section>
 
     <section id="graph-section" style="position: relative;">
         <div class="container-lg">

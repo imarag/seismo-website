@@ -28,12 +28,14 @@ let vertCompoSelect = document.querySelector("#vertical-component-select");
 optionsMenu.style.display = 'none';
 removeNoiseButton.style.display = 'none';
 noiseSliderDiv.style.display = 'none';
+
+// deactivate all tabs initially
 fourierTab.disabled = true;
 hvsrTab.disabled = true;
-spinnerDiv.style.display = 'none';
-timeSeriesTab.disabled = 'true';
+timeSeriesTab.disabled = true;
 
-let hvsrPlotted = false;
+// spinner off
+spinnerDiv.style.display = 'none';
 
 // initialize all the parameters that i will use 
 ////////////////////////////////////////////////////////
@@ -42,7 +44,13 @@ let hvsrPlotted = false;
 let noiseWindowAdded = false;
 
 // initialize the config and layout of the time series graph
-let config;
+let config = {
+    scrollZoom: true,
+    responsive: true,
+    displayModeBar: true,
+    modeBarButtons: [['pan2d', 'zoom2d', 'resetScale2d', 'resetViews', 'toggleSpikelines']]
+};
+
 let layout;
 
 // save here to global variables the total min, max X and Y values
@@ -51,14 +59,13 @@ let maxXValueTotal;
 let minYValueTotal;
 let maxYValueTotal;
 
-// i save the fourier and hvsr data list because i will use it later when i want to save the figure
-let fourierDataList;
-let hvsrDataList;
-
 // i want to save to a variable the total traces loaded by the user. It can be 2 or 3
 let totalTraces;
 
+
 ////////////////////////////////////////////////////////
+
+
 
 // add the click event on the upload-file and another-file-upload buttons
 document.querySelector("#upload-file-button").addEventListener('click', function() {
@@ -83,7 +90,7 @@ uploadAnotherFileInput.addEventListener('change', (ev) => {
 // when you press the time series tab, display=block for the menu and display=none otherwise
 timeSeriesTab.addEventListener('click', () => {
     optionsMenu.style.display = 'block';
-    document.querySelector("#upload-file-button").disabled = false;
+    document.querySelector("#upload-file-button").style.display = false;
 })
 
 fourierTab.addEventListener('click', () => {
@@ -239,12 +246,7 @@ function prepareTracesList(mseedDataObject) {
 
 function initializeParameters() {
     
-    config = {
-        scrollZoom: true,
-        responsive: true,
-        displayModeBar: true,
-        modeBarButtons: [['pan2d', 'zoom2d', 'resetScale2d', 'resetViews', 'toggleSpikelines']]
-    };
+    
     
     layout = {
         title: '',
@@ -615,14 +617,8 @@ function plotFourierData(fourierData) {
         metrSignalNoise += 1;
     };
 
-    // define the config and layout of Fourier
-    let configFourier = {
-        scrollZoom: true,
-        responsive: true,
-        displayModeBar: true,
-        modeBarButtons: [['pan2d', 'zoom2d', 'resetScale2d', 'resetViews', 'toggleSpikelines']]
-    };
-    
+    // define the layout of Fourier
+  
     let layoutFourier = {
         title: '',
         margin: {
@@ -662,7 +658,7 @@ function plotFourierData(fourierData) {
         }
     }
 
-    Plotly.newPlot('fourier-graph', fourierDataList, layoutFourier, configFourier);
+    Plotly.newPlot('fourier-graph', fourierDataList, layoutFourier, config);
 }
 
 
@@ -719,7 +715,7 @@ function calculateHVSR(){
 
 function plotHVSRData(hvsrData) {
 
-    hvsrDataList = [
+    let hvsrDataList = [
         { 
             x: hvsrData['xdata'], 
             y: hvsrData['ydata'], 
@@ -731,22 +727,16 @@ function plotHVSRData(hvsrData) {
             line: {color: '#5E62FF', width: 1}
         }
     ];
-
-
-    // define the config and layout of HVSR
-    let configHVSR = {
-        scrollZoom: true,
-        responsive: true,
-        displayModeBar: true,
-        modeBarButtons: [['pan2d', 'zoom2d', 'resetScale2d', 'resetViews', 'toggleSpikelines']]
-    };
     
-    layoutHVSR = {
+
+    // define the layout of HVSR
+
+    let layoutHVSR = {
         title: '',
         margin: {
             l: 0, // left margin
             r: 0, // right margin
-            t: 50, // top margin
+            t: 0, // top margin
             b: 0  // bottom margin
         },
         plot_bgcolor: '#212529',
@@ -763,7 +753,8 @@ function plotHVSRData(hvsrData) {
             font: {
             size: 12 // Adjust the font size as desired
             },
-        }
+        },
+      
     }; 
 
     // put log x and y at the 
@@ -778,16 +769,12 @@ function plotHVSRData(hvsrData) {
         title: 'HVSR',
     }
 
-    if (hvsrPlotted) {
-        Plotly.update('hvsr-graph', {}, layoutHVSR);
-    }
-    else {
-        Plotly.newPlot('hvsr-graph', hvsrDataList, layoutHVSR, configHVSR);
-    }
+
+    Plotly.newPlot('hvsr-graph', hvsrDataList, layoutHVSR, config);
+
+
 
     
-
-    hvsrPlotted = true;
 
     
 }

@@ -22,24 +22,46 @@
         </div>
     </section>
 
+
     <section id="explanation-section">
-        <div class="container-lg fs-4">
-            <p>
-                Start by uploading an <kbd>mseed</kbd> file. Select the <kbd>P</kbd> or <kbd>S</kbd> wave option and click anywhere on the waveforms to
-                pick the arrival time of the selected wave. Use the <kbd>del P</kbd> and <kbd>del S</kbd> buttons to remove the applied arrival.
-                Fill free to use the filter dropdown 
-                to apply a filter to the waveforms, to facilite your picking. Using the entry boxes on the bottom 
-                you can manually insert a filter in addition to the pre-defined ones in the dropdown. If you fill in a value just for the left
-                entry box, a highpass filter is going to be applied with frequency, the one you specified.
-                If you insert a value just for the right entry box, a lowpass
-                filter is going to be applied with frequency, the one you specified.
-                If both are filled, a bandpass filter is applied. Use the <kbd>&ltenter&gt</kbd>
-                key to apply the manual filters.
-            </p>
+        <div class="container-lg fs-4 lead">
+            <div class="accordion" id="accordionExample">
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                      User Guide
+                    </button>
+                  </h2>
+                  <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <p>
+                            Start by uploading an <kbd>mseed</kbd> file. Select the <kbd>P</kbd> or <kbd>S</kbd> wave option and click anywhere on the waveforms to
+                            pick the arrival time of the selected wave. Use the <kbd>del P</kbd> and <kbd>del S</kbd> buttons to remove the applied arrival.
+                            Fill free to use the filter dropdown 
+                            to apply a filter to the waveforms, to facilite your picking. Using the entry boxes on the bottom 
+                            you can manually insert a filter in addition to the pre-defined ones in the dropdown. If you fill in a value just for the left
+                            entry box, a highpass filter is going to be applied with frequency, the one you specified.
+                            If you insert a value just for the right entry box, a lowpass
+                            filter is going to be applied with frequency, the one you specified.
+                            If both are filled, a bandpass filter is applied. Use the <kbd>&ltenter&gt</kbd>
+                            key to apply the manual filters.
+                        </p>
+                        
+                    </div>
+                  </div>
+                </div>
+            </div>
         </div>
     </section>
 
-
+    <section>
+        <div class="container-lg">
+            <p class="text-muted text-center  my-5 fs-5">Don't have an MSEED file ? Click <a href="{{ url_for('BP_ascii_to_mseed.show_template') }}" class="link-info">here</a> to create one using data defined in an ASCII file
+                or <a href="{{ url_for('static', filename='static-files/test-mseed-file.mseed') }}" class="link-info">download</a> one, to try the tool.
+            
+            </p>
+        </div>
+    </section>
    
     <section>  
         <div class="container-lg">
