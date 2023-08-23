@@ -35,16 +35,13 @@
                   <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                     <div class="accordion-body">
                         <p>
-                            Start by uploading an <kbd>mseed</kbd> file. Select the <kbd>P</kbd> or <kbd>S</kbd> wave option and click anywhere on the waveforms to
-                            pick the arrival time of the selected wave. Use the <kbd>del P</kbd> and <kbd>del S</kbd> buttons to remove the applied arrival.
-                            Fill free to use the filter dropdown 
-                            to apply a filter to the waveforms, to facilite your picking. Using the entry boxes on the bottom 
-                            you can manually insert a filter in addition to the pre-defined ones in the dropdown. If you fill in a value just for the left
-                            entry box, a highpass filter is going to be applied with frequency, the one you specified.
-                            If you insert a value just for the right entry box, a lowpass
-                            filter is going to be applied with frequency, the one you specified.
-                            If both are filled, a bandpass filter is applied. Use the <kbd>&ltenter&gt</kbd>
-                            key to apply the manual filters.
+                            Start by uploading an MSEED file using the <kbd>upload</kbd> option. Choose between the available processing tools to edit your uploaded waveform. These tools are presented below:
+                            <ul>
+                                <li><a href="https://docs.obspy.org/packages/autogen/obspy.core.trace.Trace.detrend.html">Detrend</a>: Remove the trend variations in a signal using a specific detrend type. Detrending is essential when you want to focus on the fluctuations or patterns in a signal that are not related to the underlying trend. By removing the trend, you can make it easier to analyze the residuals or the noise in the signal, which can provide valuable insights into the underlying processes or phenomena being observed.</li>
+                                <li><a href="https://docs.obspy.org/packages/autogen/obspy.core.trace.Trace.taper.html">Taper</a>: Apply a weight function window to a signal to reduce the sharp transitions at the edges of the finite signal segment. The tapering window gradually reduces the amplitude of the signal toward its edges, making it smoother and more compatible with Fourier analysis techniques. This results in more accurate frequency domain representations.</li>
+                                <li><a href="https://docs.obspy.org/packages/autogen/obspy.core.stream.Stream.trim.html">Trim</a>: Remove portions of a signal that are considered unwanted or irrelevant for the specific analysis or application. Trimming can be used to focus on a specific segment of a signal, eliminate noise or artifacts, or isolate particular events or features of interest.</li>
+                            </ul>
+                            Every tool contain several options to adjust its functionality. When you are done, download the processed mseed file using the <kbd>Save</kbd> option at the top menu.
                         </p>
                         
                     </div>
@@ -70,6 +67,10 @@
                     <img src="{{ url_for('static', filename='img/signal-processing-images/upload-file.png') }}" class="img-fluid signal-processing-icon">
                     Upload
                 </button>
+                <a class="btn btn-light" id="save-file-button" href="{{ url_for('BP_signal_processing.download_mseed_file') }}">
+                    <img src="{{ url_for('static', filename='img/signal-processing-images/download.svg') }}" class="img-fluid signal-processing-icon">
+                    Save
+                </a>
                 <input type="file" id="upload-file-input" value="upload-file-input" name="upload-file-input" style="display: none;">
             </div>
         </div>
@@ -88,23 +89,22 @@
                             </button>
                             <ul class="dropdown-menu">
                                 <div class="p-3 text-center">
-                                    <form  action="{{ url_for('BP_signal_processing.process_signal_detrend') }}" method="GET" id="detrend-form-element-expanding">
-                                        <div class="row justify-content-center text-center">
-                                            <div class="col-12">
-                                                <p class="text-center  mb-3  fw-bold">Detrend</p>
-                                                <hr>
-                                                <label for="detrend-type-select-expanding" class="form-label">type</label>
-                                                <select class="form-select" name="detrend-type-select" aria-label="Default select example" id="detrend-type-select-expanding">
-                                                    <option value="simple" name="simple">simple</option>
-                                                    <option value="linear" name="linear">linear</option>
-                                                    <option value="constant" name="constant">constant</option>
-                                                    <option value="polynomial" name="polynomial"">polynomial</option>
-                                                    <option value="spline" name="spline">spline</option>
-                                                </select>
-                                                <button class="btn btn-primary mt-3" id="detrend-apply-button-expanding">apply</button>
-                                            </div>
+                                    <div class="row justify-content-center text-center">
+                                        <div class="col-12">
+                                            <p class="text-center  mb-3  fw-bold">Detrend</p>
+                                            <hr>
+                                            <label for="detrend-type-select-expanding" class="form-label">type</label>
+                                            <select class="form-select" name="detrend-type-select" aria-label="Default select example" id="detrend-type-select-expanding">
+                                                <option value="simple" name="simple">simple</option>
+                                                <option value="linear" name="linear">linear</option>
+                                                <option value="constant" name="constant">constant</option>
+                                                <option value="polynomial" name="polynomial"">polynomial</option>
+                                                <option value="spline" name="spline">spline</option>
+                                            </select>
+                                            <button class="btn btn-primary mt-3" id="detrend-apply-button-expanding">apply</button>
                                         </div>
-                                    </form>
+                                    </div>
+                                   
                                 </div>
                             </ul>
                         </div>

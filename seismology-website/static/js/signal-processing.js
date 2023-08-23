@@ -21,6 +21,8 @@ let trimRightSideInputExpanding = document.querySelector("#trim-right-side-input
 let trimApplyButton = document.querySelector("#trim-apply-button");
 let trimApplyButtonExpanding = document.querySelector("#trim-apply-button-expanding");
 
+let saveFileButton = document.querySelector("#save-file-button");
+
 let processingPillsContainer = document.querySelector("#processing-pills-container");
 
 let spinnerDiv = document.querySelector("#spinner-div");
@@ -28,17 +30,40 @@ let spinnerDiv = document.querySelector("#spinner-div");
 let uploadFileInput = document.querySelector("#upload-file-input");
 let uploadAnotherFileInput = document.querySelector("#upload-another-file-input");
 
-let uploadFileParagraph = document.querySelector("#upload-file-paragraph");
-
+// initialize some parameters
 let allFilterPills = [];
-let minXValueTotal;
-let maxXValueTotal;
-let minYValueTotal;
-let maxYValueTotal;
-let waveformColors = ['#FFF256', '#6495ED', '#FF5677', '#DAF7A6', '#FFFFFF']
-let config;
-let layout;
+let config = {
+    scrollZoom: true,
+    responsive: true,
+    displayModeBar: true,
+    modeBarButtons: [['pan2d', 'zoom2d', 'resetScale2d', 'resetViews', 'toggleSpikelines']]
+};
+let layout = {
+    title: '',
+    margin: {
+        l: 40,
+        r: 15,
+        t: 40,
+        b: 40
+    },
+    grid: {rows: 3, columns: 1, pattern: 'independent'},
+    plot_bgcolor: '#212529',
+    paper_bgcolor: '#212529',
+    height: 500,
+    shapes: [ ],
+    annotations: [],
+    legend: {
+        orientation: 'h', 
+        x: 0.5,           
+        y: 1.15,
+        xanchor: 'center',
+        font: {
+        size: 20 // Adjust the font size as desired
+        },
+    }
+}; 
 
+// display none to spinner initially
 spinnerDiv.style.display = 'none';
 
 // define a list that disables and enables them
@@ -50,9 +75,12 @@ let disableEnableElements = [
     trimApplyButton, trimApplyButtonExpanding
 ];
 
+// disable all elements initially
 for (el of disableEnableElements) {
     el.disabled = true;
 }
+
+saveFileButton.href = "javascript:void(0)";
 
 // add the click event on the upload-file and another-file-upload buttons
 document.querySelector("#upload-file-button").addEventListener('click', function() {
@@ -73,7 +101,8 @@ uploadAnotherFileInput.addEventListener('change', (ev) => {
     uploadMseedFile(ev)
 })
 
-
+// when i change the value of an element, you need to change also its corresponding value at the expanding elements
+// it goes double way
 detrendTypeSelect.addEventListener('change', () => {
     detrendTypeSelectExpanding.value = detrendTypeSelect.value;
 })
@@ -122,217 +151,51 @@ trimRightSideInputExpanding.addEventListener('change', () => {
     trimRightSideInput.value = trimRightSideInputExpanding.value;
 })
 
-detrendApplyButton.addEventListener("click", applyDetrendFilter)
-detrendApplyButtonExpanding.addEventListener("click", applyDetrendFilter)
-
-taperApplyButton.addEventListener("click", applyTaperFilter)
-taperApplyButtonExpanding.addEventListener("click", applyTaperFilter)
-
-trimApplyButton.addEventListener("click", applyTrimFilter)
-trimApplyButtonExpanding.addEventListener("click", applyTrimFilter)
-
-
-
-function applyDetrendFilter() {
-      
-    fetch(`/signal-processing/apply-processing-detrend?detrend-type-select=${detrendTypeSelect.value}`)
-        .then(response => { 
-            // if not ok deactivate the spinner and show the modal message
-            if (!response.ok) {
-                // deactivate spinner
-                spinnerDiv.style.display = 'none';
-                return response.json()
-                    .then(errorMessage => {
-                        document.querySelector("#modal-message").textContent = errorMessage['error_message'];
-                        document.querySelector("#modal-title").textContent = 'An error has occured!'
-                        document.querySelector("#modal-header").style.backgroundColor = "red";
-                        document.querySelector("#modal-button-triger").click()
-                        throw new Error(errorMessage);
-                    })
-              }
-            // if ok just return the json response
-            return response.json()
-        })
-        .then(mseedData => {
-            // deactivate spinner
-            spinnerDiv.style.display = 'none';
-
-            // convert the returned json object to a form that i can use to plot the graph
-            let convertedMseedData = prepareTracesList(mseedData);
-            
-            // initialize some parameters
-            initializeParameters();
-
-            // create the plot
-            createNewPlot(convertedMseedData);
-
-            addPill(`detrend-${detrendTypeSelect.value}`);
-        })
-        .catch(error => {
-          // Handle any errors during the upload process
-          console.error('Error uploading MSeed file:', error);
-        });
-}
+// define the functions when the user clicks on the buttons
+detrendApplyButton.addEventListener("click", () =>{
+    let queryURL = `/signal-processing/apply-processing-detrend?detrend-type-select=${detrendTypeSelect.value}`;
+    let pillLabel = `detrend-${detrendTypeSelect.value}`;
+    applyFilter(queryURL, pillLabel)
+})
+detrendApplyButtonExpanding.addEventListener("click", () =>{
+    let queryURL = `/signal-processing/apply-processing-detrend?detrend-type-select=${detrendTypeSelect.value}`;
+    let pillLabel = `detrend-${detrendTypeSelect.value}`;
+    applyFilter(queryURL, pillLabel)
+})
 
 
-
-function applyTaperFilter() {
-      
-    fetch(`/signal-processing/apply-processing-taper?taper-length-input=${taperLengthInput.value}&taper-side-select=${taperSideSelect.value}&taper-type-select=${taperTypeSelect.value}`)
-        .then(response => { 
-            // if not ok deactivate the spinner and show the modal message
-            if (!response.ok) {
-                // deactivate spinner
-                spinnerDiv.style.display = 'none';
-                return response.json()
-                    .then(errorMessage => {
-                        document.querySelector("#modal-message").textContent = errorMessage['error_message'];
-                        document.querySelector("#modal-title").textContent = 'An error has occured!'
-                        document.querySelector("#modal-header").style.backgroundColor = "red";
-                        document.querySelector("#modal-button-triger").click()
-                        throw new Error(errorMessage);
-                    })
-              }
-            // if ok just return the json response
-            return response.json()
-        })
-        .then(mseedData => {
-            // deactivate spinner
-            spinnerDiv.style.display = 'none';
-
-            // convert the returned json object to a form that i can use to plot the graph
-            let convertedMseedData = prepareTracesList(mseedData);
-            
-            // initialize some parameters
-            initializeParameters();
-
-            // create the plot
-            createNewPlot(convertedMseedData);
-
-            addPill(`taper-${taperTypeSelect.value}-${taperSideSelect.value}-${taperLengthInput.value}`);
-        })
-        .catch(error => {
-          // Handle any errors during the upload process
-          console.error('Error uploading MSeed file:', error);
-        });
-}
+taperApplyButton.addEventListener("click", () =>{
+    let queryURL = `/signal-processing/apply-processing-taper?taper-length-input=${taperLengthInput.value}&taper-side-select=${taperSideSelect.value}&taper-type-select=${taperTypeSelect.value}`;
+    let pillLabel = `taper-${taperTypeSelect.value}-${taperSideSelect.value}-${taperLengthInput.value}`;
+    applyFilter(queryURL, pillLabel)
+})
+taperApplyButtonExpanding.addEventListener("click", () =>{
+    let queryURL = `/signal-processing/apply-processing-taper?taper-length-input=${taperLengthInput.value}&taper-side-select=${taperSideSelect.value}&taper-type-select=${taperTypeSelect.value}`;
+    let pillLabel = `taper-${taperTypeSelect.value}-${taperSideSelect.value}-${taperLengthInput.value}`;
+    applyFilter(queryURL, pillLabel)
+})
 
 
-function applyTrimFilter() {
-      
-    fetch(`/signal-processing/apply-processing-trim?trim-left-side-input=${trimLeftSideInput.value}&trim-right-side-input=${trimRightSideInput.value}`)
-        .then(response => { 
-            // if not ok deactivate the spinner and show the modal message
-            if (!response.ok) {
-                // deactivate spinner
-                spinnerDiv.style.display = 'none';
-                return response.json()
-                    .then(errorMessage => {
-                        document.querySelector("#modal-message").textContent = errorMessage['error_message'];
-                        document.querySelector("#modal-title").textContent = 'An error has occured!'
-                        document.querySelector("#modal-header").style.backgroundColor = "red";
-                        document.querySelector("#modal-button-triger").click()
-                        throw new Error(errorMessage);
-                    })
-              }
-            // if ok just return the json response
-            return response.json()
-        })
-        .then(mseedData => {
-            // deactivate spinner
-            spinnerDiv.style.display = 'none';
-
-            // convert the returned json object to a form that i can use to plot the graph
-            let convertedMseedData = prepareTracesList(mseedData);
-            
-            // initialize some parameters
-            initializeParameters();
-
-            // create the plot
-            createNewPlot(convertedMseedData);
-           
-            addPill(`trim-${trimLeftSideInput.value}-${trimRightSideInput.value}`);
-        })
-        .catch(error => {
-          // Handle any errors during the upload process
-          console.error('Error uploading MSeed file:', error);
-        });
-}
+trimApplyButton.addEventListener("click", () =>{
+    let queryURL = `/signal-processing/apply-processing-trim?trim-left-side-input=${trimLeftSideInput.value}&trim-right-side-input=${trimRightSideInput.value}`;
+    let pillLabel = `trim-${trimLeftSideInput.value}-${trimRightSideInput.value}`;
+    applyFilter(queryURL, pillLabel)
+})
+trimApplyButtonExpanding.addEventListener("click", () =>{
+    let queryURL = `/signal-processing/apply-processing-trim?trim-left-side-input=${trimLeftSideInput.value}&trim-right-side-input=${trimRightSideInput.value}`;
+    let pillLabel = `trim-${trimLeftSideInput.value}-${trimRightSideInput.value}`;
+    applyFilter(queryURL, pillLabel)
+})
 
 
-
-
-function addPill(pillText) {
-    let newProcessingPillColumn = document.createElement('div');
-    newProcessingPillColumn.className = 'col-auto';
-    let newProcessingPillButton = document.createElement('button');
-    newProcessingPillButton.addEventListener('click', () => {
-        deletePillFilter(newProcessingPillColumn, newProcessingPillButton);
-    });
-    let newProcessingPillSpan = document.createElement('span');
-    newProcessingPillButton.className = 'btn btn-primary fs-6';
-    newProcessingPillSpan.className = 'ms-1 text-dark fw-bold';
-    newProcessingPillButton.textContent = pillText;
-    newProcessingPillSpan.textContent = 'X';
-    newProcessingPillButton.appendChild(newProcessingPillSpan)
-    processingPillsContainer.appendChild(newProcessingPillColumn);
-    newProcessingPillColumn.appendChild(newProcessingPillButton);
-    allFilterPills.push(newProcessingPillButton);
-}
-
-
-function deletePillFilter(elementToDelete, pillButton) {
-    
-    let pillText = pillButton.textContent;
-
-    allFilterPills = allFilterPills.filter((bt) => bt !== pillButton);
-
-    let allActiveFiltersString = '';
-     allFilterPills.forEach((bt) => {
-        allActiveFiltersString += bt.textContent.slice(0, -1) + ' ';
-    })
-    processingPillsContainer.removeChild(elementToDelete);
-    spinnerDiv.style.display = 'block';
-
-    fetch(`/signal-processing/delete-applied-filter?filter=${allActiveFiltersString}`)
-    .then(response => { 
-            // if not ok deactivate the spinner and show the modal message
-            if (!response.ok) {
-                // deactivate spinner
-                spinnerDiv.style.display = 'none';
-                return response.json()
-                    .then(errorMessage => {
-                        document.querySelector("#modal-message").textContent = errorMessage['error_message'];
-                        document.querySelector("#modal-title").textContent = 'An error has occured!'
-                        document.querySelector("#modal-header").style.backgroundColor = "red";
-                        document.querySelector("#modal-button-triger").click()
-                        throw new Error(errorMessage);
-                    })
-              }
-            // if ok just return the json response
-            return response.json()
-        })
-
-        .then(mseedData => {
-            // deactivate spinner
-            spinnerDiv.style.display = 'none';
-
-            let convertedMseedData = prepareTracesList(mseedData);
-
-            createNewPlot(convertedMseedData);
-        })
-        .catch(error => {
-
-            console.error('Error uploading MSeed file:', error);
-        }); 
-
-}
 
 
 // call this function when the user uploads a file
 function uploadMseedFile(ev) {
+
     // get all the files
     let files = ev.target.files;
+
     // if empty return
     if (files.length === 0) {
         return;
@@ -375,16 +238,15 @@ function uploadMseedFile(ev) {
             return response.json()
         })
         .then(mseedData => {
+
             // deactivate spinner
             spinnerDiv.style.display = 'none';
 
-            // activate all elements
+            // activate all elements when you upload a file
             for (el of disableEnableElements) {
                 el.disabled = false;
             }
             
-
-
             // display none to the initial "start by upload an mseed file" div
             document.querySelector("#signal-processing-start-by-upload-container").style.display = "none";
 
@@ -393,12 +255,12 @@ function uploadMseedFile(ev) {
 
             // convert the returned json object to a form that i can use to plot the graph
             let convertedMseedData = prepareTracesList(mseedData);
-            
-            // initialize some parameters
-            initializeParameters();
+
+            // activate the href of the save button
+            saveFileButton.href = "/signal-processing/download-mseed-file";
 
             // create the plot
-            createNewPlot(convertedMseedData);
+            Plotly.newPlot('time-series-graph', convertedMseedData, layout, config);
         })
         .catch(error => {
           // Handle any errors during the upload process
@@ -407,6 +269,147 @@ function uploadMseedFile(ev) {
 }
 
 
+
+
+function applyFilter(queryURL, pillLabel) {
+    
+    // activate the spinner
+    spinnerDiv.style.display = 'block';
+
+    fetch(queryURL)
+        .then(response => { 
+            // if not ok deactivate the spinner and show the modal message
+            if (!response.ok) {
+                // deactivate spinner
+                spinnerDiv.style.display = 'none';
+                return response.json()
+                    .then(errorMessage => {
+                        document.querySelector("#modal-message").textContent = errorMessage['error_message'];
+                        document.querySelector("#modal-title").textContent = 'An error has occured!'
+                        document.querySelector("#modal-header").style.backgroundColor = "red";
+                        document.querySelector("#modal-button-triger").click()
+                        throw new Error(errorMessage);
+                    })
+              }
+            // if ok just return the json response
+            return response.json()
+        })
+        .then(mseedData => {
+            
+            // deactivate spinner
+            spinnerDiv.style.display = 'none';
+
+            // convert the returned json object to a form that i can use to plot the graph
+            let convertedMseedData = prepareTracesList(mseedData);
+
+            // create the plot
+            Plotly.newPlot('time-series-graph', convertedMseedData, layout, config);
+            
+            if (allFilterPills.length > 9 ) {
+                alert('You cannot add more pills');
+                return;
+            }
+
+            addPill(pillLabel);
+        })
+        .catch(error => {
+          // Handle any errors during the upload process
+          console.error('Error uploading MSeed file:', error);
+        });
+}
+
+
+
+
+function addPill(pillText) {
+    // create first a column div and give a class name
+    let newProcessingPillColumn = document.createElement('div');
+    newProcessingPillColumn.className = 'col-auto';
+
+    // then create a button that we will put it in the col div and add a bootstrap class, a text and an event listener to delete the current filter
+    // when it is clicked
+    let newProcessingPillButton = document.createElement('button');
+    newProcessingPillButton.className = 'btn btn-primary fs-6';
+    newProcessingPillButton.textContent = pillText;
+    newProcessingPillButton.addEventListener('click', () => {
+        deletePillFilter(newProcessingPillColumn, newProcessingPillButton);
+    });
+
+    // then create a span that will have the X text inside. We will put it inside the button
+    let newProcessingPillSpan = document.createElement('span');
+    newProcessingPillSpan.className = 'ms-1 text-dark fw-bold';
+    newProcessingPillSpan.textContent = 'X';
+    
+    // put the column div inside the pills container, the button inside the column div and the span inside the button
+    processingPillsContainer.appendChild(newProcessingPillColumn);
+    newProcessingPillColumn.appendChild(newProcessingPillButton);
+    newProcessingPillButton.appendChild(newProcessingPillSpan)
+
+    // save the filter button object in the array
+    allFilterPills.push(newProcessingPillButton);
+
+}
+
+// the elementToDelete is the column div and the pillBUtton the button the user clicked
+function deletePillFilter(elementToDelete, pillButton) {
+
+    // get the text of the button that the user clicked
+    let pillText = pillButton.textContent;
+
+    // remove that button from the list
+    allFilterPills = allFilterPills.filter((bt) => bt !== pillButton);
+
+    // create an empty string that will concatenate the labels of all the current applied filters
+    let allActiveFiltersString = '';
+
+    // for each button in the list (or for each filter applied) concat the filter or button text
+     allFilterPills.forEach((bt) => {
+        allActiveFiltersString += bt.textContent.slice(0, -1) + ' ';
+    })
+
+    // remove the current button from the DOM
+    processingPillsContainer.removeChild(elementToDelete);
+
+    // enable the spinner div
+    spinnerDiv.style.display = 'block';
+
+    // do a fetch to remove the filter or button that the user pressed
+    // pass the filter concatenated string in the URL query parameters
+    fetch(`/signal-processing/delete-applied-filter?filter=${allActiveFiltersString}`)
+    .then(response => { 
+            // if not ok deactivate the spinner and show the modal message
+            if (!response.ok) {
+                // deactivate spinner
+                spinnerDiv.style.display = 'none';
+                return response.json()
+                    .then(errorMessage => {
+                        document.querySelector("#modal-message").textContent = errorMessage['error_message'];
+                        document.querySelector("#modal-title").textContent = 'An error has occured!'
+                        document.querySelector("#modal-header").style.backgroundColor = "red";
+                        document.querySelector("#modal-button-triger").click()
+                        throw new Error(errorMessage);
+                    })
+              }
+            // if ok just return the json response
+            return response.json()
+        })
+
+        .then(mseedData => {
+            
+            // deactivate spinner
+            spinnerDiv.style.display = 'none';
+
+            // convert the returned json object to a form that i can use to plot the graph
+            let convertedMseedData = prepareTracesList(mseedData);
+
+            // create the plot
+            Plotly.newPlot('time-series-graph', convertedMseedData, layout, config);
+        })
+        .catch(error => {
+            console.error('Error uploading MSeed file:', error);
+        }); 
+
+}
 
 
 
@@ -438,71 +441,3 @@ function prepareTracesList(mseedDataObject) {
     };
     return tracesList;
 }
-
-
-
-function initializeParameters() {
-    
-    config = {
-        scrollZoom: true,
-        responsive: true,
-        displayModeBar: true,
-        modeBarButtons: [['pan2d', 'zoom2d', 'resetScale2d', 'resetViews', 'toggleSpikelines']]
-    };
-    
-    layout = {
-        title: '',
-        margin: {
-            l: 40,
-            r: 15,
-            t: 40,
-            b: 40
-        },
-        grid: {rows: 3, columns: 1, pattern: 'independent'},
-        plot_bgcolor: '#212529',
-        paper_bgcolor: '#212529',
-        height: 500,
-        shapes: [ ],
-        annotations: [],
-        legend: {
-            orientation: 'h', 
-            x: 0.5,           
-            y: 1.15,
-            xanchor: 'center',
-            font: {
-            size: 20 // Adjust the font size as desired
-            },
-        }
-    }; 
-}
-
-
-function createNewPlot(tracesList) {
-
-    let subplotIndex = 1;
-    totalTraces = tracesList.length;
-    // i gather here all the X and Y values to find the min and max to set the limits
-    let minMaxXValues = [];
-    let minMaxYValues = [];
-    for (tr of tracesList) {
-        let xArray = tr['x'].map(Number);
-        let yArray = tr['y'].map(Number);
-        let minXValue = Math.min(...xArray);
-        let maxXValue = Math.max(...xArray);
-        let minYValue = Math.min(...yArray);
-        let maxYValue = Math.max(...yArray);
-        minMaxXValues.push(minXValue);
-        minMaxXValues.push(maxXValue);
-        minMaxYValues.push(minYValue);
-        minMaxYValues.push(maxYValue);
-    }
-
-    minXValueTotal = Math.min(...minMaxXValues);
-    maxXValueTotal = Math.max(...minMaxXValues);
-    minYValueTotal = Math.min(...minMaxYValues);
-    maxYValueTotal = Math.max(...minMaxYValues);
-
-
-    Plotly.newPlot('time-series-graph', tracesList, layout, config);
-}
-
