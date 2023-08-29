@@ -50,8 +50,6 @@ PickHoverLi.addEventListener('mouseover', () => {
 
 
 
-    
-
 
 
 // let intervalID;

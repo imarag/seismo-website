@@ -236,3 +236,16 @@ pre {
     margin-bottom: 0px;
 }
 
+/* HOME */
+
+
+#site-effect-container-div .paragraph-text {
+    text-indent: 30px;
+    margin: 0px;
+    text-align: justify;
+    
+}
+
+#article-main-title {
+    margin-bottom: 150px;
+}
