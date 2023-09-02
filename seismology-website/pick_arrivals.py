@@ -21,6 +21,9 @@ def convert_mseed_to_json(stream):
     fs = float(first_trace.stats["sampling_rate"])
     station = first_trace.stats["station"]
 
+    if not station:
+        station = 'STATION'
+        
     # create the record name
     rec_name = str(starttime.date) + "_" + str(starttime.time) + "_" + station
     rec_name = rec_name.replace(":", "").replace("-", "")

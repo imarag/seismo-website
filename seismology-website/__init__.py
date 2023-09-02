@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, g, redirect, jsonify, url_for, session, flash, request, make_response
+from flask import Flask, render_template,  redirect, jsonify, url_for, session, flash, request, make_response
 from .auth import login_required
 from . import db
 from . import auth
@@ -12,7 +12,6 @@ from . import topics_table
 from . import users_table
 from . import user_account
 from .db import get_db
-import re
 from flask_mail import Mail, Message
 
 
@@ -20,11 +19,6 @@ def create_app(test_config=None):
 
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
-    
-    app.config.from_mapping(
-        SECRET_KEY='dev',
-        DATABASE=os.path.join(app.instance_path, 'seismo-database.sqlite'),
-    )
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
@@ -38,18 +32,8 @@ def create_app(test_config=None):
         os.makedirs(app.instance_path)
     except OSError:
         pass
-
-    app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-    app.config['MAIL_PORT'] = 465
-    app.config['MAIL_USERNAME'] = 'seismoweb95@gmail.com'
-    app.config['MAIL_PASSWORD'] = 'qppnzstyxltfjcnz'
-    app.config['MAIL_USE_TLS'] = False
-    app.config['MAIL_USE_SSL'] = True
-
-    app.config['DATA_FILES_FOLDER'] = os.path.join(app.root_path, 'data_files')
-
+    
     mail = Mail(app)
-
 
     @app.route('/send-email', methods=['POST'])
     def send_email():
@@ -106,17 +90,48 @@ def create_app(test_config=None):
         return render_template('home.html')
     
 
-    @app.route('/testt', methods=['GET'])
-    def test():
-        return render_template('test.html')
-    
-
     @app.route('/show-article/<article_name>', methods=['GET'])
     @login_required
     def show_article(article_name):
         return render_template(f'topics/{article_name}')
     
+    @app.route('/resource-file')
+    @login_required
+    def resource_file():
+        return render_template(f'resources.html')
+    
+    @app.route('/receive-feedback', methods=['POST'])
+    def receive_feedback():
+        feedback_input_text = request.form['feedback-input']
+        
+        if feedback_input_text:
+            flash('Thank you for your feedback!')
 
+            database = get_db()
+            user_id = session["user_id"]
+            user = database.execute("SELECT * FROM user WHERE id = ?", (user_id,)).fetchone()
+            sender_email = user['email']
+            # create the message to send to the user email
+            msg = Message(
+                sender = sender_email, 
+                recipients = ['giannis.marar@hotmail.com'],
+                subject="Feedback acquired (seismology website)"
+                )
+    
+            # create the message html
+            msg.html = f"""
+                <h1>From: {sender_email}</h1>
+                <div>
+                    <p>{feedback_input_text}</p>
+                </div>
+                """
+            
+            # send the email
+            mail.send(msg)
+
+        return redirect(url_for('BP_user_account.help_and_support'))
+    
+    
    
     @app.errorhandler(400)
     def handle_bad_request(error):
@@ -134,7 +149,6 @@ def create_app(test_config=None):
     app.register_blueprint(users_table.bp)
     app.register_blueprint(topics.bp)
     app.register_blueprint(user_account.bp)
-
 
     return app
 

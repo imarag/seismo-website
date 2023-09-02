@@ -27,10 +27,10 @@
                 <div class="col-12 col-lg-7">
                     <p class="paragraph-text">
                         The input motion that arrives at the surface of the Earth is affected by the nature of the seismic source, the medium or the 
-                        Earth's material that it is traveling through and the underground Geology beneath the surface. Site effect is the influence of that
-                        underground Geological structure at the seismic motion while it approaches the Earth's surface. That causes a great 
-                        influence on the characterization of seismic ground motion, significantly impacting essential attributes like amplitude, 
-                        frequency distribution, and duration. Site effect can greatly amplify the magnitude of the seismic motion 
+                        Earth's material that it is traveling through and the underground Geology. Site effect is the influence of the underground geological structure 
+                        at the seismic motion while it approaches the Earth's surface. That alters greatly 
+                        the characteristics of the seismic ground motion such as the amplitude of the waveform, 
+                        the frequency distribution, and the duration of the shaking. Site effect can greatly amplify the magnitude of the seismic motion 
                         often by nearly two orders of magnitude. Hence, it demands diligent consideration. 
                         
                     </p>
@@ -38,7 +38,7 @@
                 <div class="col-10 col-md-8 col-lg-5">
                     <figure>
                         <img src="{{ url_for('static', filename='img/site-effect-images/site-effect.png') }}" alt="site effect image" class="img-fluid">
-                        <figcaption class="fs-6 mt-1 mb-5 text-primary text-start fst-italic">Amplification of the ground motion due to the underground Geology</figcaption>
+                        <figcaption class="fs-6 mt-1 mb-5 text-primary text-start fst-italic">Site effect: Amplification of the ground motion due to the underground Geology</figcaption>
                     </figure>
                 </div>
             </div>
@@ -60,17 +60,17 @@
             <div class="row justify-content-center align-items-center gx-5 gy-4">
                 <div class="col-lg-5 col-md-7 col-12">
                     <p class="paragraph-text">
-                        The elastic properties of Earth materials ranges from hard 
+                        The elastic properties of the Earth's materials ranges from hard 
                         rock materials to soft sediments. Seismic waves travel faster through hard rocks than through softer rocks and sediments. 
-                        As the waves pass from deeper harder to shallow softer rocks they slow down and get bigger in amplitude due to the 
-                        conservation of energy. Just like tsunamis get bigger while they approach the coast. The softer the rock or soil under 
-                        a site is, the larger the wave. Softer soils amplify ground motion. 
+                        As the waves pass from deep, hard rocks to shallow and soft sediments they slow down and get bigger in amplitude due to the 
+                        conservation of energy and as a result amplify the ground motion. Just like tsunamis get bigger while they approach the coast (decrease of depth). The softer the rock or soil under 
+                        a site is, the larger the wave.
                     </p>
                 </div>
                 <div class="col-lg-4 col-md-5 col-7">
                     <figure>
                         <img src="{{ url_for('static', filename='img/site-effect-images/softness.png') }}" alt="softness of the geological rocks" class="img-fluid">
-                        <figcaption class="fs-6 mt-1 mb-5 text-primary text-start fst-italic">Elastic properties of the underground medium below the surface. The input motion goes to layers with lower velocity and density that results in higher amplitudes at the surface due to the conservation of energy</figcaption>
+                        <figcaption class="fs-6 mt-1 mb-5 text-primary text-start fst-italic">Elastic properties of the underground medium below the surface. The input motion travels towards surface layers with lower velocity and density that results in higher amplitudes at the surface due to the conservation of energy</figcaption>
                     </figure>
                 </div>
             </div>
@@ -88,7 +88,7 @@
                 <div class="col-lg-4 col-md-5 col-7">
                     <figure>
                         <img src="{{ url_for('static', filename='img/site-effect-images/basin.png') }}" alt="geological basin" class="img-fluid">
-                        <figcaption class="fs-6 mt-1 mb-5 text-primary text-start fst-italic">Underground basin geometry affects the ground motion characteristics. Multiple reflections can greatly increase the amplitude of the motion at the surface</figcaption>
+                        <figcaption class="fs-6 mt-1 mb-5 text-primary text-start fst-italic">Underground basin geometry affects the ground motion characteristics. Multiple reflections can greatly increase the amplitude of the motion at the surface due to the conversion of body waves to surface waves</figcaption>
                     </figure>
                 </div>
             </div>
@@ -106,7 +106,7 @@
                 <div class="col-lg-4 col-md-5 col-7">
                     <figure>
                         <img src="{{ url_for('static', filename='img/site-effect-images/topography.png') }}" alt="topographic effects" class="img-fluid">
-                        <figcaption class="fs-6 mt-1 mb-5 text-primary text-start fst-italic">Topographic effects caused by simple irregularities can amplify the ground motion. For example a triangular infinite wedge subjected to vertically propagating S-waves with φ, the angle of the wedge</figcaption>
+                        <figcaption class="fs-6 mt-1 mb-5 text-primary text-start fst-italic">Topographic effects caused by simple irregularities can amplify the ground motion. For example a triangular infinite wedge subjected to vertically propagating S-waves with φ, the angle of the wedge (S. L. Kramer, Geotechnical Earthquake Engineering)</figcaption>
                     </figure>
                 </div>
             </div>
@@ -118,7 +118,7 @@
 
             <p class="paragraph-text">
                 The first thing that comes to mind when this question is asked, is: <q><em>Can site effects be predicted ?</em></q> The answer comes from 
-                a scientific paper published by David M. Boore on 2004:
+                a scientific paper published by <span class="author-ref">David M. Boore (2004)</span>:
 
                 <div class="row justify-content-center align-items-center my-5">
                     <div class="col-11 col-md-9 col-lg-8">
@@ -199,11 +199,12 @@
             <p class="paragraph-text">
                 However, the effectiveness of using V<sub>s30</sub> as the sole proxy for assessing site effects has been questioned in several 
                 studies. These studies propose the consideration of complementary or alternative parameters. For instance, some investigations 
-                explore the utilization of the fundamental frequency (f<sub>0</sub>) of the site as an alternative or supplementary indicator 
-                alongside V<sub>s30</sub>. This highlights the insufficiency of relying solely on V<sub>s30</sub> as a single proxy for 
-                site-response assessment.Other researchers recommend a combined approach, where the peak amplification frequency (f<sub>peak</sub>) 
-                is integrated with V<sub>s30</sub> to enhance the accuracy of site response predictions. Additionally, some 
-                studies suggest that a pair of variables, V<sub>s30</sub> and f<sub>0</sub>, offer the best discrimination of soil characteristics. 
+                explore the utilization of the fundamental frequency (f<sub>0</sub>) of the site, as an alternative or supplementary indicator 
+                alongside V<sub>s30</sub> (<span class="author-ref">Cadet et al. 2012, Luzi et al. 2011</span>). This highlights the insufficiency of relying solely on V<sub>s30</sub> as a single proxy for 
+                site-response assessment. Other researchers recommend a combined approach, where the peak amplification frequency (f<sub>peak</sub>) 
+                is integrated with V<sub>s30</sub> to enhance the accuracy of site response predictions (<span class="author-ref">Baram et al. 2020,  Hassani and Atkinson, 2016</span>). Additionally, some 
+                studies suggest that a pair of variables, the average shear wave velocity, V<sub>s,z</sub> over the top z meters 
+                and the site fundamental frequnecy (f<sub>0</sub>) offer the best discrimination of soil characteristics (<span class="author-ref">Cadet et al. 2008</span>). 
                 These variables are independent and provide a comprehensive representation of different aspects of soil response. V<sub>s30</sub> 
                 pertains to the average response within the first 30 meters, while f<sub>0</sub> combines information about soil stiffness and the 
                 depth to bedrock.
@@ -219,7 +220,7 @@
             <p class="paragraph-text">
                 A straightforward yet 
                 effective strategy involves computing spectral ratios between two adjacent records obtained from locations with different 
-                soil conditions. Ideally, this involves a comparison between a free-field site situated on unaltered hard rock outcrops and a 
+                soil conditions. Ideally, this involves a comparison between a free-field site (no amplification) situated on unaltered hard rock outcrops and a 
                 site resting on soft sedimentary layers.
             </p>
 
@@ -254,12 +255,12 @@
                     <li>
                         <b>a) Equality of eHVSR and mHVSR</b>: There's a question about whether eHVSR and mHVSR are equivalent. Research suggests 
                         that while they share similarities, they are not identical. Researchers have computed a ratio known as EMR 
-                        (Earthquake to Microtremor Ratio) to extract eHVSR information from mHVSR data.
+                        (Earthquake to Microtremor Ratio) to extract eHVSR information from mHVSR data (<span class="author-ref">Kawase et al. 2018</span>).
                     </li>
                     <li>
                         <b>b) Relationship between HSAF and eHVSR</b>: It's also important to consider whether HSAF and eHVSR are the same. These 
                         may not be identical, but they can be made equal by adjusting the vertical site amplification factor (VSAF) in the 
-                        denominator of the eHVSR calculation.
+                        denominator of the eHVSR calculation (<span class="author-ref">Ito et al. 2020, Maragkakis et al. 2021</span>).
                     </li>
                 </ul>
 
@@ -277,15 +278,15 @@
         <div class="lead">
             <p class="paragraph-text">
                 While we've previously mentioned Horizontal to Vertical spectral ratios (eHVSRs) in a previous chapter, their significance 
-                warrants a dedicated chapter to provide a more comprehensive understanding of this approach. This separate chapter will delve 
-                deeper into the intricacies and nuances of eHVSRs, offering a more detailed exploration of this critical concept.
+                warrants a dedicated chapter to provide a more comprehensive understanding of this approach. This separate chapter will offer
+                 a more detailed exploration of this critical concept.
             </p>
             <p class="paragraph-text">
                 In 2020, Ito and their team introduced an innovative approach, building upon the diffuse field assumption (DFA) previously 
-                developed by Wesley in 1982, as well as the work of Sánchez-Sesma et al. in 2008 and 2011, and Kawase et al. in 2011. This 
+                developed by <span class="author-ref">Wesley (1982)</span>, as well as the work of <span class="author-ref">Sánchez-Sesma et al. 2008, 2011</span>, and <span class="author-ref">Kawase et al. 2011</span>. This 
                 approach aimed to calculate the horizontal site amplification factor (HSAF) by utilizing the horizontal-to-vertical spectral 
                 ratios derived from earthquake recordings (eHVSRs) in combination with a correction factor known as the Vertical Amplification 
-                Correction Factor (VACF).The function represented by VACF serves to adjust the eHVSR recordings by eliminating the Vertical Site 
+                Correction Factor (VACF). The function represented by VACF serves to adjust the eHVSR recordings by eliminating the Vertical Site 
                 Amplification Factor (VSAF) from the denominator of these recordings. This correction process transforms the corrected eHVSR into 
                 an equivalent representation of the horizontal amplification factor, HSAF.
             </p>
@@ -297,9 +298,9 @@
             <p class="paragraph-text">
                 This method simplifies the calculation of the horizontal site amplification factor (HSAF) by multiplying two key components: the 
                 horizontal to vertical spectra ratio of earthquake recordings (eHVSR) and the vertical amplification correction function (VACF). 
-                Eri Ito and their colleagues applied this method in 2020, as detailed in their research paper published in the Bulletin of the 
+                <span class="author-ref">Eri Ito (2020) and their colleagues</span> applied this method, in their research paper published in the Bulletin of the 
                 Seismological Society of America. Their study aimed to estimate horizontal site amplification factors based on seismic recordings 
-                in Japan. Similarly, in 2021, Maragkakis and their research team employed the same methodology to compute horizontal amplification 
+                in Japan. Similarly, <span class="author-ref">Maragkakis (2021) and their research team </span> employed the same methodology to compute horizontal amplification 
                 factors using recorded data from the Greek region as shown in the ray paths map below. 
             </p>
 
@@ -307,7 +308,7 @@
                 <div class="col-10 col-md-8 col-lg-6 text-center">
                     <figure>
                         <img src="{{ url_for('static', filename='img/site-effect-images/raypaths_300.png') }}" alt="ray paths map Greece" class="img-fluid">
-                        <figcaption class="fs-6 mt-1 mb-5 text-primary text-start fst-italic">Ray paths of the Greek data used for the analysis for 300 km hypocentral distance. The stations are depicted in the map as the blue triangles shown and the earthquakes by the red dots. There were used 152 stations, 368 earthquakes recorded by the stations and in total 8428 recordings.</figcaption>
+                        <figcaption class="fs-6 mt-1 mb-5 text-primary text-start fst-italic">Ray paths of the Greek data (earthquakes and stations) used for the analysis with hypocentral distances less that 300 km. The stations are depicted in the map as the blue triangles shown and the earthquakes by the red dots. There were 368 earthquakes recorded by 152 stations and resulted a total of 8428 recordings.</figcaption>
                     </figure>
                 </div>
             </div>
@@ -316,7 +317,7 @@
                 The resulting amplification curves are visually represented in the figures 
                 below. The left figure illustrates a comparison between the average VACF curves for Japanese (blue) and Greek (black) data, along with their 
                 respective standard deviations. Meanwhile, the right figure displays various VACF curves for the Greek region, categorized based 
-                on the dominant frequency (f<sub>0</sub>) and the peak HVSR curve amplitude.
+                on the fundamental frequency (f<sub>0</sub>) and the peak HVSR curve amplitude.
             </p>
 
             <div class="row justify-content-center align-items-center my-5">
@@ -329,7 +330,7 @@
                 <div class="col">
                     <figure>
                         <img src="{{ url_for('static', filename='img/site-effect-images/categorized_vacfs_mine.png') }}" alt="site effect image" class="img-fluid">
-                        <figcaption class="fs-6 mt-1 mb-5 text-primary text-start fst-italic">VACF curves for the Greek area categorized by the station HVSR peak amplitude and the dominant frequency, f<sub>0</sub></figcaption>
+                        <figcaption class="fs-6 mt-1 mb-5 text-primary text-start fst-italic">VACF curves for the Greek area categorized by the station HVSR peak amplitude and the fundamental frequency, f<sub>0</sub>. The numbers inside the brackets are the total stations used for each category.</figcaption>
                     </figure>
                 </div>
             </div>
@@ -358,8 +359,8 @@
             </div>
 
             <p class="paragraph-text">
-                When we compare the blue and black lines at these stations, it becomes evident that the application of the categorized correction curve to adjust the 
-                eHVSR ratio leads to a notably improved estimation of the gain across the entire frequency spectrum.
+                When we compare the blue and black lines at these stations, it becomes evident that both corrected curves using the average and the categorized VACF, can simulate the amplification at an extend. Howerver, it is obvious that the application of the categorized correction curve 
+                leads to a notably improved estimation of the gain across the entire frequency spectrum.
             </p>
         </div>
 

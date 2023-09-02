@@ -10,6 +10,9 @@
 
     <div>
         <div class="container-lg">
+            {% for message in get_flashed_messages() %}
+                <div class="flash bg-light-yellow2 p-2 mb-3 text-center text-dark fs-4 rounded">{{ message }}</div>
+            {% endfor %}
             <p class="display-4 text-center my-5">Help & Support</p>
             <div class="accordion my-5" id="accordion-information">
                 <div class="accordion-item">
@@ -27,14 +30,22 @@
                                 </div>
                                 <div class="col-12 col-md-6  text-start">
                                     <img class="img-fluid" src="{{ url_for('static', filename='img/help-and-support/envelope-fill.svg') }}">
-                                    <span class="text-primary fw-bold">email:</span> <span>giannis.marar@hotmail.com</span>
+                                    <span class="text-primary fw-bold">email:</span> <span>giannis.marar@hotmail.com</span> 
                                 </div>
                                 <div class="col-12 col-md-6  text-start">
                                     <img class="img-fluid" src="{{ url_for('static', filename='img/help-and-support/linkedin.svg') }}">
-                                    <span class="text-primary fw-bold">LinkedIn:</span> <span><a href="https://www.linkedin.com/in/ioannis-maragkakis-1ba2851a9/">ioannis-maragkakis</a></span>
+                                    <span class="text-primary fw-bold">LinkedIn:</span> <span>ioannis-maragkakis</span>
                                 </div>
                                 <div class="col-12 col-md-6  text-start">
                 
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col justify-content-center">
+                                    <div class="text-center">
+                                        <span class="me-4"><a href="mailto: giannis.marar@hotmail.com">send email</a></span>
+                                        <span><a target="_blank" href="https://www.linkedin.com/in/ioannis-maragkakis-1ba2851a9/">Go to LinkedIn</a></span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -83,7 +94,7 @@
                                     </div>
                                     <div class="col-3 col-sm-2 col-lg-1">
                                         <p>
-                                            <img src="{{ url_for('static', filename='img/index-images/iris.png') }}" class="img-fluid">
+                                            <img src="{{ url_for('static', filename='img/help-and-support/iris.png') }}" class="img-fluid">
                                         </p>
                                         
                                     </div>
@@ -97,7 +108,7 @@
                                     </div>
                                     <div class="col-3 col-sm-2 col-lg-1">
                                         <p>
-                                            <img src="{{ url_for('static', filename='img/index-images/usgs.png') }}" class="img-fluid">
+                                            <img src="{{ url_for('static', filename='img/help-and-support/usgs.png') }}" class="img-fluid">
                                         </p>
                                         
                                     </div>
@@ -111,7 +122,49 @@
                                     </div>
                                     <div class="col-3 col-sm-2 col-lg-1">
                                         <p>
-                                            <img src="{{ url_for('static', filename='img/index-images/emsc.jpg') }}" class="img-fluid">
+                                            <img src="{{ url_for('static', filename='img/help-and-support/emsc.jpg') }}" class="img-fluid">
+                                        </p>
+                                        
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row justify-content-around align-items-center">
+                                    <div class="col-9 col-sm-10 col-lg-11">
+                                        <a href="http://www.itsak.gr/en">
+                                            <p class="fs-5">Institute of Engineering Seismology and Earthquake Engineering</p>
+                                        </a>
+                                    </div>
+                                    <div class="col-3 col-sm-2 col-lg-1">
+                                        <p>
+                                            <img src="{{ url_for('static', filename='img/help-and-support/itsak_logo.png') }}" class="img-fluid">
+                                        </p>
+                                        
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row justify-content-around align-items-center">
+                                    <div class="col-9 col-sm-10 col-lg-11">
+                                        <a href="http://geophysics.geo.auth.gr/ss/station_index_en.html">
+                                            <p class="fs-5">Seismological Station Aristotle University of Thessaloniki</p>
+                                        </a>
+                                    </div>
+                                    <div class="col-3 col-sm-2 col-lg-1">
+                                        <p>
+                                            <img src="{{ url_for('static', filename='img/help-and-support/auth_logo.png') }}" class="img-fluid">
+                                        </p>
+                                        
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row justify-content-around align-items-center">
+                                    <div class="col-9 col-sm-10 col-lg-11">
+                                        <a href="http://bbnet.gein.noa.gr/HL/">
+                                            <p class="fs-5">National Observatory of Athens</p>
+                                        </a>
+                                    </div>
+                                    <div class="col-3 col-sm-2 col-lg-1">
+                                        <p>
+                                            <img src="{{ url_for('static', filename='img/help-and-support/noa_logo.png') }}" class="img-fluid">
                                         </p>
                                         
                                     </div>
@@ -120,10 +173,31 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                            <p class="fs-3 text-start text-muted">Feedback</p>
+                        </button>
+                    </h2>
+                    <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordion-information">
+                        <div class="accordion-body">
+                            <div class="mb-3">
+                                <form action="{{ url_for('receive_feedback') }}" method="POST"> 
+                                    <label for="feedback-input" class="form-label">Provide Feedback</label>
+                                    <textarea class="form-control" id="feedback-input" name="feedback-input" rows="10"></textarea>
+                                    <div class="text-center my-5">
+                                        <button type="submit" class="btn btn-primary">submit</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    
+
      
 
 {% endblock %}

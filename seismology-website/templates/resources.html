@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Resources
+{% endblock %}
+
+
+
+{% block content %}
+
+    <div class="container-lg">
+        <h1 class="display-3 fw-medium text-center text-muted mt-5 mb-3">Resources</h1>
+        <div class="row justify-content-center">
+            <div class="col-8 text-center">
+                <p class="text-muted fs-3 fw-semibold fst-italic mb-5">
+                    Explore our resources for a richer seismology experience!
+                </p>
+            </div>
+        </div>
+   
+        <div class="row justify-content-center align-items-center mt-5">
+            <div class="col-lg-4 col-md-8 col-10 me-4">
+                <h1 class="fs-3 fw-semibold text-center text-lg-start">Fourier Spectra Script</h1>
+                <p class="text-center text-lg-start test-muted fs-5 fst-italic">Download the script used to calculate the Fourier Spectra at interactive tool</p>
+                <p class="text-center text-lg-start"><a href="#">Download resource <img src="{{ url_for('static', filename='img/resources/file-earmark-arrow-down-fill.svg') }}" alt="download icon"></a></p>
+            </div>
+            <div class="col-lg-4 col-md-6 col-10">
+                <img src="{{ url_for('static', filename='img/resources/resource_fourier_script.png') }}" alt="fourier spectra images" class="img-fluid">
+            </div>
+        </div>
+        <hr>
+        <div class="row justify-content-center align-items-center mt-5">
+            <div class="col-lg-4 col-md-8 col-10 me-4">
+                <h1 class="fs-3 fw-semibold text-center text-lg-start">Picking Tool</h1>
+                <p class="text-center text-lg-start test-muted fs-5 fst-italic">Use a picking tool GUI built using Python PyQt5 and Pyqtgraph for multiple picking</p>
+                <p class="text-center text-lg-start"><a href="#">Download resource <img src="{{ url_for('static', filename='img/resources/file-earmark-arrow-down-fill.svg') }}" alt="download icon"></a></p>
+            </div>
+            <div class="col-lg-4 col-md-6 col-10">
+                <img src="{{ url_for('static', filename='img/resources/resource_picking_tool.png') }}" alt="fourier spectra images" class="img-fluid">
+            </div>
+        </div>
+        <hr>
+        <div class="row justify-content-center align-items-center my-5">
+            <div class="col-lg-4 col-md-8 col-10 me-4">
+                <h1 class="fs-3 fw-semibold text-center text-lg-start">Test MSEED file</h1>
+                <p class="text-center text-lg-start test-muted fs-5 fst-italic">Download a testing MSEED file to interact with the website</p>
+                <p class="text-center text-lg-start"><a href="#">Download resource <img src="{{ url_for('static', filename='img/resources/file-earmark-arrow-down-fill.svg') }}" alt="download icon"></a></p>
+            </div>
+            <div class="col-lg-4 col-md-6 col-10">
+                <img src="{{ url_for('static', filename='img/resources/resource_test_mseed.png') }}" alt="fourier spectra images" class="img-fluid">
+            </div>
+        </div>
+
+
+
+
+        
+    </div>
+
+{% endblock %}

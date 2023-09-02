@@ -169,9 +169,6 @@ function uploadMseedFile(ev) {
             // display block to the option menu
             optionsMenu.style.display = 'block';
 
-            // rename the dummy paragraph to have the record name
-            document.querySelector("#record-name-paragraph").textContent = mseedData["trace-0"]["record-name"];
-
             // convert the returned json object to a form that i can use to plot the graph
             let convertedMseedData = prepareTracesList(mseedData);
             
@@ -772,11 +769,7 @@ function plotHVSRData(hvsrData) {
 
     Plotly.newPlot('hvsr-graph', hvsrDataList, layoutHVSR, config);
 
-
-
-    
-
-    
+ 
 }
 
 

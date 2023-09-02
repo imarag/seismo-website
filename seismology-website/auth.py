@@ -5,8 +5,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from .db import get_db
 import functools
 import datetime 
-
-
+from .forms import RegistrationForm, LoginForm
 
 bp = Blueprint('auth', __name__, url_prefix = '/auth')
 
@@ -64,44 +63,42 @@ def forgot_password():
 
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
-    if request.method == 'POST':
-        email = request.form['email']
-        fullname = request.form['fullname']
-        password = request.form['password']
+
+    form = RegistrationForm(request.form)
+
+    if request.method == 'POST' and form.validate():
+        email = form['email'].data
+        fullname = form['fullname'].data
+        password = form['password'].data
 
         db = get_db()
-        error_message = None
 
-        if not email:
-            error_message = 'Email is required!'
-        elif not fullname:
-            error_message = 'Fullname is required!'
-        elif not password:
-            error_message = 'Password is required!'
-
-        if error_message is None:
-            try:
-                db.execute(
-                    'INSERT INTO user (fullname, email, password) VALUES (?, ?, ?)',
-                    (fullname, email, generate_password_hash(password))
-                )
-                db.commit()
-            except db.IntegrityError:
-                error_message = f"User {fullname} is already registered!"
-            else:
-                flash('you have succesfully registered!')
-                return redirect(url_for('auth.login')) 
+        try:
+            db.execute(
+                'INSERT INTO user (fullname, email, password) VALUES (?, ?, ?)',
+                (fullname, email, generate_password_hash(password))
+            )
+            db.commit()
+        except db.IntegrityError:
+            error_message = f"User {fullname} is already registered!"
+        else:
+            flash('you have succesfully registered!')
+            return redirect(url_for('auth.login')) 
             
         flash(error_message)
 
-    return render_template('auth/register.html')
+    return render_template('auth/register.html', form=form)
 
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
+
+    form = LoginForm(request.form)
+
+    if request.method == 'POST' and form.validate():
+
+        email = form['email'].data
+        password = form['password'].data
 
         db = get_db()
         error_message = None
@@ -131,7 +128,7 @@ def login():
         
         flash(error_message)
 
-    return render_template('auth/login.html')
+    return render_template('auth/login.html', form=form)
 
 
 @bp.route('/logout')

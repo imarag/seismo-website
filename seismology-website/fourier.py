@@ -20,6 +20,8 @@ def get_record_name():
     first_trace = mseed[0]
     starttime = first_trace.stats["starttime"]
     station = first_trace.stats["station"]
+    if not station:
+        station = 'STATION'
     rec_name = str(starttime.date) + "_" + str(starttime.time) + "_" + station
     rec_name = rec_name.replace(":", "").replace("-", "")
     return rec_name

@@ -249,3 +249,18 @@ pre {
 #article-main-title {
     margin-bottom: 150px;
 }
+
+#article-cards-container .card:hover {
+    box-shadow: 0 0 !important;
+}
+
+.author-ref {
+    color:rgb(55, 55, 247);
+    font-style: italic;
+}
+
+#seismology-intro-container p {
+    text-indent: 30px;
+    margin: 0px;
+    text-align: justify;
+}
