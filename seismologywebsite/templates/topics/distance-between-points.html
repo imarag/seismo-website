@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Fourier Spectra
+{% endblock %}
+
+
+
+{% block content %}
+<div class="container-lg">
+    <h1 class="display-3 text-center mt-5 mb-3">Distance calculator</h1>
+    <p class="text-muted text-center fs-2 mb-5">Calculate the distance between two points on WGS84</p>
+    <br><br>
+    <div class="row justify-content-center align-items-center">
+        <div class="col-8 col-md-4">
+            <h2 class="text-center fs-3">Point 1</h2>
+            <hr>
+            <div class="row justify-content-center align-items-center">
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="point1-lat-input" class="form-label  text-muted">Latitude</label>
+                        <input type="number" class="form-control" id="point1-lat-input" name="point1-lat-input">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="point1-lon-input" class="form-label  text-muted">Longitude</label>
+                        <input type="number" class="form-control" id="point1-lon-input" name="point1-lon-input">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-8 col-md-4">
+            <h2 class="text-center fs-3">Point 2</h2>
+            <hr>
+            <div class="row justify-content-center align-items-center">
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="point2-lat-input" class="form-label  text-muted">Latitude</label>
+                        <input type="number" class="form-control" id="point2-lat-input" name="point2-lat-input">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="point2-lon-input" class="form-label  text-muted">Longitude</label>
+                        <input type="number" class="form-control" id="point2-lon-input" name="point2-lon-input">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center align-items-center">
+        <div class="col-7 text-center">
+            <div class="text-center my-5">
+                <button class="btn btn-primary" style="width:100px;" id="compute-button">Compute</button>
+                <button class="btn btn-danger" style="width:100px;" id="reset-button">Reset</button>
+            </div>
+        </div>
+    </div>
+    <div class="text-center">
+        <p class="text-muted my-4 text-center fs-3 fw-bold">
+            The distance between the points in [km] is: 
+            <p id="result-paragraph" class="fw-bold"></p> 
+
+        </p>
+    </div>
+    <div class="text-center">
+        <p class="text-muted my-4 text-center">For more information read the obspy <a href="https://docs.obspy.org/packages/autogen/obspy.geodetics.base.gps2dist_azimuth.html#obspy.geodetics.base.gps2dist_azimuth" target="_blank"><code>gps2dist_azimuth</code></a></p>
+    </div>
+    
+
+</div>
+
+
+<script src="/static/js/distance-between-points.js"></script>
+
+
+{% endblock %}

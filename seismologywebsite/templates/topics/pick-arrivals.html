@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Arrival picking
+{% endblock %}
+
+
+
+
+{% block content %}
+    <div class="container-lg">
+        <section id="title-section" class="mb-5">
+            <div class="bg-light fs-2 p-5">
+                <p class="display-4 text-center mb-5">Arrivals selection</p>
+                <div>
+                    <p class="text-center fs-3 text-muted">Select the P & S wave arrival times</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="explanation-section">
+            <div class="fs-4 lead">
+                <div class="accordion" id="accordionExample">
+                    <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        User Guide
+                        </button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <p>
+                                The program uses MSEED file format. Begin by uploading an MSEED file using the <kbd>Upload</kbd> option. From the top menu, select either the P-wave 
+                                (<kbd>P</kbd> button) or S-wave (<kbd>S</kbd> button) option, then click anywhere on the waveforms to select the 
+                                arrival time of the chosen wave. To remove a previously applied arrival time, use the <kbd>del P</kbd> and 
+                                <kbd>del S</kbd> buttons. Feel free to utilize the filter dropdown in the top menu to apply a pre-defined filter to 
+                                the waveforms, which can streamline your picking process. Additionally, you have the option to manually input a filter 
+                                using the entry boxes located at the bottom right corner. If you input a value only in the left entry box, a highpass 
+                                filter will be applied with the specified frequency. Similarly, you input a value only in the right entry box, a 
+                                lowpass filter will be implemented using the specified frequency. Should you fill in both entry boxes, a bandpass 
+                                filter will be applied. Once the mouse focus is in the left or right box, simply press the <kbd>Enter</kbd> key to 
+                                confirm your input and apply the manual filters. Lastly, utilize the options located at the top right corner of the 
+                                plot to zoom in, zoom out, and adjust the position of the waveforms. These tools will aid you in selecting the 
+                                arrivals more effectively. 
+                            </p>
+                            <p>
+                                Take into account the following:
+                                <ul>
+                                    <li><strong>Trace:</strong> Represents a single continuous seismic recording with a specific channel (e.g., E, N, or Z). It contains the waveform data and metadata, such as sampling rate, start time, channel information, and more.</li>
+                                    <li><strong>Stream:</strong> A collection of one or more "Trace" objects, representing a continuous sequence of seismic traces recorded over a period of time.</li>
+                                    <li>The program saves the arrivals as seconds from the start time of the record. It will automatically generate a file with the arrival values, naming it based on the start time and station name (e.g., 20150724_095834_KRL1).</li>
+                                    <li>Due to the above requirements, ensure you define both the start time and the station name for each record.</li>
+                                    <li>Your MSEED file should contain 2 or 3 traces. The scenario with 2 traces can occur if you have one horizontal and one vertical component record.</li>
+                                    <li>It's necessary to define either the sampling frequency (fs) or the sample distance (dt) in your MSEED file, with at least one present. This ensures a correct time axis representation while picking the arrivals.</li>
+                                    <li>Each trace in your MSEED file should have its channel defined. This information is essential for selecting the arrivals on the respective trace.</li>
+                                </ul>
+                            </p>
+                            
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section>
+            <p class="text-muted text-center  my-5 fs-5">
+                Don't have an MSEED file ? Click <a href="{{ url_for('show_topic', topic_name='ascii-to-mseed.html') }}" class="link-info">here</a> to create one using data defined in an ASCII file
+                or <a href="{{ url_for('static', filename='static-files/test-mseed-file.mseed') }}" class="link-info">download</a> one, to try the tool.
+            </p>
+        </section>
+
+        <section id="graph-section" style="position: relative;">
+            <div class="row bg-dark2 p-3 mt-5">
+                <div class="col">
+                    <button class="btn btn-outline-info me-3" id="upload-file-button">Upload</button>
+                    <input type="file" id="upload-file-input" style="display:none;">
+                    <button class="btn btn-outline-success" id="save-arrivals-button" disabled>Save arrivals</button>
+                </div>
+            </div>
+            <div class="row bg-dark p-3 align-items-center">
+                <div class="col-3 text-center text-end">
+                    <label for="p-wave-radio" class="text-secondary fs-3">P</label>
+                    <input type="radio" id="p-wave-radio" class="me-2" name="ps-wave-radio" checked disabled>
+                    <label for="s-wave-radio" class="text-secondary fs-3">S</label>
+                    <input type="radio" id="s-wave-radio" name="ps-wave-radio" disabled>
+                </div>
+                <div class="col-4 text-start">
+                    <button class="btn btn-danger" id="remove-p-wave-button" disabled>del P</button>
+                    <button class="btn btn-danger"  id="remove-s-wave-button" disabled>del S</button>
+                </div>
+                <div class="col-5 col-sm-4 col-md-3 col-lg-3 col-xl-2 text-center">
+                    <select class="form-select" aria-label="filter-dropdown" id="filters-dropdown" disabled>
+                        <option disabled>--select a filter--</option>
+                        <option selected>initial</option>
+                        <option>1-2</option>
+                        <option>1-3</option>
+                        <option>1-5</option>
+                        <option>1-10</option>
+                        <option>0.1-10</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="row bg-secondary border-start border-end border-dark border-5">
+                <div class="col-12 text-center ms-0 ps-0" id="picking-graph-container">
+        
+                </div>
+            </div>
+            <div class="row bg-dark mb-5">
+                <div class="col-12 text-center text-md-end p-3">
+                    <input class="rounded" type="number" id="left-filter-input" placeholder="eg. 0.1"  disabled>
+                    <input class="rounded" type="number" id="right-filter-input" placeholder="eg. 1"  disabled>
+                </div>
+            </div>
+
+            <div id="spinner-div" style="display:none; position: absolute; top: 50%; left: 50%;">
+                <div class="text-center">
+                    <div class="spinner-border my-3" role="status" >
+                    <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="/static/js/pick-arrivals.js"></script>
+{% endblock %}

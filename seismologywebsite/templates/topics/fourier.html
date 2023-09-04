@@ -1,0 +1,241 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Fourier Spectra
+{% endblock %}
+
+
+
+{% block content %}
+<div class="container-lg">
+    <div class="mb-5">
+        <section id="title-section" class="mb-5">
+            <div class="bg-light fs-2 p-5">
+                <p class="display-4 text-center mb-5">Fourier Spectra</p>
+                <div>
+                    <p class="text-center fs-3 text-muted">Calculate the Fourier spectra between a window on the
+                        waveform</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="description-section">
+            <div class="fs-4 lead">
+                <div class="accordion" id="accordionExample">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                User Guide
+                            </button>
+                        </h2>
+                        <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <p>
+                                    Analyze the Fourier Spectra within a specified seismic record window. Begin by
+                                    uploading an MSEED file. Then, utilize the <i>signal left side</i> slider and
+                                    the <i>window length</i> slider to manipulate the position and length of the signal
+                                    window (highlighted in red). This will allow you to precisely define the
+                                    section for which you want to compute the Fourier Spectra. For added functionality,
+                                    you can use the <kbd>add</kbd> button to compute the Fourier Spectra for
+                                    a noise window (indicated in blue). By adjusting the <i>Noise window right side</i>
+                                    slider, you can align the right side of the noise window with the signal
+                                    window. These two windows will share the same duration. To calculate the Fourier
+                                    spectra for the entire time series, simply click the <kbd>apply</kbd> button,
+                                    to make the length of the signal window cover all the time series.
+                                </p>
+                                <p>
+                                    Once you're prepared, initiate the computation of the Fourier Spectra by selecting
+                                    the
+                                    <kbd>Compute Fourier</kbd> button. The resulting Fourier Spectra will be accessible
+                                    under the <i>Fourier Spectra</i> tab at the top. Here, you can opt to
+                                    download either the graphical representation or the data in ASCII format.
+                                    Also navigate to the <i>HVSR</i> section to calculate the Horizontal-to-Vertical
+                                    Spectral Ratio (HVSR) of the record. Specify the vertical component of your seismic
+                                    components for HVSR computation.
+                                </p>
+                                <p>
+                                    Lastly take into account that you can download the graph automatically by clicking
+                                    on the download <kbd>graph</kbd> button
+                                    or you can just click on the download the <kbd>data</kbd> button to download the
+                                    data and generate a graph on your own.
+                                </p>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section>
+            <p class="text-muted text-center  my-5 fs-5">
+                Don't have an MSEED file ? Click <a href="{{ url_for('show_topic', topic_name='ascii-to-mseed.html') }}"
+                    class="link-info">here</a> to create one using data defined in an ASCII file
+                or <a href="{{ url_for('static', filename='static-files/test-mseed-file.mseed') }}"
+                    class="link-info">download</a> one, to try the tool.
+            </p>
+        </section>
+
+        <section>
+
+            <div class="text-bg-dark rounded p-5 mt-5">
+
+                <div class="mb-4">
+                    <button class="btn btn-outline-info" id="upload-file-button">Upload</button>
+                    <input type="file" id="upload-file-input" value="upload-file-input" name="upload-file-input"
+                        style="display: none;">
+
+                </div>
+
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="time-series-tab" data-bs-toggle="tab"
+                            data-bs-target="#time-series-tab-pane" type="button" role="tab"
+                            aria-controls="time-series-tab-pane" aria-selected="true" disabled>Time Series</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="fourier-tab" data-bs-toggle="tab"
+                            data-bs-target="#fourier-tab-pane" type="button" role="tab" aria-controls="fourier-tab-pane"
+                            aria-selected="false" disabled>Fourier Spectra</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="hvsr-tab" data-bs-toggle="tab" data-bs-target="#hvsr-tab-pane"
+                            type="button" role="tab" aria-controls="hvsr-tab-pane" aria-selected="false"
+                            disabled>HVSR</button>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="time-series-tab-pane" role="tabpanel"
+                        aria-labelledby="time-series-tab" tabindex="0">
+                        <div class="row justify-content-center align-items-center"
+                            id="fourier-spectra-start-by-upload-container">
+                            <div class="col text-center">
+                                <p class="fs-3">Start by <button class="btn btn-outline-info"
+                                        id="upload-another-file-button">uploading</button> an mseed file</p>
+                                <input type="file" id="upload-another-file-input" value="upload-another-file-input"
+                                    name="upload-file-input" style="display: none;">
+                            </div>
+                        </div>
+                        <div id="time-series-graph">
+
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="fourier-tab-pane" role="tabpanel" aria-labelledby="fourier-tab"
+                        tabindex="1">
+                        <div class="row justify-content-center align-items-center">
+                            <div class="col-12 col-lg-8 text-center">
+                                <div id="fourier-graph">
+
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-4 text-center">
+                                <p class="display-6">Download:</p>
+                                <a href="{{ url_for('BP_fourier_spectra.download', what_output='graph-fourier') }}"
+                                    class="btn btn-lg btn-primary d-inline" id="download-graph-button-fourier">Graph</a>
+                                <a href="{{ url_for('BP_fourier_spectra.download', what_output='data-fourier') }}"
+                                    class="btn btn-lg btn-danger d-inline" id="download-data-button-fourier">Data</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="hvsr-tab-pane" role="tabpanel" aria-labelledby="hvsr-tab"
+                        tabindex="2">
+                        <div class="row justify-content-center align-items-center my-5">
+                            <div class="col-10 col-md-7 col-lg-5 text-center">
+                                <p class="text-muted fs-4">Select the <b>vertical</b> component of your record:</p>
+                                <select name="vertical-component-select" id="vertical-component-select"
+                                    style="width:80px">
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <button class="btn btn-info mb-5" id="compute-hvsr-button">Compute HVSR</button>
+                        </div>
+
+                        <div class="row justify-content-center align-items-center">
+                            <div class="col-12 col-lg-8 text-center">
+                                <div id="hvsr-graph">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center text-center align-items-center">
+                            <div class="col-12 text-center">
+                                <p class="display-6">Download:</p>
+                                <a href="{{ url_for('BP_fourier_spectra.download', what_output='graph-hvsr') }}"
+                                    class="btn btn-lg btn-primary d-inline" id="download-graph-button-hvsr">Graph</a>
+                                <a href="{{ url_for('BP_fourier_spectra.download', what_output='data-hvsr') }}"
+                                    class="btn btn-lg btn-danger d-inline" id="download-data-button-hvsr">Data</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div id="options-menu" class="mt-3">
+                    <p class="text-start">Signal window left side <span class="badge rounded-pill text-bg-warning"
+                            id="signal-left-side-badge">1 sec</span></p>
+                    <input style="width: 100%" type="range" min="0" max="100" value="50" step="1"
+                        id="signal-window-left-side-slider">
+                    <p class="text-start mt-3">Window length <span class="badge rounded-pill text-bg-warning"
+                            id="window-length-badge">1 sec</span></p>
+                    <input style="width: 100%" type="range" min="0" max="100" value="50" step="1"
+                        id="window-length-slider">
+
+
+                    <div class="row justify-content-start align-items-center  mt-3">
+                        <div class="col-5">
+                            <p>Use the whole time series as the window</p>
+                        </div>
+                        <div class="col-5">
+                            <button id="whole-signal-button" class="btn btn-secondary">apply</button>
+                        </div>
+                    </div>
+
+                    <div class="row justify-content-start align-items-center  mt-3">
+                        <div class="col-5">
+                            <p>Add a noise window</p>
+                        </div>
+                        <div class="col-5">
+                            <button id="add-noise-button" class="btn btn-success">Add +</button>
+                            <button id="remove-noise-button" class="btn btn-danger">Remove</button>
+                        </div>
+                    </div>
+
+                    <div id="noise-slider-div">
+                        <p class="text-start">Noise window right side <span class="badge rounded-pill text-bg-warning"
+                                id="noise-right-side-badge">1 sec</span></p>
+                        <input style="width:100%" type="range" min="0" max="100" value="50" step="1"
+                            id="noise-window-right-side-slider">
+                    </div>
+
+                    <div class="row justify-content-center align-items-center text-center">
+                        <div class="col-12">
+                            <button class="btn btn-primary p-3 mt-5" id="computeFourierButton">Compute Fourier</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center  bg-red text-red mt-3" id="spinner-div">
+                    <div class="spinner-border spinner-border-xl text-warning" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </div>
+</div>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script src="/static/js/fourier.js"></script>
+
+
+
+
+
+{% endblock %}

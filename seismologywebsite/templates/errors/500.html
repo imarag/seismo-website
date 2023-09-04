@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Python obspy
+{% endblock %}
+
+
+{% block content %}
+    <div class="row justify-content-center my-5">
+        <div class="col-12 col-md-7 text-center">
+            <h1 class="fs-2 text-center">Uh-oh, the Minions are confused!</h1>
+            <h1 class="fs-2 text-center">Something went wrong (500)</h1>
+            <p class="fs-3 text-center text-muted mt-4">We are experiencing some trouble on our end. Please try again later!</p>
+        </div>
+    </div>
+    <div class="row justify-content-center my-5">
+        <div class="col-9 col-md-7 col-lg-5 text-center">
+            <img src="{{ url_for('static', filename='img/page-not-found-images/minions-removebg-preview.png') }}" alt="page not found minions" class="img-fluid">
+        </div>
+    </div>
+{% endblock %}

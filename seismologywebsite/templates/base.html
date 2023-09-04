@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Explore earthquake related topics through insightful articles and interactive tools.">
+        <meta name="author" content="Ioannis Maragkakis">
+        <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}" type="image/x-icon">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+        <title>{% block title %}{% endblock %} - seismo</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main-style.css') }}">
+    </head>
+    <body>
+        <header>
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="{{ url_for('home') }}">
+                        <img src="{{ url_for('static', filename='img/logo6.png') }}" class="img-fluid" style="height: 60px" alt="logo of the site">
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0" >
+                            <li class="nav-item">
+                                <a class="nav-link active text-secondary anchor-underline" aria-current="page" href="{{ url_for('home') }}">
+                                    Home
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active text-secondary anchor-underline" aria-current="page" href="{{ url_for('BP_search_topics.filter_topics', filter='all topics') }}">
+                                    All Topics
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active text-secondary anchor-underline" aria-current="page" href="{{ url_for('resource_file') }}">
+                                    Resources
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active text-secondary anchor-underline" aria-current="page" href="{{ url_for('help_and_support') }}">
+                                    Help & Support
+                                </a>
+                            </li>
+                            {% if g.user and g.user['email'] == 'giannis.marar@hotmail.com' %}
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        topics
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="{{ url_for('BP_topics_database.show_all_topics') }}">show topics</a></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('BP_users_database.show_all_users') }}">show users</a></li>
+                                    </ul>
+                                </li>
+                            {% endif %}
+                        </ul>
+                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                            {% if g.user %}
+                                <li class="nav-item dropdown me-3">
+                                    <a class="nav-link dropdown-toggle anchor-underline" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        {{ g.user['fullname'] }}
+                                        <img src="/static/img/home-images/person-circle.svg" class="img-fluid" style="width:30px;"  id="home-top-menu-logout-icon" alt="logout icon">
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}">Logout</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('BP_user_account.show_account_details') }}">Account details</a></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('BP_user_account.edit_account_information') }}">Edit account</a></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('BP_user_account.change_password') }}">Change password</a></li>
+                                    </ul> 
+                                </li>
+                            {% else %}
+                                <li class="nav-item">
+                                    <a href="{{ url_for('auth.login') }}" class="btn btn-success me-3" id="login-anchor">
+                                        Login 
+                                        <img src="/static/img/login-images/box-arrow-in-right.svg" class="img-fluid" alt="login arrow">
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ url_for('auth.register') }}" class="btn btn-primary" id="register-anchor">
+                                        Register 
+                                        <img src="/static/img/login-images/person.svg" class="img-fluid" alt="user account icon">
+                                    </a>  
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <main>
+            <p class="d-none" id="record-name-paragraph"></p>
+            <div class="modal fade" id="modalErrorMessage" tabindex="-1" aria-labelledby="modal-title" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header" id="modal-header">
+                            <h1 class="modal-title fs-5 text-dark" id="modal-title">Modal title</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body" id="modal-body">
+                            <p id="modal-message" class="fs-5"></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#modalErrorMessage" id="modal-button-triger">
+                modal
+            </button>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} text-center fs-5">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                {% block content %}
+    
+                {% endblock %}
+        </main>
+        <footer class="bg-dark text-light py-5">
+            <div class="container-lg py-5">
+                <h1 class="mb-4 display-4 text-center">Maragkakis Ioannis</h1>
+                <div class="row align-items-center justify-content-center">
+                    <div class="col-lg-4 col-10 text-center">
+                        <img src="/static/img/footer-images/myface.jpg" style="width: 300px" class="rounded-circle img-fluid" alt="An image about me">
+                    </div>
+                    <div class="col-lg-4 col-12 text-center text-lg-start">
+                        <p class="mb-4"><img src="/static/img/footer-images/geology.png" style="width:35px" class="me-3" alt="Mineral Resource Engineer">Mineral Resource Engineer</p>
+                        <p class="mb-4"><img src="/static/img/footer-images/data-science.png" style="width:35px" class="me-3" alt="Data Scientist">Data Scientist</p>
+                        <p class="mb-4"><img src="/static/img/footer-images/activity.png" style="width:35px" class="me-3" alt="Seismology enthusiast">Seismology enthusiast</p>
+                        <p class="mb-4"><img src="/static/img/footer-images/volleyball.png" style="width:35px" class="me-3" alt="Beach volley player">Beach volley player</p>
+                    </div>
+                </div>
+                <div class="row align-items-center justify-content-center">
+                    <hr class="d-block d-lg-none">
+                    <div class="col-lg-6 text-center col-xl-6 col-12">
+                        <p>
+                            <span><img src="/static/img/footer-images/media/telephone.png" style="width:25px" class="mb-2" alt="phone icon"> 6982972144 </span>
+                            <span><img src="/static/img/footer-images/media/mail.png"      style="width:25px" alt="email icon"> giannis.marar@hotmail.com</span>
+                        </p>
+                    </div>
+                    <div class="col-4">
+   
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </body>
+</html>
