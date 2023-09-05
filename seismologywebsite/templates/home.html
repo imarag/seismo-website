@@ -24,12 +24,12 @@
                     <img src="/static/img/home-images/book-read.svg" class="img-fluid" alt="read topic icon">
                 </div>
                 <div class="col-8 col-md-5">
-                    <p class="text-muted fs-4">Get started with the <a href="{{ url_for('BP_search_topics.filter_topics', filter='articles') }}" class="link-primary">seismic articles</a> to learn more about the science of Seismology</p>
+                    <p class="text-muted fs-4">Get started with the <a href="{{ url_for('BP_search_topics.filter_topics', topictype='articles') }}" class="link-primary">seismic articles</a> to learn more about the science of Seismology</p>
                 </div>
             </div>
             <div class="row justify-content-center align-items-center">
                 <div class="col-8 col-md-5">
-                    <p class="text-muted fs-4">Try the <a href="{{ url_for('BP_search_topics.filter_topics', filter='interactive-tools') }}" class="link-primary">interactive tools</a> to process and analyze real seismological data</p>
+                    <p class="text-muted fs-4">Try the <a href="{{ url_for('BP_search_topics.filter_topics', topictype='interactive tools') }}" class="link-primary">interactive tools</a> to process and analyze real seismological data</p>
                 </div>
                 <div class="col-4 col-sm-3 col-md-3 col-lg-2">
                     <img src="/static/img/home-images/interactive.svg" class="img-fluid" alt="interactive topics icon">
@@ -37,7 +37,7 @@
             </div>
             <div class="row justify-content-center">
                 <div class="col">
-                    <p class="text-center text-muted fs-4 mt-5">or <a href="{{ url_for('BP_search_topics.filter_topics', filter='all topics') }}">check</a> all the topics...</p>
+                    <p class="text-center text-muted fs-4 mt-5">or <a href="{{ url_for('BP_search_topics.filter_topics', topictype='all topics') }}">check</a> all the topics...</p>
                 </div>
             </div>
         </div>

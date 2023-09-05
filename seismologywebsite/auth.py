@@ -10,54 +10,6 @@ from .forms import RegistrationForm, LoginForm
 bp = Blueprint('auth', __name__, url_prefix = '/auth')
 
 
-####################### forgot password functionality ##############################
-
-@bp.route('/set-new-password/<user_email>', methods=['POST'])
-def set_new_password(user_email):
-
-    # get the new password and the new confirmation password from the user input
-    new_password = request.form["new-password-input"]
-    new_confirmation_password = request.form["new-password-confirmation-input"]
-
-    # if any of the fields is empty abort
-    if not new_password or not new_confirmation_password:
-        flash('You need to fill in both fields to continue!', 'danger')
-        return redirect(url_for('auth.reset_password'))
-    
-    # if the new password is not equal to the new confirmation password abort
-    if new_password != new_confirmation_password:
-        flash('New password must match with the confirmation password!', 'danger')
-        return redirect(url_for('auth.reset_password'))
-    
-    # open the database
-    db = get_db()
-
-    # get the user with that email (the email that we pass in <user_email>)
-    user = db.execute("SELECT * FROM user WHERE email = ?", (user_email,)).fetchone()
-
-    # update the password of that user with user['id'] id
-    db.execute(
-        'UPDATE user SET password = ? WHERE id = ?', (generate_password_hash(new_password), user['id'])
-        )
-    db.commit()
-   
-    # flash successful update
-    flash('Your password has been reset!', 'success')
-
-    # redirect to home
-    return redirect(url_for('home'))
-
-
-@bp.route('/reset-password/<user_email>', methods=['GET'])
-def reset_password(user_email):
-    return render_template('auth/reset-password.html', user_email=user_email)
-
-@bp.route('/forgot-password', methods=['GET'])
-def forgot_password():
-    return render_template('auth/forgot-password.html')
-
-
-
 ################################# login - logout - register functionality ################################
 
 

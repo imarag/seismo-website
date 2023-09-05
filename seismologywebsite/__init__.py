@@ -1,21 +1,13 @@
 import os
-from flask import Flask, render_template,  redirect, jsonify, url_for, session, flash, request, make_response
+from flask import Flask, render_template,  send_file, redirect, jsonify, url_for, session, flash, request, make_response
 from .auth import login_required
-from . import db
-from . import auth
-from . import fourier
-from . import pick_arrivals
-from . import ascii_to_mseed
-from . import signal_processing
-from . import search_topics
-from . import topics_table
-from . import users_table
-from . import user_account
 from .db import get_db
 from flask_mail import Mail, Message
 from .functions import send_email
 from obspy.geodetics import gps2dist_azimuth
 from .functions import  raise_error
+from . import db
+
 
 mail = Mail()
 
@@ -44,6 +36,9 @@ def create_app(test_config=None):
     db.init_app(app)
     mail.init_app(app)
 
+
+    
+
     @app.route('/')
     @app.route('/home')
     def home():
@@ -64,6 +59,13 @@ def create_app(test_config=None):
     def help_and_support():
         return render_template('help-and-support.html')
     
+    @app.route('/download-static-file/<file>')
+    def download_static_file(file):
+        name = os.path.basename(file)
+        static_file_path = os.path.join(app.root_path, 'static', 'static-files', name)
+        download_name = os.path.basename(static_file_path)
+        return send_file(static_file_path, as_attachment=True, download_name=download_name)
+    
     @app.route('/calculate-distance')
     def calculate_distance():
         point1_lat = request.args.get('point1-lat-input')
@@ -80,7 +82,14 @@ def create_app(test_config=None):
         except:
             error_message = 'You need to provide numbers as the points coordinates!'
             return raise_error(error_message)
+
+        if float(point1_lon) > 180 or float(point1_lon) < -180 or float(point2_lon) > 180 or float(point2_lon) < -180:
+            error_message = 'The longitude value can be between -180 and 180 degrees!'
+            return raise_error(error_message)
         
+        if float(point1_lat) > 90 or float(point1_lat) < -90 or float(point2_lat) > 90 or float(point2_lat) < -90:
+            error_message = 'The latitude value can be between -90 and 90 degrees!'
+            return raise_error(error_message)
         
         try:
             result = gps2dist_azimuth(
@@ -93,8 +102,10 @@ def create_app(test_config=None):
         except Exception as e:
             error_message = str(e)
             return raise_error(error_message)
-
-        return jsonify({'result': result})
+        
+        point_label = f'Point({float(point1_lat):.3f},{float(point1_lon):.3f})-Point({float(point2_lat):.3f},{float(point2_lon):.3f})' 
+        
+        return jsonify({'result': result, 'points': point_label})
     
 
     @app.errorhandler(403)
@@ -110,64 +121,30 @@ def create_app(test_config=None):
         return render_template('errors/500.html'), 500
 
 
+    from . import forgot_password
+    from . import auth
+    from . import fourier
+    from . import pick_arrivals
+    from . import ascii_to_mseed
+    from . import signal_processing
+    from . import search_topics
+    from . import admin
+    from . import user_account
+    
 
     app.register_blueprint(auth.bp)
     app.register_blueprint(fourier.bp)
     app.register_blueprint(pick_arrivals.bp)
     app.register_blueprint(ascii_to_mseed.bp)
     app.register_blueprint(signal_processing.bp)
-    app.register_blueprint(topics_table.bp)
-    app.register_blueprint(users_table.bp)
+    app.register_blueprint(admin.bp)
     app.register_blueprint(search_topics.bp)
     app.register_blueprint(user_account.bp)
+    app.register_blueprint(forgot_password.bp)
 
 
 
-    @app.route('/send-email', methods=['POST'])
-    def send_reset_password_email():
-        # get the email from the password reset when you hit forgot password
-        user_email = request.form['email-input']
-
-        # if the user did not provide any email abort
-        if not user_email:
-            flash('You must fill an email!')
-            return redirect(url_for('auth.forgot_password'))
-        
-        # get the database
-        db = get_db()
-       
-        # search the database for the email that the user provided
-        user = db.execute(
-            'SELECT * FROM user WHERE email = ?', (user_email, )
-        ).fetchone()
-
-        # if it can't find any user with that email then abort
-        if not user:
-            flash('There is no user with that email!')
-            return redirect(url_for('auth.forgot_password'))
-
-        # # create the message to send to the user email
-        # msg = Message(
-        #     sender = app.config['MAIL_USERNAME'], 
-        #     recipients = [user_email])
-        
-        # i can't user jinja in the msg.html below. So i create the link url that the email message will have, here
-        # it will send the user to the reset_password. Pass also the user_email to use it later
-        # reset_password_url = url_for('auth.reset_password', user_email=user_email, _external=True)
-
-        # # create the message html
-        # msg.html = f"""
-        # <h1>Click the link below to reset your email</h1>
-        # <div>
-        #     <a href="{reset_password_url}">Reset password</a>
-        # </div>
-        # """
-
-        # # send the email
-        # mail.send(msg)
-        
-        # when you send it, redirect to home page
-        return(redirect(url_for('home')))
+    
     
 
     

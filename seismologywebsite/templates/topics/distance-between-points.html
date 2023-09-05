@@ -50,24 +50,30 @@ Fourier Spectra
             </div>
         </div>
     </div>
+    <div class="text-center">
+        <p class="text-muted my-4 text-center">For more information read the obspy <a href="https://docs.obspy.org/packages/autogen/obspy.geodetics.base.gps2dist_azimuth.html#obspy.geodetics.base.gps2dist_azimuth" target="_blank"><code>gps2dist_azimuth</code></a></p>
+    </div>
     <div class="row justify-content-center align-items-center">
         <div class="col-7 text-center">
             <div class="text-center my-5">
                 <button class="btn btn-primary" style="width:100px;" id="compute-button">Compute</button>
-                <button class="btn btn-danger" style="width:100px;" id="reset-button">Reset</button>
+                <button class="btn btn-danger" style="width:100px;" id="clear-button">clear</button>
             </div>
         </div>
     </div>
-    <div class="text-center">
-        <p class="text-muted my-4 text-center fs-3 fw-bold">
-            The distance between the points in [km] is: 
-            <p id="result-paragraph" class="fw-bold"></p> 
-
-        </p>
+    <div class="row justify-content-center align-items-center">
+        <div class="col-6 text-center">
+            <p class="text-center fw-bold fs-3">Points (lat, lon)</p>
+        </div>
+        <div class="col-6 text-center">
+            <p class="text-center fw-bold fs-3">Distance [km]</p>
+        </div>
     </div>
-    <div class="text-center">
-        <p class="text-muted my-4 text-center">For more information read the obspy <a href="https://docs.obspy.org/packages/autogen/obspy.geodetics.base.gps2dist_azimuth.html#obspy.geodetics.base.gps2dist_azimuth" target="_blank"><code>gps2dist_azimuth</code></a></p>
+    <hr class="border-bottom border-2 border-secondary">
+    <div id="results-container">
+        
     </div>
+    
     
 
 </div>

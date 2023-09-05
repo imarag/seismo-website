@@ -1,43 +1,9 @@
-from flask import Flask, make_response, Blueprint, current_app, render_template, url_for, abort, request, jsonify, Response, session, send_from_directory, send_file, redirect
+from flask import Blueprint, render_template, request
 import re
 from .db import get_db
-from .auth import login_required
-
 
 
 bp = Blueprint('BP_search_topics', __name__, url_prefix = '/search-topics')
-
-
-@bp.route('/filter-topics/<filter>', methods=['GET','POST'])
-def filter_topics(filter):
-    database = get_db()
-
-    if request.method == "GET":
-        if filter == "all topics":
-            selectedradiobutton = "all topics"
-            topics = database.execute("SELECT * FROM topics").fetchall()
-        elif filter == "articles":
-            selectedradiobutton = "articles"
-            topics = database.execute("SELECT * FROM topics WHERE type = ?", ('static',)).fetchall()
-        else:
-            selectedradiobutton = "interactive tools"
-            topics = database.execute("SELECT * FROM topics WHERE type = ?", ('interactive',)).fetchall()
-    
-    else:
-        filter = request.form["topic-type"]
-        if filter == "all topics":
-            selectedradiobutton = "all topics"
-            topics = database.execute("SELECT * FROM topics").fetchall()
-        elif filter == "articles":
-            selectedradiobutton = "articles"
-            topics = database.execute("SELECT * FROM topics WHERE type = ?", ('static',)).fetchall()
-        else:
-            selectedradiobutton = "interactive tools"
-            topics = database.execute("SELECT * FROM topics WHERE type = ?", ('interactive',)).fetchall()
-    
-
-    return render_template('search-topics.html', topics=topics, selectedradiobutton=selectedradiobutton)
-
 
 
 @bp.route('/search-topic', methods=['POST'])
@@ -45,8 +11,9 @@ def search_topic():
     search_param = request.form.get('search-param')
     database = get_db()
     topics = database.execute("SELECT * FROM topics").fetchall()
+
     if not search_param:
-        return render_template('search-topics.html', topics=topics, selectedradiobutton='all topics')
+        topics = topics
     else:
         found_topics_list = []
         for tp in topics:
@@ -54,5 +21,29 @@ def search_topic():
             lower_description = tp['description'].lower()
             if re.search(lower_search_param, lower_description):
                 found_topics_list.append(tp)
-        return render_template('search-topics.html', topics=found_topics_list, selectedradiobutton='all topics')
+        topics = found_topics_list
+    
+    return render_template('search-topics.html', topics=topics, selectedradiobutton='all topics')
+
+
+@bp.route('/filter-topics', methods=['GET','POST'])
+def filter_topics():
+
+    if request.method == "GET":
+        filter_selected = request.args.get("topictype")
+    else:
+        filter_selected = request.form["topictype"]
+    print(filter_selected, "*************")
+    database = get_db()
+    if filter_selected == "all topics":
+        topics = database.execute("SELECT * FROM topics").fetchall()
+    elif filter_selected == "articles":
+        topics = database.execute("SELECT * FROM topics WHERE type = ?", ('static',)).fetchall()
+    else:
+        topics = database.execute("SELECT * FROM topics WHERE type = ?", ('interactive',)).fetchall()
+
+    return render_template('search-topics.html', topics=topics, selectedradiobutton=filter_selected)
+
+
+
 

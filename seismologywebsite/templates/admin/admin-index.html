@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}
+admin index
+{% endblock %}
+
+
+
+{% block content %}
+<div class="bg-light-blue2 py-4">
+    <div class="container-lg">
+        <h1 class="display-3 py-5 text-center">Welcome to the admin page</h1>
+    
+    
+        <div class="row justify-content-center align-items-center my-5">
+            <div class="col-7 col-md-5 text-center">
+                <h2 class="text-center fs-3 fw-semibold">Topic table</h2>
+                <div class="shadow-lg text-center py-5 rounded bg-light">
+                    <a class="btn btn-info" href="{{ url_for('BP_admin.show_all_topics') }}">show topics</a>
+                    <a class="btn btn-success" href="{{ url_for('BP_admin.add_topic_template') }}">add topic</a>
+                    <a class="btn btn-danger" href="{{ url_for('BP_admin.reset_topics') }}">reset topics</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center align-items-center my-5">
+            <div class="col-7 col-md-5 text-center">
+                <h2 class="text-center fs-3 fw-semibold">Users table</h2>
+                <div class="shadow-lg text-center py-5 rounded bg-light">
+                    <a class="btn btn-info" href="{{ url_for('BP_admin.show_all_users') }}">show users</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

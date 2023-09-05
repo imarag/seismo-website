@@ -30,8 +30,8 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link active text-secondary anchor-underline" aria-current="page" href="{{ url_for('BP_search_topics.filter_topics', filter='all topics') }}">
-                                    All Topics
+                                <a class="nav-link active text-secondary anchor-underline" aria-current="page" href="{{ url_for('BP_search_topics.filter_topics', topictype='all topics') }}">
+                                    Search Topic
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -45,14 +45,10 @@
                                 </a>
                             </li>
                             {% if g.user and g.user['email'] == 'giannis.marar@hotmail.com' %}
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        topics
+                                <li class="nav-item">
+                                    <a class="nav-link active text-secondary anchor-underline" aria-current="page" href="{{ url_for('BP_admin.admin_login') }}">
+                                        admin
                                     </a>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="{{ url_for('BP_topics_database.show_all_topics') }}">show topics</a></li>
-                                        <li><a class="dropdown-item" href="{{ url_for('BP_users_database.show_all_users') }}">show users</a></li>
-                                    </ul>
                                 </li>
                             {% endif %}
                         </ul>

@@ -26,11 +26,12 @@ Resources
     <div class="row justify-content-center align-items-center mt-5">
         <div class="col-lg-4 col-md-8 col-10 me-4">
             <h1 class="fs-3 fw-semibold text-center text-lg-start">Fourier Spectra Script</h1>
-            <p class="text-center text-lg-start test-muted fs-5 fst-italic">Download the Python script used to calculate the
+            <p class="text-center text-lg-start test-muted fs-5 fst-italic">Download the Python script used to calculate
+                the
                 Fourier Spectra at the "Fourier Spectra" interactive tool</p>
-            <p class="text-center text-lg-start"><a href="#">Download resource <img
+            <p class="text-center text-lg-start"><a href="{{ url_for('download_static_file', file='fourier_spectra_calculation_script.txt') }}">Download resource <img
                         src="{{ url_for('static', filename='img/resources/file-earmark-arrow-down-fill.svg') }}"
-                        alt="download icon"></a></p>
+                        alt="download icon" class="ms-2"></a></p>
         </div>
         <div class="col-lg-4 col-md-6 col-10">
             <img src="{{ url_for('static', filename='img/resources/resource_fourier_script.png') }}"
@@ -41,11 +42,12 @@ Resources
     <div class="row justify-content-center align-items-center mt-5">
         <div class="col-lg-4 col-md-8 col-10 me-4">
             <h1 class="fs-3 fw-semibold text-center text-lg-start">Picking Tool</h1>
-            <p class="text-center text-lg-start test-muted fs-5 fst-italic">Get a graphical user interface built, using Python
+            <p class="text-center text-lg-start test-muted fs-5 fst-italic">Get a graphical user interface built, using
+                Python
                 PyQt5 and Pyqtgraph for the first arrivals selection in multiple MSEED files</p>
-            <p class="text-center text-lg-start"><a href="#">Download resource <img
-                        src="{{ url_for('static', filename='img/resources/file-earmark-arrow-down-fill.svg') }}"
-                        alt="download icon"></a></p>
+            <p class="text-center text-lg-start"><span class="me-4"><a href="mailto: giannis.marar@hotmail.com">send email <img
+                src="{{ url_for('static', filename='img/resources/envelope-fill.svg') }}"
+                alt="download icon" class="ms-2"></a></span></p>
         </div>
         <div class="col-lg-4 col-md-6 col-10">
             <img src="{{ url_for('static', filename='img/resources/resource_picking_tool.png') }}"
@@ -58,9 +60,9 @@ Resources
             <h1 class="fs-3 fw-semibold text-center text-lg-start">Test MSEED file</h1>
             <p class="text-center text-lg-start test-muted fs-5 fst-italic">Download a testing MSEED file to interact
                 with the website</p>
-            <p class="text-center text-lg-start"><a href="#">Download resource <img
+            <p class="text-center text-lg-start"><a href="{{ url_for('download_static_file', file='test-mseed-file.mseed') }}">Download resource <img
                         src="{{ url_for('static', filename='img/resources/file-earmark-arrow-down-fill.svg') }}"
-                        alt="download icon"></a></p>
+                        alt="download icon" class="ms-2"></a></p>
         </div>
         <div class="col-lg-4 col-md-6 col-10">
             <img src="{{ url_for('static', filename='img/resources/resource_test_mseed.png') }}"

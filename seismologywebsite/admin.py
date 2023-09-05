@@ -1,8 +1,49 @@
-from flask import Blueprint, redirect, render_template, request, url_for
+from flask import Blueprint, redirect, render_template, request, url_for, flash
 from .db import get_db
 
-bp = Blueprint('BP_topics_database', __name__, url_prefix = '/topics-database')
+bp = Blueprint('BP_admin', __name__, url_prefix = '/admin')
 
+
+@bp.route('/admin-login', methods=["POST", "GET"])
+def admin_login():
+
+    if request.method == "POST":
+        email = request.form["email"]
+        password = request.form["password"]
+
+        if email == "giannis.marar@hotmail.com" and password == "password":
+            flash("You have succesfully loged in", "success")
+            return redirect(url_for("BP_admin.admin_index"))
+        else:
+            flash("You don't have the permission to enter this page!", "danger")
+    
+    return render_template("admin/admin-login-page.html")
+    
+@bp.route('/admin-index')
+def admin_index():
+    return render_template("admin/admin-index.html")
+
+@bp.route('/show-all-topics')
+def show_all_topics():
+    database = get_db()
+    topics = database.execute("SELECT * FROM topics").fetchall()
+    return render_template('admin/show-topics.html', topics=topics)
+
+@bp.route('/add_topic_template')
+def add_topic_template():
+    return render_template('admin/add-topic-template.html')
+
+@bp.route('/edit-topic-template/<topic_id>', methods=['GET'])
+def edit_topic_template(topic_id):
+    database = get_db()
+    topic = database.execute("SELECT * FROM topics WHERE id = ?", (topic_id,)).fetchone()
+    return render_template('admin/edit-topic-template.html', topic = topic)
+
+@bp.route('/show_all_users', methods=['GET', 'POST'])
+def show_all_users():
+    database = get_db()
+    users = database.execute("SELECT * FROM user").fetchall()
+    return render_template('admin/show-users.html', users=users)
 
 @bp.route('reset-topics')
 def reset_topics():
@@ -33,25 +74,13 @@ def reset_topics():
     db.commit()
 
     # redirect to show all topics
-    return redirect(url_for('BP_topics_database.show_all_topics'))
+    return redirect(url_for('BP_admin.show_all_topics'))
 
 
-@bp.route('/show-all-topics')
-def show_all_topics():
-    database = get_db()
-    topics = database.execute("SELECT * FROM topics").fetchall()
-    return render_template('database-tables/show-topics.html', topics=topics)
-
-@bp.route('/add_topic_template')
-def add_topic_template():
-    return render_template('database-tables/add-topic-template.html')
 
 
-@bp.route('/edit-topic-template/<topic_id>', methods=['GET'])
-def edit_topic_template(topic_id):
-    database = get_db()
-    topic = database.execute("SELECT * FROM topics WHERE id = ?", (topic_id,)).fetchone()
-    return render_template('database-tables/edit-topic-template.html', topic = topic)
+
+
 
 
 @bp.route('/add-topic', methods=['GET', 'POST'])
@@ -67,7 +96,7 @@ def add_topic():
         (topic_title, topic_description, topic_image_name, topic_type, topic_template_name)
     )
     database.commit()
-    return redirect(url_for('BP_topics_database.show_all_topics'))
+    return redirect(url_for('BP_admin.show_all_topics'))
 
 
 @bp.route('/edit-topic/<topic_id>', methods=['GET', 'POST'])
@@ -83,7 +112,7 @@ def edit_topic(topic_id):
         (topic_title, topic_description, topic_image_name, topic_type, topic_template_name, topic_id)
     )
     database.commit()
-    return redirect(url_for('BP_topics_database.show_all_topics'))
+    return redirect(url_for('BP_admin.show_all_topics'))
 
 
 @bp.route('/delete-topic/<topic_id>', methods=['GET', 'POST'])
@@ -93,5 +122,5 @@ def delete_topic(topic_id):
         (topic_id,)
     )
     database.commit()
-    return redirect(url_for('BP_topics_database.show_all_topics'))
+    return redirect(url_for('BP_admin.show_all_topics'))
 
