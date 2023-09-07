@@ -1,5 +1,9 @@
 {% extends 'base-auth.html' %}
 
+{% block title %}
+Register
+{% endblock %}
+
 {% block content %}
     <div class="fs-6">
         <form id="myForm" action="{{ url_for('auth.register') }}" method="POST" novalidate>

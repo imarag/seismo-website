@@ -60,8 +60,11 @@ def reset_topics():
         "INSERT INTO topics (title, description, image_name, type, template_name) VALUES ('Signal processing', 'An interactive tool to apply various techniques and algorithms to analyze, filter, enhance, and extract meaningful information from seismic records.', 'signal-processing-icon.png', 'interactive', 'signal-processing.html')",
         "INSERT INTO topics (title, description, image_name, type, template_name) VALUES ('Site effect', 'Refers to the phenomenon where the characteristics of the local site or subsurface geology affect the propagation and amplification of seismic waves.', 'site-effect-icon.png', 'static', 'site-effect.html')",
         "INSERT INTO topics (title, description, image_name, type, template_name) VALUES ('Introduction to Seismology', 'A small introduction to various seismological concepts and the propagation of seismic waves through the Earth', 'introduction-to-seismology.png', 'static', 'seismology-intro.html')",
-        "INSERT INTO topics (title, description, image_name, type, template_name) VALUES ('Distance between points', 'Compute the distance between two geographical points on the WGS84 ellipsoid', 'distance-between-points.png', 'interactive', 'distance-between-points.html')"
+        "INSERT INTO topics (title, description, image_name, type, template_name) VALUES ('Distance between points', 'Compute the distance between two geographical points on the WGS84 ellipsoid', 'distance-between-points.png', 'interactive', 'distance-between-points.html')",
+        "INSERT INTO topics (title, description, image_name, type, template_name) VALUES ('File Manipulation', 'Use Python libraries to manipulate system files. Simplify tasks like directory traversal, file creation, path handling and pattern matching using libraries like Python os, pathlib, shutil and more.', 'file-manipulation.png', 'static', 'file-manipulation.html')"
+        
     ]
+
 
     # delete all the table
     db.execute('DELETE FROM topics;')

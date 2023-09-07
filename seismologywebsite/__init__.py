@@ -26,6 +26,8 @@ def create_app(test_config=None):
     else:
         app.config.from_mapping(test_config)
 
+    app.config['DATA_FILES_FOLDER'] = os.path.join(app.root_path, 'data_files')
+
     # ensure the instance folder exists
     try:
         os.makedirs(app.instance_path)
@@ -42,7 +44,7 @@ def create_app(test_config=None):
     @app.route('/')
     @app.route('/home')
     def home():
-        return render_template('home.html')
+        return render_template('index.html')
 
 
     @app.route('/show-topic/<topic_name>')
