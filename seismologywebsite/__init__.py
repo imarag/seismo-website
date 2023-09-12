@@ -27,6 +27,8 @@ def create_app(test_config=None):
         app.config.from_mapping(test_config)
 
     app.config['DATA_FILES_FOLDER'] = os.path.join(app.root_path, 'data_files')
+    app.config['items_per_page'] = 4
+    app.config['total_topics'] = 9
 
     # ensure the instance folder exists
     try:
@@ -38,8 +40,6 @@ def create_app(test_config=None):
     db.init_app(app)
     mail.init_app(app)
 
-
-    
 
     @app.route('/')
     @app.route('/home')

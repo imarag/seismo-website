@@ -49,9 +49,7 @@ def upload():
 
     # get the file path to save the mseed file on the server
     mseed_save_file_path = os.path.join(current_app.config['DATA_FILES_FOLDER'], str(session.get("user_id", "test")) + "_fourier-spectra-tool.mseed")
-    print(stream)
-    print(mseed_save_file_path)
-    print("***************")
+
     # write the uploaded file
     stream.write(mseed_save_file_path)
 

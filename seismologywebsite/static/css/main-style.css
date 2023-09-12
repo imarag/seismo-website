@@ -101,6 +101,8 @@
     font-size: 15px;
 }
 
+
+
 .bg-pink {background-color: #ff80ed}
 .bg-light-red1 {background-color: #fff2ed}
 .bg-light-red2 {background-color: #ffcbb9}
@@ -133,7 +135,7 @@
 
 /* ----------------------  OBSPY TUTORIAL -------------------------*/
 
-#obspy-pills-container span {
+#hyper-reference-pills-container span {
     display: inline-block;
     width: 75px;
     transition: transform 0.3s, background-color 0.2s, color 0.2s;
@@ -141,7 +143,7 @@
     color: rgb(47, 45, 45);
 }
 
-#obspy-pills-container span:hover {
+#hyper-reference-pills-container span:hover {
     transform: scale(1.13) translateY(-6px);
     background-color: rgb(47, 45, 45);
     color: rgb(169, 220, 250);

@@ -87,6 +87,7 @@
                                 </div>
                             </div>
                         {% else %}
+                        
                             <div class="row justify-content-center align-items-center">
                                 <div class="col-auto text-center">
                                     <nav aria-label="Topic navigation" class="text-center mx-auto">
@@ -96,6 +97,15 @@
                                             {% else %}
                                                 <li class="page-item disabled" ><a class="page-link" href="{{ url_for('BP_search_topics.previous_page') }}" style="width: 100px;">Previous</a></li>
                                             {% endif %}
+                                            
+                                            {% for i in range(1, total_show_pages + 1) %}
+                                                {% if i == mark_page %}
+                                                    <li class="page-item "><a class="page-link bg-info text-light fw-bold" href="{{ url_for('BP_search_topics.topic_number_page', topic_number=i) }}">{{ i }}</a></li>
+                                                {% else %}
+                                                    <li class="page-item"><a class="page-link" href="{{ url_for('BP_search_topics.topic_number_page', topic_number=i) }}">{{ i }}</a></li>
+                                                {% endif %}
+                                            {% endfor %}
+                                                
                                             {% if next_state == 'enabled' %}
                                                 <li class="page-item"><a class="page-link" href="{{ url_for('BP_search_topics.next_page') }}"  style="width: 100px;">Next</a></li>
                                             {% else %}
