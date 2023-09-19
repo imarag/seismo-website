@@ -1,336 +1,1329 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Python obspy
+File Manipulation
 {% endblock %}
 
 
 {% block content %}
-    <section class="bg-light">
-        <div class="py-3 container-lg">
-            <div class="row justify-content-center align-items-center  pt-5 mb-4 ">
-                <div class="col-lg-2 col-3 col-md-2 d-none d-md-block">
-                    <a href="https://docs.obspy.org/">
-                        <img src="/static/img/templates-icons/file-manipulation.png" alt="mseed record ASCII file" class="img-fluid">
-                    </a>
-                </div>
-                <div class="col-lg-9 col-10 col-md-8 text-center text-md-start">
-                    <p class="display-1">Python File Manipulation</p>
-                </div>
-                    
-            </div>
-
-            <div class="fs-2 lead fst-italic text-muted">
-                <p class="text-center text-md-start">Python provides a wide variety of tools and functions for handling various file-related tasks, such as file opening, reading, writing, handling file paths, pattern searching, file and folder listing and more </p>
-            </div>
-
-
-            
-            
-            <div class="text-center fs-5 my-5" id="hyper-reference-pills-container">
-                <a target="_blank" href="https://docs.python.org/3/library/os.html"><span class="badge rounded-pill">os</span></a>
-                <a target="_blank" href="https://docs.python.org/3/library/os.path.html"><span class="badge rounded-pill">os.path</span></a>
-                <a target="_blank" href="https://docs.python.org/3/library/pathlib.html"><span class="badge rounded-pill">pathlib</span></a>
-                <a target="_blank" href="https://docs.python.org/3/library/shutil.html"><span class="badge rounded-pill">shutil</span></a>
-                <a target="_blank" href="https://docs.python.org/3/library/glob.html"><span class="badge rounded-pill">glob</span></a>
-                <a target="_blank" href="https://docs.python.org/3/library/re.html"><span class="badge rounded-pill">re</span></a>
-            </div>
-        </div>
-    </section>
-
-    <div class="lead fs-3 container-lg">
-      <section>
-          <h1 class="text-center display-4 text-info my-5">Introduction</h1>
-          <p>
-            Python is a multi-tasking programming language. There are many tasks that someone can accomplish by using it. 
-            From all the different libraries, tools and functions available, guess what, Python is also great at manipulating files.
-            It provides mutliple libraries for file path handling, regular expression matching, creating, removing, renaming folders and files,
-            directory searching, listing of the contents of folders and files, checking existence of files and more. Some of the most popular
-            libraries used for this purpose are the <b>os</b> library that provides a way to use various operating system functionality,
-            the <b>pathlib</b> library that offers an approach to working with system paths and file manipulation, the <b>shutil</b> library
-            which is built on top of the <b>os</b> library and provides a high level file operations, then the <b>glob</b> library which is
-            used for pattern matching and lastly the <b>re</b> library for regular expression support.
-          </p>
-      </section>
-
-      <section>
-        <h1 class="text-center display-4 text-info my-5">Path Handling</h1>
-        <p>
-          Python offers the <b><code>os.path</code></b> module and the 
-          <b><code>pathlib</code></b> library for file and directory path handling. Let's 
-          initialize them first:
-        </p>
-        <div class="input-code-block">
-          <pre><code><span class="python-color1">import</span> os
-            <span class="python-color1">import</span> pathlib</code></pre>
-        </div>
-        <p>
-          The <code>os.path</code> module offers great functionality to handle file paths 
-          such as:
-        </p>
-        <ul>
-          <li><code>os.getcwd()</code>, that gets the current working directory path as a Python string</li>
-          <li><code>os.path.basename(path)</code>, that extracts the last component of the provided path which is a file or a directory name</li>
-          <li><code>os.path.dirname(path)</code>, that essentially extracts everything from the beginning of the path up to, but not including, the last path component</li>
-          <li><code>os.path.split(path)</code>, it takes the path as input and returns a tuple with the <code>os.path.dirname</code> as the first element and the <code>os.path.basename</code> as the second element</li>
-          <li><code>os.path.splitext(path)</code>, it is used to split a file path into two parts: the root part of the path (everything before the last dot) and the file extension (including the dot)</li>
-          <li><code>os.path.join(path, *path)</code>, it is used to join one or more path components together to create a valid file path. The return value is a concatenation of all the provided components</li>
-          <li><code>os.path.exists(path)</code>, it is used to check whether a file or directory exists at a given path</li>
-          <li><code>os.path.isdir(path)</code>, it is used to check whether a given path corresponds to a directory (<code>True</code>) or not (<code>False</code>)</li>
-          <li><code>os.path.isfile(path)</code>, it is used to check whether a given path corresponds to a file (<code>True</code>) or not (<code>False</code>)</li>
-        </ul>
-        <p>
-          Let's see about all these functions at an example to better understand them. Suppose that we have the following file path that we need to manipulate:
-        </p>
-        <div class="input-code-block">
-          <pre><code>mypath = "c:/Users/User/Desktop/myfile.txt"
-            </code></pre>
-        </div>
-        <p>
-        <p>Let's see how can we can get the basename and the dirname of the path:</p>
-        <div class="input-code-block">
-          <pre><code><span class="comment"># get the basename and the dirname of the path</span>
-            bs_name = <span class="python-color1">os.path.basename(</span>mypath<span class="python-color1">)</span>
-            <span class="python-color1">print(</span>bs_name<span class="python-color1">)</span>
-            <span class="python-color1">print()</span>
-            dir_name = <span class="python-color1">os.path.dirname(</span>mypath<span class="python-color1">)</span>
-            <span class="python-color1">print(</span>dir_name<span class="python-color1">)</span>
-            </code></pre>
-        </div>
-        <div class="output-code-block">
-          <pre><code>myfile.txt
-
-            c:/Users/User/Desktop
-              </code></pre>
-        </div>
-        <p>We can also do the same using the <code>os.path.split</code> command:</p>
-        <div class="input-code-block">
-          <pre><code><span class="comment"># get the basename and the dirname of the path</span>
-            <span class="comment"># return a tuple: (basename, dirname)</span>
-            dir_name, bs_name = <span class="python-color1">os.path.split(</span>mypath<span class="python-color1">)</span>
-            <span class="python-color1">print(</span>bs_name, dir_name<span class="python-color1">)</span>
-            </code></pre>
-        </div>
-        <div class="output-code-block">
-          <pre><code>myfile.txt c:/Users/User/Desktop
-              </code></pre>
-        </div>
-        <p>Suppose that we need to get the file extension (without the dot) and also the path of the file without its extension:</p>
-        <div class="input-code-block">
-          <pre><code><span class="comment"># get the path of the file (everything before the last dot)</span>
-            <span class="comment"># and the file extension</span>
-            file_path, file_ext = <span class="python-color1">os.path.splitext(</span>mypath<span class="python-color1">)</span>
-            <span class="comment"># the file_ext returns the extension with the dot (e.g, .txt)</span>
-            <span class="comment"># so remove the dot</span>
-            file_ext = file_ext<span class="python-color1">[</span>1:<span class="python-color1">]</span>
-            <span class="python-color1">print(</span>file_path, file_ext<span class="python-color1">)</span>
-            </code></pre>
-        </div>
-        <div class="output-code-block">
-          <pre><code>c:/Users/User/Desktop/myfile txt
-              </code></pre>
-        </div>
-        <p>How can we get the name (just the name, not the path) of the parent folder of the file?</p>
-        <div class="input-code-block">
-          <pre><code><span class="comment"># get the name of the folder that the file is located inside</span>
-            parent_name = <span class="python-color1">os.path.basename(os.path.dirname(</span>mypath<span class="python-color1">))</span>
-            <span class="python-color1">print(</span>parent_name<span class="python-color1">)</span>
-            </code></pre>
-        </div>
-        <div class="output-code-block">
-          <pre><code>Desktop
-              </code></pre>
-        </div>
-        <p>How do we know if the path is indeed located somewhere in the computer ? In our case it doesn't but let's try it:</p>
-        <div class="input-code-block">
-          <pre><code><span class="comment"># check if the path exists somewhere</span>
-            <span class="python-color1">print(os.path.exists(</span>mypath<span class="python-color1">))</span>
-            </code></pre>
-        </div>
-        <div class="output-code-block">
-          <pre><code>False
-              </code></pre>
-        </div>
-        <p>Check to see if the path is pointing to a file or a directory (in our case the file or the path does not exist, so both commands (<code>os.path.isdir</code>, <code>os.path.isfile</code>) will return <code>False</code>:</p>
-        <div class="input-code-block">
-          <pre><code><span class="comment"># check if the path provided, is a file or a directory</span>
-            <span class="python-color1">print(</span>'is a file: ', <span class="python-color1">os.path.isfile(</span>mypath<span class="python-color1">))</span>
-            <span class="python-color1">print(</span>'is a directory: ', <span class="python-color1">os.path.isdir(</span>mypath<span class="python-color1">))</span>
-            </code></pre>
-        </div>
-        <div class="output-code-block">
-          <pre><code>is a file:  False
-            is a directory:  False
-              </code></pre>
-        </div>
-        <p>Suppose that we changed the location of the file and we put it in a folder called <i>data_files</i> located in the current working directory. How can we access its path using the old "mypath" path ?</p>
-        <div class="input-code-block">
-          <pre><code><span class="comment"># get the path of the file inside the new location</span>
-            new_file_path = <span class="python-color1">os.path.join(os.path.dirname(</span>mypath<span class="python-color1">)</span>, 'data_files', 'myfile.txt'<span class="python-color1">)</span>
-            <span class="python-color1">print(</span>new_file_path<span class="python-color1">)</span>
-            </code></pre>
-        </div>
-        <div class="output-code-block">
-          <pre><code>c:/Users/User/Desktop\data_files\myfile.txt
-              </code></pre>
-        </div>
-        <p>Or you can just copy the path of the new folder from the Windows "option menu" directly. But why to choose the easy solution :p</p>
-        <p>
-          As you can see the Python <code>os</code> library is great at handling the file paths. However, it gets really annoying sometimes when we have to 
-          write multiple functions one after another to simply get the name of a part of the path (e.g., <code>os.path.basename(os.path.dirname(path))</code>).
-          You could import the <code>basename</code> and the <code>dirname</code> from the <code>os.path</code> module but there is a better 
-          solution to this: the Python <code>pathlib</code> library. It is built on top of the <code>os</code> library and provides an easier way to accomplish
-          all of the previous tasks:
-        </p>
-        <p>
-          Let's get again the initial file path:
-        </p>
-        <div class="input-code-block">
-          <pre><code>mypath = "c:/Users/User/Desktop/myfile.txt"
-            </code></pre>
-        </div>
-        <p>Start by importing the main <code>Path</code> class and wrap the "mypath" variable with the imported Path class:</p>
-        <div class="input-code-block">
-          <pre><span class="python-color1">from</span> pathlib <span class="python-color1">import</span> Path
-            mypath = <span class="python-color1">Path(</span>mypath<span class="python-color1">)</span>
-            </code></pre>
-        </div>
-        <p>This will give you a <code>pathlib.WindowsPath</code> (if you are on Windows) and a <code>pathlib.PosixPath</code> if you are on Linux. Now you have full access to all of its functionality that will make your life easier. It contains many attributes that can get different parts of the path by just using the "dot" syntax as you it is presented at the image below:</p>
-        <div class="input-code-block">
-          <pre><code><span class="comment"># get the different parts of the path</span>
-            <span class="python-color1">print(</span>"mypath.name: ", mypath.name<span class="python-color1">)</span>
-            <span class="python-color1">print(</span>"mypath.stem: ", mypath.stem<span class="python-color1">)</span>
-            <span class="comment"># use .suffixes if you have many file endings</span>
-            <span class="python-color1">print(</span>"mypath.suffix: ", mypath.suffix<span class="python-color1">)</span>
-            <span class="python-color1">print(</span>"mypath.parent: ", mypath.parent<span class="python-color1">)</span>
-            </code></pre>
-        </div>
-        <div class="output-code-block">
-          <pre><code>mypath.name:  myfile.txt
-            mypath.stem:  myfile
-            mypath.suffix:  .txt
-            mypath.parent:  c:\Users\User\Desktop
-              </code></pre>
-        </div>
-        <div class="row text-center justify-content-center align-items-center">
-          <div class="col-lg-8 col-md-10 col-12">
-              <figure>
-                  <img src="/static/img/file-manipulation/pathlib_path_structure.png" alt="mseed record ASCII file" class="img-fluid my-5">
-                  <figcaption class="lead fs-5 fst-italic">Get the different parts of a path using the "dot" syntax of the <code>pathlib.Path</code> class</figcaption>
-              </figure> 
+<section class="bg-light">
+  <div class="py-3 container-lg">
+      <div class="row justify-content-center align-items-center  pt-5 mb-4 ">
+          <div class="col-lg-2 col-3 col-md-2 d-none d-md-block">
+              <a href="https://docs.obspy.org/">
+              <img src="/static/img/templates-icons/file-manipulation.png" alt="mseed record ASCII file" class="img-fluid">
+              </a>
           </div>
-        </div>
-        <p>You can also split the path and get each part seperately using the <code>.parts</code> attribute: </p>
-        <div class="input-code-block">
-          <pre><code><span class="comment"># get all of the path parts seperately</span>
-            <span class="python-color1">print(</span>mypath.parts<span class="python-color1">)</span>
-            </code></pre>
-        </div>
-        <div class="output-code-block">
-          <pre><code>('c:\\', 'Users', 'User', 'Desktop', 'myfile.txt')
+          <div class="col-lg-9 col-10 col-md-8 text-center text-md-start">
+              <p class="display-1">Python File Manipulation</p>
+          </div>
+      </div>
+      <div class="fs-2 lead fst-italic text-muted">
+          <p class="text-center text-md-start">Python provides a wide variety of tools and functions for handling various
+              file-related tasks, such as file opening, reading, writing, handling file paths, pattern searching, file and
+              folder listing etc.
+          </p>
+      </div>
+      <div class="text-center fs-5 my-5" id="hyper-reference-pills-container">
+          <a target="_blank" href="https://docs.python.org/3/library/os.html"><span class="badge rounded-pill">os</span></a>
+          <a target="_blank" href="https://docs.python.org/3/library/os.path.html"><span
+              class="badge rounded-pill">os.path</span></a>
+          <a target="_blank" href="https://docs.python.org/3/library/pathlib.html"><span
+              class="badge rounded-pill">pathlib</span></a>
+          <a target="_blank" href="https://docs.python.org/3/library/shutil.html"><span
+              class="badge rounded-pill">shutil</span></a>
+          <a target="_blank" href="https://docs.python.org/3/library/glob.html"><span
+              class="badge rounded-pill">glob</span></a>
+      </div>
+  </div>
+</section>
+<section>
+  <div class="lead fs-3 container-lg">
+      <h1 class="text-center display-4 text-info my-5">Introduction</h1>
+      <p>
+        Python is a multitasking programming language. There are many tasks that someone can 
+        accomplish by using it. Among the various libraries, tools, and functions available, 
+        Python is also great at manipulating files. It provides multiple libraries for file 
+        path handling, regular expression matching, creating, removing, renaming folders and 
+        files, searching directories, listing the content of folders and files, checking the 
+        existence of files, and more. Some of the most popular libraries used for this purpose 
+        are the <b>os</b> library, which provides a way to utilize various operating system 
+        functionalities, the <b>pathlib</b> library, which offers an approach to working with system 
+        paths and file manipulation, the <b>shutil</b> library, built on top of the os library, 
+        providing high-level file operations, and finally, the <b>glob</b> library, used for pattern 
+        matching.
+      </p>
+  </div>
+</section>
+<section>
+  <div class="lead fs-3 container-lg">
+      <h1 class="text-center display-4 text-info my-5">Path Handling</h1>
+      <p>
+          Python offers the <code>os</code> and the <code>pathlib</code> libraries for path handling and more specifically, the <code>os.path</code> module 
+          and the <code>pathlib.Path</code> class. Let's initialize them first:
+      </p>
+      <div class="input-code-block">
+          <pre><code><span class="python-color1">import</span> os.path
+            <span class="python-color1">from</span> pathlib <span class="python-color1">import</span> Path</code></pre>
+      </div>
+      <p>
+        For a better understanding we will describe the basic 
+        path structure naming conventions. The <i>file path</i> is the whole absolute path of the file which is the directory where it is located 
+        and the file name with its extension. The <i>directory path</i> is the full absolute path of the directory where the file is located and the <i>directory name</i>
+        is just the name of that directory. The <i>filename</i> or the <i>basename</i> is the name of the file with its extension or <i>suffix</i>. We present those definitions is the image below.
+    </p>
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-9 col-lg-7">
+        <figure>
+          <img src="/static/img/file-manipulation/path_structure.png" alt="file-structure" class="img-fluid my-5">
+        </figure>
+      </div>
+    </div>
+      <h2 class="fs-1 text-start my-5 ms-3">Python os library</h2>
+      <p>
+        The <code>os.path</code> module provides  functionality for managing file paths. Let's explore the diverse capabilities it offers for manipulating these path components:
+      </p>
+      <ul>
+          <li><a class="link-info" href="#func-getcwd"><code>os.getcwd()</code></a>, returns the current working directory
+              as a string
+          </li>
+          <li><a class="link-info" href="#func-basename"><code>os.path.basename(path)</code></a>, returns the file name part of a given file path
+          </li>
+          <li><a class="link-info" href="#func-dirname"><code>os.path.dirname(path)</code></a>, returns the directory name part of a given file path
+          </li>
+          <li><a class="link-info" href="#func-split"><code>os.path.split(path)</code></a>, splits a path into its directory name and file name components as a tuple
+          </li>
+          <li><a class="link-info" href="#func-splitext"><code>os.path.splitext(path)</code></a>, splits a file path into the file path without its extension 
+            and the file extension
+          </li>
+          <li><a class="link-info" href="#func-join"><code>os.path.join(path, *path)</code></a>, joins multiple path
+              components into a single path
+          </li>
+          <li><a class="link-info" href="#func-exists"><code>os.path.exists(path)</code></a>, checks if a file or directory
+              exists at the specified path
+          </li>
+          <li><a class="link-info" href="#func-isdir"><code>os.path.isdir(path)</code></a>, checks if the given path points
+              to a directory
+          </li>
+          <li><a class="link-info" href="#func-isfile"><code>os.path.isfile(path)</code></a>, checks if the given path
+              points to a file
+          </li>
+      </ul>
+
+      <div class="my-5 bg-light-grey2 p-3 rounded-5 border" id="func-getcwd">
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/braces-asterisk.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <p>
+                      <code>os.getcwd()</code>
+                  </p>
+              </div>
+          </div>
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/card-checklist.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <p>
+                      This function returns the current absolute working directory of your Python script as a string
+                  </p>
+              </div>
+          </div>
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/code.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <div class="input-code-block">
+                      <pre><code><span class="python-color1">print</span>(os.<span class="python-color1">getcwd</span>())
+                </code></pre>
+                  </div>
+              </div>
+          </div>
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/code-slash.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <div class="output-code-block">
+                      <pre><code>C:\Users\Ioannis\Desktop\projects\seismologywebsite\seismologywebsite\notebooks
+                  </code></pre>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="my-5 bg-light-grey2 p-3 rounded-5 border" id="func-basename">
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/braces-asterisk.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <p>
+                      <code>os.path.basename(path)</code>
+                  </p>
+              </div>
+          </div>
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/card-checklist.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <p>
+                      This function extracts the last component of the provided path that doesn't have any forward slash at the end (<i>file name</i>). If it does not 
+                      find any suffix without a forward slash, it will return an empty string. In other words, if your provide a file path with or without
+                      an extension, it will give you the file name. If the last part is a directory (ending in "/"), it will return an empty string
+                  </p>
+              </div>
+          </div>
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/code-slash.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <div class="input-code-block">
+                      <pre><code><span class="comment"># get the basename of the folowing paths</span>
+                <span class="python-color1">print</span>(os.path.<span class="python-color1">basename</span>(<span class="python-color3">"c:/Users/User/Desktop/myfile.txt"</span>))
+                <span class="python-color1">print</span>(os.path.<span class="python-color1">basename</span>(<span class="python-color3">"c:/Users/User/Desktop"</span>))
+                <span class="python-color1">print</span>(os.path.<span class="python-color1">basename</span>(<span class="python-color3">"c:/Users/User/Desktop/"</span>))<span class="comment"> # empty</span>
+                </code></pre>
+                  </div>
+              </div>
+          </div>
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/code-slash.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <div class="output-code-block">
+                      <pre><code>myfile.txt
+                Desktop
+
+                </code></pre>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="my-5 bg-light-grey2 p-3 rounded-5 border" id="func-dirname">
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/braces-asterisk.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <p>
+                      <code>os.path.dirname(path)</code>
+                  </p>
+              </div>
+          </div>
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/card-checklist.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <p>
+                      This function essentially extracts everything from the beginning of the path up to the last path component with a 
+                      forward slash at its end. However, it will remove the last forward slash when it finds it. This is the <i>directory path</i> described 
+                      above without the forward slash at the end
+                  </p>
+              </div>
+          </div>
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/code-slash.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <div class="input-code-block">
+                      <pre><code><span class="comment"># get the dirname of the folowing paths</span>
+                <span class="python-color1">print</span>(os.path.<span class="python-color1">dirname</span>(<span class="python-color3">"c:/Users/User/Desktop/myfile.txt"</span>))
+                <span class="python-color1">print</span>(os.path.<span class="python-color1">dirname</span>(<span class="python-color3">"c:/Users/User/Desktop"</span>))
+                <span class="python-color1">print</span>(os.path.<span class="python-color1">dirname</span>(<span class="python-color3">"c:/Users/User/Desktop/"</span>))
+                </code></pre>
+                  </div>
+              </div>
+          </div>
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/code-slash.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <div class="output-code-block">
+                      <pre><code>c:/Users/User/Desktop
+                c:/Users/User
+                c:/Users/User/Desktop
+                </code></pre>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="my-5 bg-light-grey2 p-3 rounded-5 border" id="func-split">
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/braces-asterisk.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <p>
+                      <code>os.path.split(path)</code>
+                  </p>
+              </div>
+          </div>
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/card-checklist.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <p>
+                      This function takes the path as input and returns a tuple with <code>os.path.dirname</code> as the first
+                      element and <code>os.path.basename</code> as the second element
+                  </p>
+              </div>
+          </div>
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/code-slash.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <div class="input-code-block">
+                      <pre><code><span class="comment"># get the basename and the dirname of the path</span>
+                dir_name, bs_name = os.path.<span class="python-color1">split</span>(<span class="python-color3">"c:/Users/User/Desktop/myfile.txt"</span>)
+                <span class="python-color1">print</span>(dir_name, bs_name)
+                </code></pre>
+                  </div>
+              </div>
+          </div>
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/code-slash.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <div class="output-code-block">
+                      <pre><code>c:/Users/User/Desktop myfile.txt 
+                  </code></pre>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="my-5 bg-light-grey2 p-3 rounded-5 border" id="func-splitext">
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/braces-asterisk.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <p>
+                      <code>os.path.splitext(path)</code>
+                  </p>
+              </div>
+          </div>
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/card-checklist.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <p>
+                      This function is used to split a file path into the file path without its extension and the file extension (including the dot).
+                      If there is not file extension or the ending path part is a directory (ends in forward slash), an empty extension is returned
+                  </p>
+              </div>
+          </div>
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/code-slash.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <div class="input-code-block">
+                      <pre><code><span class="comment"># get the file path and its extension</span>
+              <span class="python-color1">print</span>(os.path.<span class="python-color1">splitext</span>(<span class="python-color3">"c:/Users/User/Desktop/myfile.txt"</span>))
+              <span class="python-color1">print</span>(os.path.<span class="python-color1">splitext</span>(<span class="python-color3">"c:/Users/User/Desktop/myfile"</span>))
+              <span class="python-color1">print</span>(os.path.<span class="python-color1">splitext</span>(<span class="python-color3">"c:/Users/User/Desktop/"</span>))
               </code></pre>
-        </div>
-        <p>In addition, using the <code>.parents</code> syntax you can get the location path of each of the parents in the provided path. It will return an array of pathlib <code>WindowsPath</code> elements: </p>
-        <div class="input-code-block">
-          <pre><code><span class="comment"># get the path of each of the parents</span>
-            <span class="python-color1">print(list(</span>mypath.parents<span class="python-color1">))</span>
-            </code></pre>
-        </div>
-        <div class="output-code-block">
-          <pre><code>[WindowsPath('c:/Users/User/Desktop'), WindowsPath('c:/Users/User'), WindowsPath('c:/Users'), WindowsPath('c:/')]
+                  </div>
+              </div>
+          </div>
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/code-slash.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <div class="output-code-block">
+                      <pre><code>('c:/Users/User/Desktop/myfile', '.txt')
+                        ('c:/Users/User/Desktop/myfile', '')
+              ('c:/Users/User/Desktop/', '')
+                </code></pre>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="my-5 bg-light-grey2 p-3 rounded-5 border" id="func-join">
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/braces-asterisk.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <p>
+                      <code>os.path.join(path, *path)</code>
+                  </p>
+              </div>
+          </div>
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/card-checklist.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <p>
+                      This function is used to join one or more path components together to create a valid file path. The return
+                      value is a concatenation of all the provided components
+                  </p>
+              </div>
+          </div>
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/code-slash.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <div class="input-code-block">
+                      <pre><code><span class="comment"># join different path segments together</span>
+              <span class="python-color1">print</span>(os.path.<span class="python-color1">join</span>(<span class="python-color3">"c:/Users/User"</span>, <span class="python-color3">"Desktop"</span>, <span class="python-color3">"new_folder/myfile.txt"</span>))
+              <span class="python-color1">print</span>(os.path.<span class="python-color1">join</span>(<span class="python-color3">"c:/Users/User"</span>, <span class="python-color3">"Desktop"</span>, <span class="python-color3">"myfile.txt"</span>))
+              <span class="python-color1">print</span>(os.path.<span class="python-color1">join</span>(<span class="python-color3">"c:/Users"</span>, <span class="python-color3">"User/Desktop"</span>, <span class="python-color3">"myfile.txt"</span>))
+              filename = <span class="python-color3">"index.html"</span>
+              <span class="python-color1">print</span>(os.path.<span class="python-color1">join</span>(<span class="python-color3">"c:/Users/User"</span>, <span class="python-color3">"Desktop"</span>, filename))
               </code></pre>
-        </div>
-        <p>Another great functionality of a <code>pathlib.Path</code> object is that you can create new paths with modified parts (e.g., new suffix or new name) by just using a "dot syntax":</p>
-        <div class="input-code-block">
-          <pre><code><span class="comment"># initial path</span>
-            mypath = "c:/Users/User/Desktop/myfile.txt"
-            <span class="comment"># pathlib WindowsPath</span>
-            mypath = <span class="python-color1">Path(</span>"c:/Users/User/Desktop/myfile.txt"<span class="python-color1">)</span>
-            <span class="comment"># new path with file ending ".png"</span>
-            <span class="python-color1">print(</span>mypath.<span class="python-color1">with_suffix(</span>".png"<span class="comment">))</span>
-            <span class="comment"># new path with different stem "another_file"</span>
-            <span class="python-color1">print(</span>mypath.<span class="python-color1">with_suffix(</span>".png"<span class="comment">))</span>
-            <span class="comment"># new path with different name "another_file.csv"</span>
-            <span class="python-color1">print(</span>mypath.<span class="python-color1">with_suffix(</span>".png"<span class="comment">))</span>
-            </code></pre>
-        </div>
-        <div class="output-code-block">
-          <pre><code>c:\Users\User\Desktop\myfile.png
-            c:\Users\User\Desktop\another_file.txt
-            c:\Users\User\Desktop\another_file.csv
+                  </div>
+              </div>
+          </div>
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/code-slash.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <div class="output-code-block">
+                      <pre><code>c:/Users/User\Desktop\new_folder/myfile.txt
+              c:/Users/User\Desktop\myfile.txt
+              c:/Users\User/Desktop\myfile.txt
+              c:/Users/User\Desktop\index.html
+                </code></pre>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="my-5 bg-light-grey2 p-3 rounded-5 border" id="func-exists">
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/braces-asterisk.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <p>
+                      <code>os.path.exists(path)</code>
+                  </p>
+              </div>
+          </div>
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/card-checklist.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <p>
+                      This function is used to check whether a file or directory exists at a given path (in our case it does)
+                  </p>
+              </div>
+          </div>
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/code-slash.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <div class="input-code-block">
+                      <pre><code><span class="comment"># check if the following path exists</span>
+              <span class="python-color1">print</span>(os.path.<span class="python-color1">exists</span>(<span class="python-color3">"c:/Users/User/Desktop/myfile.txt"</span>))
               </code></pre>
-        </div>
-        <p>
-          One of the most useful pathlib features is the concatenation of different path 
-          parts together. Remember that in the Python <code>os</code> library we used the 
-          <code>join</code> function to concatenate different path segments together. Pathlib
-          also has a similar function called <code>joinpath</code>. However, you can achieve the
-          same functionality of <code>joinpath</code> by just using a forward slash between a 
-          pathlib path (WindowsPath, PosixPath) and a string. You need to have at least one pathlib
-          path for this to work. The following will have the same output:
-        </p>
-        <div class="input-code-block">
-          <pre><code><span class="comment"># join path segments using a forward slash ('/')</span>
-            mypath = "c:/Users/User/Desktop/myfile.txt"
-            <span class="python-color1">print(</span>'c:/Users', <span class="python-color1">Path(</span>'user'<span class="python-color1">)</span>, 'Desktop', 'myfile.txt'<span class="python-color1">)</span>
-            <span class="python-color1">print(</span>'c:/Users', <span class="python-color1">Path(</span>'user'<span class="python-color1">)</span>, 'Desktop', <span class="python-color1">Path(</span>'myfile.txt'<span class="python-color1">))</span>
-            <span class="python-color1">print(Path(</span>'c:/Users'<span class="python-color1">)</span>, 'user', 'Desktop', 'myfile.txt'<span class="python-color1">)</span>
-            <span class="python-color1">print(Path(</span>'c:/Users'<span class="python-color1">)</span>, <span class="python-color1">Path(</span>'user'<span class="python-color1">)</span>, <span class="python-color1">Path(</span>'Desktop'<span class="python-color1">)</span>, <span class="python-color1">Path(</span>'myfile.txt'<span class="python-color1">))</span>
-            <span class="python-color1">print(</span>'c:/Users', 'user', 'Desktop', <span class="python-color1">Path(</span>'myfile.txt'<span class="python-color1">))</span>
-            </code></pre>
-        </div>
-        <div class="output-code-block">
-          <pre><code>c:/Users user Desktop myfile.txt
-            c:/Users user Desktop myfile.txt
-            c:\Users user Desktop myfile.txt
-            c:\Users user Desktop myfile.txt
-            c:/Users user Desktop myfile.txt
+                  </div>
+              </div>
+          </div>
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/code-slash.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <div class="output-code-block">
+                      <pre><code>True
+                </code></pre>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="my-5 bg-light-grey2 p-3 rounded-5 border" id="func-isdir">
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/braces-asterisk.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <p>
+                      <code>os.path.isdir(path)</code>
+                  </p>
+              </div>
+          </div>
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/card-checklist.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <p>
+                      This function is used to check whether a given path corresponds to a directory (<code>True</code>) or not
+                      (<code>False</code>). If the provided path does not exists, it will return <code>False</code>
+                  </p>
+              </div>
+          </div>
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/code-slash.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <div class="input-code-block">
+                      <pre><code><span class="comment"># check if the following path is a directory</span>
+              <span class="python-color1">print</span>(os.path.<span class="python-color1">isdir</span>(<span class="python-color3">"c:/Users/User/Desktop/myfile.txt"</span>))
               </code></pre>
-        </div>
-        <p>
-          Other functionality similar to the <code>os</code> library includes the 
-          <code>WindowsPath.exists()</code> to check if a file or directory exists, the  
-          <code>pathlib.Path.cwd()</code> and <code>pathlib.Path.home()</code> to get the 
-          current working directory and the user's home directory,  the  
-          <code>WindowsPath.is_dir()</code> and <code>WindowsPath.is_file()</code> to check 
-          whether a path points to a file or a directory and lastly the 
-          <code>WindowsPath.as_posix()</code> to convert the windows backslashes ("\") to 
-          forward slashes ("/").</p>
-          <div class="shadow-lg bg-light-red1 w-100 mx-auto my-5 rounded border border-1 border-secondary">
-            <p class="ps-2 bg-info">
-              
-              <img style="width:30px; height:30px; vertical-align: middle;" class="img-fluid" src="{{ url_for('static', filename='img/file-manipulation/information-icon.png') }}" alt="information circle symbol">
+                  </div>
+              </div>
+          </div>
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/code-slash.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <div class="output-code-block">
+                      <pre><code>False
+                </code></pre>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="my-5 bg-light-grey2 p-3 rounded-5 border" id="func-isfile">
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/braces-asterisk.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <p>
+                      <code>os.path.isfile(path)</code>
+                  </p>
+              </div>
+          </div>
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/card-checklist.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <p>
+                      This function is used to check whether a given path corresponds to a file (<code>True</code>) or not
+                      (<code>False</code>). If the provided path does not exists, it will return <code>False</code>
+                  </p>
+              </div>
+          </div>
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/code-slash.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <div class="input-code-block">
+                      <pre><code><span class="comment"># check if the following path is a file</span>
+              <span class="python-color1">print</span>(os.path.<span class="python-color1">isfile</span>(<span class="python-color3">"c:/Users/User/Desktop/myfile.txt"</span>))
+              </code></pre>
+                  </div>
+              </div>
+          </div>
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/code-slash.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <div class="output-code-block">
+                      <pre><code>True
+                </code></pre>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <p>Let's see some examples of using these functions together. Let's define a path of a file to use for the examples:</p>
+      <div class="input-code-block">
+          <pre><code><span class="comment"># initialize a file to use</span>
+      myfile = <span class="python-color3">"c:/Users/User/Desktop/mysite/templates/login.html"</span>
+    </code></pre>
+      </div>
+      <p>Start by getting the name of the parent directory of the file (<i>directory name</i>):</p>
+      <div class="input-code-block">
+          <pre><code><span class="comment"># get the name of the parent folder</span>
+            parent_dir_name = os.path.<span class="python-color1">basename</span>(os.path.<span class="python-color1">dirname</span>(myfile))
+      <span class="python-color1">print</span>(parent_dir_name)
+      </code></pre>
+      </div>
+      <div class="output-code-block">
+          <pre><code>templates
+              </code></pre>
+      </div>
+      <p>
+          To continue, suppose that we moved the file inside a folder called <i>auth</i> 
+          that is located at the current working directory and we want to get the new file path:
+      </p>
+      <div class="input-code-block">
+          <pre><code><span class="comment"># get the new file path</span>
+            new_path = os.path.<span class="python-color1">join</span>(os.path.<span class="python-color1">dirname</span>(myfile), <span class="python-color3">"auth"</span>, <span class="python-color3">"login.html"</span>)
+      <span class="python-color1">print</span>(new_path)
+      </code></pre>
+      </div>
+      <div class="output-code-block">
+          <pre><code>c:/Users/User/Desktop/mysite/templates\auth\login.html
+              </code></pre>
+      </div>
+      <p>
+          Lastly, let's say that we need to rename that <i>login.html</i> file that is located 
+          in the <i>auth</i> folder, to <i>login-template.html.</i>
+      </p>
+      <div class="input-code-block">
+          <pre><code><span class="comment"># create a new path of the renamed file</span>
+        new_renamed_file_path = os.path.<span class="python-color1">splitext</span>(new_path)[0]
+        new_renamed_file_ext = os.path.<span class="python-color1">splitext</span>(new_path)[1]
+        new_renamed_path = new_renamed_file_path + <span class="python-color3">"-template"</span> + new_renamed_file_ext
+        <span class="python-color1">print</span>(new_renamed_path)
+      </code></pre>
+      </div>
+      <div class="output-code-block">
+          <pre><code>c:/Users/User/Desktop/mysite/templates\auth\login-template.html
+              </code></pre>
+      </div>
+      <p>
+          There are easier ways to achieve the previous tasks. However, we do it this way for instructional purposes.
+      </p>
+      <h2 class="fs-1 text-start my-5 ms-3">Python pathlib library</h2>
+      <p>
+          As you can see the Python <code>os</code> library is great at handling the file paths. However, it gets really
+          annoying sometimes when we have to write multiple functions one after another to simply get the name of a 
+          part of the path (e.g., <code>os.path.basename(os.path.dirname(myfile))</code>). You could import the 
+          <code>basename</code> and the <code>dirname</code> from the <code>os.path</code> module to write less code but
+          there is a better solution to this: the Python <code>pathlib</code> library. It is built on top of the 
+          <code>os</code> library and provides an easier way to accomplish
+          all of the previous tasks.
+      </p>
+      <p>
+          To use the <code>pathlib</code> libary, wrap your file or directory path with the <code>pathlib.Path</code> class. When you use 
+          <code>pathlib</code> on a Windows system, this wraping will return a <code>WindowsPath</code> path object that
+          is used to represent <code>pathlib</code> file paths. Similarly, it will return a <code>PosixPath</code> for a Linux system. 
+      </p>
+      <div class="input-code-block">
+          <pre><code><span class="comment"># Initialize a pathlib path by wrapping your path with the pathlib.Path class</span>
+            pathlib_path = <span class="python-color1">Path</span>(mypath)
+        <span class="python-color1">print</span>(<span class="python-color1">type</span>(pathlib_path))
+      </code></pre>
+      </div>
+      <div class="output-code-block">
+          <pre><code>&lt;class 'pathlib.WindowsPath'&gt;
+              </code></pre>
+      </div>
+      <p>
+          Just put your path inside the <code>pathlib.Path</code> class and you will have access to
+          the following <code>pathlib</code> functionality:
+      </p>
+      <ul>
+          <li><a class="link-info" href="#pathlib-path-parts"><code>WindowsPath.name</code></a>, returns the last component of the pathlib path (<i>WindowsPath</i>) which is the <i>file name</i> with its extension, as a string</li>
+          <li><a class="link-info" href="#pathlib-path-parts"><code>WindowsPath.stem</code></a>, provides the file name of the without the file extension as a string</li>
+          <li><a class="link-info" href="#pathlib-path-parts"><code>WindowsPath.suffix</code></a>, retrieves the file extension, including the period, as a string</li>
+          <li><a class="link-info" href="#pathlib-path-parts"><code>WindowsPath.suffixes</code></a>, returns a list of file extensions for files with multiple extensions (e.g., .tar.gz)</li>
+          <li><a class="link-info" href="#pathlib-path-parts"><code>WindowsPath.parent</code></a>, extracts the <i>directory path</i> of the current <code>WindowsPath</code> as a <code>WindowsPath</code> object</li>
+          <li><a class="link-info" href="#pathlib-path-parts"><code>WindowsPath.parents</code></a>, returns an iterator over all parent directories of the current path, as <code>WindowsPath</code> objects</li>
+          <li><a class="link-info" href="#pathlib-path-parts"><code>WindowsPath.parts</code></a>, generates a tuple that contains all the path components, as strings</li>
+          <li><a class="link-info" href="#pathlib-new-path"><code>WindowsPath.with_suffix</code></a>, returns the current <code>WindowsPath</code> object with a modified file extension</li>
+          <li><a class="link-info" href="#pathlib-new-path"><code>WindowsPath.with_name</code></a>, returns the current <code>WindowsPath</code> object with different <i>file name</i></li>
+          <li><a class="link-info" href="#pathlib-new-path"><code>WindowsPath.with_stem</code></a>, returns the current <code>WindowsPath</code> object with modified <i>stem</i></li>
+          <li><a class="link-info" href="#pathlib-join-path"><code>WindowsPath.joinpath</code></a>, joins one or more path components to the current <code>WindowsPath</code></li>
+      </ul>
+      <p>
+          Let's explore these functions below to gain a deeper understanding of how they are used.
+      </p>
+      <div class="my-5 bg-light-grey2 p-3 rounded-5 border" id="pathlib-path-parts">
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/braces-asterisk.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <div>
+                      <p class="my-0"><code>WindowsPath.name</code></p>
+                      <p class="my-0"><code>WindowsPath.stem</code></p>
+                      <p class="my-0"><code>WindowsPath.suffix</code></p>
+                      <p class="my-0"><code>WindowsPath.suffixes</code></p>
+                      <p class="my-0"><code>WindowsPath.parent</code></p>
+                      <p class="my-0"><code>WindowsPath.parents</code></p>
+                      <p class="my-0"><code>WindowsPath.parts</code></p>
+                  </div>
+              </div>
+          </div>
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/image.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <div class="row justify-content-center">
+                      <div class="col-11 col-sm-9 col-md-7">
+                          <figure>
+                              <img src="/static/img/file-manipulation/pathlib_path_structure.png" alt="mseed record ASCII file"
+                                  class="img-fluid my-5">
+                          </figure>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/card-checklist.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <p>
+                      The <code>WindowsPath.name</code> attribute returns the last component of the path, which is typically the file name. 
+                      The <code>WindowsPath.stem</code> attribute returns the filename without the file extension. The <code>WindowsPath.suffix</code> 
+                      outputs the file extension, including the period ("."). Use the <code>WindowsPath.suffixes</code> in cases where
+                      a file has multiple extensions (e.g., .tar.gz). In addition to these,
+                      the <code>WindowsPath.parent</code> extracts the parent directory or the <i>directory path</i> of the current path. Then utilize the <code>WindowsPath.parents</code> 
+                      to return an iterator over all the parent directories from the current path to the root. Lastly, apply the <code>WindowsPath.parts</code> 
+                      to get a tuple of all the components in the path.
+                  </p>
+              </div>
+          </div>
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/code-slash.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <div class="input-code-block">
+                      <pre><code><span class="comment"># get the different parts of the path</span>
+              mypath = <span class="python-color1">Path</span>(<span class="python-color3">"c:/Users/User/Desktop/myfile.txt"</span>)
+              <span class="python-color1">print</span>(<span class="python-color3">"mypath.name: "</span>, mypath.name)
+              <span class="python-color1">print</span>(<span class="python-color3">"mypath.stem: "</span>, mypath.stem)
+              <span class="python-color1">print</span>(<span class="python-color3">"mypath.suffix: "</span>, mypath.suffix)
+              <span class="python-color1">print</span>(<span class="python-color3">"mypath.parent: "</span>, mypath.parent)
+              <span class="python-color1">print</span>(<span class="python-color3">"mypath.parents: "</span>, mypath.parents)
+              <span class="python-color1">print</span>(<span class="python-color3">"mypath.parts: "</span>, mypath.parts)
+              <span class="python-color1">print</span>(<span class="python-color3">"list(mypath.parents): "</span>, <span class="python-color1">list</span>(mypath.parents))
+                  </code></pre>
+                  </div>
+              </div>
+          </div>
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/code-slash.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <div class="output-code-block">
+                      <pre><code>mypath.name:  myfile.txt
+              mypath.stem:  myfile
+              mypath.suffix:  .txt
+              mypath.parent:  c:\Users\User\Desktop
+              mypath.parents:  &lt;WindowsPath.parents&gt;
+              mypath.parts:  ('c:\\', 'Users', 'User', 'Desktop', 'myfile.txt')
+              list(mypath.parents):  [WindowsPath('c:/Users/User/Desktop'), WindowsPath('c:/Users/User'), WindowsPath('c:/Users'), WindowsPath('c:/')]
+                    </code></pre>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="my-5 bg-light-grey2 p-3 rounded-5 border" id="pathlib-new-path">
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/braces-asterisk.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <div>
+                      <p class="my-0"><code>WindowsPath.with_stem(new_stem)</code></p>
+                      <p class="my-0"><code>WindowsPath.with_name(new_name)</code></p>
+                      <p class="my-0"><code>WindowsPath.with_suffix(new_suffix)</code></p>
+                  </div>
+              </div>
+          </div>
+          <div class="row justify-content-center mt-5">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/card-checklist.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <p>
+                      The <code>WindowsPath.with_stem(new_stem)</code> creates a new <code>WindowsPath</code> object with the
+                      same path as the original but with a modified stem (<i>new_stem</i>). This is useful for renaming files 
+                      while keeping the same directory and extension intact. Similarly, the <code>WindowsPath.with_name(new_name)</code> 
+                      creates a modified path with <i>new_name</i> as its new name.  It's helpful for renaming files while preserving 
+                      their directory and extension. Lastly, the <code>WindowsPath.with_suffix(new_suffix)</code> keeps the original path but
+                      modifies the file extension with <i>new_suffix</i>.
+                  </p>
+              </div>
+          </div>
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/code-slash.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <div class="input-code-block">
+                      <pre><code><span class="comment"># pathlib WindowsPath</span>
+              mypath = <span class="python-color1">Path</span>(<span class="python-color3">"c:/Users/User/Desktop/myfile.txt"</span>)
+              <span class="python-color1">print</span>(<span class="python-color3">'initial path: '</span>, mypath)
+              <span class="comment"># new path with different file ending (".png")</span>
+              <span class="python-color1">print</span>(<span class="python-color3">'with_suffix(".png"): '</span>, mypath.<span class="python-color1">with_suffix</span>(<span class="python-color3">".png"</span>))
+              <span class="comment"># new path with different stem ("another_file")</span>
+              <span class="python-color1">print</span>(<span class="python-color3">'with_stem("another_file"): '</span>, mypath.<span class="python-color1">with_stem</span>(<span class="python-color3">"another_file"</span>))
+              <span class="comment"># new path with different name ("another_file.csv")</span>
+              <span class="python-color1">print</span>(<span class="python-color3">'with_name("another_file.csv"): '</span>, mypath.<span class="python-color1">with_name</span>(<span class="python-color3">"another_file.csv"</span>))
+                </code></pre>
+                  </div>
+              </div>
+          </div>
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/code-slash.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <div class="output-code-block">
+                      <pre><code>initial path:  c:\Users\User\Desktop\myfile.txt
+              with_suffix(".png"):  c:\Users\User\Desktop\myfile.png
+              with_stem("another_file"):  c:\Users\User\Desktop\another_file.txt
+              with_name("another_file.csv"):  c:\Users\User\Desktop\another_file.csv
+                  </code></pre>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="my-5 bg-light-grey2 p-3 rounded-5 border" id="pathlib-join-path">
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/braces-asterisk.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <p><code>PurePath.joinpath(other)</code></p>
+              </div>
+          </div>
+          <div class="row justify-content-center mt-5">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/card-checklist.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <p>
+                      The <code>PurePath.joinpath</code> is a method for creating a new path by joining one or more components 
+                      to an existing <code>pathlib</code> path object (<code>WindowsPath</code> or <code>PosixPath</code>). 
+                      An alternative to <code>PurePath.joinpath</code> is using the forward slash character ("/"). You need to have 
+                      at least one <code>pathlib</code> path and one or more Python strings to join them together.
+                  </p>
+              </div>
+          </div>
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/code-slash.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <div class="input-code-block">
+                      <pre><code><span class="comment"># join path segments using a forward slash ('/')</span>
+                         <span class="python-color1">print</span>(<span class="python-color3">'c:/Users'</span> / <span class="python-color1">Path</span>(<span class="python-color3">'user'</span>) / <span class="python-color3">'Desktop'</span> / <span class="python-color3">'myfile.txt'</span>)
+                         <span class="python-color1">print</span>(<span class="python-color3">'c:/Users'</span> / <span class="python-color1">Path</span>(<span class="python-color3">'user'</span>) / <span class="python-color3">'Desktop'</span> / <span class="python-color1">Path</span>(<span class="python-color3">'myfile.txt'</span>))
+                         <span class="python-color1">print</span>(<span class="python-color1">Path</span>(<span class="python-color3">'c:/Users'</span>) / <span class="python-color3">'user'</span> / <span class="python-color3">'Desktop'</span> / <span class="python-color3">'myfile.txt'</span>)
+                         <span class="python-color1">print</span>(<span class="python-color1">Path</span>(<span class="python-color3">'c:/Users'</span>) / <span class="python-color1">Path</span>(<span class="python-color3">'user'</span>) / <span class="python-color1">Path</span>(<span class="python-color3">'Desktop'</span>) / <span class="python-color1">Path</span>(<span class="python-color3">'myfile.txt'</span>))             
+                </code></pre>
+                  </div>
+              </div>
+          </div>
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/code-slash.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <div class="output-code-block">
+                      <pre><code>c:\Users\user\Desktop\myfile.txt
+              c:\Users\user\Desktop\myfile.txt
+              c:\Users\user\Desktop\myfile.txt
+              c:\Users\user\Desktop\myfile.txt
+                  </code></pre>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <p>
+          Other functionality similar to the <code>os</code> library includes the
+          <code>WindowsPath.exists()</code> to check if a file or directory exists, the
+          <code>pathlib.Path.cwd()</code> and <code>pathlib.Path.home()</code> to get the
+          current working directory and the user's home directory, the
+          <code>WindowsPath.is_dir()</code> and <code>WindowsPath.is_file()</code> to check
+          whether a path points to a file or a directory and lastly the
+          <code>WindowsPath.as_posix()</code> to convert the windows backslashes ("\") to
+          forward slashes ("/").
+      </p>
+      <div class="shadow-lg bg-light-red1 w-100 mx-auto my-5 rounded border border-1 border-secondary">
+          <p class="ps-2 bg-info">
+              <img style="width:30px; height:30px; vertical-align: middle;" class="img-fluid"
+                  src="{{ url_for('static', filename='img/file-manipulation/information-icon.png') }}"
+                  alt="information circle symbol">
               <span class="fs-4 fw-semibold">Note</span>
-            </p>
-            <p class="p-3 fs-4 text-dark">
+          </p>
+          <p class="p-3 fs-4 text-dark">
               The <code>pathlib.Path</code> mentioned previously, is the import <code>Path</code>
-              class. So when you want to get the current working directory use <code>Path.cwd()</code>. 
+              class. So when you want to get the current working directory use <code>Path.cwd()</code>.
               Respectively, the <code>WindowsPath</code> is a pathlib path that results either from the
               <code>Path</code> class (e.g., <code>Path(mypath)</code>) or a path calculated from any of
               the available pathlib functions (e.g., <code>mypath.with_suffix(".txt")</code>).
-            </p>
-          </div>
-      </section>
-
-      <section>
-          <h1 class="text-center display-4 text-info my-5">Managing Files and Folders</h1>
-          <p>
-            During the path handling we used the python <code>os</code> and <code>pathlib</code> to
-            manipulate file and directory paths. However, these libraries in combination with other (e.g., <code>shutil</code>)
-            can also be used effectively to create, move, copy and rename files and folders. Some of the 
-            most important functions are listed below: 
           </p>
-          <ul>
-            <li><code>os.mkdir(path)</code>, create a directory named <i>path</i>. You can pass a single string value to create a directory with name <i>path</i> in the current working directory or provide a path to create a directory inside another folder. If the directory already exists or any of its parents is missing, it will give you an error. Use <code>os.makedirs</code> function to create the folder and all of the intermediate parents needed to complete the path</li>
-            <li><code>os.makedirs(path)</code>, recursively create directories or folders along with any necessary parent directories. This function is particularly useful when you need to ensure that a directory structure exists for a given path</li>
-            <li><code>os.rmdir(path)</code>, remove the provided directory path. If the path does not exist or is not empty, an error will be raised. In order to remove whole non-empty directory trees use the <code>shutil.rmtree()</code> function</li>
-            <li><code>shutil.rmtree(path, ignore_errors=False)</code>, delete an entire empty or non-empty directory tree.  If <code>ignore_errors</code> is <code>True</code>, errors resulting from failed removals will be ignored</li>
-            <li><code>shutil.move(path)</code>, recursively move a file or directory (src) to another location (dst)</li>
-            <li><code>shutil.copyfile(src, dist)</code>, copy only the contents of a file to another file, without preserving any metadata. Use <code>shutil.copy(src, dst)</code> when you want to copy a file while preserving its contents and permissions but not its metadata and <code>shutil.copy2(src, dist)</code> when you want to copy a file while preserving both its contents and metadata, including timestamps</li>
-            <li><code>shutil.copytree(src, dist)</code>, recursively copy an entire directory tree from the source directory (src) to the destination directory (dst)</li>
-            <li>Alternative functions of <code>os</code> provided by <code>pathlib</code></li>
-          </ul>
-      </section>
+      </div>
+  </div>
+</section>
+<section>
+  <div class="lead fs-3 container-lg">
+      <h1 class="text-center display-4 text-info my-5">Managing Files and Folders</h1>
+      <p>
+          During the path handling we used the python <code>os</code> and <code>pathlib</code> libraries to
+          manipulate file and directory paths. These libraries in combination with other (e.g.,
+          <code>shutil</code>)
+          can also be used effectively to create, move, copy and rename files and folders. Some of the
+          most important functions are listed below:
+      </p>
+      <ul>
+          <li><code>os.mkdir(path)</code>,  creates a new directory specified by <i>path</i></li>
+          <li><code>os.chdir(path)</code>,  changes the current working directory to <i>path</i></li>
+          <li><code>os.makedirs(path, exist_ok=False)</code>, creates any necessary parent directories to complete the <i>path</i></li>
+          <li><code>os.rmdir(path)</code>, removes the directory specified by <i>path</i> if it's empty. Use <code>shutil.rmtree</code> if not</li>
+          <li><code>shutil.rmtree(path, ignore_errors=False)</code>, recursively removes a non-empty directory specified by <i>path</i>. Use <code>ignore_errors=True</code> to ignore any errors during the removal</li>
+          <li><code>shutil.move(src, dst)</code>, moves a file or directory from <i>src</i> to <i>dst</i></li>
+          <li><code>shutil.copyfile(src, dst)</code>, copy only the content of a file from <code>src</code> to <code>dst</code>, without preserving
+              any metadata (file size, creation timestamp, modification timestamp etc.)
+          </li>
+      </ul>
+      <div class="shadow-lg bg-light-red1 w-100 mx-auto my-5 rounded border border-1 border-secondary">
+          <p class="ps-2 bg-info">
+              <img style="width:30px; height:30px; vertical-align: middle;" class="img-fluid"
+                  src="{{ url_for('static', filename='img/file-manipulation/information-icon.png') }}"
+                  alt="information circle symbol">
+              <span class="fs-4 fw-semibold">Note</span>
+          </p>
+          <p class="p-3 fs-4 text-dark">
+              Utilize the <code>shutil.copyfile(src, dst)</code> to copy only the content of the file. Use <code>shutil.copy(src, dst)</code>, to copy a file from <code>src</code> to <code>dst</code> while preserving its content and permissions
+              but not its metadata. In order to copy a file from <code>src</code> to <code>dst</code> while preserving both
+              its content and metadata, use the <code>shutil.copy2(src, dst)</code>. Lastly, utilize the <code>shutil.copytree(src, dst)</code>, to recursively copy a directory and its content from <i>src</i> to <i>dst</i>.
+              
+          </p>
+      </div>
+      <p>
+          To enhance understanding, let's illustrate the preceding functions with examples.
+          Suppose we want to build the following file structure shown at the figure below:
+      </p>
+      <div class="row text-center justify-content-center align-items-center">
+          <div class="col-lg-8 col-md-10 col-12">
+              <figure>
+                  <img src="/static/img/file-manipulation/file-structure.png" alt="file-structure" class="img-fluid my-5">
+                  <figcaption class="lead fs-5 fst-italic">An example of a file structure</figcaption>
+              </figure>
+          </div>
+      </div>
+      <p>Let's check our current working directory:</p>
+      <div class="input-code-block">
+          <pre><code><span class="comment"># get the current working directory</span>
+      <span class="python-color1">print</span>(os.<span class="python-color1">getcwd</span>())
+            </code></pre>
+      </div>
+      <div class="output-code-block">
+          <pre><code>c:\Users\Ioannis\Desktop
+              </code></pre>
+      </div>
+      <p>
+        Begin by creating a root folder named <i>MyProject</i> in the current working directory and navigate into it. If it already exists, delete it:
+      </p>
+      <div class="input-code-block">
+          <pre><code><span class="comment"># if the folder exists delete it</span>
+        <span class="python-color2">if</span> os.path.<span class="python-color1">exists</span>(<span class="python-color3">"C:/Users/Ioannis/Desktop/Myproject"</span>):
+      &nbsp;&nbsp;&nbsp;&nbsp;shutil.<span class="python-color1">rmtree</span>(<span class="python-color3">"C:/Users/Ioannis/Desktop/Myproject"</span>)
+          
+      <span class="comment"># create the "MyProject" folder and change the directory inside it</span>
+      os.<span class="python-color1">mkdir</span>(<span class="python-color3">"C:/Users/Ioannis/Desktop/Myproject"</span>)
+      os.<span class="python-color1">chdir</span>(<span class="python-color3">"C:/Users/Ioannis/Desktop/Myproject"</span>)
+      </code></pre>
+      </div>
+      <p>
+          Now get the current working directory again:
+      </p>
+      <div class="input-code-block">
+        <pre><code><span class="comment"># get the current working directory</span>
+    <span class="python-color1">print</span>(os.<span class="python-color1">getcwd</span>())
+          </code></pre>
     </div>
+      <div class="output-code-block">
+          <pre><code>C:\Users\Ioannis\Desktop\Myproject
+              </code></pre>
+      </div>
+      <p>create the <i>Static</i> and the <i>Templates</i> folders inside the <i>MyProject</i> root folder:</p>
+      <div class="input-code-block">
+          <pre><code><span class="comment"># create the "Static" and "Templates" folders</span>
+            os.<span class="python-color1">mkdir</span>(<span class="python-color3">"Static"</span>)
+            os.<span class="python-color1">mkdir</span>(<span class="python-color3">"Templates"</span>)
+      </code></pre>
+      </div>
+      <div class="shadow-lg bg-light-red1 w-100 mx-auto my-5 rounded border border-1 border-secondary">
+          <p class="ps-2 bg-info">
+              <img style="width:30px; height:30px; vertical-align: middle;" class="img-fluid"
+                  src="{{ url_for('static', filename='img/file-manipulation/information-icon.png') }}"
+                  alt="information circle symbol">
+              <span class="fs-4 fw-semibold">Note</span>
+          </p>
+          <p class="p-3 fs-4 text-dark">
+              Use the <code>os.listdir(path)</code> function to list the content of a folder. Use a dot (".") to denote
+              the current working directory and the double dot ("..") to signify the parent directory. If you don't provide any <i>path</i>, it will
+              list the content of the current working directory. This function will show the file and the directory names inside the specified path, <i>path</i>. 
+          </p>
+      </div>
+      <div class="input-code-block">
+          <pre><code><span class="comment"># list the "MyProject" folder</span>
+            os.<span class="python-color1">listdir</span>(<span class="python-color3">"."</span>)
+          </code></pre>
+      </div>
+      <div class="output-code-block">
+          <pre><code>['Static', 'Templates']
+              </code></pre>
+      </div>
+      <p>
+        I have the necessary files in a folder named <i>myfiles</i>, located in a different directory in my machine. 
+        For this reason, I will move this folder into the <i>MyProject</i> directory to use the files later.
+      </p>
+      <div class="input-code-block">
+          <pre><code><span class="comment"># list the "MyProject" folder</span>
+            <span class="comment"># we will see the two previously created, folders </span>
+            <span class="comment"># and the "myfiles" folder with the available files</span>
+            os.<span class="python-color1">listdir</span>()
+          </code></pre>
+      </div>
+      <div class="output-code-block">
+          <pre><code>['myfiles', 'Static', 'Templates']
+              </code></pre>
+      </div>
+      <p>Check the content of the <i>myfiles</i> folder:</p>
+      <div class="input-code-block">
+          <pre><code><span class="comment"># list the "myfiles" folder</span>
+        os.<span class="python-color1">listdir</span>(<span class="python-color3">"myfiles"</span>)
+      </code></pre>
+      </div>
+      <div class="output-code-block">
+          <pre><code>['about.html',
+      'about.png',
+      'index.html',
+      'index.js',
+      'login.html',
+      'main.css',
+      'site-logo.svg']
+              </code></pre>
+      </div>
+      <p>
+          At this point we can start building the root directory structure by moving the files to their respective folders. Continue, 
+          with the <i>index.html</i> and the <i>about.html</i> files:
+      </p>
+      <div class="input-code-block">
+          <pre><code><span class="comment"># move the index.html and the about.html files in the "Templates" folder</span>
+      shutil.<span class="python-color1">move</span>(<span class="python-color3">"myfiles/index.html"</span>, <span class="python-color3">"Templates"</span>)
+      shutil.<span class="python-color1">move</span>(<span class="python-color3">"myfiles/about.html"</span>, <span class="python-color3">"Templates"</span>)
+      </code></pre>
+      </div>
+      <p>
+          Let's see the content of the <i>Templates</i> folder now:
+      </p>
+      <div class="input-code-block">
+          <pre><code><span class="comment"># list the "Templates" folder</span>
+        os.<span class="python-color1">listdir</span>(<span class="python-color3">"Templates"</span>)
+      </code></pre>
+      </div>
+      <div class="output-code-block">
+          <pre><code>['about.html', 'index.html']
+              </code></pre>
+      </div>
+      <p>
+          Create the respective sub-folders:
+      </p>
+      <div class="input-code-block">
+          <pre><code><span class="comment"># create a folder called "AUTH" inside the "Templates" folder</span>
+      os.<span class="python-color1">mkdir</span>(<span class="python-color3">"Templates/AUTH"</span>)
+      </code></pre>
+      </div>
+      <p>
+          And move the respective files from the <i>myfiles</i> folder, in the <i>AUTH</i> folder:
+      </p>
+      <div class="input-code-block">
+          <pre><code><span class="comment"># move the "login.html" file in the "AUTH" folder</span>
+      shutil.<span class="python-color1">move</span>(<span class="python-color3">"myfiles/login.html"</span>, <span class="python-color3">"Templates/AUTH"</span>)
+      </code></pre>
+      </div>
+      <p>
+          Now we need another file called <i>register.html</i> that it is going to be similar to the <i>login.html</i> file. For this 
+          reason make a copy of the <i>login.html</i> file in the <i>AUTH</i> folder with name <i>register.html</i>:
+      </p>
+      <div class="input-code-block">
+          <pre><code><span class="comment"># copy the "login.html" in the same folder ("AUTH") and create</span>
+      <span class="comment"># another file with name "register.html"</span>
+      shutil.<span class="python-color1">copyfile</span>(<span class="python-color3">"Templates/AUTH/login.html"</span>, <span class="python-color3">"Templates/AUTH/register.html"</span>)
+      </code></pre>
+      </div>
+      <p>Check the content of the <i>AUTH</i> folder now:</p>
+      <div class="input-code-block">
+          <pre><code><span class="comment"># check the content of the "AUTH" folder now</span>
+            os.<span class="python-color1">listdir</span>(<span class="python-color3">"Templates/AUTH"</span>)
+      </code></pre>
+      </div>
+      <div class="output-code-block">
+          <pre><code>['login.html', 'register.html']
+              </code></pre>
+      </div>
+      <p>Now change the current workin directory inside the <i>Static</i> folder and create the three folders shown in the image (<i>Images</i>, <i>Javascript</i>, <i>CSS</i>):</p>
+      <div class="input-code-block">
+          <pre><code><span class="comment"># change the current directory to the "Static" folder</span>
+      os.<span class="python-color1">chdir</span>(<span class="python-color3">"Static"</span>)
+      </code></pre>
+      </div>
+      <div class="input-code-block">
+          <pre><code><span class="comment"># create the three folders</span>
+      os.<span class="python-color1">mkdir</span>(<span class="python-color3">"Images"</span>)
+      os.<span class="python-color1">mkdir</span>(<span class="python-color3">"Javascript"</span>)
+      os.<span class="python-color1">mkdir</span>(<span class="python-color3">"CSS"</span>)
+      </code></pre>
+      </div>
+      <p>
+          List the content of the <i>Static</i> folder:
+      </p>
+      <div class="input-code-block">
+          <pre><code><span class="comment"># list the "Static" folder content</span>
+      os.<span class="python-color1">listdir</span>(<span class="python-color3">"."</span>)
+      </code></pre>
+      </div>
+      <div class="output-code-block">
+          <pre><code>['CSS', 'Images', 'Javascript']
+              </code></pre>
+      </div>
+      <p>
+          Move the rest of the files into its corresponding folders:
+      </p>
+      <div class="input-code-block">
+          <pre><code><span class="comment"># move the rest files</span>
+      <span class="python-color1">shutil.move</span>(<span class="python-color3">"../myfiles/site-logo.svg"</span>, <span class="python-color3">"Images"</span>)
+      <span class="python-color1">shutil.move</span>(<span class="python-color3">"../myfiles/about.png"</span>, <span class="python-color3">"Images"</span>)
+      <span class="python-color1">shutil.move</span>(<span class="python-color3">"../myfiles/index.js"</span>, <span class="python-color3">"Javascript"</span>)
+      <span class="python-color1">shutil.move</span>(<span class="python-color3">"../myfiles/main.css"</span>, <span class="python-color3">"CSS"</span>)
+      </code></pre>
+      </div>
+      <p>
+          Lastly, check the content of these three folders:
+      </p>
+      <div class="input-code-block">
+          <pre><code><span class="comment"># list the content of the created folders</span>
+      os.<span class="python-color1">listdir</span>(<span class="python-color3">"Images"</span>)
+      os.<span class="python-color1">listdir</span>(<span class="python-color3">"Javascript"</span>)
+      os.<span class="python-color1">listdir</span>(<span class="python-color3">"CSS"</span>)
+      </code></pre>
+      </div>
+      <div class="output-code-block">
+          <pre><code>['about.png', 'site-logo.svg']
+      ['index.js']
+      ['main.css']
+              </code></pre>
+      </div>
+      <p>
+          We don't need the <i>myfiles</i> folder inside the <i>MyProject</i> root folder now. Remove it:
+      </p>
+      <div class="input-code-block">
+          <pre><code><span class="comment"># now delete the "myfiles" folder that is located in the "MyProject" folder</span>
+      <span class="comment"># if the folder is not empty use the rmtree command</span>
+      <span class="comment"># else use the rmdir command</span>
+      <span class="python-color2">if</span> os.<span class="python-color1">listdir</span>(<span class="python-color3">"../myfiles"</span>):
+      &nbsp;&nbsp;&nbsp;&nbsp;shutil.<span class="python-color1">rmtree</span>(<span class="python-color3">"../myfiles"</span>)
+      <span class="python-color2">else</span>:
+      &nbsp;&nbsp;&nbsp;&nbsp;os.<span class="python-color1">rmdir</span>(<span class="python-color3">"../myfiles"</span>)
+      </code></pre>
+      </div>
+  </div>
+</section>
+<section>
+  <div class="lead fs-3 container-lg">
+      <h1 class="text-center display-4 text-info my-5">Listing and searching folders</h1>
+      <p>
+        While establishing the file structure earlier, we employed the <code>os.listdir(path)</code> function 
+        to enumerate the contents of a folder. This allowed us to retrieve the names of all files 
+        and sub-folders within the specified folder path. Nonetheless, both the <code>glob</code> and <code>pathlib</code> 
+        libraries offer additional functions for this purpose. Let's explore these alternatives 
+        below:
+      </p>
+      <ul>
+          <li><a href="#function-listdir"><code>os.listdir(path)</code></a>, returns a list of file names and sub-directory names in the specified directory (<i>path</i>)</li>
+          <li><a href="#function-glob"><code>glob.glob(path)</code></a>, returns a list of file paths that match the specified path pattern</li>
+          <li><a href="#function-iterdir"><code>Path.iterdir(path)</code></a>, returns an iterator over the entries (both files and directories) in the current directory specified by <i>Path</i></li>
+      </ul>
+      <div class="my-5 bg-light-grey2 p-3 rounded-5 border" id="function-listdir">
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/braces-asterisk.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <p>
+                      <code>os.listdir(path)</code>
+                  </p>
+              </div>
+          </div>
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/card-checklist.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <p>
+                      This command is used in Python to list the files and directories within a directory specified by the <i>path</i> parameter.
+                      It returns a list of strings, where each string represents the name of a file or directory in the specified path
+                  </p>
+              </div>
+          </div>
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/code-slash.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <div class="input-code-block">
+                      <pre><code><span class="comment"># list the contents of a directory</span>
+                os.<span class="python-color1">print</span>(<span class="python-color1">listdir</span>(<span class="python-color3">"c:/Users/User/Desktop/"</span>))
+                </code></pre>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="my-5 bg-light-grey2 p-3 rounded-5 border" id="function-glob">
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/braces-asterisk.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <p>
+                      <code>glob.glob(path)</code>
+                  </p>
+              </div>
+          </div>
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/card-checklist.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <p>
+                      This command is used to search for files and directories that match a specified path pattern using the glob-style wildcard characters (e.g., * for matching any characters and ? for matching a single character).
+                      It returns a list of file paths as strings that match the given pattern.
+                      The glob module is used for this operation, and it allows you to perform more advanced pattern-based searches within directories.
+                      Use <code>recursive=True</code>, to recursively search the whole directory in depth
+                  </p>
+              </div>
+          </div>
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/code-slash.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <div class="input-code-block">
+                    
+                      <pre><code><span class="comment"># List files matching the specified pattern</span>
+                        pattern = <span class="python-color3">"*.txt"</span>
+                        matching_files = glob.<span class="python-color1">glob</span>(pattern)
+              
+              <span class="comment"># Print the list of matching file paths</span>
+              <span class="python-color2">for</span> file_path <span class="python-color2">in</span> matching_files:
+              <span class="python-color1">&nbsp;&nbsp;&nbsp;&nbsp;print</span>(file_path)
+                </code></pre>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="my-5 bg-light-grey2 p-3 rounded-5 border" id="function-iterdir">
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/braces-asterisk.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <p>
+                      <code>Path.iterdir()</code>
+                  </p>
+              </div>
+          </div>
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/card-checklist.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <p>
+                      This command is part of the pathlib module in Python, which provides a modern and more object-oriented approach to working with filesystem paths.
+                      When called on a Path object (e.g., <code>Path("some_directory")</code>), it returns an iterator that yields Path objects representing the entries (both files and directories) in the current directory specified by that Path object
+                  </p>
+              </div>
+          </div>
+          <div class="row justify-content-center">
+              <div class="col-1 text-center">
+                  <img class="d-none d-md-block m-auto p-auto" style="width: 30px; height:30px;"
+                      src="{{ url_for('static', filename='img/file-manipulation/code-slash.svg') }}" alt="code icon">
+              </div>
+              <div class="col-12 col-md-11">
+                  <div class="input-code-block">
+                      <pre><code><span class="comment"># create a pathlib path using the pathlib Path</span>
+                pathlib_path = <span class="python-color1">Path</span>(<span class="python-color3">"path_to_directory"</span>)
 
+                <span class="comment"># Iterate over the content of the directory</span>                
+                <span class="python-color2">for</span> item <span class="python-color2">in</span> directory_path.<span class="python-color1">iterdir</span>():
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="python-color2">if</span> item.<span class="python-color1">is_file</span>():
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="python-color1">print</span>(f<span class="python-color3">"File: {item}"</span>)
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="python-color2">elif</span> item.<span class="python-color1">is_dir</span>():
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="python-color1">print</span>(f<span class="python-color3">"Directory: {item}"</span>)
+                </code></pre>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
 {% endblock %}

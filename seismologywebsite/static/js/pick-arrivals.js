@@ -187,9 +187,13 @@ function initializeParameters() {
         scrollZoom: true,
         responsive: true,
         displayModeBar: true,
-        modeBarButtons: [['pan2d', 'zoom2d', 'resetScale2d', 'resetViews', 'toggleSpikelines']]
+        modeBarButtons: [
+            
+            ['zoom2d', 'pan2d',
+            'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d']
+        ]
     };
-    
+
     layout = {
         title: '',
         margin: {

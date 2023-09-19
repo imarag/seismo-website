@@ -74,7 +74,7 @@
 }
 
 #picking-left-filter, #picking-right-filter {
-    width:120px;
+    width:100px;
     display: inline;
 }
 
@@ -163,7 +163,7 @@
 
 
 .input-code-block {
-    background-color: #f8f8f8;
+    background-color: #fdfbfb;
     color: rgb(0, 0, 0);
     border: black 0.2px solid;
     padding: 10px;
@@ -217,12 +217,17 @@ pre {
 }
 
 .python-color1 {
-    color: rgb(142, 1, 1);
+    color: rgb(184, 6, 6);
 }
 
 .python-color2 {
     color: blue;
 }
+
+.python-color3{
+    color: rgb(123, 160, 123) ;
+}
+
 
 
 /* ########################### seismology introduction page ####################### */
@@ -264,5 +269,9 @@ pre {
 #seismology-intro-container p {
     text-indent: 30px;
     margin: 0px;
+    text-align: justify;
+}
+
+.justified-paragraph {
     text-align: justify;
 }
