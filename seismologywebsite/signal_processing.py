@@ -10,6 +10,13 @@ bp = Blueprint('BP_signal_processing', __name__, url_prefix = '/signal-processin
 
 
 
+def create_path(name):
+    path = os.path.join(
+        current_app.config['DATA_FILES_FOLDER'], 
+        str(session.get("user_id", "test")) + "_" + name
+        )
+    return path
+
 
 @bp.route('/download-mseed-file', methods=['GET'])
 def download_mseed_file():
@@ -40,21 +47,22 @@ def upload_mseed_file():
         error_message = str(e)
         return raise_error(error_message)
 
-    # if the stream has 0, 1 or more that 3 traces abort
-    if len(stream) <= 1 or len(stream) > 3:
-        error_message = f'The stream must contain two or three traces. Your stream contains {len(stream)} traces!'
+    # if the stream has 0, 1 or more than 3 traces abort
+    if len(stream) not in [2, 3]:
+        error_message = f'The stream must contain two or three traces to select its arrivals. Your stream contains {len(stream)} traces!'
         return raise_error(error_message)
 
     # if at least one of the traces is empty abort
     for tr in stream:
         if len(tr.data) == 0:
-            error_message = 'One or more of your traces in the stream object, is empty!'
+            error_message = 'One or more than one of your traces in the stream object, is empty!'
             return raise_error(error_message)
 
     # if the user hasn't defined nor the fs neither the delta, then error
     if stream[0].stats['sampling_rate'] == 1 and stream[0].stats['delta'] == 1:
         error_message = 'Neither sampling rate (fs[Hz]) nor sample distance (delta[sec]) are specified in the trace objects. Consider including them in the stream traces, for the correct x-axis time representation!'
         return raise_error(error_message)
+
 
     # get the file path to save the mseed file on the server
     mseed_save_file_path = os.path.join(current_app.config['DATA_FILES_FOLDER'], str(session.get("user_id", "test")) + "_signal-processing.mseed")

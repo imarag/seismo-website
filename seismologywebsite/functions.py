@@ -4,8 +4,7 @@ import os
 from flask_mail import Message
 
 
-def get_record_name(tool):
-    mseed_path = os.path.join(current_app.config['DATA_FILES_FOLDER'], str(session.get("user_id", "test")) + "_" + tool)
+def get_record_name(mseed_path):
     # read it
     mseed = read(mseed_path)
     # create the record name

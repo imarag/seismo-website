@@ -25,12 +25,12 @@ clearButton.addEventListener("click", () => {
 })
 
 computeButton.addEventListener("click", ()=> {
-    let queryParametersURL = `/calculate-distance?point1-lat-input=${point1LatInput.value}&point1-lon-input=${point1LonInput.value}&point2-lat-input=${point2LatInput.value}&point2-lon-input=${point2LonInput.value}`
+    let queryParametersURL = `/distance-between-points/calculate-distance?point1-lat-input=${point1LatInput.value}&point1-lon-input=${point1LonInput.value}&point2-lat-input=${point2LatInput.value}&point2-lon-input=${point2LonInput.value}`
     calculateDistace(queryParametersURL);
 })
 
 mapButton.addEventListener("click", ()=> {
-    let queryParametersURL = `/calculate-distance-map?point1-lat-input=${point1LatInput.value}&point1-lon-input=${point1LonInput.value}&point2-lat-input=${point2LatInput.value}&point2-lon-input=${point2LonInput.value}`
+    let queryParametersURL = `/distance-between-points/calculate-distance-map?point1-lat-input=${point1LatInput.value}&point1-lon-input=${point1LonInput.value}&point2-lat-input=${point2LatInput.value}&point2-lon-input=${point2LonInput.value}`
     createMap(queryParametersURL);
 })
 

@@ -8,6 +8,12 @@ from .functions import convert_mseed_to_json, raise_error
 bp = Blueprint('BP_pick_arrivals', __name__, url_prefix = '/pick-arrivals')
 
 
+def create_path(name):
+    path = os.path.join(
+        current_app.config['DATA_FILES_FOLDER'], 
+        str(session.get("user_id", "test")) + "_" + name
+        )
+    return path
 
 @bp.route('/upload-mseed-file', methods=['POST'])
 def upload():
@@ -31,7 +37,7 @@ def upload():
 
     # if the stream has 0, 1 or more than 3 traces abort
     if len(stream) not in [2, 3]:
-        error_message = f'The stream must contain two or three traces. Your stream contains {len(stream)} traces!'
+        error_message = f'The stream must contain two or three traces to select its arrivals. Your stream contains {len(stream)} traces!'
         return raise_error(error_message)
 
     # if at least one of the traces is empty abort
@@ -48,19 +54,7 @@ def upload():
     # if the user hasn't defined any channel then abort
     for tr in stream:
         if not tr.stats.channel:
-            error_message = 'At least one of your traces does not have a defined channel (ej. E or N or Z). You should define the channel of the traces in order to be able to select the P and S arrivals one the corresponding recordings!'
-            return raise_error(error_message)
-
-    # if the user hasn't defined the starttime
-    for tr in stream:
-        if tr.stats.starttime == UTCDateTime(1970, 1, 1, 0, 0):
-            error_message = 'You should define the start time of your traces. The program returns the arrivals as seconds from the start time. So you need to define it to be able to use it later!'
-            return raise_error(error_message)
-
-    # if the user hasn't defined the station name
-    for tr in stream:
-        if not tr.stats.station:
-            error_message = 'You should define the station name of the record. The program uses the station name in the file name that contains the arrival values!'
+            error_message = 'At least one of your traces does not have a defined channel (ej. E or N or Z). You should define the channel of the traces in order to be able to select the P and S arrivals one the corresponding components!'
             return raise_error(error_message)
 
 

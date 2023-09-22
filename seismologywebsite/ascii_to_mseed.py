@@ -12,6 +12,14 @@ from .functions import raise_error
 bp = Blueprint('BP_ascii_to_mseed', __name__, url_prefix = '/ascii-to-mseed')
 
 
+def create_path(name):
+    path = os.path.join(
+        current_app.config['DATA_FILES_FOLDER'], 
+        str(session.get("user_id", "test")) + "_" + name
+        )
+    return path
+
+
 def check_parameter_input(param):
     if not param:
         ret_value = None
