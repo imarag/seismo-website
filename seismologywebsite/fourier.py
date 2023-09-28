@@ -1,4 +1,4 @@
-from flask import Blueprint, current_app, render_template, abort, request, jsonify, session, send_file
+from flask import Blueprint, current_app, render_template, abort, request, jsonify, session, send_file, make_response
 import os
 from obspy.core import read
 from obspy.core.trace import Trace
@@ -6,7 +6,7 @@ from obspy.core.stream import Stream
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from .functions import convert_mseed_to_json, get_record_name, raise_error
+from .functions import convert_mseed_to_json, get_record_name, raise_error, validate_seismic_file
 
 bp = Blueprint('BP_fourier_spectra', __name__, url_prefix = '/fourier-spectra')
 
@@ -19,7 +19,7 @@ def create_path(name):
     return path
 
 
-@bp.route('/upload-mseed-file', methods=['POST'])
+@bp.route('/upload-seismic-file', methods=['POST'])
 def upload():
     # get the files
     files = request.files
@@ -30,44 +30,29 @@ def upload():
         return raise_error(error_message)
 
     # Get the uploaded file from the request
-    mseed_file = files['file']
+    seismic_file = files['file']
 
-    # Read the MSeed file using obspy
     try:
-        stream = read(mseed_file)
+        stream = read(seismic_file)
     except Exception as e:
         error_message = str(e)
         return raise_error(error_message)
-    
-    # if the stream has 0, 1 or more than 3 traces abort
-    if len(stream) not in [2, 3]:
-        error_message = f'The stream must contain two or three traces to select its arrivals. Your stream contains {len(stream)} traces!'
-        return raise_error(error_message)
 
-    # if at least one of the traces is empty abort
-    for tr in stream:
-        if len(tr.data) == 0:
-            error_message = 'One or more of your traces in the stream object, is empty.'
-            return raise_error(error_message)
+    stream_validation_message = validate_seismic_file(stream)
 
-    # if the user hasn't defined nor the fs neither the delta, then error
-    if stream[0].stats['sampling_rate'] == 1 and stream[0].stats['delta'] == 1:
-        error_message = 'Neither sampling rate (fs[Hz]) nor sample distance (delta[sec]) are specified in the trace objects. Consider including them in the stream traces, for the correct x-axis time representation!'
-        return raise_error(error_message)
+    if stream_validation_message != 'ok':
+        return raise_error(stream_validation_message)
 
     # get the file path to save the mseed file on the server
-    mseed_save_file_path = create_path('fourier-spectra-tool-stream.mseed')  
+    mseed_file_save_path = create_path('fourier-spectra-tool-stream.mseed')  
 
-    # write the uploaded file
-    stream.write(mseed_save_file_path)
+    # write the uploaded file as mseed
+    stream.write(mseed_file_save_path, format='MSEED')
 
     # convert the uploaded mseed file to json
     json_data = convert_mseed_to_json(stream)
     
     return json_data
-
-
-
 
 
 
@@ -77,7 +62,7 @@ def compute_fourier():
     # initialize a total dicitonary to return
     return_dict = {}
 
-    # get the uploaded mseed file path
+    # get the saved mseed file path
     mseed_file_path = create_path('fourier-spectra-tool-stream.mseed') 
 
     # create a path to save the fourier data
@@ -124,7 +109,9 @@ def compute_fourier():
     elif noise_selected == 'true' and float(noise_window_right_side) > total_duration:
         error_message = 'The noise window must end before the end time of the time series! Consider moving the right side of the noise window to the left!'
     elif noise_selected == 'true' and float(noise_window_right_side) - float(window_length) < 0:
-        error_message = 'The noise window must start after start time of the time series! Consider reducing the noise length or moving the right side of the noise window, to the right!'
+        error_message = 'The noise window must start after the start time of the time series! Consider reducing the noise length or moving the right side of the noise window, to the right!'
+    elif float(window_length) == 0:
+        error_message = 'The window length must be greater than zero!'
 
     if error_message:
         return raise_error(error_message)
@@ -145,8 +132,12 @@ def compute_fourier():
         # get the current trace channel
         channel = df_s.stats.channel
 
-        # trim the waveform between the user selectd window
-        df_s.trim(starttime = starttime + float(signal_window_left_side), endtime=starttime + float(signal_window_left_side) + float(window_length))
+        try:
+            # trim the waveform between the user selectd window
+            df_s.trim(starttime = starttime + float(signal_window_left_side), endtime=starttime + float(signal_window_left_side) + float(window_length))
+        except Exception as e:
+            error_message = str(e)
+            raise_error(error_message)
         
         # get the npts after the trim
         npts = df_s.stats["npts"]
@@ -157,9 +148,13 @@ def compute_fourier():
         # calculate the frequnecy array to plot the fourier
         freq_x = np.linspace(0 , fnyq , sl)
 
-        # compute the fft of the signal
-        yf_s = np.fft.fft(df_s.data[:npts]) 
-        y_write_s = dt * np.abs(yf_s)[0:sl]
+        try:
+            # compute the fft of the signal
+            yf_s = np.fft.fft(df_s.data[:npts]) 
+            y_write_s = dt * np.abs(yf_s)[0:sl]
+        except Exception as e:
+            error_message = str(e)
+            raise_error(error_message)
 
         # create a dictionary for the signal
         fourier_data_dict[trace_label]['signal'] = {
@@ -173,12 +168,20 @@ def compute_fourier():
             # get a copy of the trace for the noise
             df_p = mseed_data[i].copy()
 
-            # trim it
-            df_p.trim(starttime = starttime + float(noise_window_right_side) - float(window_length), endtime=starttime + float(noise_window_right_side))
+            try:
+                # trim it
+                df_p.trim(starttime = starttime + float(noise_window_right_side) - float(window_length), endtime=starttime + float(noise_window_right_side))
+            except Exception as e:
+                error_message = str(e)
+                raise_error(error_message)
             
-            # calculate the fourier and create the object for the noise
-            yf_p = np.fft.fft(df_p.data[:npts]) 
-            y_write_p = dt * np.abs(yf_p)[0:sl]
+            try:
+                # calculate the fourier and create the object for the noise
+                yf_p = np.fft.fft(df_p.data[:npts]) 
+                y_write_p = dt * np.abs(yf_p)[0:sl]
+            except Exception as e:
+                error_message = str(e)
+                raise_error(error_message)
 
             fourier_data_dict[trace_label]['noise'] = {
                 'xdata': freq_x.tolist(),
@@ -205,7 +208,7 @@ def compute_fourier():
 
     # create the graph here
     figfourier, axfourier = plt.subplots(len(fourier_data_dict), 1, figsize=(12,6))
-    colors = ['#5E62FF', '#B9BBFF', '#FFF532', '#FDF89E', '#FE4252', '#FBA3AA']
+    colors = ['#5E62FF', '#B9BBFF', '#0a0a0a', '#969595', '#b50421', '#fc8b9e']
     xdata = fourier_data_dict["trace-0"]["signal"]["xdata"]
 
     color_i = 0
@@ -220,11 +223,14 @@ def compute_fourier():
             axfourier[n].plot(xdata, ydata, color=colors[color_i], lw=1, label=label_name)
             color_i += 1
 
-        axfourier[n].legend(title=get_record_name(mseed_file_path))
+        axfourier[n].legend(loc='upper left', fontsize=11, facecolor='w', title=get_record_name(mseed_file_path), title_fontsize=11)
         axfourier[n].set_xscale('log')
         axfourier[n].set_yscale('log')
-        axfourier[n].set_xlabel("frequency [Hz]")
-        
+        axfourier[n].set_xlabel("frequency [Hz]", fontsize=14)
+        axfourier[n].grid(color='grey', ls='-', which='both', alpha=0.1)
+        axfourier[n].tick_params(axis='both', which='both', labelsize=14)
+
+    plt.tight_layout()
     figfourier.savefig(fourier_data_graph_path)
 
     # here i check if the user checked to calculate also the hvsr curves
@@ -260,8 +266,8 @@ def compute_fourier():
             horizontal_fourier = horizontal_traces[0]
             hvsr = horizontal_fourier / vertical_traces
         else:
-            horizontal_fourier = horizontal_traces[0] + horizontal_traces[1]
-            hvsr = np.sqrt(horizontal_fourier / vertical_traces)
+            mean_horizontal_fourier = np.sqrt((horizontal_traces[0]**2 + horizontal_traces[1]**2) / 2)
+            hvsr = mean_horizontal_fourier / vertical_traces
 
         # create a dictionary to save the hvsr data
         hvsr_data_dict = {'xdata': list(xdata_hvsr), 'ydata': list(hvsr)}
@@ -270,13 +276,15 @@ def compute_fourier():
         df_hvsr_data.to_csv(hvsr_data_csv_path, index=None)
 
         fighvsr, axhvsr = plt.subplots(1, 1, figsize=(12,6))
-
         axhvsr.plot(xdata_hvsr, hvsr, color='blue', lw=1, label=f"HVSR")
-        axhvsr.legend(title=get_record_name(mseed_file_path))
+        axhvsr.legend(title='20230405_040510_SEIS')
         axhvsr.set_xscale('log')
         axhvsr.set_yscale('log')
-        axhvsr.set_xlabel("frequency [Hz]")
-        axhvsr.set_xlabel("HVSR")
+        axhvsr.set_xlabel("frequency [Hz]", fontsize=20)
+        axhvsr.legend(loc='upper left', fontsize=15, facecolor='w', title=get_record_name(mseed_file_path), title_fontsize=15)
+        axhvsr.grid(color='grey', ls='-', which='both', alpha=0.1)
+        axhvsr.tick_params(axis='both', which='both', labelsize=17)
+        plt.tight_layout()
         fighvsr.savefig(hvsr_data_graph_path)
 
         return_dict["hvsrdata"] = hvsr_data_dict

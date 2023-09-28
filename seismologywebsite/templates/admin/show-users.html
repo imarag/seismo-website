@@ -36,22 +36,27 @@ Fourier Spectra
             <div class="row justify-content-center align-items-center fs-5 bg-info text-dark rounded">
                 <div class="col-12 col-xl-2 text-center">
                     {% if user['email'] == 'giannis.marar@hotmail.com' %}
-                        <p>{{ user['id'] }} (admin)</p>
+                        <p>{{ user.id }} (admin)</p>
                     {% else %}
-                        <p>{{ user['id'] }}</p>
+                        <p>{{ user.id }}</p>
                     {% endif %}
                 </div>
                 <div class="col-12 col-xl-3 text-center">
-                    <p>{{ user['email'] }}</p>
+                    <p>{{ user.email }}</p>
                 </div>
                 <div class="col-12 col-xl-3 text-center">
-                    <p>{{ user['fullname'] }}</p>
+                    <p>{{ user.fullname }}</p>
                 </div>
                 <div class="col-6 col-xl-2 text-center">
-                    <p>{{ user['last_login'] }}</p>
+                    <p>{{ user.last_login }}</p>
                 </div>
                 <div class="col-6 col-xl-2 text-center">
-                    <p>{{ user['registered_date'] }}</p>
+                    <p>{{ user.registered_date }}</p>
+                </div>
+            </div>
+            <div class="row justify-content-center align-items-center">
+                <div class="col-auto">
+                    <a class="btn btn-danger mt-3" href="{{ url_for('BP_admin.delete_user', user_id=user.id) }}">delete user</a>
                 </div>
             </div>
             <hr>

@@ -61,7 +61,7 @@ noiseSliderDiv.style.display = 'none';
 // add nosie button none starting
 removeNoiseButton.style.display = 'none';
 
-// disable the fourier and the hvsr tabs when the user uploads an mseed file
+// disable the fourier and the hvsr tabs when the user uploads the file
 fourierTab.disabled = true;
 hvsrTab.disabled = true;
 
@@ -78,11 +78,11 @@ document.querySelector("#upload-another-file-button").addEventListener('click', 
 
 // add the change event listeners to the input elements
 uploadFileInput.addEventListener('change', (ev) => {
-    uploadMseedFile(ev)
+    uploadSeismicFile(ev)
 })
 
 uploadAnotherFileInput.addEventListener('change', (ev) => {
-    uploadMseedFile(ev)
+    uploadSeismicFile(ev)
 })
 
 calculateHVSRCheckbox.addEventListener('change', () => {
@@ -376,7 +376,7 @@ noiseRightSideInput.addEventListener('keydown', (event) => {
 
 
 // call this function when the user uploads a file
-function uploadMseedFile(ev) {
+function uploadSeismicFile(ev) {
     // get all the files
     let files = ev.target.files;
 
@@ -386,13 +386,13 @@ function uploadMseedFile(ev) {
     }
 
     // get the first file
-    let mseedFile = files[0];
+    let seismicFile = files[0];
 
     // create the formData
     let formData = new FormData();
 
     // Append the MSeed file to the FormData object
-    formData.append('file', mseedFile);
+    formData.append('file', seismicFile);
 
     // activate the spinner
     spinnerDiv.style.display = 'block';
@@ -401,8 +401,8 @@ function uploadMseedFile(ev) {
     uploadFileInput.value = null;
     uploadAnotherFileInput.value = null;
 
-    // fetch to the upload-mseed-file in flask and do a POST request
-    fetch('/fourier-spectra/upload-mseed-file', {
+    // fetch to the upload-seimsic-file in flask and do a POST request
+    fetch('/fourier-spectra/upload-seismic-file', {
         method: 'POST',
         body: formData
       })
@@ -425,7 +425,7 @@ function uploadMseedFile(ev) {
             // if ok just return the json response
             return response.json()
         })
-        .then(mseedData => {
+        .then(seismicData => {
             // deactivate spinner
             spinnerDiv.style.display = 'none';
 
@@ -438,7 +438,7 @@ function uploadMseedFile(ev) {
             document.querySelector("#fourier-spectra-start-by-upload-container").style.display = "none";
 
             // convert the returned json object to a form that i can use to plot the graph
-            let convertedMseedData = prepareTracesList(mseedData);
+            let convertedSeismicData = prepareTracesList(seismicData);
             
             layout = {
                 title: '',
@@ -466,7 +466,7 @@ function uploadMseedFile(ev) {
             }; 
 
             // create the plot
-            createNewPlot(convertedMseedData);
+            createNewPlot(convertedSeismicData);
 
             // disable the fourier and the hvsr tabs when the user uploads an mseed file
             fourierTab.disabled = true;
@@ -474,8 +474,8 @@ function uploadMseedFile(ev) {
 
             // Add new options (loop through the traces and get the channel)
             let newOptions = [];
-            for (tr in mseedData) {
-                option = { value: mseedData[tr]["stats"]["channel"], text: mseedData[tr]["stats"]["channel"]};
+            for (tr in seismicData) {
+                option = { value: seismicData[tr]["stats"]["channel"], text: seismicData[tr]["stats"]["channel"]};
                 newOptions.push(option);
             }
 
@@ -496,7 +496,7 @@ function uploadMseedFile(ev) {
 
 
 
-function prepareTracesList(mseedDataObject) {
+function prepareTracesList(seimsicDataObject) {
     let xData;
     let yData;
     // append here all the traces in an Object form (check below)
@@ -506,14 +506,14 @@ function prepareTracesList(mseedDataObject) {
     // define the colors of the record signals
     let colors = ['#FFF256', '#6495ED', '#FF5677', '#DAF7A6', '#FFFFFF']
 
-    for (tr in mseedDataObject) {
+    for (tr in seimsicDataObject) {
         tracesList.push(
             { 
-                x: mseedDataObject[tr]['xdata'], 
-                y: mseedDataObject[tr]['ydata'], 
+                x: seimsicDataObject[tr]['xdata'], 
+                y: seimsicDataObject[tr]['ydata'], 
                 type: 'scatter', 
                 mode: 'lines', 
-                name: `${mseedDataObject[tr]['stats']['channel']}` , 
+                name: `${seimsicDataObject[tr]['stats']['channel']}` , 
                 xaxis:`x${metr}`, 
                 yaxis: `y${metr}`,
                 line: {color: colors[metr-1], width: 1}

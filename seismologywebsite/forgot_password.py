@@ -1,10 +1,10 @@
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from werkzeug.security import generate_password_hash
-from .db import get_db
 from .forms import ForgotPasswordForm, ResetPasswordForm
 from .functions import send_email
 from . import mail 
 from flask_mail import Message
+from . import User, db
 
 bp = Blueprint('BP_forgotpassword', __name__, url_prefix = '/forgot-password')
 
@@ -26,13 +26,8 @@ def send_reset_email():
         # get the email from the password reset when you hit forgot password
         user_email = form['email'].data
 
-        # get the database
-        db = get_db()
-        
         # search the database for the email that the user provided
-        user = db.execute(
-            'SELECT * FROM user WHERE email = ?', (user_email, )
-        ).fetchone()
+        user = User.query.filter_by(email=user_email).first()
 
         # if it can't find any user with that email then abort
         if not user:
@@ -51,7 +46,7 @@ def send_reset_email():
             </div>
         """
 
-        send_email(mail, user['email'], message)
+        send_email(mail, user.email, message)
         flash("An email has been sent to your email to reset your password!", 'danger')
         return(redirect(url_for('home')))
     
@@ -75,17 +70,13 @@ def set_new_password(user_email):
         new_password = form["new_password"].data
         new_confirmation_password = form["confirm_new_password"].data
 
-        # open the database
-        db = get_db()
 
         # get the user with that email (the email that we pass in <user_email>)
-        user = db.execute("SELECT * FROM user WHERE email = ?", (user_email,)).fetchone()
+        user = User.query.filter_by(email=user_email).first()
 
-        # update the password of that user with user['id'] id
-        db.execute(
-            'UPDATE user SET password = ? WHERE id = ?', (generate_password_hash(new_password), user['id'])
-            )
-        db.commit()
+        user.password = generate_password_hash(new_password)
+
+        db.session.commit()
     
         # flash successful update
         flash('Your password has been reset!', 'success')

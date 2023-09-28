@@ -1,36 +1,33 @@
 from flask import Blueprint, render_template, request, current_app, redirect, url_for
 import re
 import math
-from .db import get_db
-
+from . import Topic, User, db
 
 
 bp = Blueprint('BP_search_topics', __name__, url_prefix = '/search-topics')
 
 @bp.route("/get-search-topics")
 def get_search_topics():
-
-    database = get_db()
-
+    
     if current_app.config['topic_type_selected'] == "all topics":
-        topics = database.execute("SELECT * FROM topics").fetchall()
+        topics = Topic.query.all()
         selectedradiobutton = "all topics"
 
     elif current_app.config['topic_type_selected'] == "articles":
-        topics = database.execute("SELECT * FROM topics WHERE type = ?", ('static',)).fetchall()
+        topics = Topic.query.filter_by(type='static').all()
         selectedradiobutton = "articles"
 
     elif current_app.config['topic_type_selected'] == 'interactive tools':
-        topics = database.execute("SELECT * FROM topics WHERE type = ?", ('interactive',)).fetchall()
+        topics = Topic.query.filter_by(type='interactive').all()
         selectedradiobutton = "interactive tools"
     else:
         lower_search_param  = current_app.config['search_topic_pattern'].lower()
         selectedradiobutton = "all topics"
-        topics = database.execute("SELECT * FROM topics").fetchall()
+        topics = Topic.query.all()
         
         found_topics_list = []
         for tp in topics:
-            lower_description = tp['description'].lower()
+            lower_description = tp.description.lower()
             if re.search(lower_search_param, lower_description):
                 found_topics_list.append(tp)
         topics = found_topics_list

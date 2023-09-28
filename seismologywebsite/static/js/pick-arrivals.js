@@ -52,13 +52,13 @@ uploadFileInput.addEventListener('change', (ev) => {
     }
 
     // get the selected file that is the first one
-    let mseedFile = files[0];
+    let seismicFile = files[0];
 
     // create the formData
     let formData = new FormData();
 
-    // Append the MSeed file to the FormData object
-    formData.append('file', mseedFile);
+    // Append the seismic file to the FormData object
+    formData.append('file', seismicFile);
 
     // activate the spinner
     spinnerDiv.style.display = 'block';
@@ -67,7 +67,7 @@ uploadFileInput.addEventListener('change', (ev) => {
     uploadFileInput.value = null;
 
     // post request to get the file in the flask server, read it as mseed and return its data as json
-    fetch('/pick-arrivals/upload-mseed-file', {
+    fetch('/pick-arrivals/upload-seismic-file', {
         method: 'POST',
         body: formData
       })
@@ -88,27 +88,27 @@ uploadFileInput.addEventListener('change', (ev) => {
               }
             return response.json()
         })
-        .then(mseedData => {
+        .then(seismicData => {
             // deactivate spinner
             spinnerDiv.style.display = 'none';
 
             // rename the dummy paragraph to have the record name
             // the response is a dict with keys 'trace-0', 'trace-1' etc..and in each one, that is inside
-            // mseedData["trace-0"] and mseedData["trace-1"] i have the 'record_name'
-            document.querySelector("#record-name-paragraph").textContent = mseedData["trace-0"]["record-name"];
+            // seismicData["trace-0"] and seismicData["trace-1"] i have the 'record_name'
+            document.querySelector("#record-name-paragraph").textContent = seismicData["trace-0"]["record-name"];
 
             // convert returned json object to a form that i can use to plot the graph
-            let convertedMseedData = prepareTracesList(mseedData);
+            let convertedSeismicData = prepareTracesList(seismicData);
             
             // initialize some parameters
             initializeParameters();
 
             // create the plot
-            createNewPlot(convertedMseedData);
+            createNewPlot(convertedSeismicData);
         })
         .catch(error => {
           // Handle any errors during the upload process
-          console.error('Error uploading MSeed file:', error);
+          console.error('Error uploading the seismic file:', error);
         });
 })
 
@@ -155,15 +155,15 @@ function applyFilterPost(filterValue) {
         }
         return response.json()
     })
-    .then(mseedData => {
+    .then(seismicData => {
         // deactivate the spinner
         spinnerDiv.style.display = 'none';
 
-        // get the mseed and convert them to plot them
-        let convertedMseedData = prepareTracesList(mseedData);
+        // get the seismic data and convert them to plot them
+        let convertedSeismicData = prepareTracesList(seismicData);
         
         // create the plot
-        createNewPlot(convertedMseedData);
+        createNewPlot(convertedSeismicData);
     })
     .catch(error => {
         console.error('Error:', error);
@@ -219,21 +219,21 @@ function initializeParameters() {
 }
 
 
-function prepareTracesList(mseedDataObject) {
+function prepareTracesList(seismicDataObject) {
     let xData;
     let yData;
     let tracesList = [];
     let metr = 1;
     let colors = ['#3e3efa', '#f5e027', '#1a241c'];
 
-    for (tr in mseedDataObject) {
+    for (tr in seismicDataObject) {
         tracesList.push(
             { 
-                x: mseedDataObject[tr]['xdata'], 
-                y: mseedDataObject[tr]['ydata'], 
+                x: seismicDataObject[tr]['xdata'], 
+                y: seismicDataObject[tr]['ydata'], 
                 type: 'scatter', 
                 mode: 'lines', 
-                name: `${mseedDataObject[tr]['stats']['channel']}` , 
+                name: `${seismicDataObject[tr]['stats']['channel']}` , 
                 xaxis:`x${metr}`, 
                 yaxis: `y${metr}`,
                 line: {color: colors[metr-1]}
@@ -445,7 +445,7 @@ saveArrivals.addEventListener('click', () => {
         })
         .catch(error => {
           // Handle any errors during the upload process
-          console.error('Error uploading MSeed file:', error);
+          console.error('Error uploading the seismic file:', error);
         });
     
 })

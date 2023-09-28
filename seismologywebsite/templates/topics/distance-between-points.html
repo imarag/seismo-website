@@ -9,13 +9,15 @@ Distance between points
 {% block content %}
 
 
-    <section class="bg-light-blue1 py-5">
-        <div class="row justify-content-center align-items-center">
-            <div class="col-lg-8 col-md-8 col-10 ">
-                <h1 class="display-3 text-center fw-semibold text-md-start">Distance calculator</h1>
-                <p class="text-muted text-center fs-2 text-md-start">Calculate the distance between two points on WGS84</p>
+    <section class="py-5 bg-light-blue1">
+        <div class="row justify-content-around align-items-center gy-4">
+            <div class="col-11 col-md-8 col-lg-6">
+                <h1 class="display-3 text-center text-dark fw-semibold ">Distance calculator</h1>
+                <p class="text-dark text-center fs-2">Calculate the distance between two points on WGS84</p>
             </div>
-            <div class="col-lg-2 col-4 col-md-3">
+        </div>
+        <div class="row justify-content-around align-items-center gy-4">
+            <div class="col-5 col-sm-4 col-md-3 col-lg-2 text-center">
                 <img src="{{ url_for('static', filename='img/templates-icons/distance-between-points.png') }}" alt="image of distance calculator template" class="img-fluid">
             </div>
         </div>

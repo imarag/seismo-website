@@ -20,13 +20,14 @@ Fourier Spectra
         </div>
     </div>
 </section>
+
 <section>
     <div class="fs-4 lead container-lg my-5">
         <div class="row justify-content-center">
             <div class="col-11 col-md-9 col-lg-8">
                 <p class="text-muted text-start my-5">
-                    Upload an MSEED file to compute the Fourier Spectra at the signal window on the waveform. Optionally, add a noise window 
-                    to compute the Fourier Spectra for the noise as well. 
+                    Upload a seismic data file (e.g., MiniSEED, SEG-Y, GCF etc.) to compute the Fourier Spectra at a signal and/or a noise window on the waveform. 
+                    Optionally, calculate the HVSR curve from the horizontal(s) and the vertical components.
                 </p>
                 <div class="accordion" id="accordionExample">
                     <div class="accordion-item">
@@ -40,32 +41,34 @@ Fourier Spectra
                             <div class="accordion-body">
                                 <p>
                                     Analyze the Fourier Spectra within a specified seismic record window. Begin by
-                                    uploading an MSEED file. Then, utilize the <i>signal left side</i> slider and
+                                    uploading a seismic data file. Then, utilize the <i>signal left side</i> slider and
                                     the <i>window length</i> slider to manipulate the position and length of the signal
                                     window (highlighted in red). This will allow you to precisely define the
                                     section for which you want to compute the Fourier Spectra. For added functionality,
                                     you can use the <kbd>add</kbd> button to compute the Fourier Spectra for
                                     a noise window (indicated in blue). By adjusting the <i>Noise window right side</i>
                                     slider, you can align the right side of the noise window with the signal
-                                    window. These two windows will share the same duration. To calculate the Fourier
+                                    window. These two windows will share the same duration or length. To calculate the Fourier
                                     spectra for the entire time series, simply click the <kbd>apply</kbd> button,
                                     to make the length of the signal window cover all the time series.
                                 </p>
                                 <p>
                                     Once you're prepared, initiate the computation of the Fourier Spectra by selecting
                                     the
-                                    <kbd>Compute Fourier</kbd> button. The resulting Fourier Spectra will be accessible
-                                    under the <i>Fourier Spectra</i> tab at the top. Here, you can opt to
+                                    <kbd>Compute Fourier</kbd> button at the bottom. Optionally, check the <i>Compute HVSR</i> checkbox to calculate the HVSR curve in addition to the 
+                                    Fourier Spectra. Make sure to select the vertical component of your records to appropriately compute the HVSR curve. 
+                                    The resulting Fourier Spectra and the HVSR curve will be accessible
+                                    under the <i>Fourier</i> and the <i>HVSR</i> tab at the top, respectively. There, you can opt to
                                     download either the graphical representation or the data in ASCII format.
-                                    Also navigate to the <i>HVSR</i> section to calculate the Horizontal-to-Vertical
-                                    Spectral Ratio (HVSR) of the record. Specify the vertical component of your seismic
-                                    components for HVSR computation.
                                 </p>
                                 <p>
-                                    Lastly take into account that you can download the graph automatically by clicking
-                                    on the download <kbd>graph</kbd> button
-                                    or you can just click on the download the <kbd>data</kbd> button to download the
-                                    data and generate a graph on your own.
+                                    According to the Fourier Spectra calculation you can check the script used <a target="_blank" href="{{ url_for('static', filename='static-files/fourier_spectra_calculation_script.txt') }}">here</a>
+                                </p>
+                                <p>
+                                    According to the HVSR curve, when there are two horizontal components, it is determined by dividing the average horizontal Fourier Spectra by the Fourier 
+                                    Spectra from the vertical component. This average horizontal spectra is computed as the square root of half the sum of the squares of the two horizontal 
+                                    Fourier spectra, i.e., <code>sqrt((hor1^2 + hor2^2) / 2)</code>. When there's one horizontal component and one vertical component, the HVSR curve is simply the result 
+                                    of dividing the horizontal Fourier spectra by the vertical spectra.
                                 </p>
                             </div>
                         </div>
@@ -73,8 +76,8 @@ Fourier Spectra
                 </div>
     
                 <p class="text-muted text-center mt-5 fs-5">
-                    Don't have an MSEED file ? Click <a href="{{ url_for('show_topic', topic_name='ascii-to-mseed.html') }}"
-                        class="link-info">here</a> to create one using data defined in an ASCII file
+                    Don't have an seismic data file ? Click <a href="{{ url_for('show_topic', topic_name='ascii-to-mseed.html') }}"
+                        class="link-info">here</a> to create a MiniSEED file format using data defined in an ASCII file
                     or <a href="{{ url_for('static', filename='static-files/test-mseed-file.mseed') }}"
                         class="link-info">download</a> one, to try the tool.
                 </p>
@@ -89,7 +92,7 @@ Fourier Spectra
             <div class="col-12 col-md-11 col-lg-10">
                 <div class="text-bg-dark rounded p-5 mt-5">
                     <div class="mb-4">
-                        <button class="btn btn-outline-info" id="upload-file-button">Upload mseed</button>
+                        <button class="btn btn-outline-info" id="upload-file-button">Upload file</button>
                         <input 
                             type="file" 
                             id="upload-file-input" 
@@ -122,7 +125,7 @@ Fourier Spectra
                                 id="fourier-spectra-start-by-upload-container">
                                 <div class="col text-center">
                                     <p class="fs-3">Start by <button class="btn btn-outline-info"
-                                            id="upload-another-file-button">uploading</button> an mseed file</p>
+                                            id="upload-another-file-button">uploading</button> a seismic data file</p>
                                     <input type="file" id="upload-another-file-input" value="upload-another-file-input"
                                         name="upload-another-file-input" style="display: none;">
                                 </div>
@@ -204,7 +207,7 @@ Fourier Spectra
                                             <div>
                                                 <input class="form-check-input" type="checkbox" value="" id="calculate-hvsr-checkbox" checked>
                                                 <label class="form-check-label" for="calculate-hvsr-checkbox">
-                                                  Calculate also HVSR
+                                                  Compute HVSR
                                                 </label>
                                             </div>
                                         </div>

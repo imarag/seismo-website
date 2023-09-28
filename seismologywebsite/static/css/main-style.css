@@ -275,3 +275,7 @@ pre {
 .justified-paragraph {
     text-align: justify;
 }
+
+.first-line-indent {
+    text-indent: 40px;
+}

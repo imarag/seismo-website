@@ -44,7 +44,7 @@
                                     Help & Support
                                 </a>
                             </li>
-                            {% if g.user and g.user['email'] == 'giannis.marar@hotmail.com' %}
+                            {% if current_user.is_authenticated and current_user.email == 'giannis.marar@hotmail.com' %}
                                 <li class="nav-item">
                                     <a class="nav-link active text-secondary anchor-underline" aria-current="page" href="{{ url_for('BP_admin.admin_login') }}">
                                         admin
@@ -53,10 +53,10 @@
                             {% endif %}
                         </ul>
                         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                            {% if g.user %}
+                            {% if current_user.is_authenticated %}
                                 <li class="nav-item dropdown me-3">
                                     <a class="nav-link dropdown-toggle anchor-underline" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        {{ g.user['fullname'] }}
+                                        {{ current_user.fullname }}
                                         <img src="/static/img/home-images/person-circle.svg" class="img-fluid" style="width:30px;"  id="home-top-menu-logout-icon" alt="logout icon">
                                     </a>
                                     <ul class="dropdown-menu">
@@ -108,18 +108,18 @@
                 modal
             </button>
             {% with messages = get_flashed_messages(with_categories=true) %}
-                    {% if messages %}
-                        {% for category, message in messages %}
-                            <div class="alert alert-{{ category }} text-center fs-5">
-                                {{ message }}
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-                {% endwith %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} text-center fs-5 my-0">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
 
-                {% block content %}
-    
-                {% endblock %}
+            {% block content %}
+
+            {% endblock %}
         </main>
         <footer class="bg-dark text-light py-5">
             <div class="container-lg py-5">
@@ -132,7 +132,7 @@
                         <p class="mb-4"><img src="/static/img/footer-images/geology.png" style="width:35px" class="me-3" alt="Mineral Resource Engineer">Mineral Resource Engineer</p>
                         <p class="mb-4"><img src="/static/img/footer-images/data-science.png" style="width:35px" class="me-3" alt="Data Scientist">Data Scientist</p>
                         <p class="mb-4"><img src="/static/img/footer-images/activity.png" style="width:35px" class="me-3" alt="Seismology enthusiast">Seismology enthusiast</p>
-                        <p class="mb-4"><img src="/static/img/footer-images/volleyball.png" style="width:35px" class="me-3" alt="Beach volley player">Beach volley player</p>
+                        <p class="mb-4"><img src="/static/img/footer-images/volleyball.png" style="width:35px" class="me-3" alt="Beach volley player">Beach volleyball player</p>
                     </div>
                 </div>
                 <div class="row align-items-center justify-content-center">
