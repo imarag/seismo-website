@@ -1,24 +1,45 @@
-.anchor-underline {
-    position: relative;
-    display: inline-block;
-    text-decoration: none;
+html {
+    scroll-behavior:smooth
 }
 
-.anchor-underline::before {
-    content: '';
-    position: absolute;
-    left: 50%;
-    right: 50%;
-    bottom: -2px;
-    height: 2px;
-    border-bottom: 2px solid red;
-    transition: right 0.3s, left 0.3s;
+body {
+    margin: 0px;
 }
 
-.anchor-underline:hover::before {
-    right: 0;
-    left: 0;
+
+
+/* ------------------------- BASE PAGE ----------------------------*/
+
+#index-top-menu .nav-item:hover {
+    filter: opacity(1);
 }
+
+#index-top-menu .nav-item {
+    filter: opacity(0.6);
+    color: rgb(197, 192, 192);
+}
+
+.user-dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu {
+    background-color: #343a3a;
+    
+}
+
+.dropdown-menu a:hover {
+    background-color: #343a3a;
+    color: rgb(232, 226, 226) !important;
+   
+}
+
+.dropdown-menu a {
+    color: rgb(153, 148, 148) !important;
+}
+
+
+/* ------------------------- INDEX PAGE ----------------------------*/
 
 #main-index-background-image {
     background-image: url("/static/img/index-images/main-background-image.png");
@@ -35,30 +56,17 @@
     width: 150px;
 }
 
-.bg-light2 {
-    background-color: #f2f2f2;
-}
-
-.bg-dark2 {
-    background-color: #391932;
-}
-
-.bg-navy {
-    background-color: #27285C;
-}
-
-#interactive-example-section li:hover {
+#interactive-tools-video li:hover {
     background-color: #212529 !important;
     color: #54B4D3 !important;
 }
 
-#all-topics-left-menu {
-    width: 20%;
+.index-card:hover {
+    box-shadow: 0 0 !important;
 }
 
-#all-topics-container {
-    margin-left: calc(20%)
-}
+
+/* ------------------------- SEARCH TOPICS PAGE ----------------------------*/
 
 #all-topics-card {
     transition: transform 0.5s;
@@ -69,23 +77,23 @@
     border: 3px solid black;
 }
 
-#arrival-picking-menu button, select {
-    height: 34px;
-}
 
-#picking-left-filter, #picking-right-filter {
-    width:100px;
-    display: inline;
-}
+/* ------------------------- ARRIVALS PICKING PAGE ----------------------------*/
 
 #picking-graph-container {
     height: 480px;
 }
 
+
+/* ------------------------- FOURIER PAGE ----------------------------*/
+
 #fourier-spectra-start-by-upload-container {
     height: 380px;
     position: relative;
 }
+
+
+/* ------------------------- SIGNAL PROCESSING ----------------------------*/
 
 #signal-processing-start-by-upload-container {
     height: 450px;
@@ -102,119 +110,159 @@
 }
 
 
+/* ------------------------- INTRODUCTION TO SEIMSOLOGY ----------------------------*/
 
-.bg-pink {background-color: #ff80ed}
-.bg-light-red1 {background-color: #fff2ed}
-.bg-light-red2 {background-color: #ffcbb9}
-.bg-light-red3 {background-color: #ffa584}
-.bg-light-red3 {background-color: #ff7f50}
-.bg-light-yellow1 {background-color: #ffffef}
-.bg-light-yellow2 {background-color: #ffffc1}
-.bg-light-yellow3 {background-color: #ffff93}
-.bg-light-yellow4 {background-color: #FFFF66}
-.bg-very-light-yellow1 {background-color: #fafffa}
-.bg-very-light-yellow2 {background-color: #e9ffe6}
-.bg-very-light-yellow3 {background-color: #d7ffd2}
-.bg-light-blue1 {background-color: #eaf4ff}
-.bg-light-blue2 {background-color: #add6ff}
-.bg-light-blue3 {background-color: #70b7ff}
-.bg-light-blue4 {background-color: #3399ff}
-.bg-light-grey1 {background-color: #fcfcfc}
-.bg-light-grey2 {background-color: #f5f5f5}
-.bg-light-grey3 {background-color: #eeeeee}
-.bg-light-grey4 {background-color: #e7e7e7}
-.bg-orange {background-color: #FFA500}
-.bg-dark-brown {background-color: #990000}
-.bg-tomato {background-color: #FF6347}
-.bg-sky {background-color: #82CAFF}
-.bg-iceberg {background-color: #56A5EC}
-.bg-deepteal {background-color: #033E3E}
-.bg-royalblue {background-color: #4169e1}
-.bg-beige {background-color: #f5f5dc}
-
-
-/* ----------------------  OBSPY TUTORIAL -------------------------*/
-
-#hyper-reference-pills-container span {
-    display: inline-block;
-    width: 75px;
-    transition: transform 0.3s, background-color 0.2s, color 0.2s;
-    background-color: rgb(169, 220, 250);
-    color: rgb(47, 45, 45);
+#seismo-info-main-article {
+    overflow-y: scroll; 
+    height:90vh;
 }
 
-#hyper-reference-pills-container span:hover {
-    transform: scale(1.13) translateY(-6px);
-    background-color: rgb(47, 45, 45);
-    color: rgb(169, 220, 250);
+#seismo-info-main-article p {
+    text-indent: 40px;
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
 
-.obspy-function-anchor {
-    color: rgb(249, 95, 113);
-    font-weight: 350;
-    text-decoration: none;
-}
-
-.obspy-reference-anchor {
-    color: rgb(55, 55, 247);
-    font-weight: 350;
-    text-decoration: none;
-}
-
-
-.input-code-block {
-    background-color: #fdfbfb;
-    color: rgb(0, 0, 0);
-    border: black 0.2px solid;
-    padding: 10px;
-    margin: 30px 0px;
-    border-radius:5px;
-
-
-}
-
-.output-code-block {
-    background-color: #3e3e3e;
-    color: rgb(210, 210, 210);
-    padding: 10px;
-    margin: 30px 0px;
-    border-radius:5px;
-
-}
-
-.comment {
-    color: rgba(166, 167, 167, 0.961);
-}
-
-.function {
-    background-color: #414141;
-    border-radius: 3px;
-    border: 1px solid #b4b4b4;
-   
-    color: #fdfdfd;
-    display: inline-block;
-    font-size: 0.85em;
-    font-weight: 500;
-    line-height: 1;
-    padding: 2px 5px;
-    white-space: nowrap;
-}
-
-.reference {
-    color: #d23871;
-    font-weight: 500;
-}
-
-
-
-.indent {
-    margin-left: 50px;
-}
-
-pre {
-    white-space: pre-line;
+#seismology-intro-container p {
+    text-indent: 30px;
     margin: 0px;
+    text-align: justify;
 }
+
+
+
+
+
+
+/* ----------------------- COLORS ---------------------------*/
+
+
+.bg-light2 {
+    background-color: #f2f2f2;
+}
+
+.bg-dark2 {
+    background-color: #391932;
+}
+
+.bg-navy {
+    background-color: #27285C;
+}
+.bg-pink {
+    background-color: #ff80ed
+}
+
+.bg-light-red1 {
+    background-color: #fff2ed
+}
+
+.bg-light-red2 {
+    background-color: #ffcbb9
+}
+
+.bg-light-red3 {
+    background-color: #ffa584
+}
+
+.bg-light-red3 {
+    background-color: #ff7f50
+}
+
+.bg-light-yellow1 {
+    background-color: #ffffef
+}
+
+.bg-light-yellow2 {
+    background-color: #ffffc1
+}
+
+.bg-light-yellow3 {
+    background-color: #ffff93
+}
+
+.bg-light-yellow4 {
+    background-color: #FFFF66
+}
+
+.bg-very-light-yellow1 {
+    background-color: #fafffa
+}
+
+.bg-very-light-yellow2 {
+    background-color: #e9ffe6
+}
+
+.bg-very-light-yellow3 {
+    background-color: #d7ffd2
+}
+
+.bg-light-blue1 {
+    background-color: #eaf4ff
+}
+
+.bg-light-blue2 {
+    background-color: #add6ff
+}
+
+.bg-light-blue3 {
+    background-color: #70b7ff
+}
+
+.bg-light-blue4 {
+    background-color: #3399ff
+}
+
+.bg-light-grey1 {
+    background-color: #fcfcfc
+}
+
+.bg-light-grey2 {
+    background-color: #f5f5f5
+}
+
+.bg-light-grey3 {
+    background-color: #eeeeee
+}
+
+.bg-light-grey4 {
+    background-color: #e7e7e7
+}
+
+.bg-orange {
+    background-color: #FFA500
+}
+
+.bg-dark-brown {
+    background-color: #990000
+}
+
+.bg-tomato {
+    background-color: #FF6347
+}
+
+.bg-sky {
+    background-color: #82CAFF
+}
+
+.bg-iceberg {
+    background-color: #56A5EC
+}
+
+.bg-deepteal {
+    background-color: #033E3E
+}
+
+.bg-royalblue {
+    background-color: #4169e1
+}
+
+.bg-beige {
+    background-color: #f5f5dc
+}
+
+
+/* ----------------------  STATIC -------------------------*/
+
 
 .python-color1 {
     color: rgb(184, 6, 6);
@@ -228,37 +276,36 @@ pre {
     color: rgb(123, 160, 123) ;
 }
 
-
-
-/* ########################### seismology introduction page ####################### */
-
-#seismo-info-main-article {
-    overflow-y: scroll; 
-    height:90vh;
+.comment {
+    color: rgba(166, 167, 167, 0.961);
 }
 
-#seismo-info-main-article p {
-    text-indent: 40px;
-    margin-top: 0px;
-    margin-bottom: 0px;
+.justified {
+    text-align: justify !important;
 }
 
-/* HOME */
+.top-level-pills-container span {
+    display: inline-block;
+    width: 75px;
+    transition: transform 0.3s, background-color 0.2s, color 0.2s;
+    background-color: rgb(47, 45, 45)  !important;
+    color: rgb(255, 255, 255) !important;
+}
+
+.top-level-pills-container span:hover {
+    transform: scale(1.13) translateY(-6px);
+    background-color: rgb(169, 220, 250)  !important;
+    color: rgb(47, 45, 45)  !important;
+}
 
 
-#site-effect-container-div .paragraph-text {
-    text-indent: 30px;
-    margin: 0px;
+
+.justified-container p {
     text-align: justify;
-    
 }
 
-#article-main-title {
-    margin-bottom: 150px;
-}
-
-#article-cards-container .card:hover {
-    box-shadow: 0 0 !important;
+.first-line-indent {
+    text-indent: 40px;
 }
 
 .author-ref {
@@ -266,16 +313,343 @@ pre {
     font-style: italic;
 }
 
-#seismology-intro-container p {
-    text-indent: 30px;
+
+/* width */
+::-webkit-scrollbar {
+    width: 7px;
+    height: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #848484;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #848484 #f1f1f1;
+    /* You may need to use browser-specific properties or other techniques. */
+    scrollbar-track-color: #f1f1f1;
+}
+
+
+.article-container {
+    display: block;
+}
+
+.article-left-menu {
+    padding: 0px 10px;
+}
+
+.article-main-content {
+    height: auto;
+    overflow-y: visible;
+    padding: 0px 15px;
+}
+
+.article-list-container {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    list-style: none;
+}
+
+.article-list-container .title {
+    font-size: 30px;
+    text-align: center;
+}
+
+.article-container li {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.article-list-container li a {
+    color: #212529;
+    font-weight: lighter;
+    font-size: 17px;
+    text-decoration: none;
+}
+
+.article-list-container li a:hover {
+    color: rgb(63, 63, 241);
+}
+
+
+
+.article-main-content h1{
+    text-align: left;
+    font-size: 60px;
+    color: #1a1dbb;
+    margin: 80px 0px 50px 0px;
+}
+
+.article-main-content h2{
+    text-align: center;
+    font-size: 25px;
+    color: #282828;
+    margin: 35px 0px 25px 0px;
+}
+
+
+.article-main-content p{
+    font-weight: 100;
+    font-size: 20px;
+    color: #383839;
+}
+
+.article-main-content ul {
+    font-weight: 100;
+    font-size: 22px;
+    color: #383839;
+}
+
+.article-main-content ol {
+    font-weight: 100;
+    font-size: 22px;
+    color: #383839;
+}
+
+.article-main-content .figure-container {
+    text-align: center;
+    margin-top: 60px;
+    margin-bottom: 60px;
+}
+
+.article-main-content img {
+    max-width: 75%;
+    min-width: 50%
+}
+
+
+.article-main-content figcaption {
+    font-size: 16px;
+    font-style: italic;
+    color: #4b4ee5;
+    margin-top: 10px;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.article-main-content figcaption.table-caption {
+    font-size: 16px;
+    font-style: italic;
+    color: #4b4ee5;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.article-main-content .blockquote-footer {
+    font-size: 16px;
+    font-style: italic;
+    color: #4b4ee5;
+    margin-bottom: 60px;
+    text-align: center;
+}
+
+.article-main-content blockquote {
+    margin: 60px 60px 0px 60px;
+    font-style: italic;
+    font-size: 20px;
+    text-align: center;
+    font-weight: 20;
+}
+
+.article-main-content table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 20px;
+    margin-bottom: 40px;
+    text-align: center;
+}
+  
+
+.article-main-content th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+  
+
+.article-main-content tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+  
+
+.article-main-content td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.article-main-content .input-code-block {
+    background-color: #fdfbfb;
+    border: black 0.2px solid;
+    padding: 10px;
+    margin: 30px 0px;
+    border-radius:5px;
+    font-size: 18px;
+    overflow-x: auto;
+}
+
+.article-main-content .output-code-block {
+    background-color: #3e3e3e;
+    padding: 10px;
+    margin: 30px 0px;
+    border-radius:5px;
+    font-size: 18px;
+    overflow-x: auto;
+}
+
+.article-main-content .input-code-block p {
+    white-space: nowrap;
     margin: 0px;
-    text-align: justify;
+    padding: 0px;
+    line-height: 8px;
+    color: rgb(0, 0, 0);
 }
 
-.justified-paragraph {
-    text-align: justify;
+.article-main-content .output-code-block p {
+    white-space: nowrap;
+    margin: 0px 0px;
+    line-height: 0;
+    color: rgb(210, 210, 210) !important;
 }
 
-.first-line-indent {
-    text-indent: 40px;
+.article-main-content .input-code-block .pad {
+    margin-left: 40px;
 }
+
+.article-main-content .output-code-block .pad {
+    margin-left: 40px;
+}
+
+.article-main-content .input-code-block pre {
+    white-space: pre-line;
+    margin: 0px;
+}
+
+.article-main-content .output-code-block pre {
+    white-space: pre-line;
+    margin: 0px;
+}
+
+
+
+@media (min-width: 768px) {
+    .article-main-content {
+        padding: 0px 25px;
+    }
+}
+
+@media (min-width: 992px) {
+    .article-container {
+        display: flex;
+        flex-direction: row;
+        padding-right: 50px;
+    }
+
+    .article-left-menu {
+        flex: 1;
+    }
+
+    .article-main-content {
+        height: 100vh;
+        overflow-y: auto;
+        border-left: 1px solid grey;
+        flex:4;
+        padding: 0px 25px;
+    }
+
+    .article-container li {
+        text-align: left;
+    }
+
+    .article-list-container .title {
+        display: none;
+    }
+   
+ 
+}
+
+@media (min-width: 1200px) {
+    .article-main-content {
+        padding: 0px 75px;
+    }
+}
+
+
+/*
+
+
+.article-main-content .equation p {
+    text-align: center;
+    font-size: 24px;
+    font-family: 'Consolas';
+    margin: 50px 0px;
+    color: #282828;
+    font-style: italic;
+    background-color: #eeeeee;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.card {
+    background-color: #edf1f1;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 60px 0px;
+}
+
+.card svg {
+    display: block;
+    width: 24px;
+    height: 24px;
+}
+
+.card p {
+    margin-left: 40px;
+}
+
+.card .input-code-card code span {
+    display: block;
+}
+
+.card .output-code-card code span {
+    display: block;
+}
+
+.card .input-code-card {
+    padding: 6px;
+    background-color: #ffffff;
+    color: #323030;
+    border-radius: 8px;
+    border: 1px solid rgb(168, 167, 167);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 16px;
+}
+
+.card .output-code-card {
+    padding: 6px;
+    background-color: #3e3e41;
+    color: #ffffff;
+    border-radius: 8px;
+    border: 1px solid rgb(168, 167, 167);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 16px;
+}
+
+
+*/

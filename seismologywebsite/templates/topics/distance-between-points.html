@@ -1,160 +1,144 @@
-{% extends 'base.html' %}
+{% extends 'base-interactive-tools.html' %}
 
-{% block title %}
-Distance between points
+
+{% block tool_template_image %}
+    <img 
+        src="{{ url_for('static', filename='img/templates-icons/' + topic_object.image_name) }}"  
+        alt="{{ topic_object.title }} - template image"
+        class="img-fluid"
+    >
+{% endblock %}
+
+
+{% block tool_title %}
+    {{ topic_object.title }}
 {% endblock %}
 
 
 
-{% block content %}
+{% block tool_title_description %}
+    Calculate the distance between two points on the WGS84
+{% endblock %}
 
 
-    <section class="py-5 bg-light-blue1">
-        <div class="row justify-content-around align-items-center gy-4">
-            <div class="col-11 col-md-8 col-lg-6">
-                <h1 class="display-3 text-center text-dark fw-semibold ">Distance calculator</h1>
-                <p class="text-dark text-center fs-2">Calculate the distance between two points on WGS84</p>
-            </div>
-        </div>
-        <div class="row justify-content-around align-items-center gy-4">
-            <div class="col-5 col-sm-4 col-md-3 col-lg-2 text-center">
-                <img src="{{ url_for('static', filename='img/templates-icons/distance-between-points.png') }}" alt="image of distance calculator template" class="img-fluid">
-            </div>
-        </div>
-    </section>
-    <section class="my-5 ">
-        <div class="container-lg fs-4 lead">
-            <div class="row justify-content-center">
-                <div class="col-12 col-md-9 col-lg-8">
-                    <p class="text-secondary fs-4 my-5 justified-paragraph">
-                        This tool allows you to calculate the distance between two geographical points on the Earth's surface using the WGS84 coordinate 
-                        system, a standard for global positioning. It is particularly valuable for estimating the epicentral distance between an 
-                        earthquake source and a monitoring station.
-                    </p>
-                    <div class="accordion" id="accordion-description">
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button collapsed " type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                    User Guide
-                                </button>
-                            </h2>
-                            <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordion-description">
-                                <div class="accordion-body">
-                                    <p>
-                                        Insert the coordinates (latitude, longitude) of the two points below to calculate the distance between them on the WGS84 ellipsoid in kilometers. 
-                                        Keep in mind the following considerations:
-                                    </p>
-                                    <ul>
-                                        <li>
-                                            <b>Longitude</b>: Please note that longitude entries should be within the range of -180 degrees to 180 degrees. Values outside this 
-                                            range will result in an error, as they represent unrealistic values
-                                        </li>
-                                        <li>
-                                            <b>Latitude</b>: The Latitude entries should be within the range of -90 degrees to 90 degrees. Values outside this 
-                                            range will result in an error, as they represent unrealistic values
-                                        </li>
-                                    </ul>
-                                    <p>
-                                        Once you define the desired coordinates for the two points, click on the <kbd>compute</kbd> button to calculate the distance between them in kilometers.
-                                        Use the <kbd>clear</kbd> button to clear all the entries. Every time you calculate the distance between the two points, it will be appended at the output table 
-                                        below. This allows you to track the historical data and previous calculations for reference.
-                                    </p>
-                                    <p>
-                                        You can also check the location of the defined points on the map by clicking on the <kbd>Location</kbd> button. It gets the defined coordinates and opens an interactive map on another tab on your browser.
-                                    </p>
-                                    <p>
-                                        For more information read the obspy <a href="https://docs.obspy.org/packages/autogen/obspy.geodetics.base.gps2dist_azimuth.html#obspy.geodetics.base.gps2dist_azimuth" target="_blank"><code>gps2dist_azimuth</code></a>
-                                    </p>
-                                </div>
-                            </div>
+{% block tool_intro_description %}
+    {{ topic_object.description }}
+{% endblock %}
+
+
+{% block pills %}
+    <a target="_blank" href="https://docs.obspy.org/packages/autogen/obspy.geodetics.base.gps2dist_azimuth.html"><span class="badge rounded-pill">gps2dist_azimuth</span></a>
+{% endblock %}
+
+
+{% block tool_user_guide %}
+    <p>
+        Insert the coordinates (latitude, longitude) of the two points below to calculate the distance between them on the WGS84 ellipsoid in kilometers. 
+        Keep in mind the following considerations:
+    </p>
+    <ul>
+        <li>
+            <b>Longitude</b>: Please note that longitude entries should be within the range of -180 degrees to 180 degrees. Values outside this 
+            range will result in an error, as they represent unrealistic values
+        </li>
+        <li>
+            <b>Latitude</b>: The Latitude entries should be within the range of -90 degrees to 90 degrees. Values outside this 
+            range will result in an error, as they represent unrealistic values
+        </li>
+    </ul>
+    <p>
+        Once you define the desired coordinates for the two points, click on the <kbd>compute</kbd> button to calculate the distance between them in kilometers.
+        Use the <kbd>clear</kbd> button to clear all the entries. Every time you calculate the distance between the two points, it will be appended at the output table 
+        below. This allows you to track the historical data and previous calculations for reference.
+    </p>
+    <p>
+        You can also check the location of the defined points on the map by clicking on the <kbd>Location</kbd> button. It gets the defined coordinates and opens an interactive map on another tab on your browser.
+    </p>
+    <p>
+        For more information read the obspy <a href="https://docs.obspy.org/packages/autogen/obspy.geodetics.base.gps2dist_azimuth.html#obspy.geodetics.base.gps2dist_azimuth" target="_blank"><code>gps2dist_azimuth</code></a>
+    </p>
+{% endblock %}
+
+
+{% block tool_body %}
+    <div class="container-lg">
+        <h2 class="fs-1  text-info my-5 text-center fw-semibold">Calculate the distance</h2>
+
+        <div class="row justify-content-center align-items-center">
+            <div class="col-8 col-md-4">
+                <h2 class="text-center fs-3">
+                    <img src="{{ url_for('static', filename='img/distance-calculation/geo-alt-fill.svg') }}" alt="map point icon" style="width:25px;">
+                    Point 1
+                </h2>
+                <hr>
+                <div class="row justify-content-center align-items-center">
+                    <div class="col">
+                        <div class="mb-3">
+                            <label for="point1-lat-input" class="form-label  text-muted fs-4" title="Insert the latitude of the point with value from -90 to 90 degrees">Latitude</label>
+                            <input type="number" class="form-control" id="point1-lat-input" name="point1-lat-input">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="mb-3">
+                            <label for="point1-lon-input" class="form-label  text-muted fs-4" title="Insert the longitude of the point with value from -180 to 180 degrees">Longitude</label>
+                            <input type="number" class="form-control" id="point1-lon-input" name="point1-lon-input">
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        
-    </section>
-    <section>
-        <div class="container-lg">
-            <h2 class="fs-1  text-info my-5 text-center fw-semibold">Calculate the distance</h2>
-        
-            <div class="row justify-content-center align-items-center">
-                <div class="col-8 col-md-4">
-                    <h2 class="text-center fs-3">
-                        <img src="{{ url_for('static', filename='img/distance-calculation/geo-alt-fill.svg') }}" alt="map point icon" style="width:25px;">
-                        Point 1
-                    </h2>
-                    <hr>
-                    <div class="row justify-content-center align-items-center">
-                        <div class="col">
-                            <div class="mb-3">
-                                <label for="point1-lat-input" class="form-label  text-muted fs-4" title="Insert the latitude of the point with value from -90 to 90 degrees">Latitude</label>
-                                <input type="number" class="form-control" id="point1-lat-input" name="point1-lat-input">
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="mb-3">
-                                <label for="point1-lon-input" class="form-label  text-muted fs-4" title="Insert the longitude of the point with value from -180 to 180 degrees">Longitude</label>
-                                <input type="number" class="form-control" id="point1-lon-input" name="point1-lon-input">
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="col-8 col-md-4">
-                    <h2 class="text-center fs-3">
-                        <img src="{{ url_for('static', filename='img/distance-calculation/geo-alt-fill.svg') }}" alt="map point icon" style="width:25px;">
-                        Point 2
-                    </h2>
-                    <hr>
-                    <div class="row justify-content-center align-items-center">
-                        <div class="col">
-                            <div class="mb-3">
-                                <label for="point2-lat-input" class="form-label  text-muted fs-4" title="Insert the latitude of the point with value from -90 to 90 degrees">Latitude</label>
-                                <input type="number" class="form-control" id="point2-lat-input" name="point2-lat-input">
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="mb-3">
-                                <label for="point2-lon-input" class="form-label  text-muted fs-4" title="Insert the longitude of the point with value from -180 to 180 degrees">Longitude</label>
-                                <input type="number" class="form-control" id="point2-lon-input" name="point2-lon-input">
-                            </div>
+            <div class="col-8 col-md-4">
+                <h2 class="text-center fs-3">
+                    <img src="{{ url_for('static', filename='img/distance-calculation/geo-alt-fill.svg') }}" alt="map point icon" style="width:25px;">
+                    Point 2
+                </h2>
+                <hr>
+                <div class="row justify-content-center align-items-center">
+                    <div class="col">
+                        <div class="mb-3">
+                            <label for="point2-lat-input" class="form-label  text-muted fs-4" title="Insert the latitude of the point with value from -90 to 90 degrees">Latitude</label>
+                            <input type="number" class="form-control" id="point2-lat-input" name="point2-lat-input">
                         </div>
                     </div>
-                    
+                    <div class="col">
+                        <div class="mb-3">
+                            <label for="point2-lon-input" class="form-label  text-muted fs-4" title="Insert the longitude of the point with value from -180 to 180 degrees">Longitude</label>
+                            <input type="number" class="form-control" id="point2-lon-input" name="point2-lon-input">
+                        </div>
+                    </div>
                 </div>
+                
             </div>
-            <div class="row justify-content-center align-items-center gx-1 gy-1 my-5">
-                <div class="col-8 col-sm-auto text-center">
-                        <button class="btn btn-success" style="width:120px;" id="compute-button" title="calculate the distance between the points">
-                            <img src="{{ url_for('static', filename='img/distance-calculation/calculator.svg') }}" alt="calculator icon" style="width: 23px;">
-                            Compute
-                        </button>
-                </div>
-                <div class="col-8 col-sm-auto text-center">
-                    <button class="btn btn-danger" style="width:120px;" id="clear-button" title="empty the coordinate entries">
-                        <img src="{{ url_for('static', filename='img/distance-calculation/eraser.svg') }}" alt="eraser icon" style="width: 23px;">
-                        Clear
+        </div>
+        <div class="row justify-content-center align-items-center gx-1 gy-1 my-5">
+            <div class="col-8 col-sm-auto text-center">
+                    <button class="btn btn-success" style="width:120px;" id="compute-button" title="calculate the distance between the points">
+                        <img src="{{ url_for('static', filename='img/distance-calculation/calculator.svg') }}" alt="calculator icon" style="width: 23px;">
+                        Compute
                     </button>
-                </div>
-                <div class="col-8 col-sm-auto text-center">
-                    <button class="btn btn-warning" style="width:120px;" id="map-button" title="show the defined points on the map">
-                        <img src="{{ url_for('static', filename='img/distance-calculation/crosshair.svg') }}" alt="crosshair icon" style="width: 23px;">
-                        Locate
-                    </button>
-                </div>
             </div>
-            <div class="row justify-content-center">
-                <div class="col-8">
-                    <p class="text-secondary fs-4 lead">
-                    The distance (km) between the two points is: <span id="result-span" class="fw-bold"></span> 
-                    </p>
-                </div>
+            <div class="col-8 col-sm-auto text-center">
+                <button class="btn btn-danger" style="width:120px;" id="clear-button" title="empty the coordinate entries">
+                    <img src="{{ url_for('static', filename='img/distance-calculation/eraser.svg') }}" alt="eraser icon" style="width: 23px;">
+                    Clear
+                </button>
+            </div>
+            <div class="col-8 col-sm-auto text-center">
+                <button class="btn btn-warning" style="width:120px;" id="map-button" title="show the defined points on the map">
+                    <img src="{{ url_for('static', filename='img/distance-calculation/crosshair.svg') }}" alt="crosshair icon" style="width: 23px;">
+                    Locate
+                </button>
             </div>
         </div>
-    </section>
-    <section class="my-5 ">
+        <div class="row justify-content-center">
+            <div class="col-8">
+                <p class="text-secondary fs-4 lead">
+                The distance (km) between the two points is: <span id="result-span" class="fw-bold"></span> 
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="my-5">
         <div class="container-lg fs-4 lead">
             <div class="row justify-content-center">
                 <div class="col-12 col-md-9 col-lg-8">
@@ -168,13 +152,10 @@ Distance between points
                 </div>
             </div>
         </div>
-        
-    </section>
-
-
-
-
-<script src="/static/js/distance-between-points.js"></script>
-
-
+    </div>
+    <script src="/static/js/distance-between-points.js"></script>
 {% endblock %}
+
+
+
+

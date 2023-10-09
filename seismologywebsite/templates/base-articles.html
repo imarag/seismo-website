@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <article>
+        <section>
+            <div class="bg-light2">
+                <div class="py-3 container-lg">
+                    <div class="row justify-content-center align-items-center  pt-5 mb-0 gy-4 gx-5">
+                        <div class="col-4 col-sm-3 col-md-3 col-lg-3 col-xl-2">
+                            {% block article_template_image %}
+
+                            {% endblock %}
+                        </div>
+                        <div class="col-12 col-sm-11 col-md-8 col-lg-8 col-xl-8">
+                            <p class="text-center text-md-start display-4 fw-semibold">
+                                {% block article_title %}
+
+                                {% endblock %}
+                            </p>
+                            <p class="text-muted fs-2 text-center text-md-start">
+                                {% block article_title_description %}
+
+                                {% endblock %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center fs-5 my-5 top-level-pills-container" style="position: relative; top: 13px;">
+                    {% block article_pills %}
+    
+                    {% endblock %}
+                </div>
+            </div>
+        </section>
+        <section>
+            <div class="article-container">
+                <div class="article-left-menu">
+                    <ul class="article-list-container">
+                        <p class="title">Contents</p>
+                        {% block article_list_items %}
+
+                        {% endblock %}
+                    </ul>
+                </div>
+                <div class="article-main-content">
+                    {% block article_main_content %}
+
+                    {% endblock %}
+                </div>
+            </div>
+        </section>
+    </article>
+{% endblock %}
+

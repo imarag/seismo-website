@@ -1,121 +1,90 @@
-{% extends 'base.html' %}
+{% extends 'base-interactive-tools.html' %}
 
-{% block title %}
-    Arrivals picking
+
+{% block tool_template_image %}
+    <img 
+        src="{{ url_for('static', filename='img/templates-icons/' + topic_object.image_name) }}"  
+        alt="{{ topic_object.title }} - template image"
+        class="img-fluid"
+    >
 {% endblock %}
 
 
+{% block tool_title %}
+    {{ topic_object.title }}
+{% endblock %}
 
 
-{% block content %}
-<section class="py-5 bg-light-blue1">
-    <div class="row justify-content-around align-items-center gy-4">
-        <div class="col-11 col-md-8 col-lg-6">
-            <h1 class="display-3 text-center text-dark fw-semibold ">Arrivals Selection</h1>
-            <p class="text-dark text-center fs-2">Select the P & S wave arrival times</p>
-        </div>
-    </div>
-    <div class="row justify-content-around align-items-center gy-4">
-        <div class="col-5 col-sm-4 col-md-3 col-lg-2 text-center">
-            <img src="{{ url_for('static', filename='img/templates-icons/arrival-pick-icon.png') }}" alt="image of distance calculator template" class="img-fluid">
-        </div>
-    </div>
-</section>
+{% block tool_title_description %}
+    Select the P & S wave arrivals
+{% endblock %}
 
 
-<section>
-    <div class="fs-4 lead container-lg my-5">
-        <div class="row justify-content-center">
-            <div class="col-11 col-md-9 col-lg-8">
-                <p class="text-muted text-start my-5">
-                    This tool enables you to select the first arrival times of both P and S waves on the uploaded seismogram. Utilize the 
-                        pre-existing filters to filter the waveform by focusing on a specific frequency range, facilitating the picking process 
-                        and enhancing the accuracy.
-                </p>
-                <div class="accordion" id="accordionExample">
-                    <div class="accordion-item">
-                        <h2 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                User Guide
-                            </button>
-                        </h2>
-                        <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <p>
-                                    Begin by uploading a seismic data file using the <kbd>Upload</kbd> option. From the top menu, select either the P-wave 
-                                    (<kbd>P</kbd> button) or S-wave (<kbd>S</kbd> button) option, then click anywhere on the waveforms to select the 
-                                    arrival time of the chosen wave. To remove a previously applied arrival time, use the <kbd>del P</kbd> and 
-                                    <kbd>del S</kbd> buttons. Feel free to utilize the filter dropdown in the top menu to apply a pre-defined filter to 
-                                    the waveforms, which can streamline your picking process. Additionally, you have the option to manually input a filter 
-                                    using the entry boxes located at the bottom right corner. If you input a value only in the left entry box, a highpass 
-                                    filter will be applied with the specified frequency. Similarly, you input a value only in the right entry box, a 
-                                    lowpass filter will be implemented using the specified frequency. Should you fill in both entry boxes, a bandpass 
-                                    filter will be applied. Once the mouse focus is in the left or right box, simply press the <kbd>Enter</kbd> key to 
-                                    confirm your input and apply the manual filters. Lastly, utilize the options located at the top right corner of the 
-                                    plot to zoom in, zoom out, and adjust the position of the waveforms. These tools will aid you in selecting the 
-                                    arrivals more effectively. 
-                                </p>
-                                <p>
-                                    Take into account the following:
-                                    <ul>
-                                        <li><strong>Trace:</strong> Represents a single continuous seismic recording with a specific channel (e.g., E, N, or Z). It contains the waveform data and metadata, such as sampling rate, start time, channel information, and more.</li>
-                                        <li><strong>Stream:</strong> A collection of one or more "Trace" objects, representing a continuous sequence of seismic traces recorded over a period of time.</li>
-                                        <li>The program saves the arrivals as seconds from the start time of the record. It will automatically generate a file with the arrival values, naming it based on the start time and station name (e.g., 20150724_095834_KRL1).</li>
-                                        <li>Due to the above requirements, ensure you define both the start time and the station name for each record.</li>
-                                        <li>Your seismic data file should contain 2 or 3 traces. The scenario with 2 traces can occur if you have one horizontal and one vertical component record.</li>
-                                        <li>It's necessary to define either the sampling frequency (fs) or the sample distance (dt) in your seismic data file, with at least one present. This ensures a correct time axis representation while picking the arrivals.</li>
-                                        <li>Each trace in your seismic data file should have its channel defined. This information is essential for selecting the arrivals on the respective trace.</li>
-                                    </ul>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="accordion" id="accordion-shortcuts">
-                    <div class="accordion-item">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-shortcuts" aria-expanded="false" aria-controls="collapse-shortcuts">
-                        Keys
-                        </button>
-                    </h2>
-                    <div id="collapse-shortcuts" class="accordion-collapse collapse" data-bs-parent="#accordion-shortcuts">
-                        <div class="accordion-body">
-                            <p>
-                                Use the following shortcuts to facilitate the picking:
-                            </p>
-                            <h1 class="fs-3 text-center my-5">Mouse shortcuts</h1>
-                            <ul>
-                                <li><b>Left mouse Button</b>: Hold the left mouse pressed, to select the desired area to view</li>
-                                <li><b>Scroll Wheel</b>: Use the scroll wheel to zoom in and out of a specific area in the seismogram</li>
-                            </ul>
-                            <h1 class="fs-3 text-center my-5">Upper left menu</h1>
-                            <ul>
-                                <li><b>Pan</b>: Use the <kbd>Pan</kbd> option to move the figure (pan) to all directions</li>
-                                <li><b>Zoom-in</b>: Utilize the <kbd>Zoom in</kbd> option to zoom in to the seismogram</li>
-                                <li><b>Zoom-out</b>: Utilize the <kbd>Zoom out</kbd> option to zoom out of the seismogram</li>
-                                <li><b>Reset axis</b>: Select the <kbd>Reset axes</kbd> option to reset the x and y axis, to its initial limits</li>
-                            </ul>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-    
-                <p class="text-muted text-center mt-5 fs-5">
-                    Don't have an seismic data file ? Click <a href="{{ url_for('show_topic', topic_name='ascii-to-mseed.html') }}"
-                        class="link-info">here</a> to create a MiniSEED file format using data defined in an ASCII file
-                    or <a href="{{ url_for('static', filename='static-files/test-mseed-file.mseed') }}"
-                        class="link-info">download</a> one, to try the tool.
-                </p>
-            </div>
-        </div>
-    </div>
-</section>
+{% block tool_intro_description %}
+    {{ topic_object.description }}
+{% endblock %}
 
 
-    <section style="position: relative;">
+{% block pills %}
+    <a target="_blank" href="https://docs.obspy.org/packages/autogen/obspy.core.stream.Stream.html"><span class="badge rounded-pill">Stream</span></a>
+    <a target="_blank" href="https://docs.obspy.org/packages/autogen/obspy.core.trace.Trace.html"><span class="badge rounded-pill">Trace</span></a>
+    <a target="_blank" href="https://docs.obspy.org/packages/autogen/obspy.core.stream.Stream.filter.html"><span class="badge rounded-pill">filter</span></a>
+    <a target="_blank" href="https://docs.obspy.org/packages/autogen/obspy.core.stream.read.html"><span class="badge rounded-pill">read</span></a>
+    <a target="_blank" href="https://docs.obspy.org/packages/autogen/obspy.core.trace.Stats.html"><span class="badge rounded-pill">stats</span></a>
+    <a target="_blank" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html"><span class="badge rounded-pill">ndarray</span></a>
+    <a target="_blank" href="https://docs.obspy.org/packages/autogen/obspy.core.trace.Trace.trim.html#obspy.core.trace.Trace.trim"><span class="badge rounded-pill">trim</span></a>
+    <a target="_blank" href="https://stackoverflow.com/questions/33845604/what-does-dict-like-mean-in-python"><span class="badge rounded-pill">dict-like</span></a>
+{% endblock %}
+
+
+{% block tool_user_guide %}
+    <p>
+        Begin by uploading a seismic data file using the <kbd>Upload</kbd> option. From the top menu, select either the P-wave 
+        (<kbd>P</kbd> button) or S-wave (<kbd>S</kbd> button) option, then click anywhere on the waveforms to select the 
+        arrival time of the chosen wave. To remove a previously applied arrival time, use the <kbd>del P</kbd> and 
+        <kbd>del S</kbd> buttons. Feel free to utilize the filter dropdown in the top menu to apply a pre-defined filter to 
+        the waveforms, which can streamline your picking process. Additionally, you have the option to manually input a filter 
+        using the entry boxes located at the bottom right corner. If you input a value only in the left entry box, a highpass 
+        filter will be applied with the specified frequency. Similarly, you input a value only in the right entry box, a 
+        lowpass filter will be implemented using the specified frequency. Should you fill in both entry boxes, a bandpass 
+        filter will be applied. Once the mouse focus is in the left or right box, simply press the <kbd>Enter</kbd> key to 
+        confirm your input and apply the manual filters. Lastly, utilize the options located at the top right corner of the 
+        plot to zoom in, zoom out, and adjust the position of the waveforms. These tools will aid you in selecting the 
+        arrivals more effectively. 
+    </p>
+    <p>
+        Take into account the following:
+        <ul>
+            <li><strong>Trace:</strong> Represents a single continuous seismic recording with a specific channel (e.g., E, N, or Z). It contains the waveform data and metadata, such as sampling rate, start time, channel information, and more.</li>
+            <li><strong>Stream:</strong> A collection of one or more "Trace" objects, representing a continuous sequence of seismic traces recorded over a period of time.</li>
+            <li>The program saves the arrivals as seconds from the start time of the record. It will automatically generate a file with the arrival values, naming it based on the start time and station name (e.g., 20150724_095834_KRL1).</li>
+            <li>Due to the above requirements, ensure you define both the start time and the station name for each record.</li>
+            <li>Your seismic data file should contain 2 or 3 traces. The scenario with 2 traces can occur if you have one horizontal and one vertical component record.</li>
+            <li>It's necessary to define either the sampling frequency (fs) or the sample distance (dt) in your seismic data file, with at least one present. This ensures a correct time axis representation while picking the arrivals.</li>
+            <li>Each trace in your seismic data file should have its channel defined. This information is essential for selecting the arrivals on the respective trace.</li>
+        </ul>
+    </p>
+    <p>
+        Use the following shortcuts to facilitate the picking:
+    </p>
+    <h1 class="fs-3 text-center my-5">Mouse shortcuts</h1>
+    <ul>
+        <li><b>Left mouse Button</b>: Hold the left mouse pressed, to select the desired area to view</li>
+        <li><b>Scroll Wheel</b>: Use the scroll wheel to zoom in and out of a specific area in the seismogram</li>
+    </ul>
+    <h1 class="fs-3 text-center my-5">Upper left menu</h1>
+    <ul>
+        <li><b>Pan</b>: Use the <kbd>Pan</kbd> option to move the figure (pan) to all directions</li>
+        <li><b>Zoom-in</b>: Utilize the <kbd>Zoom in</kbd> option to zoom in to the seismogram</li>
+        <li><b>Zoom-out</b>: Utilize the <kbd>Zoom out</kbd> option to zoom out of the seismogram</li>
+        <li><b>Reset axis</b>: Select the <kbd>Reset axes</kbd> option to reset the x and y axis, to its initial limits</li>
+    </ul>
+{% endblock %}
+
+
+{% block tool_body %}
+    <div style="position: relative;">
         <div class="container-lg fs-4 lead text-secondary">
-           
             <div class="row bg-dark2 p-3 mt-5">
                 <div class="col">
                     <button class="btn btn-outline-info me-3" id="upload-file-button">Upload</button>
@@ -168,10 +137,10 @@
                     </div>
                 </div>
             </div>
-               
         </div>
-    </section>
-    
+    </div>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="/static/js/pick-arrivals.js"></script>
 {% endblock %}
+    
+

@@ -47,98 +47,98 @@ def reset_topics():
 
     # # Define multiple SQL commands
     # sql_commands = [
-    #     "INSERT INTO topics (title, description, image_name, type, template_name) VALUES ('Python Obspy', 'ObsPy is an open-source Python library used for seismic data processing and analysis. It stands for Observatory Python and provides a wide range of functionalities for working with seismological data.', 'obspy-icon.png', 'static', 'obspy.html')",
-    #     "INSERT INTO topics (title, description, image_name, type, template_name) VALUES ('Fourier spectra calculation', 'An interactive tool to calculate the Fourier spectra on a window of a seismogram. The Fourier transform is commonly used in seismology to analyze the frequency content of seismic signals.', 'fourier-icon.png', 'interactive', 'fourier.html')",
-    #     "INSERT INTO topics (title, description, image_name, type, template_name) VALUES ('Arrival time picking', 'Arrival time picking refers to the process of extracting the arrival times of specific seismic phases from a seismogram. These arrival times provide valuable information about the timing and characteristics of seismic events.', 'arrival-pick-icon.png', 'interactive', 'pick-arrivals.html')",
-    #     "INSERT INTO topics (title, description, image_name, type, template_name) VALUES ('ASCII to MSEED', 'An interactive tool to convert ASCII files to ObsPy MiniSEED (mseed) format. Use this option if you want to transform your data into a binary format to use the available tools.', 'ascii-to-mseed-icon.png', 'interactive', 'ascii-to-mseed.html')",
-    #     "INSERT INTO topics (title, description, image_name, type, template_name) VALUES ('Signal processing', 'An interactive tool to apply various techniques and algorithms to analyze, filter, enhance, and extract meaningful information from seismic records.', 'signal-processing-icon.png', 'interactive', 'signal-processing.html')",
-    #     "INSERT INTO topics (title, description, image_name, type, template_name) VALUES ('Site effect', 'Refers to the phenomenon where the characteristics of the local site or subsurface geology affect the propagation and amplification of seismic waves.', 'site-effect-icon.png', 'static', 'site-effect.html')",
-    #     "INSERT INTO topics (title, description, image_name, type, template_name) VALUES ('Introduction to Seismology', 'A small introduction to various seismological concepts and the propagation of seismic waves through the Earth', 'introduction-to-seismology.png', 'static', 'seismology-intro.html')",
-    #     "INSERT INTO topics (title, description, image_name, type, template_name) VALUES ('Distance between points', 'Compute the distance between two geographical points on the WGS84 ellipsoid', 'distance-between-points.png', 'interactive', 'distance-between-points.html')",
-    #     "INSERT INTO topics (title, description, image_name, type, template_name) VALUES ('Python File Manipulation', 'Use Python libraries to manipulate system files. Simplify tasks like directory traversal, file creation, path handling and pattern matching using libraries like Python os, pathlib, shutil and more.', 'file-manipulation.png', 'static', 'file-manipulation.html')"
-    #     "INSERT INTO topics (title, description, image_name, type, template_name) VALUES ('Python Matplotlib Tutorial', 'Unlock the power of Python and Matplotlib for visually analyzing seismic data. Dive into our comprehensive tutorial, where we guide you through the art of plotting and interpreting seismic data with precision and clarity.', 'matplotlib.png', 'static', 'matplotlib.html')"
+    #     "INSERT INTO topics (title, description, image_name, type, template_name) VALUES ('Python Obspy', 'ObsPy is an open-source Python library used for seismic data processing and analysis. It stands for Observatory Python and provides a wide range of functionalities for working with seismological data.', 'obspy-icon.png', 'static', 'obspy')",
+    #     "INSERT INTO topics (title, description, image_name, type, template_name) VALUES ('Fourier spectra calculation', 'An interactive tool to calculate the Fourier spectra on a window of a seismogram. The Fourier transform is commonly used in seismology to analyze the frequency content of seismic signals.', 'fourier-icon.png', 'interactive', 'fourier')",
+    #     "INSERT INTO topics (title, description, image_name, type, template_name) VALUES ('Arrival time picking', 'Arrival time picking refers to the process of extracting the arrival times of specific seismic phases from a seismogram. These arrival times provide valuable information about the timing and characteristics of seismic events.', 'arrival-pick-icon.png', 'interactive', 'pick-arrivals')",
+    #     "INSERT INTO topics (title, description, image_name, type, template_name) VALUES ('ASCII to MSEED', 'An interactive tool to convert ASCII files to ObsPy MiniSEED (mseed) format. Use this option if you want to transform your data into a binary format to use the available tools.', 'ascii-to-mseed-icon.png', 'interactive', 'ascii-to-mseed')",
+    #     "INSERT INTO topics (title, description, image_name, type, template_name) VALUES ('Signal processing', 'An interactive tool to apply various techniques and algorithms to analyze, filter, enhance, and extract meaningful information from seismic records.', 'signal-processing-icon.png', 'interactive', 'signal-processing')",
+    #     "INSERT INTO topics (title, description, image_name, type, template_name) VALUES ('Site effect', 'Refers to the phenomenon where the characteristics of the local site or subsurface geology affect the propagation and amplification of seismic waves.', 'site-effect-icon.png', 'static', 'site-effect')",
+    #     "INSERT INTO topics (title, description, image_name, type, template_name) VALUES ('Introduction to Seismology', 'A small introduction to various seismological concepts and the propagation of seismic waves through the Earth', 'introduction-to-seismology.png', 'static', 'seismology-intro')",
+    #     "INSERT INTO topics (title, description, image_name, type, template_name) VALUES ('Distance between points', 'Compute the distance between two geographical points on the WGS84 ellipsoid', 'distance-between-points.png', 'interactive', 'distance-between-points')",
+    #     "INSERT INTO topics (title, description, image_name, type, template_name) VALUES ('Python File Manipulation', 'Use Python libraries to manipulate system files. Simplify tasks like directory traversal, file creation, path handling and pattern matching using libraries like Python os, pathlib, shutil and more.', 'file-manipulation.png', 'static', 'file-manipulation')"
+    #     "INSERT INTO topics (title, description, image_name, type, template_name) VALUES ('Python Matplotlib Tutorial', 'Unlock the power of Python and Matplotlib for visually analyzing seismic data. Dive into our comprehensive tutorial, where we guide you through the art of plotting and interpreting seismic data with precision and clarity.', 'matplotlib.png', 'static', 'matplotlib')"
         
     # ]
 
     # Create Topic instances for all topics
     tp1 = Topic(
         title="Python Obspy",
-        description="ObsPy is an open-source Python library used for seismic data processing and analysis. It stands for Observatory Python and provides a wide range of functionalities for working with seismological data.",
+        description="An open-source Python library used for working with seismological data",
         image_name="obspy-icon.png",
         type="static",
-        template_name="obspy.html"
+        template_name="obspy"
     )
 
     tp2 = Topic(
         title="Fourier spectra calculation",
-        description="An interactive tool to calculate the Fourier spectra on a window of a seismogram. The Fourier transform is commonly used in seismology to analyze the frequency content of seismic signals.",
+        description="An interactive tool to calculate the Fourier spectra between a window on the seismogram",
         image_name="fourier-icon.png",
         type="interactive",
-        template_name="fourier.html"
+        template_name="fourier"
     )
 
     tp3 = Topic(
         title="Arrival time picking",
-        description="Arrival time picking refers to the process of extracting the arrival times of specific seismic phases from a seismogram. These arrival times provide valuable information about the timing and characteristics of seismic events.",
+        description="An interactive tool to extract the P & S arrival time from the records",
         image_name="arrival-pick-icon.png",
         type="interactive",
-        template_name="pick-arrivals.html"
+        template_name="pick-arrivals"
     )
 
     tp4 = Topic(
         title="ASCII to MSEED",
-        description="An interactive tool to convert ASCII files to ObsPy MiniSEED (mseed) format. Use this option if you want to transform your data into a binary format to use the available tools.",
+        description="An interactive tool to convert ASCII data files to ObsPy MiniSEED (mseed) format",
         image_name="ascii-to-mseed-icon.png",
         type="interactive",
-        template_name="ascii-to-mseed.html"
+        template_name="ascii-to-mseed"
     )
 
     tp5 = Topic(
         title="Signal processing",
-        description="An interactive tool to apply various techniques and algorithms to analyze, filter, enhance, and extract meaningful information from seismic records.",
+        description="An interactive tool to process seismic records using various techniques and algorithms",
         image_name="signal-processing-icon.png",
         type="interactive",
-        template_name="signal-processing.html"
+        template_name="signal-processing"
     )
 
     tp6 = Topic(
         title="Site effect",
-        description="Refers to the phenomenon where the characteristics of the local site or subsurface geology affect the propagation and amplification of seismic waves.",
+        description="The phenomenon of the amplification of the seismic ground motion due to the subsurface geological conditions",
         image_name="site-effect-icon.png",
         type="static",
-        template_name="site-effect.html"
+        template_name="site-effect"
     )
 
     tp7 = Topic(
         title="Introduction to Seismology",
-        description="A small introduction to various seismological concepts and the propagation of seismic waves through the Earth.",
+        description="An introduction to various seismological concepts",
         image_name="introduction-to-seismology.png",
         type="static",
-        template_name="seismology-intro.html"
+        template_name="seismology-intro"
     )
 
     tp8 = Topic(
         title="Distance between points",
-        description="Compute the distance between two geographical points on the WGS84 ellipsoid.",
+        description="An interactive tool to compute the distance between two geographical points on the WGS84 ellipsoid",
         image_name="distance-between-points.png",
         type="interactive",
-        template_name="distance-between-points.html"
+        template_name="distance-between-points"
     )
 
     tp9 = Topic(
         title="Python File Manipulation",
-        description="Use Python libraries to manipulate system files. Simplify tasks like directory traversal, file creation, path handling, and pattern matching using libraries like Python os, pathlib, shutil, and more.",
+        description="Utilization of various Python libraries to manipulate system files and paths",
         image_name="file-manipulation.png",
         type="static",
-        template_name="file-manipulation.html"
+        template_name="file-manipulation"
     )
 
     tp10 = Topic(
         title="Python Matplotlib Tutorial",
-        description="Unlock the power of Python and Matplotlib for visually analyzing seismic data. Dive into our comprehensive tutorial, where we guide you through the art of plotting and interpreting seismic data with precision and clarity.",
+        description="A Python library to visually analyzing seismic data with precision and clarity",
         image_name="matplotlib.png",
         type="static",
-        template_name="matplotlib.html"
+        template_name="matplotlib"
     )
 
     Topic.query.delete()

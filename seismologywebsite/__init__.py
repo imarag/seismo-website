@@ -4,7 +4,7 @@ from flask_login import LoginManager, UserMixin, login_required, current_user
 from flask_mail import Mail, Message
 import datetime
 import os
-from .functions import send_email
+from itsdangerous.url_safe import URLSafeTimedSerializer as Serializer
 
 db = SQLAlchemy()
 login_manager = LoginManager()
@@ -22,6 +22,21 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(255), nullable=False)
     last_login = db.Column(db.TIMESTAMP, nullable=False, default=datetime.datetime.utcnow)
     registered_date = db.Column(db.DATE, default=datetime.datetime.utcnow().date())
+
+    def get_reset_token(self, app, expires_sec=1800):
+        s = Serializer(app.config['SECRET_KEY'])
+        token = s.dumps({'user_id': self.id}, salt='reset_salt')
+        return token
+    
+    @staticmethod
+    def verify_reset_token(token, app):
+        s = Serializer(app.config['SECRET_KEY'])
+        try:
+            user_id = s.loads(token)['user_id']
+        except:
+            return None
+        return User.query.get('user_id')
+    
 
 class Topic(db.Model, UserMixin):
     __tablename__ = 'topics'
@@ -43,6 +58,13 @@ def create_app(test_config=None):
     app.config['items_per_page'] = 4
     app.config['total_topics'] = 9
 
+    app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+    app.config['MAIL_PORT'] = 465
+    app.config['MAIL_USERNAME'] = 'seismoweb95@gmail.com'
+    app.config['MAIL_PASSWORD'] = 'qppnzstyxltfjcnz'
+    app.config['MAIL_USE_TLS'] = False
+    app.config['MAIL_USE_SSL'] = True
+
     app.config.from_mapping(
         SECRET_KEY = 'asdf12345po45i34OI'
     )
@@ -52,14 +74,7 @@ def create_app(test_config=None):
     mail.init_app(app)
 
     login_manager.login_view = "auth.login"
-
-    with app.app_context():
-        db.create_all()
-
-    if test_config is None:
-        app.config.from_pyfile('config.py', silent=True) # filename relative to the root path
-    else:
-        app.config.from_mapping(test_config)
+    login_manager.login_message_category = "info"
    
     try:
         os.makedirs(app.instance_path)
@@ -72,17 +87,23 @@ def create_app(test_config=None):
     def home():
         return render_template('index.html')
 
-    @app.route('/show-topic/<topic_name>')
+    @app.route('/show-topic/<topic_tmp_name>')
     @login_required
-    def show_topic(topic_name):
-        return render_template(f'topics/{topic_name}')
+    def show_topic(topic_tmp_name):
+        topic = Topic.query.filter_by(template_name=topic_tmp_name).first()
+        return render_template(f'topics/{topic_tmp_name}.html', topic_object = topic)
 
     @app.route('/resource-file')
     @login_required
     def resource_file():
         return render_template(f'resources.html')
 
+    @app.route('/test')
+    def test():
+        return render_template(f'test2.html')
+
     @app.route('/help-and-support')
+    @login_required
     def help_and_support():
         return render_template('help-and-support.html')
     
@@ -96,18 +117,19 @@ def create_app(test_config=None):
     @app.route('/receive-feedback', methods=['POST'])
     @login_required
     def receive_feedback():
-        feedback_input_text = request.form['feedback-input']
-
-        if feedback_input_text:
-            flash('Thank you for your feedback!')
-
-            user = current_user
-            # send the email
-            send_email(mail, user.email, feedback_input_text)
-
-        flash("You haven't provided any feedback", "danger")
-
         return redirect(url_for('help_and_support'))
+        # feedback_input_text = request.form['feedback-input']
+
+        # if feedback_input_text:
+        #     flash('Thank you for your feedback!')
+
+        #     user = current_user
+        #     # send the email
+        #     send_email(mail, user.email, feedback_input_text)
+
+        # flash("You haven't provided any feedback", "danger")
+
+        # return redirect(url_for('help_and_support'))
     
 
     @app.errorhandler(403)
@@ -149,7 +171,11 @@ def create_app(test_config=None):
 
     return app
    
-
+# one time setup
+with create_app().app_context():
+    # Create User to test with
+    db.create_all()
+    db.session.commit()
 
 
 

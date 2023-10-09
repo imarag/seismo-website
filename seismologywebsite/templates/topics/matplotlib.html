@@ -1,87 +1,86 @@
-{% extends 'base.html' %}
 
-{% block title %}
-File Manipulation
+{% extends 'base-articles.html' %}
+
+
+{% block article_template_image %}
+    <img 
+        src="{{ url_for('static', filename='img/templates-icons/' + topic_object.image_name) }}"  
+        alt="{{ topic_object.title }} - template image"
+        class="img-fluid"
+    >
 {% endblock %}
 
 
-{% block content %}
-<section class="bg-light">
-  <div class="py-3 container-lg">
-      <div class="row justify-content-center align-items-center  pt-5 mb-4 ">
-          <div class="col-lg-2 col-3 col-md-2 d-none d-md-block">
-              <a href="https://matplotlib.org/stable/" target="_blank">
-                <img src="/static/img/templates-icons/matplotlib.png" alt="mseed record ASCII file" class="img-fluid">
-              </a>
-          </div>
-          <div class="col-lg-9 col-10 col-md-8 text-center text-md-start">
-              <p class="display-1">Python Matplotlib</p>
-          </div>
-      </div>
-      <div class="fs-2 lead fst-italic text-muted">
-          <p class="text-center text-md-start">
-            Unlock the art of visualizing seismological data using the versatile Python Matplotlib library. Learn to generate analytical figures that depict seismic phenomena and 
-            facilitate deeper insights.
-          </p>
-      </div>
-      <div class="text-center fs-5 my-5" id="hyper-reference-pills-container">
-          <a target="_blank" href="https://docs.python.org/3/library/os.html"><span class="badge rounded-pill">os</span></a>
-          <a target="_blank" href="https://docs.python.org/3/library/os.path.html"><span
-              class="badge rounded-pill">figure</span></a>
-          <a target="_blank" href="https://docs.python.org/3/library/pathlib.html"><span
-              class="badge rounded-pill">ax</span></a>
-      </div>
-  </div>
-</section>
+{% block article_title %}
+    {{ topic_object.title }}
+{% endblock %}
 
-<section>
-    <div class="lead fs-3 container-lg">
-        <h1 class="text-center display-4 text-info my-5">Introduction</h1>
-        <p>
-          Matplotlib is a Python library for data plotting. It contains a variety of functions to depict your data utilizing different graph types (e.g., line graph, bar graph, pie chart). In this 
-          guide we will present the basic functionality of the library is order for someone to be able to quickly generate a figure without having to spend time searching the vast amount of information presented in the 
-          documentation. However, bear in mind that an in-depth knowledge of the library requires reading and understanding the documentation in depth.
-        </p>
-        <p>Start by importing the <code>matplotlib</code> library:</p>
-        <div class="input-code-block">
-            <pre><code><span class="python-color1">import</span> matplotlib.pyplot <span class="python-color2">as</span> plt 
+
+{% block article_title_description %}
+    {{ topic_object.description }}
+{% endblock %}
+
+
+{% block article_pills %}
+    <a target="_blank" href="https://docs.python.org/3/library/os.html"><span class="badge rounded-pill">os</span></a>
+    <a target="_blank" href="https://docs.python.org/3/library/os.path.html"><span
+        class="badge rounded-pill">figure</span></a>
+    <a target="_blank" href="https://docs.python.org/3/library/pathlib.html"><span
+        class="badge rounded-pill">ax</span></a>
+{% endblock %}
+
+
+{% block article_body %}
+
+
+    <section>
+        <div class="lead fs-3 container-lg">
+            <h1 class="text-center display-4 text-info my-5">Introduction</h1>
+            <p>
+            Matplotlib is a Python library for data plotting. It contains a variety of functions to depict your data utilizing different graph types (e.g., line graph, bar graph, pie chart). In this 
+            guide we will present the basic functionality of the library is order for someone to be able to quickly generate a figure without having to spend time searching the vast amount of information presented in the 
+            documentation. However, bear in mind that an in-depth knowledge of the library requires reading and understanding the documentation in depth.
+            </p>
+            <p>Start by importing the <code>matplotlib</code> library:</p>
+            <div class="input-code-block">
+                <pre><code><span class="python-color1">import</span> matplotlib.pyplot <span class="python-color2">as</span> plt 
+            </code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="lead fs-3 container-lg">
+            <h1 class="text-center display-4 text-info my-5">Basic Matplotlib structure</h1>
+            <p>
+                The basic structure of the Matplotlib library are the <code>matplotlib.pyplot.figure</code> and the <code>matplotlib.pyplot.Axes</code> classes. The <code>matplotlib.pyplot.figure</code> is 
+                in a sense, a container for one or multiple <code>matplotlib.pyplot.Axes</code> instances. To begin plotting your data, you must first create these two essential objects. You can 
+                initiate them by using the <code>matplotlib.pyplot.subplots</code> function which creates a plot of multiple <code>matplotlib.pyplot.Axes</code> instances as a grid. These 
+                <code>matplotlib.pyplot.Axes</code> instances are called <i>subplots</i> in the grid.
+            </p>
+            
+            <p>
+                This function returns a tuple with a <code>matplotlib.pyplot.figure</code> instance as its first item and
+                a single <code>matplotlib.pyplot.Axes</code> object, or an array of <code>matplotlib.pyplot.Axes</code> objects as its second item. 
+                That depends on the number of subplots in your plot grid.
+            </p>
+            
+            <div class="input-code-block">
+                <pre><code><span class="comment"># initialize a figure and axes instances</span>
+                    fig, ax = plt.<span class="python-color1">subplots</span>()
         </code></pre>
+            </div>
+            <p>
+                The function can get various parameters to control the final graph. These parameters are described below:
+            </p>
+            <ul>
+                <li><b>nrows</b>, the number of rows (default, 1) your plot grid will contain</li>
+                <li><b>ncols</b>, the number of column (default, 1) your plot grid will have</li>
+                <li><b>sharex</b>, control whether the plot subplots will have shared x-axis vertically (<code>True</code>) or not (default, <code>False</code>)</li>
+                <li><b>sharey</b>, control whether the plot subplots will have shared y-axis horizontally (<code>True</code>) or not (default, <code>False</code>)</li>
+                <li><b>figsize</b>, the size ([with, height]) of the figure in inches (default, <code>[6.4, 4.8]</code>)</li>
+            </ul>
         </div>
-    </div>
-</section>
-
-<section>
-    <div class="lead fs-3 container-lg">
-        <h1 class="text-center display-4 text-info my-5">Basic Matplotlib structure</h1>
-        <p>
-            The basic structure of the Matplotlib library are the <code>matplotlib.pyplot.figure</code> and the <code>matplotlib.pyplot.Axes</code> classes. The <code>matplotlib.pyplot.figure</code> is 
-            in a sense, a container for one or multiple <code>matplotlib.pyplot.Axes</code> instances. To begin plotting your data, you must first create these two essential objects. You can 
-            initiate them by using the <code>matplotlib.pyplot.subplots</code> function which creates a plot of multiple <code>matplotlib.pyplot.Axes</code> instances as a grid. These 
-            <code>matplotlib.pyplot.Axes</code> instances are called <i>subplots</i> in the grid.
-        </p>
-        
-        <p>
-            This function returns a tuple with a <code>matplotlib.pyplot.figure</code> instance as its first item and
-            a single <code>matplotlib.pyplot.Axes</code> object, or an array of <code>matplotlib.pyplot.Axes</code> objects as its second item. 
-            That depends on the number of subplots in your plot grid.
-        </p>
-        
-        <div class="input-code-block">
-            <pre><code><span class="comment"># initialize a figure and axes instances</span>
-                fig, ax = plt.<span class="python-color1">subplots</span>()
-      </code></pre>
-        </div>
-        <p>
-            The function can get various parameters to control the final graph. These parameters are described below:
-        </p>
-        <ul>
-            <li><b>nrows</b>, the number of rows (default, 1) your plot grid will contain</li>
-            <li><b>ncols</b>, the number of column (default, 1) your plot grid will have</li>
-            <li><b>sharex</b>, control whether the plot subplots will have shared x-axis vertically (<code>True</code>) or not (default, <code>False</code>)</li>
-            <li><b>sharey</b>, control whether the plot subplots will have shared y-axis horizontally (<code>True</code>) or not (default, <code>False</code>)</li>
-            <li><b>figsize</b>, the size ([with, height]) of the figure in inches (default, <code>[6.4, 4.8]</code>)</li>
-        </ul>
-    </div>
-</section>
+    </section>
 
 {% endblock %}

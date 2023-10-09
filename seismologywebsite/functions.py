@@ -1,7 +1,6 @@
 from flask import session, jsonify, abort, current_app, make_response
 from obspy.core import read
 import os
-from flask_mail import Message
 import pandas as pd
 
 def raise_error(error_message):
@@ -108,22 +107,3 @@ def convert_mseed_to_json(stream):
 
 
 
-
-def send_email(mail, sender_email, feedback_text):
-    msg = Message(
-        sender = sender_email, 
-        recipients = ['giannis.marar@hotmail.com'],
-        subject="Feedback created (seismology website)"
-        )
-    
-    # create the message html
-    msg.html = f"""
-        <h1>Feedback</h1>
-        <h3>From: {sender_email}</h3>
-        <div>
-            <p>{feedback_text}</p>
-        </div>
-        """
-    
-    # send the email
-    mail.send(msg)
