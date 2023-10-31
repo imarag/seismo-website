@@ -4,29 +4,16 @@ from .forms import ForgotPasswordForm, ResetPasswordForm
 from . import mail 
 from flask_mail import Message
 from . import User, db
+from .functions import generate_password
+from werkzeug.security import check_password_hash, generate_password_hash
+from . import db
+
 
 bp = Blueprint('BP_forgotpassword', __name__, url_prefix = '/forgot-password')
 
 
 
 ####################### forgot password functionality ##############################
-
-def send_email(user):
-    token = user.get_reset_token(current_app)
-    msg = Message(
-        sender = 'giannis.marar@hotmail.com', 
-        recipients = [user.email],
-        subject="Reset email"
-        )
-    
-    # create the message html
-    msg.body = f'''
-        To reset your password visit the following link:
-        { url_for('BP_forgotpassword.reset_password_template', token=token, _external=True) }
-    '''
-
-    # send the email
-    mail.send(msg)
 
 
 @bp.route('/forgot-password-template')
@@ -51,8 +38,35 @@ def send_reset_email():
             flash('There is no user with that email!', 'danger')
             return redirect(url_for('BP_forgotpassword.forgot_password_template'))
         
-        send_email(user)
-        flash("An email has been sent to your email to reset your password!", 'success')
+        try:
+            # generate a new random password
+            new_password = generate_password()
+
+            # create an email object
+            msg = Message(
+                subject="Password Reset",
+                sender="seismoweb95@gmail.com",
+                recipients=[user.email]
+            )
+            msg.html = f"""
+            <h1>Password Reset</h1>
+            <hr>
+            <p>Use your email address and the temporary password provided below to log in into your account:</p>
+            <ul>
+                <li><b>Email</b>: {user.email}</li>
+                <li><b>Password</b>: {new_password}</li>
+            </ul>
+            <p>We strongly recommend changing the temporary password to a new, unique one.</p>
+            """
+            mail.send(msg)
+        except Exception as e:
+            flash('Sorry, something went wrong. The reset password email was not sent!', 'danger')
+            return redirect(url_for('BP_forgotpassword.forgot_password_template'))
+        
+        user.password = generate_password_hash(new_password)
+        db.session.commit()
+        
+        flash(f'A new temporary password has been sent to your email account!', 'info')
         return(redirect(url_for('home')))
     
     return render_template('forgot-password/forgot-password-template.html', form=form)

@@ -65,12 +65,9 @@ def login():
             # login the user
             login_user(user, remember=remember_me)
 
-            # flash succesful login
-            flash('Login successful. Welcome, {}!'.format(user.fullname), 'success')
-
             # update the last logged in date
-            current_timestamp = datetime.datetime.now()
-
+            current_datetime = datetime.datetime.now()
+            current_timestamp = datetime.datetime(current_datetime.year, current_datetime.month, current_datetime.day, current_datetime.hour, current_datetime.minute, current_datetime.second)
             user.last_login = current_timestamp
             db.session.commit()
 

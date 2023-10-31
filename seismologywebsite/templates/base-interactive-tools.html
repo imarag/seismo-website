@@ -41,6 +41,7 @@
                                 {% endblock %}
                             </p>
                         </div>
+                        
                         <div class="accordion" id="accordionExample">
                             <div class="accordion-item">
                                 <h2 class="accordion-header">
@@ -61,10 +62,10 @@
                             </div>
                         </div>
                         <p class="text-muted text-center mt-5 fs-5 lead">
-                            Don't have an seismic data file ? Click <a href="{{ url_for('show_topic', topic_tmp_name='ascii-to-mseed') }}"
-                                class="link-info">here</a> to create a MiniSEED file format using data defined in an ASCII file
+                            Don't have a seismic data file ? Click <a href="{{ url_for('show_topic', topic_tmp_name='ascii-to-mseed') }}"
+                                class="link-info">here</a> convert data stored in an ASCII file format (such as .csv, .txt or .dat) to the seismic MiniSEED data file format
                             or <a href="{{ url_for('static', filename='static-files/test-mseed-file.mseed') }}"
-                                class="link-info">download</a> one, to try the tool.
+                                class="link-info">download</a> one to experiment with the tool.
                         </p>
                     </div>
                 </div>

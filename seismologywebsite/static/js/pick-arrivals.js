@@ -31,7 +31,7 @@
     let wavesPicked; // list of 'P' or 'S' ex. ['P', 'S']. it can only have one or two values
     let PSArrivalValues; // dict with the actual values picked {P: null, S: null}
 
-
+    spinnerDiv.style.display = 'none';
 
 
 
@@ -190,7 +190,7 @@
             modeBarButtons: [
                 
                 ['zoom2d', 'pan2d',
-                'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d']
+                'zoomIn2d', 'zoomOut2d',  'resetScale2d']
             ]
         };
 

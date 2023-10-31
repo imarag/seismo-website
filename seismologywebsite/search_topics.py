@@ -45,7 +45,7 @@ def get_search_topics():
         previous_state = 'disabled'
     else:
         previous_state = 'enabled'
-
+    # this has to do with the numbers between previous and next
     total_show_pages = math.ceil(len(topics) / current_app.config['items_per_page'])
 
     return render_template(
@@ -62,12 +62,10 @@ def get_search_topics():
     
 @bp.route('/filter-topics', methods=['GET','POST'])
 def filter_topics():
-
     if request.method == "GET":
         filter_selected = request.args.get("topictype")
     else:
         filter_selected = request.form["topictype"]
-    
     current_app.config['topic_type_selected'] = filter_selected
     current_app.config['current_page'] = 1
     return redirect(url_for('BP_search_topics.get_search_topics'))

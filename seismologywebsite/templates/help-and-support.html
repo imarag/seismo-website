@@ -17,208 +17,249 @@ Help & Support
         </ol>
     </nav>
     <p class="display-4 text-center my-5">Help & Support</p>
-    <div class="accordion my-5" id="accordion-information">
-        <div class="accordion-item">
-            <h2 class="accordion-header">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                    <p class="fs-3 text-start text-muted">Contact us</p>
-                </button>
-            </h2>
-            <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordion-information">
-                <div class="accordion-body">
-                    <div class="row fs-5 mb-5 mt-2 gy-5">
-                        <div class="col-12 col-md-6  text-start">
-                            <img class="img-fluid"
-                                src="{{ url_for('static', filename='img/help-and-support/telephone-fill.svg') }}">
-                            <span class="text-primary fw-bold">telephone:</span> <span>+30&nbsp6982972144</span>
-                        </div>
-                        <div class="col-12 col-md-6  text-start">
-                            <img class="img-fluid"
-                                src="{{ url_for('static', filename='img/help-and-support/envelope-fill.svg') }}">
-                            <span class="text-primary fw-bold">email:</span> <a href="mailto: giannis.marar@hotmail.com">giannis.marar@hotmail.com</a>
-                        </div>
-                        <div class="col-12 col-md-6  text-start">
-                            <img class="img-fluid"
-                                src="{{ url_for('static', filename='img/help-and-support/linkedin.svg') }}">
-                            <span class="text-primary fw-bold">LinkedIn:</span> <a target="_blank" href="https://www.linkedin.com/in/ioannis-maragkakis-1ba2851a9/">ioannis-maragkakis</a>
-                        </div>
-                        <div class="col-12 col-md-6  text-start">
 
+    <div class="accordion" id="help-and-support-accordion">
+        <div class="row justify-content-center gy-4">
+            <div class="col-7 col-md-3 col-lg-3 text-center">
+                <p class="fs-3 text-dark text-center fw-bold ">Contact</p>
+                <div class="accordion-item bg-light mx-auto shadow rounded" style="width: 120px">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed bg-info shadow text-center" type="button" data-bs-toggle="collapse" data-bs-target="#contact-container" aria-expanded="false" aria-controls="contact-container">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="black" class="bi bi-telephone-outbound" viewBox="0 0 16 16">
+                                <path d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.568 17.568 0 0 0 4.168 6.608 17.569 17.569 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.678.678 0 0 0-.58-.122l-2.19.547a1.745 1.745 0 0 1-1.657-.459L5.482 8.062a1.745 1.745 0 0 1-.46-1.657l.548-2.19a.678.678 0 0 0-.122-.58L3.654 1.328zM1.884.511a1.745 1.745 0 0 1 2.612.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511zM11 .5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V1.707l-4.146 4.147a.5.5 0 0 1-.708-.708L14.293 1H11.5a.5.5 0 0 1-.5-.5z"/>
+                            </svg>
+                        </button>
+                    </h2>
+                </div>                
+            </div>
+            <div class="col-7 col-md-3 col-lg-3 text-center">
+                <p class="fs-3 text-dark text-center fw-bold ">FAQs</p>
+                <div class="accordion-item bg-light mx-auto shadow rounded" style="width: 120px">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed bg-info shadow text-center" type="button" data-bs-toggle="collapse" data-bs-target="#faqs-container" aria-expanded="false" aria-controls="faqs-container">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="black" class="bi bi-patch-question" viewBox="0 0 16 16">
+                                <path d="M8.05 9.6c.336 0 .504-.24.554-.627.04-.534.198-.815.847-1.26.673-.475 1.049-1.09 1.049-1.986 0-1.325-.92-2.227-2.262-2.227-1.02 0-1.792.492-2.1 1.29A1.71 1.71 0 0 0 6 5.48c0 .393.203.64.545.64.272 0 .455-.147.564-.51.158-.592.525-.915 1.074-.915.61 0 1.03.446 1.03 1.084 0 .563-.208.885-.822 1.325-.619.433-.926.914-.926 1.64v.111c0 .428.208.745.585.745z"/>
+                                <path d="m10.273 2.513-.921-.944.715-.698.622.637.89-.011a2.89 2.89 0 0 1 2.924 2.924l-.01.89.636.622a2.89 2.89 0 0 1 0 4.134l-.637.622.011.89a2.89 2.89 0 0 1-2.924 2.924l-.89-.01-.622.636a2.89 2.89 0 0 1-4.134 0l-.622-.637-.89.011a2.89 2.89 0 0 1-2.924-2.924l.01-.89-.636-.622a2.89 2.89 0 0 1 0-4.134l.637-.622-.011-.89a2.89 2.89 0 0 1 2.924-2.924l.89.01.622-.636a2.89 2.89 0 0 1 4.134 0l-.715.698a1.89 1.89 0 0 0-2.704 0l-.92.944-1.32-.016a1.89 1.89 0 0 0-1.911 1.912l.016 1.318-.944.921a1.89 1.89 0 0 0 0 2.704l.944.92-.016 1.32a1.89 1.89 0 0 0 1.912 1.911l1.318-.016.921.944a1.89 1.89 0 0 0 2.704 0l.92-.944 1.32.016a1.89 1.89 0 0 0 1.911-1.912l-.016-1.318.944-.921a1.89 1.89 0 0 0 0-2.704l-.944-.92.016-1.32a1.89 1.89 0 0 0-1.912-1.911l-1.318.016z"/>
+                                <path d="M7.001 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0z"/>
+                            </svg>
+                        </button>
+                    </h2>
+                </div>                
+            </div>
+            <div class="col-7 col-md-3 col-lg-3 text-center">
+                <p class="fs-3 text-dark text-center fw-bold">Websites</p>
+                <div class="accordion-item bg-light mx-auto shadow rounded" style="width: 120px">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed bg-info shadow text-center" type="button" data-bs-toggle="collapse" data-bs-target="#websites-container" aria-expanded="false" aria-controls="websites-container">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="black" class="bi bi-database-add" viewBox="0 0 16 16">
+                                <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0Z"/>
+                                <path d="M12.096 6.223A4.92 4.92 0 0 0 13 5.698V7c0 .289-.213.654-.753 1.007a4.493 4.493 0 0 1 1.753.25V4c0-1.007-.875-1.755-1.904-2.223C11.022 1.289 9.573 1 8 1s-3.022.289-4.096.777C2.875 2.245 2 2.993 2 4v9c0 1.007.875 1.755 1.904 2.223C4.978 15.71 6.427 16 8 16c.536 0 1.058-.034 1.555-.097a4.525 4.525 0 0 1-.813-.927C8.5 14.992 8.252 15 8 15c-1.464 0-2.766-.27-3.682-.687C3.356 13.875 3 13.373 3 13v-1.302c.271.202.58.378.904.525C4.978 12.71 6.427 13 8 13h.027a4.552 4.552 0 0 1 0-1H8c-1.464 0-2.766-.27-3.682-.687C3.356 10.875 3 10.373 3 10V8.698c.271.202.58.378.904.525C4.978 9.71 6.427 10 8 10c.262 0 .52-.008.774-.024a4.525 4.525 0 0 1 1.102-1.132C9.298 8.944 8.666 9 8 9c-1.464 0-2.766-.27-3.682-.687C3.356 7.875 3 7.373 3 7V5.698c.271.202.58.378.904.525C4.978 6.711 6.427 7 8 7s3.022-.289 4.096-.777ZM3 4c0-.374.356-.875 1.318-1.313C5.234 2.271 6.536 2 8 2s2.766.27 3.682.687C12.644 3.125 13 3.627 13 4c0 .374-.356.875-1.318 1.313C10.766 5.729 9.464 6 8 6s-2.766-.27-3.682-.687C3.356 4.875 3 4.373 3 4Z"/>
+                            </svg>
+                        </button>
+                    </h2>
+                </div>                
+            </div>
+            <div class="col-7 col-md-3 col-lg-3 text-center">
+                <p class="fs-3 text-dark text-center fw-bold ">Feedback</p>
+                <div class="accordion-item bg-light mx-auto shadow rounded" style="width: 120px">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed bg-info shadow text-center" type="button" data-bs-toggle="collapse" data-bs-target="#feeback-container" aria-expanded="false" aria-controls="feeback-container">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="black" class="bi bi-chat-dots" viewBox="0 0 16 16">
+                                <path d="M5 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+                                <path d="m2.165 15.803.02-.004c1.83-.363 2.948-.842 3.468-1.105A9.06 9.06 0 0 0 8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6a10.437 10.437 0 0 1-.524 2.318l-.003.011a10.722 10.722 0 0 1-.244.637c-.079.186.074.394.273.362a21.673 21.673 0 0 0 .693-.125zm.8-3.108a1 1 0 0 0-.287-.801C1.618 10.83 1 9.468 1 8c0-3.192 3.004-6 7-6s7 2.808 7 6c0 3.193-3.004 6-7 6a8.06 8.06 0 0 1-2.088-.272 1 1 0 0 0-.711.074c-.387.196-1.24.57-2.634.893a10.97 10.97 0 0 0 .398-2z"/>
+                            </svg>
+                        </button>
+                    </h2>
+                </div>                
+            </div>
+        </div>
+        
+        <div class="row justify-content-center my-5">
+            <div class="col">
+                <div class="fs-5 p-4">
+                    <div id="contact-container" class="accordion-collapse collapse" data-bs-parent="#help-and-support-accordion">
+                        <div class="accordion-body">
+                            <div class="row justify-content-center gy-4">
+                                <div class="col-8 col-lg-4 text-center">
+                                    <p>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-telephone-fill" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"/>
+                                        </svg>
+                                        <span class="fw-semibold ms-2 fs-4">Telephone</span>
+                                    </p>
+                                    <p class="text-primary fw-bold">+30&nbsp6982972144</p>
+                                </div>
+                                <div class="col-8 col-lg-4 text-center">
+                                    <p>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope-fill" viewBox="0 0 16 16">
+                                            <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555ZM0 4.697v7.104l5.803-3.558L0 4.697ZM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757Zm3.436-.586L16 11.801V4.697l-5.803 3.546Z"/>
+                                          </svg>
+                                        <span class="fw-semibold ms-2 fs-4">Email</span>
+                                    </p>
+                                    <p class="text-primary fw-bold"><a href="mailto: giannis.marar@hotmail.com">giannis.marar@hotmail.com</a></p>
+                                </div>
+                                <div class="col-8 col-lg-4 text-center">
+                                    <p>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-linkedin" viewBox="0 0 16 16">
+                                            <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 0 1 .016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z"/>
+                                          </svg>
+                                        <span class="fw-semibold ms-2 fs-4">LinkedIn</span>
+                                    </p>
+                                    <p class="text-primary fw-bold"><a target="_blank" href="https://www.linkedin.com/in/ioannis-maragkakis-1ba2851a9/">ioannis-maragkakis</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="faqs-container" class="accordion-collapse collapse" data-bs-parent="#help-and-support-accordion">
+                        <div class="accordion-body">
+                            <p class="fw-bold fs-6">What kind of files does the site uses ?</p>
+                            <p class="fs-6">The site uses MiniSEED or MSEED binary format files that store and exchange digital
+                                seismic waveform data.</p>
+                            <hr>
+                            <p class="fw-bold fs-6">What tools are used to build this website ?</p>
+                            <p class="fs-6">The technology used to build this website consists of tools that have to do with the
+                                front-end side such as <code>HTML</code>, <code>CSS</code>, <code>Javascript</code> and tools
+                                related to the front-end side or server side that we use the <code>Flask</code> Python library.
+                            </p>
+                            <hr>
+                            <p class="fw-bold fs-6">What is the site about ?</p>
+                            <p class="fs-6">The site is about earthquake related concepts and tools. Our platform is
+                                thoughtfully designed to serve individuals from various backgrounds and levels of knowledge.
+                                Here, we're passionate about making earthquake knowledge accessible to everyone. Our mission is
+                                to empower you with insights and resources that span from the basics to more advanced insights.
+                                Our collection includes a wide array of articles and tools carefully crafted to ensure that
+                                regardless of your familiarity with the topic, you'll find something valuable and engaging.</p>
+                            <hr>
+                            <p class="fw-bold fs-6">How do I navigate through the website?</p>
+                            <p class="fs-6">We've organized our content into two main categories: articles and interactive
+                                tools. Dive into our articles to gain deeper insights into various seismological concepts, and
+                                don't miss out on our interactive tools that let you explore and apply different seismological
+                                computations.</p>
+                            <hr>
+                            <p class="fw-bold fs-6">Will the site be regularly updated with new content?</p>
+                            <p class="fs-6">Yes, we are committed to providing you with a dynamic and evolving resource. Our
+                                team is dedicated to regularly updating the site with fresh articles, tools, and the latest
+                                insights in the field of seismology. Be sure to check back often to discover new additions that
+                                will continue to enrich your understanding and exploration of earthquakes.</p>
+                            <hr>
+                        </div>
+                    </div>
+                    <div id="websites-container" class="accordion-collapse collapse" data-bs-parent="#help-and-support-accordion">
+                        <div class="accordion-body">
+                            <ul class="list-group list-group-flush">
+                                <div class="row justify-content-center">
+                                    <div class="col text-center">
+                                        <p>
+                                            <img src="{{ url_for('static', filename='img/help-and-support/iris.png') }}"
+                                                class="img-fluid" style="width:80px;">
+                                        </p>
+                                        <p>
+                                            <a target="_blank" href="https://www.iris.edu/hq/">
+                                                <p class="fs-5">Incorporated Research Institutions for Seismology</p>
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <hr>
+                                <div class="row justify-content-center">
+                                    <div class="col text-center">
+                                        <p>
+                                            <img src="{{ url_for('static', filename='img/help-and-support/usgs.png') }}"
+                                                class="img-fluid" style="width:80px;">
+                                        </p>
+                                        <p>
+                                            <a target="_blank" href="https://www.usgs.gov/">
+                                                <p class="fs-5">United States Geological Survey</p>
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+
+                               
+                                <hr>
+                                <div class="row justify-content-center">
+                                    <div class="col text-center">
+                                        <p>
+                                            <img src="{{ url_for('static', filename='img/help-and-support/emsc.jpg') }}"
+                                                class="img-fluid" style="width:80px;">
+                                        </p>
+                                        <p>
+                                            <a target="_blank" href="https://www.emsc-csem.org/">
+                                                <p class="fs-5">European-Mediterranean Seismological Centre</p>
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                
+                                <hr>
+                                <div class="row justify-content-center">
+                                    <div class="col text-center">
+                                        <p>
+                                            <img src="{{ url_for('static', filename='img/help-and-support/itsak_logo.png') }}"
+                                                class="img-fluid" style="width:80px;">
+                                        </p>
+                                        <p>
+                                            <a target="_blank" href="http://www.itsak.gr/en">
+                                                <p class="fs-5">Institute of Engineering Seismology and Earthquake Engineering</p>
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                
+                                <hr>
+                                <div class="row justify-content-center">
+                                    <div class="col text-center">
+                                        <p>
+                                            <img src="{{ url_for('static', filename='img/help-and-support/auth_logo.png') }}"
+                                                class="img-fluid" style="width:80px;">
+                                        </p>
+                                        <p>
+                                            <a target="_blank" href="http://geophysics.geo.auth.gr/ss/station_index_en.html">
+                                                <p class="fs-5">Seismological Station Aristotle University of Thessaloniki</p>
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+
+                              
+                                <hr>
+                                <div class="row justify-content-center">
+                                    <div class="col text-center">
+                                        <p>
+                                            <img src="{{ url_for('static', filename='img/help-and-support/noa_logo.png') }}"
+                                                class="img-fluid" style="width:80px;">
+                                        </p>
+                                        <p>
+                                            <a target="_blank" href="http://bbnet.gein.noa.gr/HL/">
+                                                <p class="fs-5">National Observatory of Athens</p>
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                            </ul>
+                        </div>
+                    </div>
+                    <div id="feeback-container" class="accordion-collapse collapse" data-bs-parent="#help-and-support-accordion">
+                        <div class="accordion-body">
+                            <form action="{{ url_for('receive_feedback') }}" method="POST">
+                                <label for="feedback-input" class="form-label">Provide Feedback</label>
+                                <textarea class="form-control" id="feedback-input" name="feedback-input"
+                                    rows="10"></textarea>
+                                <div class="text-center my-5">
+                                    <button type="submit" class="btn btn-primary">submit</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="accordion-item">
-            <h2 class="accordion-header">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                    <p class="fs-3 text-start text-muted">FAQs</p>
-                </button>
-            </h2>
-            <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordion-information">
-                <div class="accordion-body">
-                    <p class="fw-bold fs-6">What kind of files does the site uses ?</p>
-                    <p class="fs-6">The site uses MiniSEED or MSEED binary format files that store and exchange digital
-                        seismic waveform data.</p>
-                    <hr>
-                    <p class="fw-bold fs-6">What tools are used to build this website ?</p>
-                    <p class="fs-6">The technology used to build this website consists of tools that have to do with the
-                        front-end side such as <code>HTML</code>, <code>CSS</code>, <code>Javascript</code> and tools
-                        related to the front-end side or server side that we use the <code>Flask</code> Python library.
-                    </p>
-                    <hr>
-                    <p class="fw-bold fs-6">What is the site about ?</p>
-                    <p class="fs-6">The site is about earthquake related concepts and tools. Our platform is
-                        thoughtfully designed to serve individuals from various backgrounds and levels of knowledge.
-                        Here, we're passionate about making earthquake knowledge accessible to everyone. Our mission is
-                        to empower you with insights and resources that span from the basics to more advanced insights.
-                        Our collection includes a wide array of articles and tools carefully crafted to ensure that
-                        regardless of your familiarity with the topic, you'll find something valuable and engaging.</p>
-                    <hr>
-                    <p class="fw-bold fs-6">How do I navigate through the website?</p>
-                    <p class="fs-6">We've organized our content into two main categories: articles and interactive
-                        tools. Dive into our articles to gain deeper insights into various seismological concepts, and
-                        don't miss out on our interactive tools that let you explore and apply different seismological
-                        computations.</p>
-                    <hr>
-                    <p class="fw-bold fs-6">Will the site be regularly updated with new content?</p>
-                    <p class="fs-6">Yes, we are committed to providing you with a dynamic and evolving resource. Our
-                        team is dedicated to regularly updating the site with fresh articles, tools, and the latest
-                        insights in the field of seismology. Be sure to check back often to discover new additions that
-                        will continue to enrich your understanding and exploration of earthquakes.</p>
-                    <hr>
-                </div>
-            </div>
-        </div>
-        <div class="accordion-item">
-            <h2 class="accordion-header">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                    <p class="fs-3 text-start text-muted">Additional websites</p>
-                </button>
-            </h2>
-            <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordion-information">
-                <div class="accordion-body">
-                    <ul class="list-group list-group-flush">
-                        <div class="row justify-content-around align-items-center">
-                            <div class="col-9 col-sm-10 col-lg-11">
-                                <a target="_blank" href="https://www.iris.edu/hq/">
-                                    <p class="fs-5">Incorporated Research Institutions for Seismology</p>
-                                </a>
-                            </div>
-                            <div class="col-3 col-sm-2 col-lg-1">
-                                <p>
-                                    <img src="{{ url_for('static', filename='img/help-and-support/iris.png') }}"
-                                        class="img-fluid">
-                                </p>
+</div>
 
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row justify-content-around align-items-center">
-                            <div class="col-9 col-sm-10 col-lg-11">
-                                <a target="_blank" href="https://www.usgs.gov/">
-                                    <p class="fs-5">United States Geological Survey</p>
-                                </a>
-                            </div>
-                            <div class="col-3 col-sm-2 col-lg-1">
-                                <p>
-                                    <img src="{{ url_for('static', filename='img/help-and-support/usgs.png') }}"
-                                        class="img-fluid">
-                                </p>
-
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row justify-content-around align-items-center">
-                            <div class="col-9 col-sm-10 col-lg-11">
-                                <a target="_blank" href="https://www.emsc-csem.org/">
-                                    <p class="fs-5">European-Mediterranean Seismological Centre</p>
-                                </a>
-                            </div>
-                            <div class="col-3 col-sm-2 col-lg-1">
-                                <p>
-                                    <img src="{{ url_for('static', filename='img/help-and-support/emsc.jpg') }}"
-                                        class="img-fluid">
-                                </p>
-
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row justify-content-around align-items-center">
-                            <div class="col-9 col-sm-10 col-lg-11">
-                                <a target="_blank" href="http://www.itsak.gr/en">
-                                    <p class="fs-5">Institute of Engineering Seismology and Earthquake Engineering</p>
-                                </a>
-                            </div>
-                            <div class="col-3 col-sm-2 col-lg-1">
-                                <p>
-                                    <img src="{{ url_for('static', filename='img/help-and-support/itsak_logo.png') }}"
-                                        class="img-fluid">
-                                </p>
-
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row justify-content-around align-items-center">
-                            <div class="col-9 col-sm-10 col-lg-11">
-                                <a target="_blank" href="http://geophysics.geo.auth.gr/ss/station_index_en.html">
-                                    <p class="fs-5">Seismological Station Aristotle University of Thessaloniki</p>
-                                </a>
-                            </div>
-                            <div class="col-3 col-sm-2 col-lg-1">
-                                <p>
-                                    <img src="{{ url_for('static', filename='img/help-and-support/auth_logo.png') }}"
-                                        class="img-fluid">
-                                </p>
-
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row justify-content-around align-items-center">
-                            <div class="col-9 col-sm-10 col-lg-11">
-                                <a target="_blank" href="http://bbnet.gein.noa.gr/HL/">
-                                    <p class="fs-5">National Observatory of Athens</p>
-                                </a>
-                            </div>
-                            <div class="col-3 col-sm-2 col-lg-1">
-                                <p>
-                                    <img src="{{ url_for('static', filename='img/help-and-support/noa_logo.png') }}"
-                                        class="img-fluid">
-                                </p>
-
-                            </div>
-                        </div>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="accordion-item">
-            <h2 class="accordion-header">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                    <p class="fs-3 text-start text-muted">Feedback</p>
-                </button>
-            </h2>
-            <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordion-information">
-                <div class="accordion-body">
-                    <div class="mb-3">
-                        <form action="{{ url_for('receive_feedback') }}" method="POST">
-                            <label for="feedback-input" class="form-label">Provide Feedback</label>
-                            <textarea class="form-control" id="feedback-input" name="feedback-input"
-                                rows="10"></textarea>
-                            <div class="text-center my-5">
-                                <button type="submit" class="btn btn-primary">submit</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
 

@@ -110,26 +110,6 @@ body {
 }
 
 
-/* ------------------------- INTRODUCTION TO SEIMSOLOGY ----------------------------*/
-
-#seismo-info-main-article {
-    overflow-y: scroll; 
-    height:90vh;
-}
-
-#seismo-info-main-article p {
-    text-indent: 40px;
-    margin-top: 0px;
-    margin-bottom: 0px;
-}
-
-#seismology-intro-container p {
-    text-indent: 30px;
-    margin: 0px;
-    text-align: justify;
-}
-
-
 
 
 
@@ -369,6 +349,10 @@ body {
     text-align: center;
 }
 
+.article-list-container li a.sub-chapter {
+    margin-left: 20px;
+}
+
 .article-container li {
     text-align: center;
     margin-bottom: 10px;
@@ -396,7 +380,7 @@ body {
 
 .article-main-content h2{
     text-align: center;
-    font-size: 25px;
+    font-size: 30px;
     color: #282828;
     margin: 35px 0px 25px 0px;
 }
@@ -525,7 +509,8 @@ body {
     white-space: nowrap;
     margin: 0px 0px;
     line-height: 0;
-    color: rgb(210, 210, 210) !important;
+    line-height: 8px;
+    color: rgb(210, 210, 210);
 }
 
 .article-main-content .input-code-block .pad {
@@ -534,6 +519,14 @@ body {
 
 .article-main-content .output-code-block .pad {
     margin-left: 40px;
+}
+
+.article-main-content .input-code-block .pad-double {
+    margin-left: 80px;
+}
+
+.article-main-content .output-code-block .pad-double {
+    margin-left: 80px;
 }
 
 .article-main-content .input-code-block pre {
@@ -546,6 +539,22 @@ body {
     margin: 0px;
 }
 
+.card {
+    background-color: #edf1f1;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 60px 0px;
+}
+
+.card svg {
+    display: block;
+    width: 24px;
+    height: 24px;
+}
+
+.card p, .card .input-code-block, .card .output-code-block {
+    margin-left: 40px;
+}
 
 
 @media (min-width: 768px) {
@@ -606,22 +615,10 @@ body {
     border-radius: 8px;
 }
 
-.card {
-    background-color: #edf1f1;
-    padding: 20px;
-    border-radius: 10px;
-    margin: 60px 0px;
-}
 
-.card svg {
-    display: block;
-    width: 24px;
-    height: 24px;
-}
 
-.card p {
-    margin-left: 40px;
-}
+
+
 
 .card .input-code-card code span {
     display: block;

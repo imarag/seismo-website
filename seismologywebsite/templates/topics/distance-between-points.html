@@ -132,9 +132,10 @@
         </div>
         <div class="row justify-content-center">
             <div class="col-8">
-                <p class="text-secondary fs-4 lead">
-                The distance (km) between the two points is: <span id="result-span" class="fw-bold"></span> 
+                <p class="text-secondary fs-4 lead text-center">
+                The distance (in kilometers) between the two points is:
                 </p>
+                <p class="text-center text-secondary fs-4"><span id="result-span" class="fw-bold"></span></p>
             </div>
         </div>
     </div>
@@ -142,12 +143,11 @@
         <div class="container-lg fs-4 lead">
             <div class="row justify-content-center">
                 <div class="col-12 col-md-9 col-lg-8">
-                    <p class="fs-4 lead text-secondary"> The Obspy script that runs on the background is displayed below:</p>
-                    <div class="input-code-block lead fs-5">
-                        <pre><code><span class="python-color2">from</span> obspy.geodetics.base <span class="python-color2">import</span> gps2dist_azimuth
-                            result = <span class="python-color1">gps2dist_azimuth</span>(<span id="lat1">lat1</span>, <span id="lon1">lon1</span>, <span id="lat2">lat2</span>, <span id="lon2">lon2</span>)[0] / 1000
-                            result = <span class="python-color1">round</span>(result, 3)
-                </code></pre>
+                    <p class="fs-4 lead text-secondary"> Python:</p>
+                    <div class="fs-5 bg-dark text-light p-3 rounded" style="white-space: nowrap; overflow-x: auto; font-family: 'Courier New', Courier, monospace;">
+                        <p class="my-0">from obspy.geodetics.base import gps2dist_azimuth</p>
+                        <p class="my-0">result = gps2dist_azimuth(<span id="lat1">lat1</span>, <span id="lon1">lon1</span>, <span id="lat2">lat2</span>, <span id="lon2">lon2</span>)[0] / 1000</p>
+                        <p class="my-0">result = round(result, 3)</p>
                     </div>
                 </div>
             </div>

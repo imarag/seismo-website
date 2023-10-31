@@ -1,5 +1,6 @@
 from flask import Blueprint, current_app, render_template, abort, request, jsonify, session, send_file
 import os
+import numpy as np
 from obspy.core import read, UTCDateTime
 from obspy.core.trace import Trace
 from obspy.core.stream import Stream
@@ -14,6 +15,7 @@ def create_path(name):
         str(session.get("user_id", "test")) + "_" + name
         )
     return path
+
 
 @bp.route('/upload-seismic-file', methods=['POST'])
 def upload():
@@ -39,7 +41,7 @@ def upload():
     if stream_validation_message != 'ok':
         return raise_error(stream_validation_message)
 
-    # get the file path to save the mseed file on the server
+    # get the file path to save the uploaded file as miniseed in the server
     mseed_file_save_path = create_path('pick-arrivals-tool-stream.mseed')  
 
     # write the uploaded file
@@ -57,7 +59,7 @@ def apply_filter():
     # get the filter value
     filter_value = request.args.get('filter')
 
-    # get the file path to save the mseed file on the server
+    # get the mseed file path on the server
     mseed_file_path = create_path('pick-arrivals-tool-stream.mseed') 
 
     # read it
@@ -67,71 +69,67 @@ def apply_filter():
     # if the filter is "initial" then don't do any filter, just return the raw values
     if filter_value != 'initial':
 
-        # get the freqmin and freqmax
         freqmin = filter_value.split('-')[0].strip()
         freqmax = filter_value.split('-')[1].strip()
 
-        # if the user inserted something different than a number abort
-        # first check if the value is something other than the empty string
-        # because the user CAN leave the entry, empty
         if freqmin:
             try:
-                dummy = float(freqmin)
-            except:
-                error_message="You need to provide a number for the left filter!"
+                # try to convert it to float
+                freqmin = float(freqmin)
+            except Exception as e:
+                error_message = "Frequency values should be numeric (float or int)."
+                return raise_error(error_message + " " + str(e))
+            
+            if np.isnan(freqmin):
+                error_message = "Frequency values should be numeric (float or int)."
+                return raise_error(error_message + " " + str(e))
+
+            if freqmin < 0.01 or freqmin > 99:
+                error_message="The acceptable left filter range is from 0.01 to 99 Hz!"
                 return raise_error(error_message)
 
         if freqmax:
             try:
-                dummy = float(freqmax)
-            except:
-                error_message="You need to provide a number for the right filter!"
-                return raise_error(error_message)
-
-        # if freqmin exists and not freqmax
-        if freqmin and not freqmax:
-            if float(freqmin) < 0.01 or float(freqmin) > 100:
-                error_message="The acceptable filter range is from 0.01 to 100 Hz!"
+                # try to convert it to float
+                freqmax = float(freqmax)
+            except Exception as e:
+                error_message = "Frequency values should be numeric (float or int)."
                 return raise_error(error_message)
             
-            try:
-                mseed_data.filter("highpass", freq=float(freqmin))
-            except Exception as e:
-                error_message = str(e)
-                return raise_error(error_message)
-
-        # elif freqmin does not exist but freqmax exists
-        elif not freqmin and freqmax:
-            if float(freqmax) < 0.01 or float(freqmax) > 100:
-                error_message = "The acceptable filter range is from 0.01 to 100 Hz!"
+            if np.isnan(freqmax):
+                error_message = "Frequency values should be numeric (float or int)."
                 return raise_error(error_message)
             
-            try:
-                mseed_data.filter("lowpass", freq=float(freqmax))
-            except Exception as e:
-                error_message = str(e)
+            if freqmax < 0.02 or freqmax > 100:
+                error_message="The acceptable right filter range is from 0.02 to 100 Hz!"
                 return raise_error(error_message)
-
-        # if neither freqmin nor freqmax exists, do nothing (return the initial unfiltered values)
-        elif not freqmin and not freqmax:
-            pass
-
-        # if both are defined (freqmin and freqmax)
-        else:
-            if float(freqmin) >= float(freqmax):
-                error_message = 'The left filter cannot be greater or equal to the right filter!'
-                return raise_error(error_message)
-
-            elif float(freqmin) < 0.01 or float(freqmin) > 100 or float(freqmax) < 0.01 or float(freqmax) > 100:
-                error_message = "The acceptable filter range is from 0.01 to 100 Hz!"
-                return raise_error(error_message)
+        
+        # if freqmin is greater than the freqmax abort
+        if freqmin and freqmax and freqmin >= freqmax:
+            error_message = 'The left filter cannot be greater or equal to the right filter!'
+            return raise_error(error_message)
             
-            try:
-                mseed_data.filter("bandpass", freqmin=float(freqmin), freqmax=float(freqmax))
-            except Exception as e:
-                error_message = str(e)
-                return raise_error(error_message)
-    
+        try:
+            # if freqmin exists and not freqmax
+            if freqmin and not freqmax:
+                mseed_data.filter("highpass", freq=freqmin)
+
+            # elif freqmin does not exist but freqmax exists
+            elif not freqmin and freqmax:
+                mseed_data.filter("lowpass", freq=freqmax)
+
+            # if neither freqmin nor freqmax exists, do nothing (return the initial unfiltered values)
+            elif not freqmin and not freqmax:
+                pass
+
+            # if both are defined (freqmin and freqmax)
+            else:
+                mseed_data.filter("bandpass", freqmin=freqmin, freqmax=freqmax)
+
+        except Exception as e:
+            error_message = str(e)
+            return raise_error(error_message)
+
     json_data = convert_mseed_to_json(mseed_data)
 
     return json_data
@@ -146,7 +144,7 @@ def save_arrivals():
 
     # check if the Parr and Sarr exist and create a dict_arrivals dict accordingly
     if Parr == "null" and Sarr == "null":
-        error_message = "You need to select at least one arrival to save them!"
+        error_message = "You need to select at least one wave arrival to use this option!"
         return raise_error(error_message)
     elif Parr != "null" and Sarr == "null":
         dict_arrivals = {"P": float(Parr)}
@@ -161,11 +159,11 @@ def save_arrivals():
     mseed_file_parent = os.path.dirname(mseed_file_path)
 
     # read the mseed
-    df = read(mseed_file_path)
+    st = read(mseed_file_path)
 
     # get some seismic info
-    station = df[0].stats.station
-    starttime = df[0].stats.starttime
+    station = st[0].stats.station
+    starttime = st[0].stats.starttime
 
     # create the txt file path from the date and time and station and save it in the previous parent
     arrivals_file_name = str(starttime.date) + "_" + str(starttime.time) + "_" + station + ".txt"
@@ -175,7 +173,7 @@ def save_arrivals():
     # write the file to the parent
     with open(arrivals_file_path, "w") as fw:
         for pick_label in dict_arrivals:
-            fw.write(pick_label + " ")
+            fw.write(pick_label + "arr ")
         fw.write("\n")
 
         for pick_label in dict_arrivals:
@@ -184,5 +182,10 @@ def save_arrivals():
     
     # return the file. The download name does not matter. I will use the dummy paragraph that i created
     # later in the javascript
-    return send_file(arrivals_file_path, mimetype=None, as_attachment=True, download_name=arrivals_file_name)
+    return send_file(
+        arrivals_file_path, 
+        mimetype=None, 
+        as_attachment=True, 
+        download_name=arrivals_file_name
+    )
             

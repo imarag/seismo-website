@@ -25,18 +25,6 @@
 {% endblock %}
 
 
-{% block pills %}
-    <a target="_blank" href="https://docs.obspy.org/packages/autogen/obspy.core.stream.Stream.html"><span class="badge rounded-pill">Stream</span></a>
-    <a target="_blank" href="https://docs.obspy.org/packages/autogen/obspy.core.trace.Trace.html"><span class="badge rounded-pill">Trace</span></a>
-    <a target="_blank" href="https://docs.obspy.org/packages/autogen/obspy.core.stream.Stream.filter.html"><span class="badge rounded-pill">filter</span></a>
-    <a target="_blank" href="https://docs.obspy.org/packages/autogen/obspy.core.stream.read.html"><span class="badge rounded-pill">read</span></a>
-    <a target="_blank" href="https://docs.obspy.org/packages/autogen/obspy.core.trace.Stats.html"><span class="badge rounded-pill">stats</span></a>
-    <a target="_blank" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html"><span class="badge rounded-pill">ndarray</span></a>
-    <a target="_blank" href="https://docs.obspy.org/packages/autogen/obspy.core.trace.Trace.trim.html#obspy.core.trace.Trace.trim"><span class="badge rounded-pill">trim</span></a>
-    <a target="_blank" href="https://stackoverflow.com/questions/33845604/what-does-dict-like-mean-in-python"><span class="badge rounded-pill">dict-like</span></a>
-{% endblock %}
-
-
 {% block tool_user_guide %}
     <p>
         Begin by uploading a seismic data file using the <kbd>Upload</kbd> option. From the top menu, select either the P-wave 
@@ -130,9 +118,9 @@
                 </div>
             </div>
 
-            <div id="spinner-div" style="display:none; position: absolute; top: 50%; left: 50%;">
+            <div id="spinner-div" style="position: absolute; top: 50%; left: 50%;">
                 <div class="text-center">
-                    <div class="spinner-border my-3" role="status" >
+                    <div class="spinner-border my-3 text-warning" role="status" >
                     <span class="visually-hidden">Loading...</span>
                     </div>
                 </div>

@@ -71,7 +71,7 @@ def reset_topics():
 
     tp2 = Topic(
         title="Fourier spectra calculation",
-        description="An interactive tool to calculate the Fourier spectra between a window on the seismogram",
+        description="An interactive tool to calculate the Fourier spectra at the signal and/or at the noise window on the seismogram. Optionally, compute the Horizontal to Vertical Spectral Ratio (HVSR) using the generated Fourier spectra. Feel free to download the data and the figures at the results.",
         image_name="fourier-icon.png",
         type="interactive",
         template_name="fourier"
@@ -79,7 +79,7 @@ def reset_topics():
 
     tp3 = Topic(
         title="Arrival time picking",
-        description="An interactive tool to extract the P & S arrival time from the records",
+        description="An interactive tool to extract the P & S wave arrival times from the records. You can use either the built-in filters or manually set filters to filter the seismograms within a defined frequency range, simplifying the process of selecting the arrivals.",
         image_name="arrival-pick-icon.png",
         type="interactive",
         template_name="pick-arrivals"
@@ -87,7 +87,7 @@ def reset_topics():
 
     tp4 = Topic(
         title="ASCII to MSEED",
-        description="An interactive tool to convert ASCII data files to ObsPy MiniSEED (mseed) format",
+        description="An interactive tool to transform ASCII data files into the seismic MiniSEED (mseed) format. To begin, upload your ASCII file while specifying the relevant file parameters (e.g., delimiter and skip rows). Afterward, choose the corresponding seismic parameters to complete the conversion process.",
         image_name="ascii-to-mseed-icon.png",
         type="interactive",
         template_name="ascii-to-mseed"
@@ -95,7 +95,7 @@ def reset_topics():
 
     tp5 = Topic(
         title="Signal processing",
-        description="An interactive tool to process seismic records using various techniques and algorithms",
+        description="An interactive tool to process seismic records using various techniques to cut the waveforms between a specific time range, to apply a smoothing function using an appropriate filter and eliminate any pre-existing trend in the waveforms.",
         image_name="signal-processing-icon.png",
         type="interactive",
         template_name="signal-processing"
@@ -119,7 +119,7 @@ def reset_topics():
 
     tp8 = Topic(
         title="Distance between points",
-        description="An interactive tool to compute the distance between two geographical points on the WGS84 ellipsoid",
+        description='An interactive tool to compute the distance between two geographical points on the WGS84 ellipsoid. Utilize the "locate" option to open an interactive map and check the points visually.',
         image_name="distance-between-points.png",
         type="interactive",
         template_name="distance-between-points"
@@ -135,7 +135,7 @@ def reset_topics():
 
     tp10 = Topic(
         title="Python Matplotlib Tutorial",
-        description="A Python library to visually analyzing seismic data with precision and clarity",
+        description="A Python library to visually analyzing seismic data",
         image_name="matplotlib.png",
         type="static",
         template_name="matplotlib"

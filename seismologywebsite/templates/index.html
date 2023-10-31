@@ -8,7 +8,7 @@
         <div id="main-index-background-image">
             <div class="container-lg py-5">
                 <h2 class="text-center text-light fw-bold display-3 mb-5 " id="home-main-title">
-                    A Journey into Seismology: Unravel the secrets of the earthquakes
+                    A Journey into Seismology
                 </h2>
                 <h2 class="text-center text-light fw-bold fs-1 my-5" id="home-main-subtitle">
                     Discover Seismic Concepts, Interact with Tools, and Deepen Your Understanding
@@ -19,25 +19,36 @@
     
     <section class="bg-light2 py-5 my-0">
         <div class="container-lg py-5">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-4 col-sm-3 text-center">
+                    <img src="/static/img/home-images/book-read.svg" class="img-fluid d-block d-md-none" alt="read topic icon">
+                </div>
+            </div>
             <div class="row justify-content-center align-items-center mb-5">
-                <div class="col-4 col-sm-3 col-md-3 col-lg-2">
-                    <img src="/static/img/home-images/book-read.svg" class="img-fluid" alt="read topic icon">
+                <div class="col-md-3 col-lg-3 col-xl-2">
+                    <img src="/static/img/home-images/book-read.svg" class="img-fluid d-none d-md-block" alt="read topic icon">
                 </div>
                 <div class="col-8 col-md-5">
-                    <p class="text-muted fs-4">Get started with the <a href="{{ url_for('BP_search_topics.filter_topics', topictype='articles') }}" class="link-info">seismic articles</a> to learn more about the science of Seismology</p>
+                    <p class="text-dark fs-4 text-center text-md-start">Get started with the <a href="{{ url_for('BP_search_topics.filter_topics', topictype='articles') }}" class="link-info">seismic articles</a> to learn more about the science of Seismology</p>
+                </div>
+            </div>
+            <div class="row justify-content-center align-items-center">
+                <div class="col-4 col-sm-3 text-center">
+                    <img src="/static/img/home-images/interactive.svg" class="img-fluid d-block d-md-none" alt="read topic icon">
                 </div>
             </div>
             <div class="row justify-content-center align-items-center">
                 <div class="col-8 col-md-5">
-                    <p class="text-muted fs-4">Try the <a href="{{ url_for('BP_search_topics.filter_topics', topictype='interactive tools') }}" class="link-info">interactive tools</a> to process and analyze real seismological data</p>
+                    <p class="text-dark fs-4 text-center text-md-start">Try the <a href="{{ url_for('BP_search_topics.filter_topics', topictype='interactive tools') }}" class="link-info">interactive tools</a> to process and analyze real seismological data</p>
                 </div>
-                <div class="col-4 col-sm-3 col-md-3 col-lg-2">
-                    <img src="/static/img/home-images/interactive.svg" class="img-fluid" alt="interactive topics icon">
+                <div class="col-md-3 col-lg-3 col-xl-2">
+                    <img src="/static/img/home-images/interactive.svg" class="img-fluid d-none d-md-block" alt="interactive topics icon">
                 </div>
             </div>
+            
             <div class="row justify-content-center">
                 <div class="col">
-                    <p class="text-center text-muted fs-4 mt-5">or <a href="{{ url_for('BP_search_topics.filter_topics', topictype='all topics') }}" class="link-info">check</a> all the topics...</p>
+                    <p class="text-center text-dark fs-4 mt-5">or <a href="{{ url_for('BP_search_topics.filter_topics', topictype='all topics') }}" class="link-info">check</a> all the topics...</p>
                 </div>
             </div>
         </div>
@@ -73,22 +84,21 @@
             </div>
         </div>
     </section> 
-    
+
     <section>
-        <div class=" py-5 bg-light ">
+        <div class="py-5 bg-light position-relative">
         <div class="container-lg">
-                <h1 class="display-6 text-muted text-center fw-bold">Seismic Articles</h1>
-                <hr class="mt-1 mb-5">
-                <br><br>
-                <div class="row justify-content-center align-items-center gy-4">
+                <h1 class="display-4 text-muted text-center fw-semibold">Explore various Seismic Articles</h1>
+                <hr class="mt-1 mb-2">
+                <div class="row justify-content-center align-items-center">
                     <div class="col-auto text-center">
                         <div class="card index-card shadow-lg mx-auto rounded" style="width: 25rem; height: 450px;">
                             <img src="/static/img/home-images/site-effect-animation.gif" alt="Site effect"  class="img-fluid card-img-top" id="site-effect-animation">
                             <div class="card-body bg-very-light-yellow2">
                                 <h5 class="card-title fw-bold fs-4">Seismic Site Effect</h5>
                                 <hr class="w-75 border-top border-2 mx-auto border-dark">
-                                <p class="card-text text-muted fs-6">Influence of the underground Geology at the incoming ground motion</p>
-                                <a href="{{ url_for('show_topic', topic_tmp_name='site-effect') }}" class="btn btn-dark">Go to the page</a>
+                                <p class="card-text text-muted fs-6  mx-0 my-0">Influence of the underground Geology at the incoming ground motion</p>
+                                <a href="{{ url_for('show_topic', topic_tmp_name='site-effect') }}" class="btn btn-dark position-absolute bottom-0 start-50 translate-middle mb-4">Go to the page</a>
                             </div>
                         </div>
                     </div>
@@ -98,21 +108,19 @@
                             <div class="card-body bg-very-light-yellow2">
                                 <h5 class="card-title fw-bold fs-4">Introduction To Seismology</h5>
                                 <hr class="w-75 border-top border-2 mx-auto border-dark">
-                                <p class="card-text text-muted fs-6">Introduce yourself to different seismological concepts about earthquakes</p>
-                                <a href="{{ url_for('show_topic', topic_tmp_name='seismology-intro') }}" class="btn btn-dark">Go to the page</a>
+                                <p class="card-text text-muted fs-6 mx-0 my-0">Introduce yourself to different seismological concepts about earthquakes</p>
+                                <a href="{{ url_for('show_topic', topic_tmp_name='seismology-intro') }}" class="btn btn-dark position-absolute bottom-0 start-50 translate-middle mb-4">Go to the page</a>
                             </div>
                         </div>
                     </div>
-                    
                 </div>
             </div>
         </div>
     </section>
 
-
     <section class="bg-dark py-5" id="interactive-tools-video">
         <div class="container-lg">
-            <h2 class="display-4 text-muted text-center mb-5">Try the interactive tools</h2>
+            <h2 class="display-4 text-muted text-center mb-5 fw-semibold">Try the interactive tools</h2>
             <div class="row justify-content-center my-5 gy-2 text-center">
                 <div class="col-12 col-md-auto">
                     <a class="badge bg-secondary text-dark text-decoration-none home-badge fs-6" href="{{ url_for('show_topic', topic_tmp_name='fourier') }}">Fourier spectra</a>
@@ -147,6 +155,11 @@
             </div>
         </div>
     </section>
+    
+    
+
+
+    
 
     <section>
         <div class="container-lg py-5">
@@ -160,9 +173,13 @@
                     <img src="/static/img/home-images/python-logo.png" alt="python logo" class="img-fluid">
                 </div>
                 <div class="col-11 col-md-10 col-lg-8 col-xl-7">
-                    <p class="text-center text-lg-start display-3 fw-semibold mb-5">Python Tutorials</p>
+                    <p class="text-center text-lg-start display-4 fw-semibold mb-5">Python for Earthquakes</p>
                     <p class="text-center text-lg-start text-muted lead fs-4">
-                        Explore a range of Python tutorials customized to the specific requirements of seismological data processing. From fundamental concepts to advanced techniques, our tutorials cover a wide range of topics, making them suitable for beginners and experienced developers alike
+                        Explore a range of Python tutorials customized to the specific requirements of seismological data processing. 
+                        These tutorials cover a wide spectrum of topics, from generating functions for real-time data manipulation to 
+                        file processing techniques for earthquake-related analysis. Additionally, gain insights into best practices for 
+                        data visualization and the utilization of powerful libraries like ObsPy for data handling and interpretation. 
+                       
                     </p>
                     <div class="text-center text-lg-start mt-4 mb-5">
                         <a class="btn btn-outline-primary" style="width:170px;" href="{{ url_for('show_topic', topic_tmp_name='file-manipulation') }}">

@@ -1,10 +1,10 @@
-from flask import Blueprint, current_app, render_template, abort, request, jsonify, session, send_file
+from flask import Blueprint, current_app, render_template, abort, make_response, request, jsonify, session, send_file
 import os
 from obspy.core import read
 from obspy.core.trace import Trace
 from obspy.core.stream import Stream
 import numpy as np
-from .functions import convert_mseed_to_json, raise_error
+from .functions import convert_mseed_to_json, raise_error, validate_seismic_file
 
 bp = Blueprint('BP_signal_processing', __name__, url_prefix = '/signal-processing')
 
@@ -18,58 +18,39 @@ def create_path(name):
     return path
 
 
-@bp.route('/download-mseed-file', methods=['GET'])
-def download_mseed_file():
-   # get the file path of the processed mseed
-   mseed_processed_file_path = os.path.join(current_app.config['DATA_FILES_FOLDER'], 'processed_' + str(session.get("user_id", "test")) + "_signal-processing.mseed")
-   
-   return send_file(mseed_processed_file_path, as_attachment=True, download_name="processed_mseed_file.mseed")
+@bp.route('/upload-seismic-file', methods=['POST'])
+def upload():
 
-
-
-@bp.route('/upload-mseed-file', methods=['POST'])
-def upload_mseed_file():
-
+    # get the files (in our case just one)
     files = request.files
 
     # check if file exists
     if 'file' not in files or len(files) < 1:
-        error_message = 'No file uploaded!'
+        error_message = "No file uploaded!"
         return raise_error(error_message)
 
     # Get the uploaded file from the request
-    mseed_file = files['file']
-
-    # Read the MSeed file using obspy
+    seismic_file = files['file']
     try:
-        stream = read(mseed_file)
+        stream = read(seismic_file)
     except Exception as e:
         error_message = str(e)
         return raise_error(error_message)
+    
+    
 
-    # if the stream has 0, 1 or more than 3 traces abort
-    if len(stream) not in [2, 3]:
-        error_message = f'The stream must contain two or three traces to select its arrivals. Your stream contains {len(stream)} traces!'
-        return raise_error(error_message)
+    # deactivate the option that checks the total number of npts in order for the user to
+    # be able to trim big data
+    stream_validation_message = validate_seismic_file(stream, check_total_number_of_npts=False)
 
-    # if at least one of the traces is empty abort
-    for tr in stream:
-        if len(tr.data) == 0:
-            error_message = 'One or more than one of your traces in the stream object, is empty!'
-            return raise_error(error_message)
-
-    # if the user hasn't defined nor the fs neither the delta, then error
-    if stream[0].stats['sampling_rate'] == 1 and stream[0].stats['delta'] == 1:
-        error_message = 'Neither sampling rate (fs[Hz]) nor sample distance (delta[sec]) are specified in the trace objects. Consider including them in the stream traces, for the correct x-axis time representation!'
-        return raise_error(error_message)
-
+    if stream_validation_message != 'ok':
+        return raise_error(stream_validation_message)
 
     # get the file path to save the mseed file on the server
-    mseed_save_file_path = os.path.join(current_app.config['DATA_FILES_FOLDER'], str(session.get("user_id", "test")) + "_signal-processing.mseed")
+    mseed_save_file_path = create_path('signal-processing-tool-stream.mseed') 
 
     # get the file path of the processed mseed
-    mseed_processed_file_path = os.path.join(current_app.config['DATA_FILES_FOLDER'], 'processed_' + str(session.get("user_id", "test")) + "_signal-processing.mseed")
-
+    mseed_processed_file_path = create_path('signal-processing-tool-processed-stream.mseed') 
 
     # write the uploaded file
     stream.write(mseed_save_file_path)
@@ -88,7 +69,7 @@ def upload_mseed_file():
 def process_signal_taper():
 
     # get the file path of the processed mseed
-    mseed_processed_file_path = os.path.join(current_app.config['DATA_FILES_FOLDER'], 'processed_' + str(session.get("user_id", "test")) + "_signal-processing.mseed")
+    mseed_processed_file_path = create_path('signal-processing-tool-processed-stream.mseed') 
 
     try:
         mseed_data = read(mseed_processed_file_path)
@@ -136,7 +117,7 @@ def process_signal_taper():
 def process_signal_detrend():
     
     # get the file path of the processed mseed
-    mseed_processed_file_path = os.path.join(current_app.config['DATA_FILES_FOLDER'], 'processed_' + str(session.get("user_id", "test")) + "_signal-processing.mseed")
+    mseed_processed_file_path = create_path('signal-processing-tool-processed-stream.mseed') 
 
     try:
         mseed_data = read(mseed_processed_file_path)
@@ -146,10 +127,15 @@ def process_signal_detrend():
 
     # get the user selected detrend type
     detrend_type = request.args.get('detrend-type-select')
+    detrend_order= int(request.args.get('detrend-order-input'))
 
-    # detrend the mseed file
     try:
-        mseed_data.detrend(type=detrend_type)
+        if detrend_type == 'polynomial':
+            mseed_data.detrend(type=detrend_type, order=detrend_order)
+        elif detrend_type == 'spline':
+            mseed_data.detrend(type=detrend_type, order=detrend_order, dspline=1000)
+        else:
+            mseed_data.detrend(type=detrend_type)
     except Exception as e:
         error_message = str(e)
         return raise_error(error_message)
@@ -169,7 +155,7 @@ def process_signal_detrend():
 def process_signal_trim():
     
     # get the file path of the processed mseed
-    mseed_processed_file_path = os.path.join(current_app.config['DATA_FILES_FOLDER'], 'processed_' + str(session.get("user_id", "test")) + "_signal-processing.mseed")
+    mseed_processed_file_path = create_path('signal-processing-tool-processed-stream.mseed') 
 
     try:
         mseed_data = read(mseed_processed_file_path)
@@ -237,10 +223,10 @@ def process_signal_trim():
 def delete_filter():
 
     # get the initial raw mseed file path
-    mseed_save_file_path = os.path.join(current_app.config['DATA_FILES_FOLDER'], str(session.get("user_id", "test")) + "_signal-processing.mseed")
+    mseed_save_file_path = create_path('signal-processing-tool-stream.mseed') 
 
     # get the file path of the processed mseed
-    mseed_processed_file_path = os.path.join(current_app.config['DATA_FILES_FOLDER'], "processed_" + str(session.get("user_id", "test")) + "_signal-processing.mseed")
+    mseed_processed_file_path = create_path('signal-processing-tool-processed-stream.mseed') 
 
     # get the inirial uploaded mseed file to re-apply the current filters that the user has
     mseed_data = read(mseed_save_file_path)
@@ -275,3 +261,12 @@ def delete_filter():
     
     json_data = convert_mseed_to_json(mseed_data)
     return json_data
+
+
+
+@bp.route('/download-mseed-file', methods=['GET'])
+def download_mseed_file():
+   # get the file path of the processed mseed
+   mseed_processed_file_path = create_path('signal-processing-tool-processed-stream.mseed') 
+   return send_file(mseed_processed_file_path, as_attachment=True, download_name="processed_mseed_file.mseed")
+

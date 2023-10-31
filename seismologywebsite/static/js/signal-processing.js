@@ -2,6 +2,8 @@
 
     let detrendTypeSelect = document.querySelector("#detrend-type-select");
     let detrendTypeSelectExpanding = document.querySelector("#detrend-type-select-expanding");
+    let detrendOrderInput = document.querySelector("#detrend-order-input");
+    let detrendOrderInputExpanding = document.querySelector("#detrend-order-input-expanding");
     let detrendApplyButton = document.querySelector("#detrend-apply-button");
     let detrendApplyButtonExpanding = document.querySelector("#detrend-apply-button-expanding");
 
@@ -68,7 +70,7 @@
 
     // define a list that disables and enables them
     let disableEnableElements = [
-        detrendTypeSelect, detrendTypeSelectExpanding, detrendApplyButton, detrendApplyButtonExpanding,
+        detrendTypeSelect, detrendTypeSelectExpanding, detrendOrderInput, detrendOrderInputExpanding, detrendApplyButton, detrendApplyButtonExpanding,
         taperTypeSelect, taperTypeSelectExpanding, taperSideSelect, taperSideSelectExpanding,
         taperLengthInput, taperLengthInputExpanding, taperApplyButton, taperApplyButtonExpanding,
         trimLeftSideInput, trimLeftSideInputExpanding, trimRightSideInput, trimRightSideInputExpanding,
@@ -104,12 +106,37 @@
     // when i change the value of an element, you need to change also its corresponding value at the expanding elements
     // it goes double way
     detrendTypeSelect.addEventListener('change', () => {
+        if (detrendTypeSelect.value === 'polynomial' || detrendTypeSelect.value === 'spline') {
+            detrendOrderInput.disabled = false;
+            detrendOrderInputExpanding.disabled = false;
+        }
+        else {
+            detrendOrderInput.disabled = true;
+            detrendOrderInputExpanding.disabled = true;
+        }
         detrendTypeSelectExpanding.value = detrendTypeSelect.value;
     })
 
     detrendTypeSelectExpanding.addEventListener('change', () => {
+        if (detrendTypeSelectExpanding.value === 'polynomial' || detrendTypeSelectExpanding.value === 'spline') {
+            detrendOrderInput.disabled = false;
+            detrendOrderInputExpanding.disabled = false;
+        }
+        else {
+            detrendOrderInput.disabled = true;
+            detrendOrderInputExpanding.disabled = true;
+        }
         detrendTypeSelect.value = detrendTypeSelectExpanding.value;
     })
+
+    detrendOrderInput.addEventListener('change', () => {
+        detrendOrderInputExpanding.value = detrendOrderInput.value;
+    })
+
+    detrendOrderInputExpanding.addEventListener('change', () => {
+        detrendOrderInput.value = detrendOrderInputExpanding.value;
+    })
+
 
     taperTypeSelect.addEventListener('change', () => {
         taperTypeSelectExpanding.value = taperTypeSelect.value;
@@ -153,12 +180,12 @@
 
     // define the functions when the user clicks on the buttons
     detrendApplyButton.addEventListener("click", () =>{
-        let queryURL = `/signal-processing/apply-processing-detrend?detrend-type-select=${detrendTypeSelect.value}`;
+        let queryURL = `/signal-processing/apply-processing-detrend?detrend-type-select=${detrendTypeSelect.value}&detrend-order-input=${detrendOrderInput.value}`;
         let pillLabel = `detrend-${detrendTypeSelect.value}`;
         applyFilter(queryURL, pillLabel)
     })
     detrendApplyButtonExpanding.addEventListener("click", () =>{
-        let queryURL = `/signal-processing/apply-processing-detrend?detrend-type-select=${detrendTypeSelect.value}`;
+        let queryURL = `/signal-processing/apply-processing-detrend?detrend-type-select=${detrendTypeSelect.value}&detrend-order-input=${detrendOrderInput.value}`;
         let pillLabel = `detrend-${detrendTypeSelect.value}`;
         applyFilter(queryURL, pillLabel)
     })
@@ -216,21 +243,24 @@
         uploadFileInput.value = null;
 
         // fetch to the upload-mseed-file in flask and do a POST request
-        fetch('/signal-processing/upload-mseed-file', {
+        fetch('/signal-processing/upload-seismic-file', {
             method: 'POST',
             body: formData
         })
             .then(response => { 
+
                 // if not ok deactivate the spinner and show the modal message
                 if (!response.ok) {
                     // deactivate spinner
                     spinnerDiv.style.display = 'none';
+
+                    // get the jsonify({'error_message': error.description}) response
                     return response.json()
                         .then(errorMessage => {
                             document.querySelector("#modal-message").textContent = errorMessage['error_message'];
-                            document.querySelector("#modal-title").textContent = 'An error has occured!'
                             document.querySelector("#modal-header").style.backgroundColor = "red";
-                            document.querySelector("#modal-button-triger").click()
+                            document.querySelector("#modal-title").textContent = 'An error has occured!'
+                            document.querySelector("#modal-button-triger").click();
                             throw new Error(errorMessage);
                         })
                 }
@@ -258,6 +288,15 @@
 
                 // activate the href of the save button
                 saveFileButton.href = "/signal-processing/download-mseed-file";
+
+                if (detrendTypeSelect.value === 'polynomial' || detrendTypeSelect.value === 'spline') {
+                    detrendOrderInput.disabled = false;
+                    detrendOrderInputExpanding.disabled = false;
+                }
+                else {
+                    detrendOrderInput.disabled = true;
+                    detrendOrderInputExpanding.disabled = true;
+                }
 
                 // create the plot
                 Plotly.newPlot('time-series-graph', convertedMseedData, layout, config);

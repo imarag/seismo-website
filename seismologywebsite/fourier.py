@@ -32,6 +32,7 @@ def upload():
     # Get the uploaded file from the request
     seismic_file = files['file']
 
+    # try to read the seimsic file
     try:
         stream = read(seismic_file)
     except Exception as e:
@@ -43,11 +44,11 @@ def upload():
     if stream_validation_message != 'ok':
         return raise_error(stream_validation_message)
 
-    # get the file path to save the mseed file on the server
+    # get the file path to save the uploaded file as miniseed in the server
     mseed_file_save_path = create_path('fourier-spectra-tool-stream.mseed')  
 
     # write the uploaded file as mseed
-    stream.write(mseed_file_save_path, format='MSEED')
+    stream.write(mseed_file_save_path)
 
     # convert the uploaded mseed file to json
     json_data = convert_mseed_to_json(stream)

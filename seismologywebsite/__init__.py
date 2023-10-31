@@ -4,13 +4,11 @@ from flask_login import LoginManager, UserMixin, login_required, current_user
 from flask_mail import Mail, Message
 import datetime
 import os
-from itsdangerous.url_safe import URLSafeTimedSerializer as Serializer
+from markupsafe import escape
 
 db = SQLAlchemy()
 login_manager = LoginManager()
 mail = Mail()
-
-
 
 
 class User(db.Model, UserMixin):
@@ -22,20 +20,6 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(255), nullable=False)
     last_login = db.Column(db.TIMESTAMP, nullable=False, default=datetime.datetime.utcnow)
     registered_date = db.Column(db.DATE, default=datetime.datetime.utcnow().date())
-
-    def get_reset_token(self, app, expires_sec=1800):
-        s = Serializer(app.config['SECRET_KEY'])
-        token = s.dumps({'user_id': self.id}, salt='reset_salt')
-        return token
-    
-    @staticmethod
-    def verify_reset_token(token, app):
-        s = Serializer(app.config['SECRET_KEY'])
-        try:
-            user_id = s.loads(token)['user_id']
-        except:
-            return None
-        return User.query.get('user_id')
     
 
 class Topic(db.Model, UserMixin):
@@ -117,19 +101,20 @@ def create_app(test_config=None):
     @app.route('/receive-feedback', methods=['POST'])
     @login_required
     def receive_feedback():
+        feedback_input_text = request.form['feedback-input']
+
+        if feedback_input_text:
+            user = current_user
+            msg = Message(
+                sender="seismoweb95@gmail.com",
+                recipients=[user.email]
+            )
+            msg.body = escape(feedback_input_text)
+            mail.send(msg)
+            flash('Thank you for your feedback!', 'info')
+        
         return redirect(url_for('help_and_support'))
-        # feedback_input_text = request.form['feedback-input']
 
-        # if feedback_input_text:
-        #     flash('Thank you for your feedback!')
-
-        #     user = current_user
-        #     # send the email
-        #     send_email(mail, user.email, feedback_input_text)
-
-        # flash("You haven't provided any feedback", "danger")
-
-        # return redirect(url_for('help_and_support'))
     
 
     @app.errorhandler(403)
