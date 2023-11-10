@@ -3,7 +3,7 @@
 
 {% block tool_template_image %}
     <img 
-        src="{{ url_for('static', filename='img/templates-icons/' + topic_object.image_name) }}"  
+        src="{{ url_for('static', filename='img/' + topic_object.image_name) }}"  
         alt="{{ topic_object.title }} - template image"
         class="img-fluid"
     >
@@ -39,10 +39,9 @@
 
 {% block tool_user_guide %}
     <p class="text-start">
-        If you have ASCII files that you would like to use with our tools, we offer a convenient 
-        conversion tool that allows you to convert ASCII files to the MSEED file format which ensures 
-        compatibility with our interactive tools.
-        This tool supports only ASCII files and more specifically the formats: <kbd>.csv</kbd>, <kbd>.txt</kbd> and <kbd>.dat</kbd> files. 
+        If you have ASCII files that you would like to use with the available tools, this is a convenient 
+        conversion tool that allows you to convert ASCII files to the MSEED file format.
+        This tool supports only ASCII files and more specifically the formats: <kbd>.csv</kbd>, <kbd>.txt</kbd> and <kbd>.dat</kbd>. 
         Start by selecting the appropriate file parsing parameters that fit with your file format (delimiter, number of rows to read, etc.) and load your data file. 
         To continue, when you load the file, check the first five rows that the program reads, at the sample table shown below the file parsing parameters.
         If it represents correctly you data columns, continue with the second set of parameters that are related to the sampling process of converting analog signals 
@@ -50,25 +49,30 @@
     </p>
     <p class="mt-4">
         According to the first five rows that the program shows, in order for you to check if it has correctly read your file, you will see a table (after you load your file, below) with data 
-        columns. This table is in the form of a <a target="_blank" href="{{ url_for('static', filename='img/ascii-to-mseed-images/pandas-data-structure.svg') }}">Pandas DataFrame</a> table. 
+        columns. This table is in the form of a <a target="_blank" href="{{ url_for('static', filename='img/pandas-data-structure.svg') }}">Pandas DataFrame</a> table. 
         The left most column (with bold numbers) is the index and it is given a default array of numbers from 0 to the total number of rows. You don't need to worry about it. It will not be 
         included in the conversion.
         If you don't have any header in your file, the column names (the bolded row at the top) are also given a default value from 0 to the total number of your columns. Again your do not have to 
         worry about it.
     </p>
-    <p>
-        Take into account the following:<br>
-        <ul>
-            <li>Be careful of the delimiter. Select the delimiter of your columns correctly in order for the program to run. Use the "space" option if your columns are separated by one or more 
-                blanks or spaces. </li>
-            <li>If you skip too many rows at the "skiprows" entry, the final dataframe will be empty and it will give you an error!</li>
-            <li>Similarly, if you insert the number "0" at the "# rows to read" option, it will result in an error for the same reason.</li>
-            <li>If your file has 1 or no columns you can't use it. You need at least 2 and at most, 3 columns to use the program. If you have more than 3 columns, use the "columns to read" option to specify 2 or 3 columns to insert. You can't upload more!</li>
-            <li>If you file has headers and you don't check the "has headers" option it will give you an error.</li>
-            <li>The "channels" option at the seismic parameter option, need to have one vertical component (Z) and at least one horizontal component (E and/or N). If you provide 3 columns of data each column corresponds to one vertical (Z) and two horizontals (E and N). If you provide the same channel for a column or if you don't include the vertical component (Z) it will give you an error.</li>
-            <li>The "channels" and "fs/dt" options are obligatory to fill!</li>
-        </ul>
-    </p>
+    <p>Take into account the following about the file parameters:<br></p>
+    <ul>
+        <li>Be careful of the delimiter. Select the delimiter of your columns correctly in order for the program to run. Use the "space" option if your columns are separated by one or more 
+            blanks or spaces. </li>
+        <li>Utilize the  "skiprows" entry if you want to skip some rows at the beginning of your file. If you skip more rows than the total rows of your file, the final table will be empty and it will give you an error!</li>
+        <li>Insert a value into the "# rows to read" to read a specific number of rows from your file. If the number inserted is greater than the total rows of your file, it is gonna read all the rows.</li>
+        <li>Generally, the program can just read three columns in case of two horizontals and one vertical components, or two, in case of one horizontal and one vertical component. For this reason, you need at least two columns in your file. If your file has one or no columns you can't use it. </li>
+        <li>In case you have more than three columns in your file, use the "columns to read" option to specify two or three columns to insert, using comma separated numbers starting from the number one (e.g., 1,2,4 or 2,4 or 1,4). You can't upload more!</li>
+        <li>If you file contain headers check the "has headers" option.</li>
+    </ul>
+    <p>Take into account the following about the seismic parameters:<br></p>
+    <ul>
+        <li>The "starting date" is optional. If no date is selected, a default value of "1970-01-01" will be applied. However, it is recommended to select a date especially in case you intend to select the P & S wave arrivals.</li>
+        <li>As with the "starting date", the "starting time" is also optional but recommended. The default value is "00:00:00".</li>
+        <li>The station name is optional and a name of "STAT" will be applied as a default value, is case it is empty. The station name should contain three to five letters from a-z or A-Z, and/or numbers from 0-9!</li>
+        <li>The "channels" option are obligatory and they need to have one vertical component (Z) and at least one horizontal component (E and/or N). If you provide three columns of data each column corresponds to one vertical (Z) and two horizontals (E and N). If you provide the same channel for a column or if you don't include the vertical component (Z) it will give you an error.</li>
+        <li>Lastly, you need to insert the sampling frequency in Hertz or the sample distance in seconds for the correct x-axis representation.</li>
+    </ul>
 {% endblock %}
 
 
@@ -100,7 +104,6 @@
                             </br>
                             <select id="delimiter-select" name="delimiter" class="form-select" aria-label="Default select">
                                 <option value="," name="comma" selected>Comma (,)</option>
-                                <option value="\t" name="tab" >Tab (\t)</option>
                                 <option value=";" name="semicolon">Semicolon (;)</option>
                                 <option value="|" name="pipe">Pipe (|)</option>
                                 <option value=":" name="colon">Colon (:)</option>
@@ -233,7 +236,7 @@
                             For more information about these options click 
                             <a target="_blank"  href="https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html" class="text-center link-info">here</a>
                             for the Pandas <code>read_csv</code> function or 
-                            <a target="_blank" href="{{ url_for('static', filename='img/ascii-to-mseed-images/ascii-manual.png') }}" class="link-info">here</a>
+                            <a target="_blank" href="{{ url_for('static', filename='img/ascii-manual.png') }}" class="link-info">here</a>
                             to view the steps visually.
                         </p>
                     </div>

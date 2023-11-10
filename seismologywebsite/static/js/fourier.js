@@ -277,7 +277,7 @@
 
     signalLeftSideInput.addEventListener('keydown', (event) => {
         let inputValue = Number(signalLeftSideInput.value);
-        var numberPattern = /^ *[0-9]+[.,]?[0-9]+ *$/;
+        var numberPattern = /^ *[0-9]+[.,]?[0-9]? *$/;
         
         if (event.key === 'Enter' & numberPattern.test(inputValue)) {
 
@@ -306,7 +306,7 @@
 
     windowLengthInput.addEventListener('keydown', (event) => {
         let inputValue = Number(windowLengthInput.value);
-        var numberPattern = /^ *[0-9]+[.,]?[0-9]+ *$/;
+        var numberPattern = /^ *[0-9]+[.,]?[0-9]? *$/;
         
         if (event.key === 'Enter' & numberPattern.test(inputValue)) {
 
@@ -474,6 +474,8 @@
                 // disable the fourier and the hvsr tabs when the user uploads an mseed file
                 fourierTab.disabled = true;
                 hvsrTab.disabled = true;
+
+                vertCompoSelect.innerHTML = "";
 
                 // Add new options (loop through the traces and get the channel)
                 let newOptions = [];

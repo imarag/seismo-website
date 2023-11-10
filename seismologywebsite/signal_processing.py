@@ -31,12 +31,12 @@ def upload():
 
     # Get the uploaded file from the request
     seismic_file = files['file']
+
     try:
         stream = read(seismic_file)
     except Exception as e:
         error_message = str(e)
         return raise_error(error_message)
-    
     
 
     # deactivate the option that checks the total number of npts in order for the user to
@@ -99,7 +99,7 @@ def process_signal_taper():
 
     try:
         # taper the mseed file
-        mseed_data.taper(float(taper_length), type=taper_type, side=taper_side)
+        mseed_data.taper(float(taper_length)/10, type=taper_type, side=taper_side)
     except Exception as e:
         error_message = str(e)
         return raise_error(error_message)

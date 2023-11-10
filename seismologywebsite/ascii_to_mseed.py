@@ -160,7 +160,7 @@ def convert_ascii_to_mseed():
         
         params_dict['station'] = station.strip().upper()
     else:
-        params_dict['station'] = ''
+        params_dict['station'] = 'STAT'
 
     
     

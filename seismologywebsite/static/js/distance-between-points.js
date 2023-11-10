@@ -4,32 +4,33 @@
     let point1LonInput = document.querySelector("#point1-lon-input");
     let point2LatInput = document.querySelector("#point2-lat-input");
     let point2LonInput = document.querySelector("#point2-lon-input");
-    let computeButton = document.querySelector("#compute-button");
-    let clearButton = document.querySelector("#clear-button");
-    let mapButton = document.querySelector("#map-button");
-    let resultSpan = document.querySelector("#result-span");
 
 
-    clearButton.addEventListener("click", () => {
+    document.querySelector("#clear-button").addEventListener("click", () => {
+        // empty the coordinate entries
         point1LatInput.value = "";
         point1LonInput.value = "";
         point2LatInput.value = "";
         point2LonInput.value = "";
 
+        // set the default values on the Python script block at the bottom
         document.querySelector("#lat1").textContent = 'lat1';
         document.querySelector("#lon1").textContent = 'lon1';
         document.querySelector("#lat2").textContent = 'lat2';
         document.querySelector("#lon2").textContent = 'lon2';
 
-        resultSpan.textContent = '';
+        // clear also the result
+        document.querySelector("#result-span").textContent = '';
     })
 
-    computeButton.addEventListener("click", ()=> {
+    // when the compute button is clicked call the respective function
+    document.querySelector("#compute-button").addEventListener("click", ()=> {
         let queryParametersURL = `/distance-between-points/calculate-distance?point1-lat-input=${point1LatInput.value}&point1-lon-input=${point1LonInput.value}&point2-lat-input=${point2LatInput.value}&point2-lon-input=${point2LonInput.value}`
         calculateDistace(queryParametersURL);
     })
 
-    mapButton.addEventListener("click", ()=> {
+    // when the locate button is clicked, call the respective function
+    document.querySelector("#map-button").addEventListener("click", ()=> {
         let queryParametersURL = `/distance-between-points/calculate-distance-map?point1-lat-input=${point1LatInput.value}&point1-lon-input=${point1LonInput.value}&point2-lat-input=${point2LatInput.value}&point2-lon-input=${point2LonInput.value}`
         createMap(queryParametersURL);
     })
@@ -54,21 +55,22 @@
                 return response.json()
             })
             .then(data => {
+                // succesful message (modal)
                 document.querySelector("#modal-message").textContent = "You have succesfully calculated the distance!";
                 document.querySelector("#modal-title").textContent = 'Successful calculation!'
                 document.querySelector("#modal-header").style.backgroundColor = "green";
                 document.querySelector("#modal-button-triger").click()
-            
+                // change the coordinates at the python script sample at the bottom
                 document.querySelector("#lat1").textContent = point1LatInput.value;
                 document.querySelector("#lon1").textContent = point1LonInput.value;
                 document.querySelector("#lat2").textContent = point2LatInput.value;
                 document.querySelector("#lon2").textContent = point2LonInput.value;
-
-                resultSpan.textContent = data['result'];
+                // change also the result
+                document.querySelector("#result-span").textContent = data['result'];
             })
             .catch(error => {
-            // Handle any errors during the upload process
-            console.error('Error uploading MSeed file:', error);
+                // Handle any errors during the upload process
+                console.error('Error uploading MSeed file:', error);
             });
     }
 
@@ -93,6 +95,7 @@
                 return response.blob()
             })
             .then(blob  => {
+                // this creates the map on the server using python folium and we download it here
                 const url = window.URL.createObjectURL(blob);
                 // Create a link element and trigger the download
                 const a = document.createElement('a');
@@ -101,8 +104,8 @@
                 a.click();
             })
             .catch(error => {
-            // Handle any errors during the upload process
-            console.error('Error uploading MSeed file:', error);
+                // Handle any errors during the upload process
+                console.error('Error uploading MSeed file:', error);
             });
     }
 })();

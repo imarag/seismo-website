@@ -35,19 +35,19 @@
     let PickHoverLi =  document.querySelector('#pick-hover-li');
 
     trimHoverLi.addEventListener('mouseover', () => {
-        imageHover.src = "/static/img/home-images/trim-gif.gif";
+        imageHover.src = "/static/img/trim-gif.gif";
     })
     taperHoverLi.addEventListener('mouseover', () => {
-        imageHover.src = "/static/img/home-images/taper-gif.gif";
+        imageHover.src = "/static/img/taper-gif.gif";
     })
     detrendHoverLi.addEventListener('mouseover', () => {
-        imageHover.src = "/static/img/home-images/detrend-gif.gif";
+        imageHover.src = "/static/img/detrend-gif.gif";
     })
     fourierHoverLi.addEventListener('mouseover', () => {
-        imageHover.src = "/static/img/home-images/fourier-gif.gif";
+        imageHover.src = "/static/img/fourier-gif.gif";
     })
     PickHoverLi.addEventListener('mouseover', () => {
-        imageHover.src = "/static/img/home-images/pick-gif.gif";
+        imageHover.src = "/static/img/pick-gif.gif";
     })
 
     

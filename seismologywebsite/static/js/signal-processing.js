@@ -6,7 +6,6 @@
     let detrendOrderInputExpanding = document.querySelector("#detrend-order-input-expanding");
     let detrendApplyButton = document.querySelector("#detrend-apply-button");
     let detrendApplyButtonExpanding = document.querySelector("#detrend-apply-button-expanding");
-
     let taperTypeSelect = document.querySelector("#taper-type-select");
     let taperTypeSelectExpanding = document.querySelector("#taper-type-select-expanding");
     let taperSideSelect = document.querySelector("#taper-side-select");
@@ -15,7 +14,6 @@
     let taperLengthInputExpanding = document.querySelector("#taper-length-input-expanding");
     let taperApplyButton = document.querySelector("#taper-apply-button");
     let taperApplyButtonExpanding = document.querySelector("#taper-apply-button-expanding");
-
     let trimLeftSideInput = document.querySelector("#trim-left-side-input");
     let trimLeftSideInputExpanding = document.querySelector("#trim-left-side-input-expanding");
     let trimRightSideInput = document.querySelector("#trim-right-side-input");
@@ -83,6 +81,10 @@
     }
 
     saveFileButton.href = "javascript:void(0)";
+
+
+
+
 
     // add the click event on the upload-file and another-file-upload buttons
     document.querySelector("#upload-file-button").addEventListener('click', function() {
@@ -178,6 +180,8 @@
         trimRightSideInput.value = trimRightSideInputExpanding.value;
     })
 
+
+
     // define the functions when the user clicks on the buttons
     detrendApplyButton.addEventListener("click", () =>{
         let queryURL = `/signal-processing/apply-processing-detrend?detrend-type-select=${detrendTypeSelect.value}&detrend-order-input=${detrendOrderInput.value}`;
@@ -190,7 +194,6 @@
         applyFilter(queryURL, pillLabel)
     })
 
-
     taperApplyButton.addEventListener("click", () =>{
         let queryURL = `/signal-processing/apply-processing-taper?taper-length-input=${taperLengthInput.value}&taper-side-select=${taperSideSelect.value}&taper-type-select=${taperTypeSelect.value}`;
         let pillLabel = `taper-${taperTypeSelect.value}-${taperSideSelect.value}-${taperLengthInput.value}`;
@@ -201,7 +204,6 @@
         let pillLabel = `taper-${taperTypeSelect.value}-${taperSideSelect.value}-${taperLengthInput.value}`;
         applyFilter(queryURL, pillLabel)
     })
-
 
     trimApplyButton.addEventListener("click", () =>{
         let queryURL = `/signal-processing/apply-processing-trim?trim-left-side-input=${trimLeftSideInput.value}&trim-right-side-input=${trimRightSideInput.value}`;
@@ -247,64 +249,62 @@
             method: 'POST',
             body: formData
         })
-            .then(response => { 
-
-                // if not ok deactivate the spinner and show the modal message
-                if (!response.ok) {
-                    // deactivate spinner
-                    spinnerDiv.style.display = 'none';
-
-                    // get the jsonify({'error_message': error.description}) response
-                    return response.json()
-                        .then(errorMessage => {
-                            document.querySelector("#modal-message").textContent = errorMessage['error_message'];
-                            document.querySelector("#modal-header").style.backgroundColor = "red";
-                            document.querySelector("#modal-title").textContent = 'An error has occured!'
-                            document.querySelector("#modal-button-triger").click();
-                            throw new Error(errorMessage);
-                        })
-                }
-                // if ok just return the json response
-                return response.json()
-            })
-            .then(mseedData => {
-
+        .then(response => { 
+            // if not ok deactivate the spinner and show the modal message
+            if (!response.ok) {
                 // deactivate spinner
                 spinnerDiv.style.display = 'none';
 
-                // activate all elements when you upload a file
-                for (el of disableEnableElements) {
-                    el.disabled = false;
-                }
-                
-                // display none to the initial "start by upload an mseed file" div
-                document.querySelector("#signal-processing-start-by-upload-container").style.display = "none";
+                // get the jsonify({'error_message': error.description}) response
+                return response.json()
+                    .then(errorMessage => {
+                        document.querySelector("#modal-message").textContent = errorMessage['error_message'];
+                        document.querySelector("#modal-header").style.backgroundColor = "red";
+                        document.querySelector("#modal-title").textContent = 'An error has occured!'
+                        document.querySelector("#modal-button-triger").click();
+                        throw new Error(errorMessage);
+                    })
+            }
+            // if ok just return the json response
+            return response.json()
+        })
+        .then(mseedData => {
+            // deactivate spinner
+            spinnerDiv.style.display = 'none';
 
-                // rename the dummy paragraph to have the record name
-                document.querySelector("#record-name-paragraph").textContent = mseedData["trace-0"]["record-name"];
+            // activate all elements when you upload a file
+            for (el of disableEnableElements) {
+                el.disabled = false;
+            }
+            
+            // display none to the initial "start by upload an mseed file" div
+            document.querySelector("#signal-processing-start-by-upload-container").style.display = "none";
 
-                // convert the returned json object to a form that i can use to plot the graph
-                let convertedMseedData = prepareTracesList(mseedData);
+            // rename the dummy paragraph to have the record name
+            document.querySelector("#record-name-paragraph").textContent = mseedData["trace-0"]["record-name"];
 
-                // activate the href of the save button
-                saveFileButton.href = "/signal-processing/download-mseed-file";
+            // convert the returned json object to a form that i can use to plot the graph
+            let convertedMseedData = prepareTracesList(mseedData);
 
-                if (detrendTypeSelect.value === 'polynomial' || detrendTypeSelect.value === 'spline') {
-                    detrendOrderInput.disabled = false;
-                    detrendOrderInputExpanding.disabled = false;
-                }
-                else {
-                    detrendOrderInput.disabled = true;
-                    detrendOrderInputExpanding.disabled = true;
-                }
+            // activate the href of the save button
+            saveFileButton.href = "/signal-processing/download-mseed-file";
 
-                // create the plot
-                Plotly.newPlot('time-series-graph', convertedMseedData, layout, config);
-            })
-            .catch(error => {
+            if (detrendTypeSelect.value === 'polynomial' || detrendTypeSelect.value === 'spline') {
+                detrendOrderInput.disabled = false;
+                detrendOrderInputExpanding.disabled = false;
+            }
+            else {
+                detrendOrderInput.disabled = true;
+                detrendOrderInputExpanding.disabled = true;
+            }
+
+            // create the plot
+            Plotly.newPlot('time-series-graph', convertedMseedData, layout, config);
+        })
+        .catch(error => {
             // Handle any errors during the upload process
             console.error('Error uploading MSeed file:', error);
-            });
+        });
     }
 
 
@@ -345,10 +345,9 @@
                 Plotly.newPlot('time-series-graph', convertedMseedData, layout, config);
                 
                 if (allFilterPills.length > 9 ) {
-                    alert('You cannot add more pills');
+                    alert('You cannot use more tools');
                     return;
                 }
-
                 addPill(pillLabel);
             })
             .catch(error => {

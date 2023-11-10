@@ -103,14 +103,15 @@ def compute_fourier():
 
     # initialize an empty error message
     error_message = None
-    if float(signal_window_left_side) + float(window_length) >= total_duration:
+
+    if float(signal_window_left_side) + float(window_length) > total_duration:
         error_message = 'The signal window must ends before the end time of the time series! Consider reducing the window length or moving the left side of the signal window, to the left!'
     elif float(signal_window_left_side) < 0:
-        error_message = 'The signal window must start after the start time of the time series! Consider moving the left side of the signal window to the right, so that it is inside the graph area!'
+        error_message = 'The signal window must starts after the start time of the time series! Consider moving the left side of the signal window to the right, so that it is inside the graph area!'
     elif noise_selected == 'true' and float(noise_window_right_side) > total_duration:
-        error_message = 'The noise window must end before the end time of the time series! Consider moving the right side of the noise window to the left!'
+        error_message = 'The noise window must ends before the end time of the time series! Consider moving the right side of the noise window to the left!'
     elif noise_selected == 'true' and float(noise_window_right_side) - float(window_length) < 0:
-        error_message = 'The noise window must start after the start time of the time series! Consider reducing the noise length or moving the right side of the noise window, to the right!'
+        error_message = 'The noise window must starts after the start time of the time series! Consider reducing the noise length or moving the right side of the noise window, to the right!'
     elif float(window_length) == 0:
         error_message = 'The window length must be greater than zero!'
 

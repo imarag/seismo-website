@@ -39,7 +39,7 @@ def create_app(test_config=None):
 
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///seismo-database.db"
     app.config['DATA_FILES_FOLDER'] = os.path.join(app.root_path, 'data_files')
-    app.config['items_per_page'] = 4
+    app.config['items_per_page'] = 6
     app.config['total_topics'] = 9
 
     app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -90,6 +90,10 @@ def create_app(test_config=None):
     @login_required
     def help_and_support():
         return render_template('help-and-support.html')
+    
+    @app.route('/donation')
+    def donation():
+        return render_template('donation.html')
     
     @app.route('/download-static-file/<file>')
     def download_static_file(file):

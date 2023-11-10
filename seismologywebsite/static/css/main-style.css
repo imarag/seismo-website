@@ -42,7 +42,7 @@ body {
 /* ------------------------- INDEX PAGE ----------------------------*/
 
 #main-index-background-image {
-    background-image: url("/static/img/index-images/main-background-image.png");
+    background-image: url("/static/img/main-background-image.png");
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
@@ -73,8 +73,8 @@ body {
 }
 
 #all-topics-card:hover {
-    transform: rotate(3deg) scale(1.1);
-    border: 3px solid black;
+    transform:  scale(1.1);
+    border: 1px solid black;
 }
 
 
@@ -380,15 +380,16 @@ body {
 
 .article-main-content h2{
     text-align: center;
-    font-size: 30px;
-    color: #282828;
+    font-size: 45px;
+    color: #242425;
     margin: 35px 0px 25px 0px;
 }
 
 
+
 .article-main-content p{
     font-weight: 100;
-    font-size: 20px;
+    font-size: 25px;
     color: #383839;
 }
 
@@ -406,13 +407,12 @@ body {
 
 .article-main-content .figure-container {
     text-align: center;
-    margin-top: 60px;
-    margin-bottom: 60px;
+    margin-top: 30px;
+    margin-bottom: 30px;
 }
 
 .article-main-content img {
-    max-width: 75%;
-    min-width: 50%
+    width: 80%;
 }
 
 
@@ -513,6 +513,18 @@ body {
     color: rgb(210, 210, 210);
 }
 
+.article-main-content .equation p {
+    text-align: center;
+    font-size: 24px;
+    font-family: 'Consolas';
+    margin: 50px 0px;
+    color: #282828;
+    font-style: italic;
+    background-color: #eeeeee;
+    padding: 10px;
+    border-radius: 8px;
+}
+
 .article-main-content .input-code-block .pad {
     margin-left: 40px;
 }
@@ -539,20 +551,20 @@ body {
     margin: 0px;
 }
 
-.card {
+.card-article {
     background-color: #edf1f1;
     padding: 20px;
     border-radius: 10px;
     margin: 60px 0px;
 }
 
-.card svg {
+.card-article svg {
     display: block;
     width: 24px;
     height: 24px;
 }
 
-.card p, .card .input-code-block, .card .output-code-block {
+.card-article p, .card-article .input-code-block, .card-article .output-code-block {
     margin-left: 40px;
 }
 
@@ -560,6 +572,9 @@ body {
 @media (min-width: 768px) {
     .article-main-content {
         padding: 0px 25px;
+    }
+    .article-main-content img {
+        width: 60%;
     }
 }
 
@@ -589,6 +604,9 @@ body {
     .article-list-container .title {
         display: none;
     }
+    .article-main-content img {
+        width: 50%;
+    }
    
  
 }
@@ -597,38 +615,31 @@ body {
     .article-main-content {
         padding: 0px 75px;
     }
+    .article-main-content img {
+        width: 40%;
+    }
 }
 
 
 /*
 
 
-.article-main-content .equation p {
-    text-align: center;
-    font-size: 24px;
-    font-family: 'Consolas';
-    margin: 50px 0px;
-    color: #282828;
-    font-style: italic;
-    background-color: #eeeeee;
-    padding: 10px;
-    border-radius: 8px;
-}
 
 
 
 
 
 
-.card .input-code-card code span {
+
+.card-article .input-code-card code span {
     display: block;
 }
 
-.card .output-code-card code span {
+.card-article .output-code-card code span {
     display: block;
 }
 
-.card .input-code-card {
+.card-article .input-code-card {
     padding: 6px;
     background-color: #ffffff;
     color: #323030;
@@ -638,7 +649,7 @@ body {
     font-size: 16px;
 }
 
-.card .output-code-card {
+.card-article .output-code-card {
     padding: 6px;
     background-color: #3e3e41;
     color: #ffffff;

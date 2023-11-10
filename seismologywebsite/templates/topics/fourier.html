@@ -4,7 +4,7 @@
 
 {% block tool_template_image %}
     <img 
-        src="{{ url_for('static', filename='img/templates-icons/' + topic_object.image_name) }}"  
+        src="{{ url_for('static', filename='img/' + topic_object.image_name) }}"  
         alt="{{ topic_object.title }} - template image"
         class="img-fluid"
     >
@@ -35,7 +35,7 @@
         the <i>window length</i> slider to manipulate the position and length of the signal
         window (highlighted in red). This will allow you to precisely define the
         section for which you want to compute the Fourier Spectra. For added functionality,
-        you can use the <kbd>add</kbd> button to compute the Fourier Spectra for
+        you can use the <kbd>add+</kbd> button to compute the Fourier Spectra for
         a noise window (indicated in blue). By adjusting the <i>Noise window right side</i>
         slider, you can align the right side of the noise window with the signal
         window. These two windows will share the same duration or length. To calculate the Fourier
@@ -43,9 +43,8 @@
         to make the length of the signal window cover all the time series.
     </p>
     <p>
-        Once you're prepared, initiate the computation of the Fourier Spectra by selecting
-        the
-        <kbd>Compute Fourier</kbd> button at the bottom. Optionally, check the <i>Compute HVSR</i> checkbox to calculate the HVSR curve in addition to the 
+        Once you're prepared, select the <kbd>Compute Fourier</kbd> button to initiate the computation of the Fourier Spectra at the bottom. 
+        Optionally, check the <i>Compute HVSR</i> checkbox to calculate the HVSR curve in addition to the 
         Fourier Spectra. Make sure to select the vertical component of your records to appropriately compute the HVSR curve. 
         The resulting Fourier Spectra and the HVSR curve will be accessible
         under the <i>Fourier</i> and the <i>HVSR</i> tab at the top, respectively. There, you can opt to
@@ -66,7 +65,7 @@
 {% block tool_body %}
     <div class="fs-5 lead my-5">
         <div class="row justify-content-center">
-            <div class="col-12 col-md-11 col-lg-10">
+            <div class="col-12 col-md-11 col-lg-10 col-xl-9 col-xxl-9">
                 <div class="text-bg-dark rounded p-5 mt-5">
                     <div class="mb-4">
                         <button class="btn btn-outline-info" id="upload-file-button">Upload file</button>

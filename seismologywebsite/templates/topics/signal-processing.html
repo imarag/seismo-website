@@ -3,7 +3,7 @@
 
 {% block tool_template_image %}
     <img 
-        src="{{ url_for('static', filename='img/templates-icons/' + topic_object.image_name) }}"  
+        src="{{ url_for('static', filename='img/' + topic_object.image_name) }}"  
         alt="{{ topic_object.title }} - template image"
         class="img-fluid"
     >
@@ -28,13 +28,24 @@
 
 {% block tool_user_guide %}
     <p>
-        Start by uploading seismic data file using the <kbd>upload</kbd> option. Choose between the available processing tools to edit your uploaded waveform. These tools are presented below:
+        Start by uploading a seismic data file using the <kbd>upload</kbd> option. Choose between the available processing tools to 
+        edit your uploaded waveforms. These available tools are described below:
         <ul>
-            <li><a href="https://docs.obspy.org/packages/autogen/obspy.core.trace.Trace.detrend.html">Detrend</a>: Remove the trend variations in a signal using a specific detrend type. Detrending is essential when you want to focus on the fluctuations or patterns in a signal that are not related to the underlying trend. By removing the trend, you can make it easier to analyze the residuals or the noise in the signal, which can provide valuable insights into the underlying processes or phenomena being observed.</li>
-            <li><a href="https://docs.obspy.org/packages/autogen/obspy.core.trace.Trace.taper.html">Taper</a>: Apply a weight function window to a signal to reduce the sharp transitions at the edges of the finite signal segment. The tapering window gradually reduces the amplitude of the signal toward its edges, making it smoother and more compatible with Fourier analysis techniques. This results in more accurate frequency domain representations.</li>
-            <li><a href="https://docs.obspy.org/packages/autogen/obspy.core.stream.Stream.trim.html">Trim</a>: Remove portions of a signal that are considered unwanted or irrelevant for the specific analysis or application. Trimming can be used to focus on a specific segment of a signal, eliminate noise or artifacts, or isolate particular events or features of interest.</li>
+            <li><a href="https://docs.obspy.org/packages/autogen/obspy.core.trace.Trace.detrend.html" target="_blank">Detrend</a>: Remove the trend variations in a signal using a specific detrend type. Detrending is essential when you want to focus on the fluctuations or patterns in a signal that are not related to the underlying trend. By removing the trend, you can make it easier to analyze the residuals or the noise in the signal, which can provide valuable insights into the underlying processes or phenomena being observed.</li>
+            <li><a href="https://docs.obspy.org/packages/autogen/obspy.core.trace.Trace.taper.html" target="_blank">Taper</a>: Apply a weight function window to a signal to reduce the sharp transitions at the edges of the finite signal segment. The tapering window gradually reduces the amplitude of the signal toward its edges, making it smoother and more compatible with Fourier analysis techniques. This results in more accurate frequency domain representations.</li>
+            <li><a href="https://docs.obspy.org/packages/autogen/obspy.core.stream.Stream.trim.html" target="_blank">Trim</a>: Remove portions of a signal that are considered unwanted or irrelevant for the specific analysis or application. Trimming can be used to focus on a specific segment of a signal, eliminate noise or artifacts, or isolate particular events or features of interest.</li>
         </ul>
-        Every tool contain several options to adjust its functionality. When you are done, download the processed seismic data file using the <kbd>Save</kbd> option at the top menu, in a MiniSEED format.
+        Applying a processing step adds a pill-shaped filter below the top menu. Click to remove. Upon removal, all existing filters are reapplied to waveforms, starting from the leftmost filter.
+        Every tool contains several options to adjust its functionality. When you are done, download the processed seismic data file in a MiniSEED format
+        using the <kbd>Save</kbd> option at the top menu.
+    </p>
+    <p>
+        In case the waveforms get out of the visible area of the graph, use the buttons on the top right corner of the graph 
+        to <kbd>pan</kbd> (move) the waveform, or <kbd>zoom</kbd> option to zoom in and our of the graph and the <kbd>reset axes</kbd>
+        option to reset the waveforms to its initial position. In addition, use the left mouse button to select a specific area on the graph and the mouse wheel to zoom in and out of the graph.
+    </p>
+    <p>
+        <b>Note: There are some times that <kbd>reset axes</kbd> option, does not work. Consider re-uploading the same record again in case this happens.</b>
     </p>
 {% endblock %}
 
@@ -59,18 +70,20 @@
             <input type="file" id="upload-file-input" name="upload-file-input" style="display: none;">
         </div>
     </div> 
+
+
     <div class="container-lg">
-        <div id="signal-processing-option-menu">
-            <div class="bg-info py-2 px-3">
-                <div class="row justify-content-center align-items-center text-center" id="option-row">
-                    <div class="col-4 relative-pos">
-                        <div class="d-lg-none d-block">
-                            <button class="btn btn-info dropdown-toggle" id="detrend-expanding-button-main" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <div class="bg-info px-3 py-2">
+            <div class="d-block d-lg-none">
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-4 text-center">
+                        <div class="dropdown">
+                            <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-align-start" viewBox="0 0 16 16">
                                     <path fill-rule="evenodd" d="M1.5 1a.5.5 0 0 1 .5.5v13a.5.5 0 0 1-1 0v-13a.5.5 0 0 1 .5-.5z"/>
                                     <path d="M3 7a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7z"/>
                                 </svg>
-                                <span class="text-dark d-block">Detrend</span>
+                                Detrend
                             </button>
                             <ul class="dropdown-menu   text-bg-light">
                                 <div class="p-3 text-center">
@@ -88,57 +101,21 @@
                                             </select>
                                             <label for="detrend-order-input-expanding" class="form-label">order</label>
                                             <input id="detrend-order-input-expanding" name="detrend-order-input-expanding" class="form-control form-control-sm"  type="number" min="1" max="5"  step="1" value="1">
-                                            <button class="btn btn-primary mt-3" id="detrend-apply-button-expanding">apply</button>
+                                            <button class="btn btn-dark mt-3" id="detrend-apply-button-expanding">apply</button>
                                         </div>
                                     </div>
                                 
                                 </div>
                             </ul>
                         </div>
-                        <div class="d-none d-lg-block">
-                            <div class="row align-items-center">
-                                <div class="col">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-align-start" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M1.5 1a.5.5 0 0 1 .5.5v13a.5.5 0 0 1-1 0v-13a.5.5 0 0 1 .5-.5z"/>
-                                        <path d="M3 7a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7z"/>
-                                    </svg>
-                                </div>
-                                <div class="col">
-                                    <p class="text-center  my-0 py-0 fw-bold">Detrend</p>
-                                </div>
-                            </div>
-                            <hr class="mt-1 mb-1">
-                            <div class=" d-none d-lg-block">
-                                <div class="row justify-content-center align-items-center text-center">
-                                    <div class="col-4">
-                                        <label for="detrend-type-select" class="form-label">type</label>
-                                        <select class="form-select form-element" name="detrend-type-select" aria-label="Default select example" id="detrend-type-select">
-                                            <option value="simple" name="simple">simple</option>
-                                            <option value="linear" name="linear">linear</option>
-                                            <option value="constant" name="constant">constant</option>
-                                            <option value="polynomial" name="polynomial">polynomial</option>
-                                            <option value="spline" name="spline">spline</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-4">
-                                        <label for="detrend-order-input" class="form-label">order</label>
-                                        <input id="detrend-order-input" name="detrend-order-input" class="form-control form-control-sm form-element"  type="number" min="1" max="5"  step="1" value="1">
-                                    </div>
-                                    <div class="col-4">
-    
-                                    </div>
-                                </div>
-                            </div>
-                            <button class="btn btn-dark mt-3 absolute-pos" id="detrend-apply-button">apply</button>
-                        </div>
                     </div>
-                    <div class="col-4  border-start border-light border-1 relative-pos">
-                        <div class="d-lg-none d-block">
+                    <div class="col-4 text-center">
+                        <div class="dropdown">
                             <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-soundwave" viewBox="0 0 16 16">
                                     <path fill-rule="evenodd" d="M8.5 2a.5.5 0 0 1 .5.5v11a.5.5 0 0 1-1 0v-11a.5.5 0 0 1 .5-.5zm-2 2a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zm4 0a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zm-6 1.5A.5.5 0 0 1 5 6v4a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm8 0a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm-10 1A.5.5 0 0 1 3 7v2a.5.5 0 0 1-1 0V7a.5.5 0 0 1 .5-.5zm12 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0V7a.5.5 0 0 1 .5-.5z"/>
                                 </svg>
-                                <span class=" text-dark d-block">Taper</span>
+                                Taper
                             </button>
                             <ul class="dropdown-menu   text-bg-light">
                                 <div class="p-3 text-center">
@@ -176,123 +153,187 @@
                                             </select>
                                             <label for="taper-length-input-expanding" class="form-label">length (%)</label>
                                             <input id="taper-length-input-expanding" name="taper-length-input" class="form-control form-control-sm"  type="number" min="0" max="50" step="1" value="30"> 
-                                            <button class="btn btn-primary  mt-3 " id="taper-apply-button-expanding">apply</button>
+                                            <button class="btn btn-dark  mt-3 " id="taper-apply-button-expanding">apply</button>
                                         </div>
                                     </div>
                                 </div>
                             </ul>
                         </div>
-                        <div class="d-none d-lg-block">
-                            <div class="row align-items-center">
-                                <div class="col">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-soundwave" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M8.5 2a.5.5 0 0 1 .5.5v11a.5.5 0 0 1-1 0v-11a.5.5 0 0 1 .5-.5zm-2 2a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zm4 0a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zm-6 1.5A.5.5 0 0 1 5 6v4a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm8 0a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm-10 1A.5.5 0 0 1 3 7v2a.5.5 0 0 1-1 0V7a.5.5 0 0 1 .5-.5zm12 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0V7a.5.5 0 0 1 .5-.5z"/>
-                                    </svg>
-                                </div>
-                                <div class="col">
-                                    <p class="text-center  my-0 py-0 fw-bold">Taper</p>
-                                </div>
-                            </div>
-                            <hr class="mt-1 mb-1">
-                            <div class="row justify-content-center align-items-start text-center">
-                                <div class="col-4">
-                                    <label for="taper-type-select" class="form-label">type</label>
-                                    <select class="form-select form-element" name="taper-type-select" aria-label="Default select example" id="taper-type-select">
-                                        <option value="cosine"           name="cosine"          >cosine</option>
-                                        <option value="barthann"         name="barthann"        >barthann</option>
-                                        <option value="bartlett"         name="bartlett"        >bartlett</option>
-                                        <option value="blackman"         name="blackman"        >blackman</option>
-                                        <option value="blackmanharris"   name="blackmanharris"  >blackmanharris</option>
-                                        <option value="bohman"           name="bohman"          >bohman</option>
-                                        <option value="boxcar"           name="boxcar"          >boxcar</option>
-                                        <option value="chebwin"          name="chebwin"         >chebwin</option>
-                                        <option value="flattop"          name="flattop"         >flattop</option>
-                                        <option value="gaussian"         name="gaussian"        >gaussian</option>
-                                        <option value="general_gaussian" name="general_gaussian">general_gaussian</option>
-                                        <option value="hamming"          name="hamming"         >hamming</option>
-                                        <option value="hann"             name="hann"            >hann</option>
-                                        <option value="kaiser"           name="kaiser"          >kaiser</option>
-                                        <option value="hann"             name="hann"            >hann</option>
-                                        <option value="nuttall"          name="nuttall"         >nuttall</option>
-                                        <option value="parzen"           name="parzen"          >parzen</option>
-                                        <option value="slepian"          name="slepian"         >slepian</option>
-                                        <option value="triang"           name="triang"          >triang</option>
-                                    </select>
-                                </div>
-                                <div class="col-4">
-                                    <label for="taper-side-select" class="form-label">side</label>
-                                    <select class="form-select form-element" aria-label="Default select example" name="taper-side-select" id="taper-side-select">
-                                        <option value="left"             name="left"           >left</option>
-                                        <option value="right"            name="right"          >right</option>
-                                        <option value="both"             name="both"           >both</option>
-                                    </select>
-                                </div>
-                                <div class="col-4">
-                                    <label for="taper-length-input" class="form-label">length (%)</label>
-                                    <input id="taper-length-input" name="taper-length-input" class="form-control form-control-sm form-element"  type="number" min="0" max="50" step="1" value="30"> 
-                                </div>
-                            </div>
-                            <button class="btn btn-dark mt-3 absolute-pos" id="taper-apply-button">apply</button>
-                        </div>
                     </div>
-                    <div class="col-4  border-start border-light border-1 relative-pos">
-                        <div class="d-lg-none d-block">
-                            <button class="btn btn-info dropdown-toggle" id="trim-expanding-button-main" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <div class="col-4 text-center">
+                        <div class="dropdown">
+                            <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-scissors" viewBox="0 0 16 16">
                                     <path d="M3.5 3.5c-.614-.884-.074-1.962.858-2.5L8 7.226 11.642 1c.932.538 1.472 1.616.858 2.5L8.81 8.61l1.556 2.661a2.5 2.5 0 1 1-.794.637L8 9.73l-1.572 2.177a2.5 2.5 0 1 1-.794-.637L7.19 8.61 3.5 3.5zm2.5 10a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0zm7 0a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0z"/>
                                 </svg>
-                                <span class="text-dark d-block">Trim</span>
+                                Trim
                             </button>
-                            <ul class="dropdown-menu  text-bg-light">
+                            <ul class="dropdown-menu text-bg-light">
                                 <div class="p-3 text-center">
                                     <div class="row justify-content-center text-center">
                                         <div class="col-12">
                                             <p class="text-center  mb-3  fw-bold">Trim</p>
                                             <hr>
-                                            <label for="trim-left-side-input-expanding" class="form-label">left side (sec)</label>
+                                            <label for="trim-left-side-input-expanding" class="form-label">left side </label>
                                             <input id="trim-left-side-input-expanding" name="trim-left-side-input" class="form-control form-control-sm"  type="number" min="0"  step="1" value="5">
-                                            <label for="trim-right-side-input-expanding" class="form-label">right side (sec)</label>
+                                            <label for="trim-right-side-input-expanding" class="form-label">right side </label>
                                             <input id="trim-right-side-input-expanding" name="trim-right-side-input" class="form-control form-control-sm"  type="number" min="0"  step="1" value="10">
-                                            <button class="btn btn-primary mt-3" id="trim-apply-button-expanding">apply</button>
+                                            <button class="btn btn-dark mt-3" id="trim-apply-button-expanding">apply</button>
                                         </div>
                                     </div>
                                 </div>
                             </ul>
                         </div>
-
-                        <div class="d-none d-lg-block">
-                            <div class="row align-items-center">
-                                <div class="col">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-scissors" viewBox="0 0 16 16">
-                                        <path d="M3.5 3.5c-.614-.884-.074-1.962.858-2.5L8 7.226 11.642 1c.932.538 1.472 1.616.858 2.5L8.81 8.61l1.556 2.661a2.5 2.5 0 1 1-.794.637L8 9.73l-1.572 2.177a2.5 2.5 0 1 1-.794-.637L7.19 8.61 3.5 3.5zm2.5 10a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0zm7 0a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0z"/>
+                    </div>
+                </div>
+            </div>
+            <div class="d-none d-lg-block">
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-4">
+                        <div class="row justify-content-center align-items-center">
+                            <div class="col text-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-align-start" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M1.5 1a.5.5 0 0 1 .5.5v13a.5.5 0 0 1-1 0v-13a.5.5 0 0 1 .5-.5z"/>
+                                    <path d="M3 7a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7z"/>
+                                </svg>
+                            </div>
+                            <div class="col text-center">
+                                <span class="fw-bold">Detrend</span>
+                                <a href="https://docs.obspy.org/packages/autogen/obspy.core.trace.Trace.detrend.html" target="_blank" class="link-dark">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
+                                        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
                                     </svg>
-                                </div>
-                                <div class="col">
-                                    <p class="text-center  my-0 py-0 fw-bold">Trim</p>
-                                </div>
+                                </a>
                             </div>
-                            <hr class="mt-1 mb-1">
-                            <div class="row justify-content-center align-items-start text-center">
-                                <div class="col-4">
-                                    <label for="trim-left-side-input" class="form-label">left side (sec)</label>
-                                    <input id="trim-left-side-input" name="trim-left-side-input" class="form-control form-control-sm form-element"  type="number" min="0"  step="1" value="5">
-                                </div>
-                                <div class="col-4">
-                                    <label for="trim-right-side-input" class="form-label">right side (sec)</label>
-                                    <input id="trim-right-side-input" name="trim-right-side-input" class="form-control form-control-sm form-element"  type="number" min="0"  step="1" value="10">
-                                </div>
-                                <div class="col-4">
-                                   
-                                </div>
-                            </div>
-                            <button class="btn btn-dark mt-3 absolute-pos" id="trim-apply-button">apply</button>
                         </div>
-                        
+                        <hr class="border-bottom border-1 border-dark my-1">
+                        <div class="row justify-content-center align-items-center">
+                            <div class="col-4">
+                                <label for="detrend-type-select" class="form-label">type</label>
+                                <select class="form-select" name="detrend-type-select" aria-label="Default select example" id="detrend-type-select" style="height:35px;">
+                                    <option value="simple" name="simple">simple</option>
+                                    <option value="linear" name="linear">linear</option>
+                                    <option value="constant" name="constant">constant</option>
+                                    <option value="polynomial" name="polynomial">polynomial</option>
+                                    <option value="spline" name="spline">spline</option>
+                                </select>
+                            </div>
+                            <div class="col-4">
+                                <label for="detrend-order-input" class="form-label">order</label>
+                                <input id="detrend-order-input" name="detrend-order-input" class="form-control form-control-sm"  type="number" min="1" max="5"  step="1" value="1" style="height:35px;">               
+                            </div>
+                            <div class="col-4">
+
+                            </div>
+                        </div>
+                        <div class="row justify-content-center align-items-center">
+                            <div class="col text-center">
+                                <button class="btn btn-dark mt-3" id="detrend-apply-button">apply</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4 border-start border-1 border-light border-end">
+                        <div class="row justify-content-center align-items-center">
+                            <div class="col text-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-soundwave" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M8.5 2a.5.5 0 0 1 .5.5v11a.5.5 0 0 1-1 0v-11a.5.5 0 0 1 .5-.5zm-2 2a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zm4 0a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zm-6 1.5A.5.5 0 0 1 5 6v4a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm8 0a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm-10 1A.5.5 0 0 1 3 7v2a.5.5 0 0 1-1 0V7a.5.5 0 0 1 .5-.5zm12 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0V7a.5.5 0 0 1 .5-.5z"/>
+                                </svg>
+                            </div>
+                            <div class="col text-center">
+                                <span class="fw-bold">Taper</span>
+                                <a href="https://docs.obspy.org/packages/autogen/obspy.core.trace.Trace.taper.html" target="_blank" class="link-dark">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
+                                        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+                                      </svg>
+                                </a>
+                            </div>
+                        </div>
+                        <hr class="border-bottom border-1 border-dark my-1">
+                        <div class="row justify-content-center align-items-center">
+                            <div class="col-4">
+                                <label for="taper-type-select" class="form-label">type</label>
+                                <select class="form-select" aria-label="Default select example" name="taper-type-select" id="taper-type-select" style="height:35px;">
+                                    <option value="cosine"           name="cosine"          >cosine</option>
+                                    <option value="barthann"         name="barthann"        >barthann</option>
+                                    <option value="bartlett"         name="bartlett"        >bartlett</option>
+                                    <option value="blackman"         name="blackman"        >blackman</option>
+                                    <option value="blackmanharris"   name="blackmanharris"  >blackmanharris</option>
+                                    <option value="bohman"           name="bohman"          >bohman</option>
+                                    <option value="boxcar"           name="boxcar"          >boxcar</option>
+                                    <option value="chebwin"          name="chebwin"         >chebwin</option>
+                                    <option value="flattop"          name="flattop"         >flattop</option>
+                                    <option value="gaussian"         name="gaussian"        >gaussian</option>
+                                    <option value="general_gaussian" name="general_gaussian">general_gaussian</option>
+                                    <option value="hamming"          name="hamming"         >hamming</option>
+                                    <option value="hann"             name="hann"            >hann</option>
+                                    <option value="kaiser"           name="kaiser"          >kaiser</option>
+                                    <option value="hann"             name="hann"            >hann</option>
+                                    <option value="nuttall"          name="nuttall"         >nuttall</option>
+                                    <option value="parzen"           name="parzen"          >parzen</option>
+                                    <option value="slepian"          name="slepian"         >slepian</option>
+                                    <option value="triang"           name="triang"          >triang</option>
+                                </select>
+                            </div>
+                            <div class="col-4">
+                                <label for="taper-side-select" class="form-label">side</label>
+                                <select class="form-select" aria-label="Default select example" name="taper-side-select" id="taper-side-select" style="height:35px;">
+                                    <option value="left"             name="left"           >left</option>
+                                    <option value="right"            name="right"          >right</option>
+                                    <option value="both"             name="both"           >both</option>
+                                </select>
+                            </div>
+                            <div class="col-4">
+                                <label for="taper-length-input" class="form-label">length (%)</label>
+                                <input id="taper-length-input" name="taper-length-input" class="form-control form-control-sm"  type="number" min="0" max="50" step="1" value="30" style="height:35px;"> 
+                            </div>
+                        </div>
+                        <div class="row justify-content-center align-items-center">
+                            <div class="col text-center">
+                                <button class="btn btn-dark  mt-3 " id="taper-apply-button">apply</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="row justify-content-center align-items-center">
+                            <div class="col text-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-scissors" viewBox="0 0 16 16">
+                                    <path d="M3.5 3.5c-.614-.884-.074-1.962.858-2.5L8 7.226 11.642 1c.932.538 1.472 1.616.858 2.5L8.81 8.61l1.556 2.661a2.5 2.5 0 1 1-.794.637L8 9.73l-1.572 2.177a2.5 2.5 0 1 1-.794-.637L7.19 8.61 3.5 3.5zm2.5 10a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0zm7 0a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0z"/>
+                                </svg>
+                            </div>
+                            <div class="col text-center">
+                                <span class="fw-bold">Trim</span>
+                                <a href="https://docs.obspy.org/packages/autogen/obspy.core.stream.Stream.trim.html" target="_blank" class="link-dark">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
+                                        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                        <hr class="border-bottom border-1 border-dark my-1">
+                        <div class="row justify-content-center align-items-center">
+                            <div class="col-4">
+                                <label for="trim-left-side-input" class="form-label">left side </label>
+                                <input id="trim-left-side-input" name="trim-left-side-input" class="form-control form-control-sm"  type="number" min="0"  step="1" value="5" style="height:35px;">
+                            </div>
+                            <div class="col-4">
+                                <label for="trim-right-side-input" class="form-label">right side </label>
+                                <input id="trim-right-side-input" name="trim-right-side-input" class="form-control form-control-sm"  type="number" min="0"  step="1" value="10" style="height:35px;">
+                            </div>
+                            <div class="col-4">
+
+                            </div>
+                        </div>
+                        <div class="row justify-content-center align-items-center">
+                            <div class="col text-center">
+                                <button class="btn btn-dark mt-3" id="trim-apply-button">apply</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 
 
     <div class="mb-5 container-lg">
@@ -326,9 +367,3 @@
     <script src="/static/js/signal-processing.js"></script>
 {% endblock %}
     
-
-
-*********************************************
-
-    
-

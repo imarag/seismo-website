@@ -77,9 +77,9 @@ Help & Support
         <div class="row justify-content-center my-5">
             <div class="col">
                 <div class="fs-5 p-4">
-                    <div id="contact-container" class="accordion-collapse collapse" data-bs-parent="#help-and-support-accordion">
+                    <div id="contact-container" class="accordion-collapse collapse show" data-bs-parent="#help-and-support-accordion">
                         <div class="accordion-body">
-                            <div class="row justify-content-center gy-4">
+                            <div class="row justify-content-center my-4">
                                 <div class="col-8 col-lg-4 text-center">
                                     <p>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-telephone-fill" viewBox="0 0 16 16">
@@ -89,6 +89,8 @@ Help & Support
                                     </p>
                                     <p class="text-primary fw-bold">+30&nbsp6982972144</p>
                                 </div>
+                            </div>
+                            <div class="row justify-content-center my-4">
                                 <div class="col-8 col-lg-4 text-center">
                                     <p>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope-fill" viewBox="0 0 16 16">
@@ -98,6 +100,8 @@ Help & Support
                                     </p>
                                     <p class="text-primary fw-bold"><a href="mailto: giannis.marar@hotmail.com">giannis.marar@hotmail.com</a></p>
                                 </div>
+                            </div>
+                            <div class="row justify-content-center my-4">
                                 <div class="col-8 col-lg-4 text-center">
                                     <p>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-linkedin" viewBox="0 0 16 16">
@@ -108,37 +112,29 @@ Help & Support
                                     <p class="text-primary fw-bold"><a target="_blank" href="https://www.linkedin.com/in/ioannis-maragkakis-1ba2851a9/">ioannis-maragkakis</a></p>
                                 </div>
                             </div>
+                            
                         </div>
                     </div>
                     <div id="faqs-container" class="accordion-collapse collapse" data-bs-parent="#help-and-support-accordion">
-                        <div class="accordion-body">
-                            <p class="fw-bold fs-6">What kind of files does the site uses ?</p>
-                            <p class="fs-6">The site uses MiniSEED or MSEED binary format files that store and exchange digital
-                                seismic waveform data.</p>
+                        <div class="accordion-body fs-5">
+                            <p class="fw-bold">What kind of files does the site uses ?</p>
+                            <p>The site uses seismic data files. Check the Obspy <a target="_blank" href="https://docs.obspy.org/packages/autogen/obspy.core.stream.read.html"><code>obspy.core.stream.read</code></a> function for the supported formats</p>
                             <hr>
-                            <p class="fw-bold fs-6">What tools are used to build this website ?</p>
-                            <p class="fs-6">The technology used to build this website consists of tools that have to do with the
-                                front-end side such as <code>HTML</code>, <code>CSS</code>, <code>Javascript</code> and tools
-                                related to the front-end side or server side that we use the <code>Flask</code> Python library.
+                            <p class="fw-bold">What tools are used to build this website ?</p>
+                            <p>The technologies used to build this website consists of front-end development
+                                tools such as pure <code>HTML</code>, <code>CSS</code>, <code>Javascript</code>, frameworks like <code>Bootstrap</code> and tools
+                                related to the back-end or server side such as the <code>Flask</code> Python library.
                             </p>
                             <hr>
-                            <p class="fw-bold fs-6">What is the site about ?</p>
-                            <p class="fs-6">The site is about earthquake related concepts and tools. Our platform is
-                                thoughtfully designed to serve individuals from various backgrounds and levels of knowledge.
-                                Here, we're passionate about making earthquake knowledge accessible to everyone. Our mission is
-                                to empower you with insights and resources that span from the basics to more advanced insights.
-                                Our collection includes a wide array of articles and tools carefully crafted to ensure that
-                                regardless of your familiarity with the topic, you'll find something valuable and engaging.</p>
+                            <p class="fw-bold">What is the site about ?</p>
+                            <p>The site is about earthquakes. It is organized into earthquake related articles and interactive tools. Dive into the articles to gain deeper insights into 
+                                various seismological concepts, and
+                                feel free to utilize the available interactive tools that let you explore and apply different seismological
+                                computations. 
+                            </p>
                             <hr>
-                            <p class="fw-bold fs-6">How do I navigate through the website?</p>
-                            <p class="fs-6">We've organized our content into two main categories: articles and interactive
-                                tools. Dive into our articles to gain deeper insights into various seismological concepts, and
-                                don't miss out on our interactive tools that let you explore and apply different seismological
-                                computations.</p>
-                            <hr>
-                            <p class="fw-bold fs-6">Will the site be regularly updated with new content?</p>
-                            <p class="fs-6">Yes, we are committed to providing you with a dynamic and evolving resource. Our
-                                team is dedicated to regularly updating the site with fresh articles, tools, and the latest
+                            <p class="fw-bold">Will the site be regularly updated with new content?</p>
+                            <p>Yes, i am committed to regularly update the site with fresh articles, tools, and the latest
                                 insights in the field of seismology. Be sure to check back often to discover new additions that
                                 will continue to enrich your understanding and exploration of earthquakes.</p>
                             <hr>
@@ -150,7 +146,7 @@ Help & Support
                                 <div class="row justify-content-center">
                                     <div class="col text-center">
                                         <p>
-                                            <img src="{{ url_for('static', filename='img/help-and-support/iris.png') }}"
+                                            <img src="{{ url_for('static', filename='img/iris.png') }}"
                                                 class="img-fluid" style="width:80px;">
                                         </p>
                                         <p>
@@ -165,7 +161,7 @@ Help & Support
                                 <div class="row justify-content-center">
                                     <div class="col text-center">
                                         <p>
-                                            <img src="{{ url_for('static', filename='img/help-and-support/usgs.png') }}"
+                                            <img src="{{ url_for('static', filename='img/usgs.png') }}"
                                                 class="img-fluid" style="width:80px;">
                                         </p>
                                         <p>
@@ -181,7 +177,7 @@ Help & Support
                                 <div class="row justify-content-center">
                                     <div class="col text-center">
                                         <p>
-                                            <img src="{{ url_for('static', filename='img/help-and-support/emsc.jpg') }}"
+                                            <img src="{{ url_for('static', filename='img/emsc.jpg') }}"
                                                 class="img-fluid" style="width:80px;">
                                         </p>
                                         <p>
@@ -197,7 +193,7 @@ Help & Support
                                 <div class="row justify-content-center">
                                     <div class="col text-center">
                                         <p>
-                                            <img src="{{ url_for('static', filename='img/help-and-support/itsak_logo.png') }}"
+                                            <img src="{{ url_for('static', filename='img/itsak_logo.png') }}"
                                                 class="img-fluid" style="width:80px;">
                                         </p>
                                         <p>
@@ -213,7 +209,7 @@ Help & Support
                                 <div class="row justify-content-center">
                                     <div class="col text-center">
                                         <p>
-                                            <img src="{{ url_for('static', filename='img/help-and-support/auth_logo.png') }}"
+                                            <img src="{{ url_for('static', filename='img/auth_logo.png') }}"
                                                 class="img-fluid" style="width:80px;">
                                         </p>
                                         <p>
@@ -229,7 +225,7 @@ Help & Support
                                 <div class="row justify-content-center">
                                     <div class="col text-center">
                                         <p>
-                                            <img src="{{ url_for('static', filename='img/help-and-support/noa_logo.png') }}"
+                                            <img src="{{ url_for('static', filename='img/noa_logo.png') }}"
                                                 class="img-fluid" style="width:80px;">
                                         </p>
                                         <p>
@@ -258,8 +254,7 @@ Help & Support
                 </div>
             </div>
         </div>
-</div>
-
+    </div>
 </div>
 
 
