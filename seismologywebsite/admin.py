@@ -86,11 +86,11 @@ def reset_topics():
     )
 
     tp4 = Topic(
-        title="ASCII to MSEED",
-        description="An interactive tool to transform ASCII data files into the seismic MiniSEED format. To begin, upload your ASCII file while specifying the relevant file parameters (e.g., delimiter and skip rows). Afterward, choose the corresponding seismic parameters to complete the conversion process.",
-        image_name="ascii-to-mseed-icon.png",
+        title="File to MiniSEED",
+        description="An interactive tool to transform data files into the seismic MiniSEED format. To begin, upload your file from the specific file format menu, and specify the relevant parameters (e.g., delimiter and skip rows). Afterward, choose the corresponding seismic parameters to complete the conversion process.",
+        image_name="file-to-mseed-icon.png",
         type="interactive",
-        template_name="ascii-to-mseed"
+        template_name="file-to-mseed"
     )
 
     tp5 = Topic(
@@ -134,17 +134,25 @@ def reset_topics():
     )
 
     tp10 = Topic(
-        title="Python Seismogram Plotting",
-        description="A Python library to visually analyzing seismic data",
+        title="Python Matplotlib Plotting",
+        description="A basic tutorial to plot seismic data using various Matplotlib functions and methods",
         image_name="matplotlib.png",
         type="static",
         template_name="matplotlib"
     )
 
+    tp11 = Topic(
+        title="Edit Seismic File",
+        description="A tool to find out about the content of a seismic file. Feel free to edit the header of it and download its data",
+        image_name="edit_seismic_file.png",
+        type="interactive",
+        template_name="edit_seismic_file"
+    )
+
     Topic.query.delete()
     db.session.commit()
 
-    for tp in [tp1, tp2, tp3, tp4, tp5, tp6, tp7, tp8, tp9, tp10]:
+    for tp in [tp1, tp2, tp3, tp4, tp5, tp6, tp7, tp8, tp9, tp10, tp11]:
         db.session.add(tp)
     db.session.commit()
 

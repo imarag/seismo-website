@@ -138,25 +138,25 @@ def create_app(test_config=None):
     from . import auth
     from . import fourier
     from . import pick_arrivals
-    from . import ascii_to_mseed
+    from . import file_to_mseed
     from . import signal_processing
     from . import search_topics
     from . import admin
     from . import user_account
     from . import distance_between_points
-    
+    from . import edit_seismic_file
 
     app.register_blueprint(auth.bp)
     app.register_blueprint(fourier.bp)
     app.register_blueprint(pick_arrivals.bp)
-    app.register_blueprint(ascii_to_mseed.bp)
+    app.register_blueprint(file_to_mseed.bp)
     app.register_blueprint(signal_processing.bp)
     app.register_blueprint(admin.bp)
     app.register_blueprint(search_topics.bp)
     app.register_blueprint(user_account.bp)
     app.register_blueprint(forgot_password.bp)
     app.register_blueprint(distance_between_points.bp)
-    
+    app.register_blueprint(edit_seismic_file.bp)
 
     return app
    

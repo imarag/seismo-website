@@ -1,20 +1,18 @@
 (()=>{
 
-  // i do this for the popover
-  let popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
-  let popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+  const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+  const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
-  // get the upload file input and button
   let uploadFileInput = document.querySelector("#upload-file-input");
-  let uploadFileButton = document.querySelector("#upload-file-button");
 
+  let seismicParamsButton = document.querySelector("#submit-seismic-params-button");
   let stationNameInput = document.querySelector("#station-input");
   let dateInput = document.querySelector("#date-input");
   let timeInput = document.querySelector("#time-input");
   let samplingFrequencyRadio = document.querySelector("#fs-radio");
   let parameterValue = document.querySelector("#parameter-value");
 
-  // get the  components
+  // get the components
   let firstComponentSelect = document.querySelector("#compo1");
   let secondComponentSelect = document.querySelector("#compo2");
   let thirdComponentSelect = document.querySelector("#compo3");
@@ -32,14 +30,14 @@
 
 
   // when clicked open the file input
-  uploadFileButton.addEventListener('click', () => {
+  document.querySelector("#upload-file-button").addEventListener('click', () => {
     uploadFileInput.click()
   })
 
   // when the change event happends, open the browse window
   uploadFileInput.addEventListener('change', handleFileUpload);
 
-  document.querySelector("#submit-seismic-params-button").addEventListener("click", submitSeismicParameters);
+  seismicParamsButton.addEventListener("click", submitSeismicParameters);
 
   function handleFileUpload(event) {
 
@@ -69,7 +67,7 @@
     formData.append('columns-to-read', document.querySelector("#columns-to-read-input").value);
 
 
-    fetch('/ascii-to-mseed/read-ascii-file', {
+    fetch('/file-to-mseed/read-file', {
       method: 'POST',
       body: formData
     })
@@ -96,20 +94,21 @@
       })
       .then(data => { // the data is a dictionary in this form: {'table-html': table_html, 'file-name-uploaded': file_path, "number_of_traces": len(df.columns) }
 
-        // get the table html
-        let tableHTML = data['table-html'];
-
-        // define the total traces that the user inserted 2 or 3
-        totalTraces = data["number_of_traces"];
-
         // deactivate the spinner
         spinnerDiv.style.display = 'none';
+        
+        // get the table html
+        let tableHTML = data['table-html'];
+        
+        // define the total traces that the user inserted 2 or 3
+        totalTraces = data["number_of_traces"];
 
         // this is the header that will say that this is the first 5 rows of your file
         let headerTopHTML = `
           <p class="text-center text-secondary fs-3">First five (5) rows of your file</p>
           <hr>
         `;
+
         // i change the inner html of the table container to be the header and the table
         document.querySelector("#table-container-preview").innerHTML = headerTopHTML + tableHTML ;
         
@@ -117,8 +116,6 @@
         // can select the same file
         uploadFileInput.value = null;
 
-        // activate the seismic parameters set fieldset
-        document.querySelector("#submit-form-fieldset").disabled = false;
 
         // if the user inserted 2 traces then disable the second select widget at the components at the seismic parameters and put its dfault value to be "not-selected"
         if (data["number_of_traces"] === 2){
@@ -132,10 +129,12 @@
         }
 
         // actiate the modal message for a succesful computation
-        document.querySelector("#modal-message").textContent = 'The ASCII file is uploaded. See below for the first five rows of it to check if is correctly read. Do not worry about bold numbers at the table. Just check the other values. If yes, continue to fill the seismic parameters at the end.';
+        document.querySelector("#modal-message").textContent = 'The file is uploaded. See below for the first five rows of it to check if is correctly read. Do not worry about bold numbers at the table. Just check the other values. If yes, continue to fill the seismic parameters at the end.';
         document.querySelector("#modal-title").textContent = 'Succeful calculation!';
         document.querySelector("#modal-header").style.backgroundColor = "green";
         document.querySelector("#modal-button-triger").click();
+
+        seismicParamsButton.disabled = false;
         
 
       })
@@ -151,7 +150,7 @@
     // activate the spinner
     spinnerDiv.style.display = 'block';
 
-    queryURL = `/ascii-to-mseed/convert-ascii-to-mseed?station=${stationNameInput.value}&date=${dateInput.value}&time=${timeInput.value}&fs-radio=${samplingFrequencyRadio.checked}&parameter-value=${parameterValue.value}&total-traces=${totalTraces}&compo1=${firstComponentSelect.value}&compo2=${secondComponentSelect.value}&compo3=${thirdComponentSelect.value}`;
+    queryURL = `/file-to-mseed/convert-file-to-mseed?station=${stationNameInput.value}&date=${dateInput.value}&time=${timeInput.value}&fs-radio=${samplingFrequencyRadio.checked}&parameter-value=${parameterValue.value}&total-traces=${totalTraces}&compo1=${firstComponentSelect.value}&compo2=${secondComponentSelect.value}&compo3=${thirdComponentSelect.value}`;
     console.log(queryURL);
     fetch(queryURL)
       // when i read the file with pandas i convert it to html table with pandas

@@ -9,7 +9,7 @@ import pandas as pd
 import datetime
 from .functions import raise_error
 
-bp = Blueprint('BP_ascii_to_mseed', __name__, url_prefix = '/ascii-to-mseed')
+bp = Blueprint('BP_file_to_mseed', __name__, url_prefix = '/file-to-mseed')
 
 
 def create_path(name):
@@ -32,11 +32,11 @@ def check_parameter_input(param):
     return ret_value
 
 
-@bp.route('/read-ascii-file', methods=['POST'])
-def read_ascii_file():
+@bp.route('/read-file', methods=['POST'])
+def read_file():
 
     # get the request parameters
-    uploaded_ascii_file = request.files.get('file')
+    uploaded_file = request.files.get('file')
     has_headers = request.form.get('has-headers')
     columns_to_read = request.form.get('columns-to-read')
     delimiter = request.form.get('delimiter')
@@ -44,7 +44,7 @@ def read_ascii_file():
     skip_rows = request.form.get('skip-rows')
 
     # check if there is a file uploaded
-    if not uploaded_ascii_file:
+    if not uploaded_file:
         error_message = 'No file uploaded!'
         return raise_error(error_message)
 
@@ -77,7 +77,7 @@ def read_ascii_file():
 
     try:
         df = pd.read_csv(
-            uploaded_ascii_file,
+            uploaded_file,
             header = header_param,
             nrows = nrows_param,
             skiprows = skiprows_param,
@@ -112,7 +112,7 @@ def read_ascii_file():
     table_html = first_5_rows.to_html().replace('class="dataframe"', 'class="table text-secondary"').replace('style="text-align: right;"', '')
 
     # inser the data file name to save in the data_files folder
-    file_path = os.path.join(current_app.config['DATA_FILES_FOLDER'], str(session.get("user_id", "test")) + "_ascii-to-mseed.csv")
+    file_path = os.path.join(current_app.config['DATA_FILES_FOLDER'], str(session.get("user_id", "test")) + "_file-to-mseed.csv")
 
     # save the generated pandas to csv at the file path specified
     df.to_csv(file_path, index=False, header=None)
@@ -122,8 +122,8 @@ def read_ascii_file():
 
 
 
-@bp.route('/convert-ascii-to-mseed', methods=['GET'])
-def convert_ascii_to_mseed():
+@bp.route('/convert-file-to-mseed', methods=['GET'])
+def convert_file_to_mseed():
 
     station = request.args.get('station')
     date = request.args.get('date')
@@ -196,7 +196,7 @@ def convert_ascii_to_mseed():
         params_dict['delta'] = float(parameterValue)
 
     df = pd.read_csv(
-        os.path.join(current_app.config['DATA_FILES_FOLDER'], str(session.get("user_id", "test")) + "_ascii-to-mseed.csv"),
+        os.path.join(current_app.config['DATA_FILES_FOLDER'], str(session.get("user_id", "test")) + "_file-to-mseed.csv"),
         header=None
     )
 
@@ -214,7 +214,7 @@ def convert_ascii_to_mseed():
 
     
     st = Stream(lt_traces)
-    mseed_file_save_path = os.path.join(current_app.config['DATA_FILES_FOLDER'], str(session.get("user_id", "test")) + "_ascii-to-mseed.mseed")
+    mseed_file_save_path = os.path.join(current_app.config['DATA_FILES_FOLDER'], str(session.get("user_id", "test")) + "_file-to-mseed.mseed")
     st.write(
         mseed_file_save_path
     )

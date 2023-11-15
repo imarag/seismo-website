@@ -36,6 +36,9 @@
     <li><a class="sub-chapter" href="#item-3-3">Configure Grid And Ticks</a></li>
     <li><a class="sub-chapter" href="#item-3-4">Configure The Legend</a></li>
     <li><a class="sub-chapter" href="#item-3-5">Configure The Line</a></li>
+    <li><a href="#item-4">Plot Seismic Records</a></li>
+    <li><a href="#item-5">Miscellaneous Functions</a></li>
+    
 
 {% endblock %}
 
@@ -117,7 +120,7 @@
         </div>
         <div class="figure-container">
             <figure>
-                <img src="{{ url_for('static', filename='img/matplotlib_figure_grid_tight_layout.png') }}" alt="matplotlib grid 2 rows and 3 columns">
+                <img src="{{ url_for('static', filename='img/matplotlib_figure_grid_tight_layout.png') }}" alt="matplotlib grid 2 rows and 3 columns, tight layout">
                 <figcaption>A Matplotlib <code>Figure</code> container with a grid of 2 rows and 3 columns</figcaption>
             </figure>
         </div>
@@ -131,165 +134,288 @@
             Matplotlib <code>Axes</code> object contains several special methods that create various graphics or <i>primitives</i> inside of it. Such methods are the <code>plots()</code>
             method that creates a line graphic (<code>Line2D</code>), the <code>text()</code> method that generates a <code>Text</code> instance, the <code>legend()</code> method that creates 
             a <code>Legend</code> object etc. There are many more interesting things in the documentation but it is way better to learn about the library while plotting real Seismological data.
-            Consider reading the <a href="https://matplotlib.org/stable/tutorials/artists.html#sphx-glr-tutorials-artists-py" target="_blank">documentation</a> for more information.
+            Consider reading the <a class="link-info" href="https://matplotlib.org/stable/tutorials/artists.html#sphx-glr-tutorials-artists-py" target="_blank">documentation</a> for more information.
         </p>
-        <div id="item-3">
-            <h1>Basic graph styling</h1>
-            <p>
-                In this section, we'll explore fundamental styling techniques to enhance the visual appeal of the plot and include essential information to the graph area. This includes tasks 
-                like setting the graph title, adding titles to the x and y axes, adjusting the grid and legend, and styling the line objects within the graph.
-            </p>
-        </div>
-        <div id="item-3-1">
-            <h2>Import And Plot The Data</h2>
-            <p>
-                Start by reading a file containing the Fourier Spectra of a record using Python Pandas:
-            </p>
-            <div class="input-code-block">
-                <pre><code>
-                    <p><span class="comment"># read a file that contains the Fourier Spectra of a record using Pandas</span></p>
-                    <p><span class="python-color1">import</span> pandas <span class="python-color2">as</span> pd</p>
-                    <p>df = pd.<span class="python-color1">read_csv</span>(<span class="python-color3">'1_fourier-spectra_data.txt'</span>, sep=<span class="python-color3">"\s+"</span>)</p>
-                    <p>df</p>
-                </code></pre>
-            </div>
-            <div class="figure-container">
-                <figure>
-                    <img src="{{ url_for('static', filename='img/pandas_fourier_dataframe.png') }}" alt="matplotlib grid 2 rows and 3 columns">
-                    <figcaption>Pandas dataframe of Fourier Spectra data</figcaption>
-                </figure>
-            </div>
-            <p>Plot the Fourier Spectra of the <i>E</i> component of the record:</p>
-            <div class="input-code-block">
-                <pre><code>
-                    <p><span class="comment"># plot the Fourier Spectra of E component</span></p>
-                    <p><span class="comment"># initialize a figure and axes objects</span></p>
-                    <p>fig, ax = plt.<span class="python-color1">subplots</span>()</p>
-                    <p><span class="comment"># plot the data</span></p>
-                    <p>ax.<span class="python-color1">plot</span>(df[<span class="python-color3">'freq'</span>], df[<span class="python-color3">'E-signal'</span>])</p>
-                </code></pre>
-            </div>
-            <div class="figure-container">
-                <figure>
-                    <img src="{{ url_for('static', filename='img/fourier_data_plot.png') }}" alt="matplotlib grid 2 rows and 3 columns">
-                    <figcaption>Fourier Spectra of the record</figcaption>
-                </figure>
-            </div>
-        </div>
-        <div id="item-3-2">
-            <h2>Style Graph And Axis Titles</h2>
-            <p>
-                Start by inserting a title for the graph and labels for the graph axis:
-            </p>
-            <div class="input-code-block">
-                <pre><code>
-                    <p><span class="comment"># insert graph title and axis labels</span></p>
-                    <p>ax.<span class="python-color1">set_title</span>(<span class="python-color3">"Fourier Spectra values"</span>, size=22, color=<span class="python-color3">"navy"</span>, pad=15)</p>
-                    <p>ax.<span class="python-color1">set_xlabel</span>(<span class="python-color3">"Frequency [Hz]"</span>, size=14, style=<span class="python-color3">"italic"</span>)</p>
-                    <p>ax.<span class="python-color1">set_ylabel</span>(<span class="python-color3">"Magnitude"</span>, size=14, style=<span class="python-color3">"italic"</span>)</p>
-                    <p>fig</p>
-                </code></pre>
-            </div>
-            <div class="figure-container">
-                <figure>
-                    <img src="{{ url_for('static', filename='img/fourier_data_plot_labels.png') }}" alt="matplotlib grid 2 rows and 3 columns">
-                    <figcaption>Edit title and axis labels</figcaption>
-                </figure>
-            </div>
-            <p>
-                Utilize various parameters to control the style of the labels such as <code>color</code> 
-                for the color, <code>size</code> for the size of the corresponding label, <code>pad</code> for the distance of the label from the graph and more. Check <a href="https://matplotlib.org/stable/api/text_api.html#matplotlib.text.Text" target="_blank">here</a> for various <code>Text</code> properties.
-            </p>
-        </div>
-        <div id="item-3-3">
-            <h2>Configure Grid And Ticks</h2>
-            <p>
-                At this point we are going to configure the x and y axis ticks, which are the numbers and the lines that show the data labels. Matplotlib contain the <code>tick_params</code> function to
-                change the appearance of ticks, tick labels and grid. In addition, utilize the Matplotlib <code>grid</code> function to style the grid of the graph:
-            </p>
-            <div class="input-code-block">
-                <pre><code>
-                    <p><span class="comment"># edit axis ticks and grid</span></p>
-                    <p>ax.<span class="python-color1">tick_params</span>(axis=<span class="python-color3">'both'</span>, which=<span class="python-color3">'both'</span>, direction=<span class="python-color3">'in'</span>, length=4, width=1, colors=<span class="python-color3">'black'</span>)</p>
-                    <p><span class="comment"># set axis scale to log</span></p>
-                    <p>ax.<span class="python-color1">set_xscale</span>(<span class="python-color2">"log"</span>)</p>
-                    <p>ax.<span class="python-color1">set_yscale</span>(<span class="python-color2">"log"</span>)</p>
-                    <p><span class="comment"># style the grid</span></p>
-                    <p>ax.<span class="python-color1">grid</span>(<span class="python-color2">True</span>, linestyle=<span class="python-color3">'-'</span>, alpha=0.1, color=<span class="python-color3">"grey"</span>, which=<span class="python-color1">"both"</span>, lw=2)</p>
-                    <p>fig</p>
-                </code></pre>
-            </div>
-            <div class="figure-container">
-                <figure>
-                    <img src="{{ url_for('static', filename='img/fourier_data_plot_grid_ticks.png') }}" alt="matplotlib grid 2 rows and 3 columns">
-                    <figcaption>Edit axis ticks and grid style</figcaption>
-                </figure>
-            </div>
-            <p>
-                Since the Fourier Spectra data is usually plotted with "log" scale we use the Matplotlib <code>set_xscale</code> and <code>set_yscale</code> functions to set the scale of the x and y axis respectively. The we 
-                utilize the <code>tick_params</code> function to configure the tick lines and labels. Check <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.tick_params.html" target="_blank">here</a> for more information.
-                Activate the grid using the Matplotlib <code>grid</code> function and configure its color, width and opacity. Since grid is a set of multiple lines, we use similar <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.lines.Line2D.html" target="_blank">parameters</a> to control the Fourier 2D Line.
-            </p>
-        </div>
-        <div id="item-3-4">
-            <h2>Configure The Legend</h2>
-            <p>
-                Last thing left to style is the legend. Legend consists one of the most important graph characteristics, since it provides information about the graph content. Assume that the record that generated the 
-                Fourier Spectra happened on 14 of July, 2014 at 14:08:05 and was recorded by station CHN1. To add the legend, we need to re-plot the data and add a <code>label</code> parameter at the <code>plot()</code> function.:
-            </p>
-            <div class="input-code-block">
-                <pre><code>
-                    <p><span class="comment"># edit the legend</span></p>
-                    <p><span class="comment"># initialize a figure and axes objects</span></p>
-                    <p>fig, ax = plt.<span class="python-color1">subplots</span>()</p>
-                    <p><span class="comment"># plot the data</span></p>
-                    <p>ax.plot(df[<span class="python-color3">'freq'</span>], df[<span class="python-color3">'E-signal'</span>], label=<span class="python-color3">"E-component"</span>)</p>
-                    <p><span class="comment"># insert graph title and axis labels</span></p>
-                    <p>ax.<span class="python-color1">set_title</span>(<span class="python-color3">"Fourier Spectra values"</span>, size=22, color=<span class="python-color3">"navy"</span>, pad=15)</p>
-                    <p>ax.<span class="python-color1">set_xlabel</span>(<span class="python-color3">"Frequency [Hz]"</span>, size=14, style=<span class="python-color3">'italic'</span>)</p>
-                    <p>ax.<span class="python-color1">set_ylabel</span>(<span class="python-color3">"Magnitude"</span>, size=14, style=<span class="python-color3">'italic'</span>)</p>
-                    <p><span class="comment"># edit axis ticks</span></p>
-                    <p>ax.<span class="python-color1">tick_params</span>(axis=<span class="python-color3">'both'</span>, which=<span class="python-color3">'both'</span>, direction=<span class="python-color3">'in'</span>, length=4, width=1, colors=<span class="python-color3">'black'</span>)</p>
-                    <p><span class="comment"># edit x and y scale</span></p>
-                    <p>ax.<span class="python-color1">set_xscale</span>(<span class="python-color3">"log"</span>)</p>
-                    <p>ax.<span class="python-color1">set_yscale</span>(<span class="python-color3">"log"</span>)</p>
-                    <p><span class="comment"># style the grid</span></p>
-                    <p>ax.<span class="python-color1">grid</span>(<span class="python-color2">True</span>, linestyle=<span class="python-color3">'-'</span>, alpha=0.1, color=<span class="python-color3">"grey"</span>, which=<span class="python-color3">"both"</span>, lw=2)</p>
-                    <p><span class="comment"># style the legend</span></p>
-                    <p>ax.<span class="python-color1">legend</span>(title=<span class="python-color3">"2014-07-14 14:08:05 CHN1"</span>, loc=<span class="python-color3">"upper right"</span>, framealpha=0.1, shadow=<span class="python-color2">True</span>)</p>
-                </code></pre>
-            </div>
-            <div class="figure-container">
-                <figure>
-                    <img src="{{ url_for('static', filename='img/fourier_data_plot_legend.png') }}" alt="matplotlib grid 2 rows and 3 columns">
-                    <figcaption>Insert a legend on the graph and style it</figcaption>
-                </figure>
-            </div>
-            <p>
-                There are many <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.legend.html" target="_blank">ways</a> to add a legend in a graph. However, the recommend way is to add the 
-                <code>label</code> parameter at the <code>plot</code> function. That way, matplotlib knows which item on the graph to refer to. There are a number of parameters to control the appearance of the 
-                legend. For instance, use the <code>loc</code> parameter to position the legend, the <code>framealpha</code> parameter to control the opacity of the legend, <code>title</code> to add a title to the legend 
-                and more.
-            </p>
-        </div> 
-        <div id="item-3-5">
-            <h2>Configure The Line</h2>
-            <p>
-                Last, it is of great importance the styling of the line of a graph (the blue line in the previous graphs). The configuration of the line is similar to the parameters used to edit the grid of the graph. Some
-                of the characteristics that we can use to configure the line are:
-            </p>
-            <ul>
-                <li>linewidth or lw, sets the width of the line</li>
-                <li>linestyle or ls, styles the line (<a href="https://matplotlib.org/stable/gallery/lines_bars_and_markers/linestyles.html" target="_blank">line styles</a>)</li>
-                <li>color, that controls the color of the line (<a href="https://matplotlib.org/stable/gallery/color/named_colors.html" target="_blank">named colors</a>)</li>
-                <li>marker, that sets the style of the marker (<a href="https://matplotlib.org/stable/api/markers_api.html" target="_blank">marker styles</a></li>
-                <li>markerfacecolor or mfc, sets the fill color of the marker</li>
-                <li>markeredgecolor or mec, sets the color of the edge of the marker</li>
-                <li>markersize or ms, sets the size of the marker</li>
-            </ul>
-            <p>There are many other parameters that control the appearance of the line. Find them <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html" target="_blank">here</a></p>
-        </div> 
     </div>
+    <div id="item-3">
+        <h1>Basic graph styling</h1>
+        <p>
+            In this section, we'll explore fundamental styling techniques to enhance the visual appeal of the plot and include essential information to the graph area. This includes tasks 
+            like setting the graph title, adding titles to the x and y axes, adjusting the grid and legend, and styling the line objects within the graph.
+        </p>
+    </div>
+    <div id="item-3-1">
+        <h2>Import And Plot The Data</h2>
+        <p>
+            Start by reading a file containing the Fourier Spectra of a record using Python Pandas:
+        </p>
+        <div class="input-code-block">
+            <pre><code>
+                <p><span class="comment"># read a file that contains the Fourier Spectra of a record using Pandas</span></p>
+                <p><span class="python-color1">import</span> pandas <span class="python-color2">as</span> pd</p>
+                <p>df = pd.<span class="python-color1">read_csv</span>(<span class="python-color3">'1_fourier-spectra_data.txt'</span>, sep=<span class="python-color3">"\s+"</span>)</p>
+                <p>df</p>
+            </code></pre>
+        </div>
+        <div class="figure-container">
+            <figure>
+                <img src="{{ url_for('static', filename='img/pandas_fourier_dataframe.png') }}" alt="pandas dataframe">
+                <figcaption>Pandas dataframe of Fourier Spectra data</figcaption>
+            </figure>
+        </div>
+        <p>Plot the Fourier Spectra of the <i>E</i> component of the record:</p>
+        <div class="input-code-block">
+            <pre><code>
+                <p><span class="comment"># plot the Fourier Spectra of E component</span></p>
+                <p><span class="comment"># initialize a figure and axes objects</span></p>
+                <p>fig, ax = plt.<span class="python-color1">subplots</span>()</p>
+                <p><span class="comment"># plot the data</span></p>
+                <p>ax.<span class="python-color1">plot</span>(df[<span class="python-color3">'freq'</span>], df[<span class="python-color3">'E-signal'</span>])</p>
+            </code></pre>
+        </div>
+        <div class="figure-container">
+            <figure>
+                <img src="{{ url_for('static', filename='img/fourier_data_plot.png') }}" alt="Fourier Spectra graph">
+                <figcaption>Fourier Spectra of the record</figcaption>
+            </figure>
+        </div>
+    </div>
+    <div id="item-3-2">
+        <h2>Style Graph And Axis Titles</h2>
+        <p>
+            Start by inserting a title for the graph and labels for the graph axis:
+        </p>
+        <div class="input-code-block">
+            <pre><code>
+                <p><span class="comment"># insert graph title and axis labels</span></p>
+                <p>ax.<span class="python-color1">set_title</span>(<span class="python-color3">"Fourier Spectra values"</span>, size=22, color=<span class="python-color3">"navy"</span>, pad=15)</p>
+                <p>ax.<span class="python-color1">set_xlabel</span>(<span class="python-color3">"Frequency [Hz]"</span>, size=14, style=<span class="python-color3">"italic"</span>)</p>
+                <p>ax.<span class="python-color1">set_ylabel</span>(<span class="python-color3">"Magnitude"</span>, size=14, style=<span class="python-color3">"italic"</span>)</p>
+                <p>fig</p>
+            </code></pre>
+        </div>
+        <div class="figure-container">
+            <figure>
+                <img src="{{ url_for('static', filename='img/fourier_data_plot_labels.png') }}" alt="Fourier spectra graph">
+                <figcaption>Edit title and axis labels</figcaption>
+            </figure>
+        </div>
+        <p>
+            Utilize various parameters to control the style of the labels such as <code>color</code> 
+            for the color, <code>size</code> for the size of the corresponding label, <code>pad</code> for the distance of the label from the graph and more. Check <a class="link-info" href="https://matplotlib.org/stable/api/text_api.html#matplotlib.text.Text" target="_blank">here</a> for various <code>Text</code> properties.
+        </p>
+    </div>
+    <div id="item-3-3">
+        <h2>Configure Grid And Ticks</h2>
+        <p>
+            At this point we are going to configure the x and y axis ticks, which are the numbers and the lines that show the data labels. Matplotlib contain the <code>tick_params</code> function to
+            change the appearance of ticks, tick labels and grid. In addition, utilize the Matplotlib <code>grid</code> function to style the grid of the graph:
+        </p>
+        <div class="input-code-block">
+            <pre><code>
+                <p><span class="comment"># edit axis ticks and grid</span></p>
+                <p>ax.<span class="python-color1">tick_params</span>(axis=<span class="python-color3">'both'</span>, which=<span class="python-color3">'both'</span>, direction=<span class="python-color3">'in'</span>, length=4, width=1, colors=<span class="python-color3">'black'</span>)</p>
+                <p><span class="comment"># set axis scale to log</span></p>
+                <p>ax.<span class="python-color1">set_xscale</span>(<span class="python-color2">"log"</span>)</p>
+                <p>ax.<span class="python-color1">set_yscale</span>(<span class="python-color2">"log"</span>)</p>
+                <p><span class="comment"># style the grid</span></p>
+                <p>ax.<span class="python-color1">grid</span>(<span class="python-color2">True</span>, linestyle=<span class="python-color3">'-'</span>, alpha=0.1, color=<span class="python-color3">"grey"</span>, which=<span class="python-color1">"both"</span>, lw=2)</p>
+                <p>fig</p>
+            </code></pre>
+        </div>
+        <div class="figure-container">
+            <figure>
+                <img src="{{ url_for('static', filename='img/fourier_data_plot_grid_ticks.png') }}" alt="Fourier spectra graph">
+                <figcaption>Edit axis ticks and grid style</figcaption>
+            </figure>
+        </div>
+        <p>
+            Since the Fourier Spectra data is usually plotted with "log" scale we use the Matplotlib <code>set_xscale</code> and <code>set_yscale</code> functions to set the scale of the x and y axis respectively. The we 
+            utilize the <code>tick_params</code> function to configure the tick lines and labels. Check <a class="link-info" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.tick_params.html" target="_blank">here</a> for more information.
+            Activate the grid using the Matplotlib <code>grid</code> function and configure its color, width and opacity. Since grid is a set of multiple lines, we use similar <a class="link-info" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.lines.Line2D.html" target="_blank">parameters</a> to control the Fourier 2D Line.
+        </p>
+    </div>
+    <div id="item-3-4">
+        <h2>Configure The Legend</h2>
+        <p>
+            Last thing left to style is the legend. Legend consists one of the most important graph characteristics, since it provides information about the graph content. Assume that the record that generated the 
+            Fourier Spectra happened on 14 of July, 2014 at 14:08:05 and was recorded by station CHN1. To add the legend, we need to re-plot the data and add a <code>label</code> parameter at the <code>plot()</code> function.:
+        </p>
+        <div class="input-code-block">
+            <pre><code>
+                <p><span class="comment"># edit the legend</span></p>
+                <p><span class="comment"># initialize a figure and axes objects</span></p>
+                <p>fig, ax = plt.<span class="python-color1">subplots</span>()</p>
+                <p><span class="comment"># plot the data</span></p>
+                <p>ax.plot(df[<span class="python-color3">'freq'</span>], df[<span class="python-color3">'E-signal'</span>], label=<span class="python-color3">"E-component"</span>)</p>
+                <p><span class="comment"># insert graph title and axis labels</span></p>
+                <p>ax.<span class="python-color1">set_title</span>(<span class="python-color3">"Fourier Spectra values"</span>, size=22, color=<span class="python-color3">"navy"</span>, pad=15)</p>
+                <p>ax.<span class="python-color1">set_xlabel</span>(<span class="python-color3">"Frequency [Hz]"</span>, size=14, style=<span class="python-color3">'italic'</span>)</p>
+                <p>ax.<span class="python-color1">set_ylabel</span>(<span class="python-color3">"Magnitude"</span>, size=14, style=<span class="python-color3">'italic'</span>)</p>
+                <p><span class="comment"># edit axis ticks</span></p>
+                <p>ax.<span class="python-color1">tick_params</span>(axis=<span class="python-color3">'both'</span>, which=<span class="python-color3">'both'</span>, direction=<span class="python-color3">'in'</span>, length=4, width=1, colors=<span class="python-color3">'black'</span>)</p>
+                <p><span class="comment"># edit x and y scale</span></p>
+                <p>ax.<span class="python-color1">set_xscale</span>(<span class="python-color3">"log"</span>)</p>
+                <p>ax.<span class="python-color1">set_yscale</span>(<span class="python-color3">"log"</span>)</p>
+                <p><span class="comment"># style the grid</span></p>
+                <p>ax.<span class="python-color1">grid</span>(<span class="python-color2">True</span>, linestyle=<span class="python-color3">'-'</span>, alpha=0.1, color=<span class="python-color3">"grey"</span>, which=<span class="python-color3">"both"</span>, lw=2)</p>
+                <p><span class="comment"># style the legend</span></p>
+                <p>ax.<span class="python-color1">legend</span>(title=<span class="python-color3">"2014-07-14 14:08:05 CHN1"</span>, loc=<span class="python-color3">"upper right"</span>, framealpha=0.1, shadow=<span class="python-color2">True</span>)</p>
+            </code></pre>
+        </div>
+        <div class="figure-container">
+            <figure>
+                <img src="{{ url_for('static', filename='img/fourier_data_plot_legend.png') }}" alt="matplotlib graph with legend">
+                <figcaption>Insert a legend on the graph and style it</figcaption>
+            </figure>
+        </div>
+        <p>
+            There are many <a class="link-info" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.legend.html" target="_blank">ways</a> to add a legend in a graph. However, the recommend way is to add the 
+            <code>label</code> parameter at the <code>plot</code> function. That way, matplotlib knows which item on the graph to refer to. There are a number of parameters to control the appearance of the 
+            legend. For instance, use the <code>loc</code> parameter to position the legend, the <code>framealpha</code> parameter to control the opacity of the legend, <code>title</code> to add a title to the legend 
+            and more.
+        </p>
+    </div> 
+    <div id="item-3-5">
+        <h2>Configure The Line</h2>
+        <p>
+            Last, it is of great importance the styling of the line of a graph (the blue line in the previous graphs). The configuration of the line is similar to the parameters used to edit the grid of the graph. Some
+            of the characteristics that we can use to configure the line are:
+        </p>
+        <ul>
+            <li>linewidth or lw, sets the width of the line</li>
+            <li>linestyle or ls, styles the line (<a class="link-info" href="https://matplotlib.org/stable/gallery/lines_bars_and_markers/linestyles.html" target="_blank">line styles</a>)</li>
+            <li>color, that controls the color of the line (<a class="link-info" href="https://matplotlib.org/stable/gallery/color/named_colors.html" target="_blank">named colors</a>)</li>
+            <li>marker, that sets the style of the marker (<a class="link-info" href="https://matplotlib.org/stable/api/markers_api.html" target="_blank">marker styles</a></li>
+            <li>markerfacecolor or mfc, sets the fill color of the marker</li>
+            <li>markeredgecolor or mec, sets the color of the edge of the marker</li>
+            <li>markersize or ms, sets the size of the marker</li>
+        </ul>
+        <p>There are many other parameters that control the appearance of the line. Find them <a class="link-info" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html" target="_blank">here</a></p>
+    </div> 
+    <div id="item-4">
+        <h1>Plot Seismic Records</h1>
+        <p>
+            At this point, we will plot real seismological data. We will start by reading data from a MiniSEED file. A MiniSEED file is a binary file used to store time series data in a compact and 
+            efficient format that includes information about the station, location, timing, and the actual waveform data. We will use Python Obspy <code>read</code> function to read the file into an 
+            Obspy <code>Stream</code> object. The <code>Stream</code> object in ObsPy is essentially a collection of multiple <code>Trace</code> objects. Each <code>Trace</code> object represents a 
+            single continuous time series of seismic data, and a <code>Stream</code> can contain multiple traces that are related, such as different components of the same seismic station or data 
+            from different stations. Check the <a class="link-info" href="{{ url_for('show_topic', topic_tmp_name='obspy') }}">Obspy tutorial</a> for more information.
+        </p>
+        <p>Start by importing the <code>read</code> function and the Matplotlib library:</p>
+        <div class="input-code-block">
+            <pre><code>
+                <p><span class="python-color1">from</span> <span class="python-color2">obspy.core</span> <span class="python-color1">import</span> read</p>
+                <p><span class="python-color1">import</span> matplotlib.pyplot <span class="python-color2">as</span> plt</p>
+            </code></pre>
+        </div>
+        <p>Read a seismic record that took place in 24 of July, 2015 at the <i>KRL1</i> station, into a <code>stream</code> object:</p>
+        <div class="input-code-block">
+            <pre><code>
+                <p><span class="comment"># read the recording</span></p>
+                <p>st = <span class="python-color1">read</span>(<span class="python-color3">"20150724_095834_KRL1.mseed"</span>)</p>
+                <p><span class="python-color1">print</span>(st)</p>
+            </code></pre>
+        </div>
+        <div class="output-code-block">
+            <pre><code>
+                <p>3 Trace(s) in Stream:</p>
+                <p>.KRL1..E | 1970-01-01T00:00:00.000000Z - 1970-01-01T00:08:25.990000Z | 100.0 Hz, 50600 samples</p>
+                <p>.KRL1..N | 1970-01-01T00:00:00.000000Z - 1970-01-01T00:08:25.990000Z | 100.0 Hz, 50600 samples</p>
+                <p>.KRL1..Z | 1970-01-01T00:00:00.000000Z - 1970-01-01T00:08:25.990000Z | 100.0 Hz, 50600 samples</p>
+            </code></pre>
+        </div>
+        <p>
+            This <code>Stream</code> object contains 3 traces or single time series with different components (E, N, Z). To plot the data, start by looping through the traces contained inside the 
+            <code>Stream</code> object. Use the <code>.data</code> attribute of each <code>Trace</code> object to get the data values and the <code>.times()</code> method to get the time from 
+            zero till the total record duration length:
+        </p>
+        <div class="input-code-block">
+            <pre><code>
+                <p><span class="comment"># create a matplotlib Figure and three Axes vertically since we have three components</span></p>
+                <p>fig, ax = plt.<span class="python-color1">subplots</span>(nrows=3, ncols=1)</p>
+                <p><span class="comment"># loop through each trace inside the stream object</span></p>
+                <p><span class="python-color2">for</span> i <span class="python-color2">in</span> <span class="python-color1">range</span>(<span class="python-color1">len</span>(st)):</p>
+                <p class="pad"><span class="comment"># get the current trace using a simple Python indexing operation</span></p>
+                <p class="pad">curr_tr = st[i]</p>
+                <p class="pad"><span class="comment"># get the current Axes again using a simple Python indexing operation</span></p>
+                <p class="pad">curr_ax = ax[i]</p>
+                <p class="pad"><span class="comment"># get the component of the current trace using the .stats["channel"] method</span></p>
+                <p class="pad">curr_compo = curr_tr.stats[<span class="python-color3">"channel"</span>]</p>
+                <p class="pad"><span class="comment"># get the time series data values</span></p>
+                <p class="pad">ydata = curr_tr.<span class="python-color2">data</span></p>
+                <p class="pad"><span class="comment"># get the time values</span></p>
+                <p class="pad">xdata = curr_tr.<span class="python-color1">times()</span></p>
+                <p class="pad"><span class="comment"># plot the current trace at the respective Axes with some styling</span></p>
+                <p class="pad">curr_ax.<span class="python-color1">plot</span>(xdata, ydata, color=<span class="python-color3">"navy"</span>, lw=1, label=curr_compo)</p>
+                <p class="pad"><span class="comment"># add the legend at the top right corner of the graph</span></p>
+                <p class="pad">curr_ax.legend(loc=<span class="python-color3">"upper right"</span>)</p>
+                <p><span class="comment"># fix the overlapping graphs</span></p>
+                <p>plt.<span class="python-color1">tight_layout</span>()</p>
+                <p><span class="comment"># set the title of the figure by setting the title of the first Axes</span></p>
+                <p>ax[0].<span class="python-color1">set_title</span>(<span class="python-color3">"20150724_095834_KRL1"</span>, size=12, pad=15)</p>
+            </code></pre>
+        </div>
+        <div class="figure-container">
+            <figure>
+                <img src="{{ url_for('static', filename='img/matplotlib_mseed_plot.png') }}" alt="matplotlib mseed plot">
+                <figcaption>Time series of the recording happened on 24 of July, 2015 at the KRL1 station</figcaption>
+            </figure>
+        </div>
+        <p>
+            There is more functionality at the Python Obspy library, to process seismic data. Check the <a class="link-info" href="{{ url_for('show_topic', topic_tmp_name='obspy') }}">Obspy tutorial</a>. In addition,
+            we could apply more styling to the seismograms, however i leave it up to you to explore the Matplotlib library. Bear in mind that you need to keep it simple and not to add a lot of information 
+            at the graph.  
+        </p>
+    </div>
+    <div id="item-5">
+        <h1>Miscellaneous Functions</h1>
+        <p>
+            Matplotlib contains a variety of different kind of <a class="link-info" href="https://matplotlib.org/stable/plot_types/index.html" target="_blank">plots</a> and 
+            <a class="link-info" href="https://matplotlib.org/stable/api/pyplot_summary.html" target="_blank">functions</a> to try. Some of them are very useful into the world of Seismology.
+        </p>
+        <p>
+            For instance the Matplotlib <a class="link-info" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axhline.html" target="_blank"><code>axhline</code></a> and 
+            <a class="link-info" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axvline.html" target="_blank"><code>axvline</code></a> are used to draw a horizontal and vertical 
+            line across the axes respectively. You can style this line just like you style the plotted line we saw at the previous chapters.
+        </p>
+        <div class="figure-container">
+            <figure>
+                <img src="{{ url_for('static', filename='img/matplotlib_vertical_lines.png') }}" alt="matplotlib vertical lines">
+                <figcaption>Matplotlib vertical lines depicting the arrivals of the P and the S waves</figcaption>
+            </figure>
+        </div>
+        <p>
+            In addition, Matplotlib <a class="link-info" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.fill_between.html" target="_blank"><code>fill_between</code></a>  and 
+            <a class="link-info" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.fill_betweenx.html" target="_blank"><code>fill_betweenx</code></a> are used 
+            to fill the area between two horizontal or vertical curves respectively. It is often used to highlight regions of interest in a plot or to visually emphasize the 
+            difference between two datasets.
+        </p>
+        <div class="figure-container">
+            <figure>
+                <img src="{{ url_for('static', filename='img/matplotlib_fill.png') }}" alt="matplotlib fill_betweenx">
+                <figcaption>Matplotlib use of <code>fill_betweenx</code> function to create 2 windows with different colors on the waveforms</figcaption>
+            </figure>
+        </div>
+        <p>
+            To continue, Matplotlib <a class="link-info" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplot_mosaic.html" target="_blank"><code>subplot_mosaic</code></a> is 
+            a function to create a complex grid of <code>Axes</code> objects with different sizes that extend to more than one row or columns.
+        </p>
+        <div class="figure-container">
+            <figure>
+                <img src="{{ url_for('static', filename='img/subplot_mosaic.png') }}" alt="matplotlib subplot_mosaic">
+                <figcaption>Matplotlib complex grid Axes with different sizes</figcaption>
+            </figure>
+        </div>
+        <p>
+            Lastly, other useful functions that may come handy are the Matplotlib <code>ax.set_xlim()</code> and <code>ax.set_ylim()</code> that set the axis x and y limits, the <code>ax.text()</code> function 
+            that generates a text at a specific position at the graph, the <code>ax.annotate()</code> function that creates a box with a text and optionally an arrow that points to a specific location on the 
+            graph, <code>ax.scatter()</code> that creates a scatter plot and more.
+        </p>
+        
+    </div> 
+        
+    
     
     
 

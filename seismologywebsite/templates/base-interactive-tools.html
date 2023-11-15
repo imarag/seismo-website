@@ -61,12 +61,15 @@
                                 </div>
                             </div>
                         </div>
-                        <p class="text-muted text-center mt-5 fs-5 lead">
-                            Don't have a seismic data file ? Click <a href="{{ url_for('show_topic', topic_tmp_name='ascii-to-mseed') }}"
-                                class="link-info">here</a> to convert data stored in an ASCII file format (such as .csv, .txt or .dat) to the seismic MiniSEED data file format
-                            or <a href="{{ url_for('static', filename='static-files/test-mseed-file.mseed') }}"
-                                class="link-info">download</a> one to experiment with the tool. Please notify me about any bug encountered at the <a class="link-info" href="{{ url_for('help_and_support') }}">Help & Support</a> page.
-                        </p>
+                        {% if topic_object.title != 'File to MiniSEED' %}
+                            <p class="text-muted text-center mt-5 fs-5 lead">
+                                Don't have a seismic data file ? Click <a href="{{ url_for('show_topic', topic_tmp_name='file-to-mseed') }}"
+                                    class="link-info">here</a> to convert data stored in a file (such as .csv, .txt or .xlsx) to the seismic MiniSEED data file format
+                                or <a href="{{ url_for('static', filename='static-files/test-mseed-file.mseed') }}"
+                                    class="link-info">download</a> one to experiment with the tool. Please notify me about any bug encountered at the <a class="link-info" href="{{ url_for('help_and_support') }}">Help & Support</a> page.
+                            </p>
+                        {% endif %}
+                        
                     </div>
                 </div>
             </div>
