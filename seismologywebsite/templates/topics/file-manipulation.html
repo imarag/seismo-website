@@ -55,10 +55,10 @@
             path handling, regular expression matching, creating, removing, renaming folders and 
             files, searching directories, listing the content of folders and files, checking the 
             existence of files, and more. Some of the most popular libraries used for this purpose 
-            are the <b>os</b> library, which provides a way to utilize various operating system 
-            functionalities, the <b>pathlib</b> library, which offers an approach to working with system 
-            paths and file manipulation, the <b>shutil</b> library, built on top of the os library, 
-            providing high-level file operations, and finally, the <b>glob</b> library, used for pattern 
+            are the <i>os</i> library, which provides a way to utilize various operating system 
+            functionalities, the <i>pathlib</i> library, which offers an approach to working with system 
+            paths and file manipulation, the <i>shutil</i> library, built on top of the os library, 
+            providing high-level file operations, and finally, the <i>glob</i> library, used for pattern 
             matching.
         </p>
     </div>
@@ -66,16 +66,7 @@
         <h1>Path Handling</h1>
         <p>
             Python offers the <code>os</code> and the <code>pathlib</code> libraries for path handling and more specifically, the <code>os.path</code> module 
-            and the <code>pathlib.Path</code> class. Let's initialize them first:
-        </p>
-        <div class="input-code-block">
-            <pre><code>
-                <p><span class="python-color1">import</span> os.path</p>
-                <p><span class="python-color1">from</span> pathlib <span class="python-color1">import</span> Path</p>
-            </code></pre>
-        </div>
-        <p>
-            Given the fact that there is a confusion about various path structure naming conventions, this article presents a specific naming convention that will be used throughout the document.  
+            and the <code>pathlib.Path</code> class. Given the fact that there is a confusion about various path structure naming conventions, this article presents a specific naming convention that will be used throughout the document.  
             The <i>file path</i> is the whole absolute path of a file which includes the path of the directory where it is located 
             and the file name with its extension. The <i>directory path</i> is the full absolute path of a directory and the <i>directory name</i>
             is just the name of that directory. The <i>basename</i> is the name of the file with its extension. The extension is also called <i>suffix</i>. We present those definitions in the image below.
@@ -93,7 +84,7 @@
             The <code>os.path</code> module provides  functionality for managing file paths. Let's explore the diverse capabilities it offers for manipulating these path components:
         </p>
         
-        <ul>
+        <ul class="article-ul-contents">
             <li><a class="link-info" href="#func-getcwd"><code>os.getcwd()</code></a>, returns the current working directory
                 as a string
             </li>
@@ -217,7 +208,7 @@
                 </svg>
                 <p>
                     This function essentially extracts everything from the beginning of the path up to the last path component with a 
-                    file separator at its end. However, it will remove the last forward slash when it finds it. This is the <i>directory path</i> described 
+                    path separator at its end. However, it will remove the last forward slash when it finds it. This is the <i>directory path</i> described 
                     above without the forward slash at the end
                 </p>
             </div>
@@ -314,7 +305,6 @@
                     <pre><code>
                         <p><span class="python-color1">print</span>(os.path.<span class="python-color1">splitext</span>(<span class="python-color3">"c:/Users/User/Desktop/myfile.txt"</span>))</p>
                         <p><span class="python-color1">print</span>(os.path.<span class="python-color1">splitext</span>(<span class="python-color3">"c:/Users/User/Desktop/myfile"</span>))</p>
-                        <p><span class="python-color1">print</span>(os.path.<span class="python-color1">splitext</span>(<span class="python-color3">"c:/Users/User/Desktop/"</span>))</p>
                     </code></pre>
                 </div>
             </div>
@@ -326,7 +316,6 @@
                     <pre><code>
                         <p>('c:/Users/User/Desktop/myfile', '.txt')</p>
                         <p>('c:/Users/User/Desktop/myfile', '')</p>
-                        <p>('c:/Users/User/Desktop/', '')</p>
                     </code></pre>
                 </div>
             </div>
@@ -433,7 +422,7 @@
                 </svg>
                 <p>
                     This function is used to check whether a given path corresponds to a directory (<code>True</code>) or not
-                    (<code>False</code>). If the provided path does not exists, it will return <code>False</code>
+                    (<code>False</code>). If the provided path does not exists, it will always return <code>False</code>
                 </p>
             </div>
             <div class="card-row">
@@ -471,7 +460,7 @@
                 </svg>
                 <p>
                     This function is used to check whether a given path corresponds to a file (<code>True</code>) or not
-                    (<code>False</code>). If the provided path does not exists, it will return <code>False</code>
+                    (<code>False</code>). If the provided path does not exists, it will always return <code>False</code>
                 </p>
             </div>
             <div class="card-row">
@@ -516,8 +505,8 @@
             </code></pre>
         </div>
         <p>
-            To continue, suppose that need to move the file inside a folder called <i>auth</i> 
-            that is located at the current working directory and we want to get the new file path:
+            To continue, suppose that we need to move the file inside a folder called <i>auth</i> 
+            that is located at the current working directory, with name "login.html" and we want to get the new file path:
         </p>
         <div class="input-code-block">
             <pre><code>
@@ -560,19 +549,20 @@
             annoying sometimes when we have to write multiple functions one after another to simply get the name of a 
             part of the path (e.g., <code>os.path.basename(os.path.dirname(myfile))</code>). You could import the 
             <code>basename</code> and the <code>dirname</code> from the <code>os.path</code> module to write less code but
-            there is a better solution to this: the Python <code>pathlib</code> library. It is built on top of the 
-            <code>os</code> library and provides an easier way to accomplish
+            there is a better solution to this: the Python <i>pathlib</i> library. It is built on top of the 
+            <i>os</i> library and provides an easier way to accomplish
             all of the previous tasks.
         </p>
         <p>
-            To use the <code>pathlib</code> libary, wrap your file or directory path with the <code>pathlib.Path</code> class. When you use 
-            <code>pathlib</code> on a Windows system, this wraping will return a <code>WindowsPath</code> path object that
-            is used to represent <code>pathlib</code> file paths. Similarly, it will return a <code>PosixPath</code> for a Linux system. 
+            To use the <i>pathlib</i> libary, wrap your file or directory path with the <code>pathlib.Path</code> class. When you use 
+            <i>pathlib</i> on a Windows system, this wraping will return a <code>WindowsPath</code> path object that
+            is used to represent <i>pathlib</i> file paths. Similarly, it will return a <code>PosixPath</code> for a Linux system. 
         </p>
         <div class="input-code-block">
             <pre><code>
                 <p><span class="comment"># Initialize a pathlib path by wrapping your path with the pathlib.Path class</span></p>
-                <p>pathlib_path = <span class="python-color1">Path</span>(mypath)</p>
+                <p><span class="python-color2">from</span> pathlib <span class="python-color1">import</span> Path</p>
+                <p>pathlib_path = <span class="python-color1">Path</span>(myfile)</p>
                 <p><span class="python-color1">print</span>(<span class="python-color1">type</span>(pathlib_path))</p>
             </code></pre>
         </div>
@@ -583,24 +573,26 @@
         </div>
         <p>
             Just put your path inside the <code>pathlib.Path</code> class and you will have access to
-            the following <code>pathlib</code> functionality:
+            the following <i>pathlib</i> functionality. Note that with "pathlib path" we refer to the returned pathlib <code>WindowsPath</code> in case of Windows operating system or
+            <code>PosixPath</code> in case of a Linux system. 
         </p>
         
-        <ul>
-            <li><a class="link-info" href="#pathlib-path-parts"><code>WindowsPath.name</code></a>, returns the last component of the pathlib path (<i>WindowsPath</i>) which is the <i>file name</i> with its extension, as a string</li>
+        <ul class="article-ul-contents">
+            <li><a class="link-info" href="#pathlib-path-parts"><code>WindowsPath.name</code></a>, returns the last component of the pathlib path which is the file name with its extension, as a string</li>
             <li><a class="link-info" href="#pathlib-path-parts"><code>WindowsPath.stem</code></a>, provides the file name of the path without the file extension as a string</li>
             <li><a class="link-info" href="#pathlib-path-parts"><code>WindowsPath.suffix</code></a>, retrieves the file extension, including the period, as a string</li>
             <li><a class="link-info" href="#pathlib-path-parts"><code>WindowsPath.suffixes</code></a>, returns a list of file extensions for files with multiple extensions (e.g., .tar.gz)</li>
-            <li><a class="link-info" href="#pathlib-path-parts"><code>WindowsPath.parent</code></a>, extracts the <i>directory path</i> of the current <code>WindowsPath</code> as a <code>WindowsPath</code> object</li>
-            <li><a class="link-info" href="#pathlib-path-parts"><code>WindowsPath.parents</code></a>, returns an iterator over all parent directories of the current path, as <code>WindowsPath</code> objects</li>
+            <li><a class="link-info" href="#pathlib-path-parts"><code>WindowsPath.parent</code></a>, extracts the directory path of the current path as a pathlib path</li>
+            <li><a class="link-info" href="#pathlib-path-parts"><code>WindowsPath.parents</code></a>, returns an iterator over all parent directories of the current path, as pathlib path objects</li>
             <li><a class="link-info" href="#pathlib-path-parts"><code>WindowsPath.parts</code></a>, generates a tuple that contains all the path components, as strings</li>
-            <li><a class="link-info" href="#pathlib-new-path"><code>WindowsPath.with_suffix</code></a>, returns the current <code>WindowsPath</code> object with a modified file extension</li>
-            <li><a class="link-info" href="#pathlib-new-path"><code>WindowsPath.with_name</code></a>, returns the current <code>WindowsPath</code> object with different <i>file name</i></li>
-            <li><a class="link-info" href="#pathlib-new-path"><code>WindowsPath.with_stem</code></a>, returns the current <code>WindowsPath</code> object with modified <i>stem</i></li>
-            <li><a class="link-info" href="#pathlib-join-path"><code>WindowsPath.joinpath</code></a>, joins one or more path components to the current <code>WindowsPath</code></li>
+            <li><a class="link-info" href="#pathlib-new-path"><code>WindowsPath.with_suffix</code></a>, returns the current pathlib path object with a modified file extension</li>
+            <li><a class="link-info" href="#pathlib-new-path"><code>WindowsPath.with_name</code></a>, returns the current pathlib path object with different file name</li>
+            <li><a class="link-info" href="#pathlib-new-path"><code>WindowsPath.with_stem</code></a>, returns the current pathlib path object with modified stem</li>
+            <li><a class="link-info" href="#pathlib-join-path"><code>WindowsPath.joinpath</code></a>, joins one or more path components to the current pathlib path</li>
         </ul>
         <p>
-            Let's explore these functions below to gain a deeper understanding of how they are used.
+            Let's explore these functions below to gain a deeper understanding of how they are used. Because of my Windows operating system, i will use <code>WindowsPath</code> as the 
+            pathlib path. 
         </p>
         <div class="card-article" id="pathlib-path-parts">
             <div class="card-row">
@@ -720,7 +712,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-braces-asterisk" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M1.114 8.063V7.9c1.005-.102 1.497-.615 1.497-1.6V4.503c0-1.094.39-1.538 1.354-1.538h.273V2h-.376C2.25 2 1.49 2.759 1.49 4.352v1.524c0 1.094-.376 1.456-1.49 1.456v1.299c1.114 0 1.49.362 1.49 1.456v1.524c0 1.593.759 2.352 2.372 2.352h.376v-.964h-.273c-.964 0-1.354-.444-1.354-1.538V9.663c0-.984-.492-1.497-1.497-1.6ZM14.886 7.9v.164c-1.005.103-1.497.616-1.497 1.6v1.798c0 1.094-.39 1.538-1.354 1.538h-.273v.964h.376c1.613 0 2.372-.759 2.372-2.352v-1.524c0-1.094.376-1.456 1.49-1.456v-1.3c-1.114 0-1.49-.362-1.49-1.456V4.352C14.51 2.759 13.75 2 12.138 2h-.376v.964h.273c.964 0 1.354.444 1.354 1.538V6.3c0 .984.492 1.497 1.497 1.6ZM7.5 11.5V9.207l-1.621 1.621-.707-.707L6.792 8.5H4.5v-1h2.293L5.172 5.879l.707-.707L7.5 6.792V4.5h1v2.293l1.621-1.621.707.707L9.208 7.5H11.5v1H9.207l1.621 1.621-.707.707L8.5 9.208V11.5h-1Z"/>
                 </svg>
-                <p><code>PurePath.joinpath(other)</code></p>
+                <p><code>WindowsPath.joinpath(other)</code></p>
             </div>
             <div class="card-row">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-checklist" viewBox="0 0 16 16">
@@ -728,9 +720,9 @@
                     <path d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0zM7 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0z"/>
                 </svg>
                 <p>
-                    The <code>PurePath.joinpath</code> is a method for creating a new path by joining one or more components 
+                    The <code>WindowsPath.joinpath</code> is a method for creating a new path by joining one or more components 
                     to an existing <code>pathlib</code> path object (<code>WindowsPath</code> or <code>PosixPath</code>). 
-                    An alternative to <code>PurePath.joinpath</code> is using the forward slash character ("/"). You need to have 
+                    An alternative to <code>WindowsPath.joinpath</code> is using the forward slash character ("/"). You need to have 
                     at least one <code>pathlib</code> path and one or more Python strings to join them together.
                 </p>
             </div>
@@ -762,41 +754,26 @@
             </div>
         </div>
         <p>
-            Other functionality similar to the <code>os</code> library includes the
+            Other functionality similar to the os library includes the
             <code>WindowsPath.exists()</code> to check if a file or directory exists, the
             <code>pathlib.Path.cwd()</code> and <code>pathlib.Path.home()</code> to get the
             current working directory and the user's home directory, the
             <code>WindowsPath.is_dir()</code> and <code>WindowsPath.is_file()</code> to check
             whether a path points to a file or a directory and lastly the
             <code>WindowsPath.as_posix()</code> to convert the windows backslashes ("\") to
-            forward slashes ("/").
+            forward slashes ("/"). Check the <a href="https://docs.python.org/3/library/pathlib.html#correspondence-to-tools-in-the-os-module" class="link-info" target="_blank">documentation</a> for more information.
         </p>
-        <div class="shadow-lg bg-light-red1 w-100 mx-auto my-5 rounded border border-1 border-secondary">
-            <p class="ps-2 bg-info">
-                <img style="width:30px; height:30px; vertical-align: middle;" class="img-fluid"
-                    src="{{ url_for('static', filename='img/information-icon.png') }}"
-                    alt="information circle symbol">
-                <span class="fs-4 fw-semibold">Note</span>
-            </p>
-            <p class="p-3 fs-4 text-dark">
-                The <code>pathlib.Path</code> mentioned previously, is the import <code>Path</code>
-                class. So when you want to get the current working directory use <code>Path.cwd()</code>.
-                Respectively, the <code>WindowsPath</code> is a pathlib path that results either from the
-                <code>Path</code> class (e.g., <code>Path(mypath)</code>) or a path calculated from any of
-                the available pathlib functions (e.g., <code>mypath.with_suffix(".txt")</code>).
-            </p>
-        </div>
     </div>
     <div id="item-3">
         <h1>Managing Files and Folders</h1>
         <p>
-            During the path handling we used the python <code>os</code> and <code>pathlib</code> libraries to
+            During the path handling we used the python os and pathlib libraries to
             manipulate file and directory paths. These libraries in combination with other (e.g.,
-            <code>shutil</code>)
+            shutil)
             can also be used effectively to create, move, copy and rename files and folders. Some of the
             most important functions are listed below:
         </p>
-        <ul>
+        <ul class="article-ul-contents">
             <li><code>os.mkdir(path)</code>,  creates a new directory specified by <i>path</i></li>
             <li><code>os.chdir(path)</code>,  changes the current working directory to <i>path</i></li>
             <li><code>os.makedirs(path, exist_ok=False)</code>, creates any necessary parent directories to complete the <i>path</i></li>
@@ -809,9 +786,10 @@
         </ul>
         <div class="shadow-lg bg-light-red1 w-100 mx-auto my-5 rounded border border-1 border-secondary">
             <p class="ps-2 bg-info">
-                <img style="width:30px; height:30px; vertical-align: middle;" class="img-fluid"
-                    src="{{ url_for('static', filename='img/information-icon.png') }}"
-                    alt="information circle symbol">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                    <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                  </svg>
                 <span class="fs-4 fw-semibold">Note</span>
             </p>
             <p class="p-3 fs-4 text-dark">
@@ -825,13 +803,11 @@
             To enhance understanding, let's illustrate the preceding functions with examples.
             Suppose we want to build the following file structure shown at the figure below:
         </p>
-        <div class="row text-center justify-content-center align-items-center">
-            <div class="col-lg-8 col-md-10 col-12">
-                <figure>
-                    <img src="/static/img/file-structure.png" alt="file-structure" >
+        <div class="figure-container">
+            <figure>
+                <img src="/static/img/file-structure.png" alt="a sample file structure to build using os library" >
                     <figcaption class="lead fs-5 fst-italic">An example of a file structure</figcaption>
-                </figure>
-            </div>
+            </figure>
         </div>
         <p>Let's check our current working directory:</p>
         <div class="input-code-block">
@@ -873,7 +849,7 @@
                 <p>C:\Users\Ioannis\Desktop\Myproject</p>
             </code></pre>
         </div>
-        <p>create the <i>Static</i> and the <i>Templates</i> folders inside the <i>MyProject</i> root folder:</p>
+        <p>Create the <i>Static</i> and the <i>Templates</i> folders inside the <i>MyProject</i> root folder:</p>
         <div class="input-code-block">
             <pre><code>
                 <p><span class="comment"># create the "Static" and "Templates" folders</span></p>
@@ -883,20 +859,21 @@
         </div>
         <div class="shadow-lg bg-light-red1 w-100 mx-auto my-5 rounded border border-1 border-secondary">
             <p class="ps-2 bg-info">
-                <img style="width:30px; height:30px; vertical-align: middle;" class="img-fluid"
-                    src="{{ url_for('static', filename='img/information-icon.png') }}"
-                    alt="information circle symbol">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                    <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                  </svg>
                 <span class="fs-4 fw-semibold">Note</span>
             </p>
             <p class="p-3 fs-4 text-dark">
                 Use the <code>os.listdir(path)</code> function to list the content of a folder. Use a dot (".") to denote
                 the current working directory and the double dot ("..") to signify the parent directory. If you don't provide any <i>path</i>, it will
-                list the content of the current working directory. This function will show the file and the directory names inside the specified path, <i>path</i>. 
+                list the content of the current working directory. This function will show the file and the directory names inside the specified path. 
             </p>
         </div>
         <div class="input-code-block">
             <pre><code>
-                <p><span class="comment"># list the "MyProject" folder</span></p>
+                <p><span class="comment"># list the contents of the "MyProject" folder</span></p>
                 <p>os.<span class="python-color1">listdir</span>(<span class="python-color3">"."</span>)</p>
             </code></pre>
         </div>
@@ -906,7 +883,7 @@
             </code></pre>
         </div>
         <p>
-            I have the necessary files in a folder named <i>myfiles</i>, located in a different directory in my machine. 
+            I have some necessary files in a folder named <i>myfiles</i>, located in a different directory in my machine. 
             For this reason, I will move this folder into the <i>MyProject</i> directory to use the files later.
         </p>
         <div class="input-code-block">
@@ -989,15 +966,14 @@
         </p>
         <div class="input-code-block">
             <pre><code>
-                <p><span class="comment"># copy the "login.html" in the same folder ("AUTH") and create</span></p>
-                <p><span class="comment"># another file with name "register.html"</span></p>
+                <p><span class="comment"># copy the "login.html" in the same folder ("AUTH") with name "register.html"</span></p>
                 <p>shutil.<span class="python-color1">copyfile</span>(<span class="python-color3">"Templates/AUTH/login.html"</span>, <span class="python-color3">"Templates/AUTH/register.html"</span>)</p>
             </code></pre>
         </div>
         <p>Check the content of the <i>AUTH</i> folder now:</p>
         <div class="input-code-block">
             <pre><code>
-                <p><span class="comment"># check the content of the "AUTH" folder now</span></p>
+                <p><span class="comment"># check the content of the "AUTH" folder</span></p>
                 <p>os.<span class="python-color1">listdir</span>(<span class="python-color3">"Templates/AUTH"</span>)</p>
             </code></pre>
         </div>
@@ -1083,16 +1059,16 @@
     <div id="item-4">
         <h1>Listing and searching folders</h1>
         <p>
-            While establishing the file structure earlier, we employed the <code>os.listdir(path)</code> function 
+            While creating the file structure earlier, we utilized the <code>os.listdir(path)</code> function 
             to enumerate the contents of a folder. This allowed us to retrieve the names of all files 
-            and sub-folders within the specified folder path. Nonetheless, both the <code>glob</code> and <code>pathlib</code> 
+            and sub-folders within the specified folder path. Nonetheless, glob, os and pathlib
             libraries offer additional functions for this purpose. Let's explore these alternatives 
             below:
         </p>
-        <ul>
-            <li><a href="#function-listdir"><code>os.listdir(path)</code></a>, returns a list of file names and sub-directory names in the specified directory (<i>path</i>)</li>
-            <li><a href="#function-glob"><code>glob.glob(path)</code></a>, returns a list of file paths that match the specified path pattern</li>
-            <li><a href="#function-iterdir"><code>Path.iterdir(path)</code></a>, returns an iterator over the entries (both files and directories) in the current directory specified by <i>Path</i></li>
+        <ul class="article-ul-contents">
+            <li><a href="#function-listdir" class="link-info"><code>os.listdir(path)</code></a>, returns a list of file names and sub-directory names in the specified directory (<i>path</i>)</li>
+            <li><a href="#function-glob" class="link-info"><code>glob.glob(path)</code></a>, returns a list of file paths that match the specified path pattern</li>
+            <li><a href="#function-iterdir" class="link-info"><code>Path.iterdir(path)</code></a>, returns an iterator over the entries (both files and directories) in the current directory specified by <i>path</i></li>
         </ul>
         <div class="card-article" id="function-listdir">
             <div class="card-row">
@@ -1121,16 +1097,6 @@
                     </code></pre>
                 </div>
             </div>
-            <div class="card-row">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-code-slash" viewBox="0 0 16 16">
-                    <path d="M10.478 1.647a.5.5 0 1 0-.956-.294l-4 13a.5.5 0 0 0 .956.294l4-13zM4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0zm6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0z"/>
-                </svg>
-                <div class="output-code-block">
-                    <pre><code>
-                        <p>???</p>
-                    </code></pre>
-                </div>
-            </div>
         </div>
         <div class="card-article" id="function-glob">
             <div class="card-row">
@@ -1146,9 +1112,10 @@
                 </svg>
                 <p>
                     This command is used to search for files and directories that match a specified path pattern using the glob-style wildcard characters (e.g., * for matching any characters and ? for matching a single character).
-                    It returns a list of file paths as strings that match the given pattern.
+                    It returns a list of absolute file paths as strings that match the given pattern.
                     The glob module is used for this operation, and it allows you to perform more advanced pattern-based searches within directories.
-                    Use <code>recursive=True</code>, to recursively search the whole directory in depth
+                    Use <code>recursive=True</code> to recursively search the whole directory in depth. If <code>recursive</code> is <code>True</code>, the pattern "**" will match any files and zero or more 
+                    directories, subdirectories.
                 </p>
             </div>
             <div class="card-row">
@@ -1161,16 +1128,6 @@
                         <p>matching_files = glob.<span class="python-color1">glob</span>(pattern)</p>
                         <p><span class="python-color2">for</span> file_path <span class="python-color2">in</span> matching_files:</p>
                         <p><span class="python-color2 pad">print</span>(file_path)</p>
-                    </code></pre>
-                </div>
-            </div>
-            <div class="card-row">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-code-slash" viewBox="0 0 16 16">
-                    <path d="M10.478 1.647a.5.5 0 1 0-.956-.294l-4 13a.5.5 0 0 0 .956.294l4-13zM4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0zm6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0z"/>
-                </svg>
-                <div class="output-code-block">
-                    <pre><code>
-                        <p>???</p>
                     </code></pre>
                 </div>
             </div>
@@ -1189,7 +1146,8 @@
                 </svg>
                 <p>
                     This command is part of the pathlib module in Python, which provides a modern and more object-oriented approach to working with filesystem paths.
-                    When called on a Path object (e.g., <code>Path("some_directory")</code>), it returns an iterator that yields Path objects representing the entries (both files and directories) in the current directory specified by that Path object
+                    When called on a Path object (e.g., <code>Path("some_directory")</code>), it returns an iterator that yields Path objects representing both files and directories 
+                    in the current directory specified by that Path object.
                 </p>
             </div>
             <div class="card-row">
@@ -1204,16 +1162,6 @@
                         <p><span class="python-color1 pad-double">print</span>(f<span class="python-color1">"File: {item}"</span>)</p>
                         <p><span class="python-color2 pad">elif</span> item.<span class="python-color1">is_dir</span>():</p>
                         <p><span class="python-color1 pad-double">print</span>(f<span class="python-color1">"Directory: {item}"</span>)</p>
-                    </code></pre>
-                </div>
-            </div>
-            <div class="card-row">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-code-slash" viewBox="0 0 16 16">
-                    <path d="M10.478 1.647a.5.5 0 1 0-.956-.294l-4 13a.5.5 0 0 0 .956.294l4-13zM4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0zm6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0z"/>
-                </svg>
-                <div class="output-code-block">
-                    <pre><code>
-                        <p>???</p>
                     </code></pre>
                 </div>
             </div>

@@ -23,12 +23,17 @@ def register():
         password = form['password'].data
 
         # check if the user email already exists
-        user = User.query.filter_by(email=email).first()
+        user_email = User.query.filter_by(email=email).first()
+        user_fullname = User.query.filter_by(fullname=fullname).first()
 
-        if user:
+        if user_email:
             flash('A user with that email already exists!', 'danger')
+        elif user_fullname:
+            flash('A user with that fullname already exists!', 'danger')
         else:
             new_user = User(fullname=fullname, password=generate_password_hash(password), email=email)
+            current_date = datetime.datetime.now().date()
+            new_user.registered_date = current_date
             db.session.add(new_user)
             db.session.commit()
 
@@ -67,8 +72,7 @@ def login():
 
             # update the last logged in date
             current_datetime = datetime.datetime.now()
-            current_timestamp = datetime.datetime(current_datetime.year, current_datetime.month, current_datetime.day, current_datetime.hour, current_datetime.minute, current_datetime.second)
-            user.last_login = current_timestamp
+            user.last_login = current_datetime
             db.session.commit()
 
             # get the next page that the user requested if wasn't logged in
@@ -91,38 +95,3 @@ def logout():
 def load_user(id):
     return User.query.get(int(id))
 
-
-
-################################# admin functionality ####################################
-
-
-
-# @bp.route('/admin', methods=['GET'])
-# def admin():
-
-#     user_id = session.get('user_id', None)
-#     user = get_db().execute(
-#             'SELECT * FROM user WHERE id = ?', (user_id,)
-#         ).fetchone()
-    
-#     email = user['email']
-#     password = user['password']
-#     if email != 'giannis.marar@hotmail.com':
-#         flash("You don't have the right to access the admin page!", 'danger')
-#         return redirect(url_for('home'))
-
-#     users = get_db().execute('SELECT * FROM user').fetchall()
-#     return render_template('auth/admin.html', users=users)
-
-# @bp.route('/delete-user', methods=['GET'])
-# def delete_user():
-#     user_id = request.args.get('userID')
-#     db = get_db()
-#     user = db.execute(
-#         'DELETE FROM user WHERE id = ?', (user_id,)
-#     )
-#     db.commit()
-#     return redirect(url_for('home'))
-    
-
-    

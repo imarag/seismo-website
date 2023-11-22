@@ -280,6 +280,9 @@
             // display none to the initial "start by upload an mseed file" div
             document.querySelector("#signal-processing-start-by-upload-container").style.display = "none";
 
+            // remove all already applied filter pills
+            processingPillsContainer.innerHTML = " ";
+
             // rename the dummy paragraph to have the record name
             document.querySelector("#record-name-paragraph").textContent = mseedData["trace-0"]["record-name"];
 

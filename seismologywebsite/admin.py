@@ -63,7 +63,7 @@ def reset_topics():
     # Create Topic instances for all topics
     tp1 = Topic(
         title="Python Obspy",
-        description="An open-source Python library used for working with seismological data",
+        description="An open-source Python library designed for advanced analysis, processing, and manipulation of seismological data",
         image_name="obspy-icon.png",
         type="static",
         template_name="obspy"
@@ -71,7 +71,7 @@ def reset_topics():
 
     tp2 = Topic(
         title="Fourier Spectra calculation",
-        description="An interactive tool to calculate the Fourier spectra at the signal and/or at the noise window on the seismogram. Optionally, compute the Horizontal to Vertical Spectral Ratio (HVSR) using the generated Fourier spectra. Feel free to download the data and the figures at the results.",
+        description="An interactive tool to calculate the Fourier spectra at the signal and/or the noise window on the seismogram. Optionally, compute the Horizontal to Vertical Spectral Ratio (HVSR) using the generated Fourier spectra. Feel free to download the data and the figures at the results.",
         image_name="fourier-icon.png",
         type="interactive",
         template_name="fourier"
@@ -87,7 +87,7 @@ def reset_topics():
 
     tp4 = Topic(
         title="File to MiniSEED",
-        description="An interactive tool to transform data files into the seismic MiniSEED format. To begin, upload your file from the specific file format menu, and specify the relevant parameters (e.g., delimiter and skip rows). Afterward, choose the corresponding seismic parameters to complete the conversion process.",
+        description="An interactive tool to transform data files into the seismic MiniSEED format. To begin, upload your file at the specific file format menu, and specify the relevant parameters (e.g., delimiter and skip rows). Afterward, choose the corresponding seismic parameters to complete the conversion process.",
         image_name="file-to-mseed-icon.png",
         type="interactive",
         template_name="file-to-mseed"
@@ -112,15 +112,15 @@ def reset_topics():
     tp7 = Topic(
         title="Introduction to Seismology",
         description="An introduction to various seismological concepts",
-        image_name="introduction-to-seismology.png",
+        image_name="introduction-to-seismology-icon.png",
         type="static",
         template_name="seismology-intro"
     )
 
     tp8 = Topic(
         title="Distance between points",
-        description='An interactive tool to compute the distance between two geographical points on the WGS84 ellipsoid. Utilize the "locate" option to open an interactive map and check the points visually.',
-        image_name="distance-between-points.png",
+        description='An interactive tool to compute the distance between two geographical points on the WGS84 ellipsoid. Use the "locate" option to open an interactive map and visually inspect the specified points.',
+        image_name="distance-between-points-icon.png",
         type="interactive",
         template_name="distance-between-points"
     )
@@ -128,7 +128,7 @@ def reset_topics():
     tp9 = Topic(
         title="Python File Manipulation",
         description="Utilization of various Python libraries to manipulate system files and paths",
-        image_name="file-manipulation.png",
+        image_name="file-manipulation-icon.png",
         type="static",
         template_name="file-manipulation"
     )
@@ -136,17 +136,17 @@ def reset_topics():
     tp10 = Topic(
         title="Python Matplotlib Plotting",
         description="A basic tutorial to plot seismic data using various Matplotlib functions and methods",
-        image_name="matplotlib.png",
+        image_name="matplotlib-icon.png",
         type="static",
         template_name="matplotlib"
     )
 
     tp11 = Topic(
         title="Edit Seismic File",
-        description="A tool to find out about the content of a seismic file. Feel free to edit the header of it and download its data",
-        image_name="edit_seismic_file.png",
+        description="A tool to look into the content of a seismic file. Feel free to edit the header of it and download its data",
+        image_name="edit-seismic-file-icon.png",
         type="interactive",
-        template_name="edit_seismic_file"
+        template_name="edit-seismic-file"
     )
 
     Topic.query.delete()

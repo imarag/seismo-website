@@ -23,10 +23,10 @@
 
 
 {% block article_pills %}
-    <a target="_blank" href="https://docs.obspy.org/packages/autogen/obspy.core.stream.Stream.html"><span class="badge rounded-pill">Stream</span></a>
-    <a target="_blank" href="https://docs.obspy.org/packages/autogen/obspy.core.trace.Trace.html"><span class="badge rounded-pill">Trace</span></a>
-    <a target="_blank" href="https://docs.obspy.org/packages/autogen/obspy.core.stream.read.html"><span class="badge rounded-pill">read</span></a>
-    <a target="_blank" href="https://docs.obspy.org/packages/autogen/obspy.core.trace.Stats.html"><span class="badge rounded-pill">stats</span></a>
+    <a target="_blank" href="https://en.wikipedia.org/wiki/Fault_(geology)"><span class="badge rounded-pill">Fault</span></a>
+    <a target="_blank" href="https://www.mtu.edu/geo/community/seismology/learn/seismology-study/"><span class="badge rounded-pill">S. Wave</span></a>
+    <a target="_blank" href="https://en.wikipedia.org/wiki/List_of_tectonic_plates"><span class="badge rounded-pill">T. Plates</span></a>
+    <a target="_blank" href="https://www.ldeo.columbia.edu/res/pi/Monitoring/Doc/Srr_2006/GUIDE.PDF"><span class="badge rounded-pill">S. Phase</span></a>
 {% endblock %}
 
 
@@ -38,9 +38,9 @@
     <li><a href="#item-3">Earthquake concepts</a></li>
     <li><a href="#item-4">Seismic phases</a></li>
     <li><a href="#item-5">Seismic Faults</a></li>
-    <li><a class="sub-chapter" href="#item-5-1">Strike-slip fault</a></li>
-    <li><a class="sub-chapter" href="#item-5-2">Normal-slip fault</a></li>
-    <li><a class="sub-chapter" href="#item-5-3">Reverse-slip fault  </a></li>
+    <li><a class="sub-chapter" href="#item-5-1">Normal-slip fault</a></li>
+    <li><a class="sub-chapter" href="#item-5-2">Reverse-slip fault  </a></li>
+    <li><a class="sub-chapter" href="#item-5-3">Strike-slip fault</a></li>
     <li><a href="#item-6">Seismic Hazards</a></li>
 {% endblock %}
 
@@ -53,7 +53,7 @@
         <p>
             An earthquake is a natural phenomenon that occurs when there is a <i>sudden release of energy</i> in the Earth's crust, resulting in seismic 
             waves that cause the ground to shake. This shaking can range from minor tremors that are barely noticeable to violent movements that can cause 
-            widespread destructions. Earthquakes can be generated in various ways such as: along the edges of the tectonic plates that constitute the earth,
+            widespread destructions. Earthquakes can be generated in various ways such as along the edges of the tectonic plates that constitute the earth,
             along seismic faults far from the edges of the tectonic plates (intraplate earthquakes), volcanic activity, human activity (induced seismicity) etc. 
         </p>
         <p>
@@ -135,7 +135,7 @@
     <div id="item-2-2">
         <h2>Surface Waves</h2>
         <p>
-            <i>Surface waves</i> are another type of seismic waves that travels along the Earth's surface rather than propagating through 
+            <i>Surface waves</i> are another type of seismic waves that travel along the Earth's surface rather than propagating through 
             its interior. These waves are produced by the complex interactions of compressional (P) and shear (S) waves with the 
             Earth's surface. Surface waves have a distinct motion that is similar to the movement of ocean 
             waves. They move slower than P-waves and S-waves but can have larger amplitudes, making them particularly impactful during 
@@ -203,7 +203,7 @@
         <div class="figure-container">
             <figure>
                 <img src="{{ url_for('static', filename='img/seismic-phases.png') }}">
-                <figcaption>Various seismic phsases generated from the interactions of the body waves and the earth's interior layers</figcaption>
+                <figcaption>Various seismic phases generated from the interactions of the body waves and the earth's interior layers</figcaption>
             </figure>
         </div>
         <p>
@@ -229,7 +229,7 @@
         </div>
         <p>
             To describe the geometry of a fault, we need to assume that a fault is a planar surface across which relative motion accurs 
-            during an earthquake. The coordinate axes used to describe the fault are the <code>X1</code> axis that is called the 
+            during an earthquake. The coordinate axis used to describe the fault are the <code>X1</code> axis that is called the 
             <i>strike</i> of the fault (the instersection of the fault plane with the surface), the <code>X2</code> axis that is 
             perpedicular to the <code>X1</code> axis and <code>X3</code> axis that it points upward and is 
             perpendicular to the other two. 
@@ -242,15 +242,15 @@
         </div>
         <p>
             The fault geometry can be completely described using two different coordinate systems: 
-            a) <code>n</code>, <code>d</code> and b) <code>φf</code>, <code>δ</code>, <code>λ</code>. The first coordinate system uses the <i>normal</i> vector on the 
+            a) <code>n</code>, <code>d</code> and b) <code>φ</code>, <code>δ</code>, <code>λ</code>. The first coordinate system uses the <i>normal</i> vector on the 
             fault plane (<code>n</code>) and the perpendicular to the normal vector, the <i>slip</i> vector, <code>d</code> that shows the direction of motion, that is the direction in which the 
             upper side of the fault (hanging wall) moved with respect to the lower side (foot wall). The second system, consists of the <i>dip angle</i> <code>δ</code>, that gives the orientation of 
             the fault plane with respect to the surface, the counterclockwise measured <i>slip angle</i> <code>λ</code> measured from the 
-            <code>X1</code> axis, that gives the direction of motion or the motion of the hanging wall block with respect to the foot wall block and lastly the <i>fault strike</i> <code>φf</code> that is the angle measured 
+            <code>X1</code> axis, that gives the direction of motion or the motion of the hanging wall block with respect to the foot wall block and lastly the <i>fault strike</i> <code>φ</code> that is the angle measured 
             clockwise from the North to the <code>X1</code> axis.
         </p>
         <p>
-            Due to different values of the slip angle (0-360 degrees) we can classify the faults into three categories, according to the <i>slip angle</i> of the fault plane:
+            Due to different values of the slip angle (0-360 degrees) we can classify the faults into three categories:
              a) normal faulting, b) reverse or thrust faulting, c) strike-slip faulting. However, most earthquakes consists of some combination of these motions and have slip angles between these values.
         </p>
     </div>
@@ -311,33 +311,27 @@
             Undoubtedly, the most striking and unforgettable depictions of earthquake devastation are the <i>structural hazards</i>. 
             From the anticipated collapse of poorly fortified masonry and adobe buildings, where numerous individuals in less developed 
             regions reside, to the unexpected ruination of more contemporary constructions, structural impairment remains a primary factor 
-            contributing to both loss of life and financial setbacks in numerous seismic events. Yet, it's important to note that complete 
-            structural collapse isn't a prerequisite for causing harm and fatalities. In various earthquakes, casualties have resulted 
-            from objects falling—such as exterior brick facades and ledges, as well as heavy artworks and shelving within buildings.
+            contributing to both loss of life and financial setbacks in numerous seismic events.
         </p>
         <p>
             Some of the most remarkable instances of earthquake-related destruction have taken place when soil deposits lose their 
             solidity and seem to transform into fluid-like substances. This occurrence, known as <i>liquefaction</i>, entails a 
             significant reduction in the soil's strength, often to the extent that it's incapable of providing support to structures or 
             retaining stability. Liquefaction is primarily observed in saturated soils, making it most prevalent in close proximity to 
-            rivers, bays, and other water bodies. The term "liquefaction" actually encompasses several connected phenomena. For instance, 
-            flow failures can transpire when the soil's strength dips below the threshold required for maintaining stability in stationary 
-            conditions. These flow failures result from the influence of gravitational forces at rest, and they can lead to extensive 
-            displacements.
+            rivers, bays, and other water bodies.
         </p>
         <p>
             Powerful earthquakes frequently trigger <i>landslides</i>. While most of these landslides are minor in scale, seismic events 
             have also led to substantial slides. Regrettably, in certain instances, landslides triggered by earthquakes have completely 
             covered towns and villages. More frequently, earthquake-triggered landslides cause harm by demolishing structures or 
-            disrupting bridges and other constructed structures. Numerous landslides induced by earthquakes are a consequence of 
-            liquefaction occurrences, but many others merely depict the collapse of slopes that were barely stable when at rest.
+            disrupting bridges and other constructed structures. 
         </p>
         <p>
             The rapid vertical movements of the seafloor due to fault ruptures during earthquakes can result in the formation of <i>tsunamis</i>, 
             which are lengthy sea waves with extended periods. When in the open ocean, tsunamis cover vast distances at significant 
             speeds, yet they are challenging to detect. Their usual height remains under 1 meter, while their wavelengths can span several 
             hundred kilometers. However, as a tsunami nears the coastline, the reduction in water depth causes its speed to decrease and 
-            the wave's height to surge. In specific coastal regions, the seabed's configuration might amplify the wave, giving rise to an 
+            the wave's height to increase. In specific coastal regions, the seabed's configuration might amplify the wave, giving rise to an 
             almost perpendicular wall of water that surges far inland, causing catastrophic devastation. When earthquakes generate waves 
             in enclosed water bodies, these are referred to as <i>seiches</i>. Typically brought about by seismic waves with long periods that 
             match the natural oscillation period of water within a lake or reservoir, seiches can manifest over extensive distances from 

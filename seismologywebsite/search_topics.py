@@ -6,98 +6,54 @@ from . import Topic, User, db
 
 bp = Blueprint('BP_search_topics', __name__, url_prefix = '/search-topics')
 
-@bp.route("/get-search-topics")
-def get_search_topics():
-    
-    if current_app.config['topic_type_selected'] == "all topics":
-        topics = Topic.query.all()
-        selectedradiobutton = "all topics"
 
-    elif current_app.config['topic_type_selected'] == "articles":
-        topics = Topic.query.filter_by(type='static').all()
-        selectedradiobutton = "articles"
+@bp.route('/filter-topics', methods=['GET', 'POST'])
+def filter_topics():
 
-    elif current_app.config['topic_type_selected'] == 'interactive tools':
-        topics = Topic.query.filter_by(type='interactive').all()
-        selectedradiobutton = "interactive tools"
+    if request.method == 'POST':
+        filter_selected = request.form.get('topictype')
     else:
-        lower_search_param  = current_app.config['search_topic_pattern'].lower()
-        selectedradiobutton = "all topics"
+        filter_selected = request.args.get('topictype')
+
+    if filter_selected == "all topics":
         topics = Topic.query.all()
+
+    elif filter_selected == "articles":
+        topics = Topic.query.filter_by(type='static').all()
+
+    elif filter_selected == 'interactive tools':
+        topics = Topic.query.filter_by(type='interactive').all()
+
+    return render_template('search-topics.html', topics=topics, selectedradiobutton=filter_selected.title()) 
         
+
+
+@bp.route('/search-topic', methods=['GET'])
+def search_topic():
+    # get the search parameter that the user inserted
+    search_param = request.args.get('search-param').lower()
+    # get firstly all the topics
+    topics = Topic.query.all()
+
+    if search_param: 
+        # create an initial empty list to append the found topics
         found_topics_list = []
+        # loop through all the topics
         for tp in topics:
+            # get the description of each topic
             lower_description = tp.description.lower()
-            if re.search(lower_search_param, lower_description):
+            lower_title = tp.title.lower()
+            # if the search parameter that the user inserted is somewhere in the topic description,
+            # append the current topic to the found list created above
+            if search_param in lower_description or search_param in lower_title:
                 found_topics_list.append(tp)
         topics = found_topics_list
-        
-
-    current_topics = topics[(current_app.config['current_page'] * current_app.config['items_per_page'] - current_app.config['items_per_page']):(current_app.config['current_page'] * current_app.config['items_per_page'])]
-    next_topics = topics[((current_app.config['current_page'] + 1) * current_app.config['items_per_page'] - current_app.config['items_per_page']):((current_app.config['current_page'] + 1) * current_app.config['items_per_page'])]
-    
-    if not next_topics:
-        next_state = 'disabled'
+        selectedradiobutton = f'Topics that contain: {search_param}'
     else:
-        next_state = 'enabled' 
-
-    if current_app.config['current_page'] == 1:
-        previous_state = 'disabled'
-    else:
-        previous_state = 'enabled'
-    # this has to do with the numbers between previous and next
-    total_show_pages = math.ceil(len(topics) / current_app.config['items_per_page'])
-
-    return render_template(
-        'search-topics.html', 
-        topics=current_topics, 
-        selectedradiobutton=selectedradiobutton, 
-        previous_state = previous_state, 
-        next_state = next_state,
-        total_show_pages = total_show_pages,
-        mark_page = current_app.config['current_page']
-        )
-
+        selectedradiobutton = 'All Topics'
 
     
-@bp.route('/filter-topics', methods=['GET','POST'])
-def filter_topics():
-    if request.method == "GET":
-        filter_selected = request.args.get("topictype")
-    else:
-        filter_selected = request.form["topictype"]
-    current_app.config['topic_type_selected'] = filter_selected
-    current_app.config['current_page'] = 1
-    return redirect(url_for('BP_search_topics.get_search_topics'))
-
-
-
-@bp.route('/next-page')
-def next_page():
-    current_app.config['current_page'] += 1
-    return redirect(url_for('BP_search_topics.get_search_topics'))
-
-
-@bp.route('/previous-page')
-def previous_page():
-    current_app.config['current_page'] -= 1
-    return redirect(url_for('BP_search_topics.get_search_topics'))
-
-
-@bp.route('/topic-number-page/<topic_number>')
-def topic_number_page(topic_number):
-    topic_number = int(topic_number)
-    current_app.config['current_page'] = topic_number
-    return redirect(url_for('BP_search_topics.get_search_topics'))
-
-
-@bp.route('/search-topic', methods=['POST'])
-def search_topic():
-    search_param = request.form.get('search-param')
-    current_app.config['search_topic_pattern'] = search_param
-    current_app.config['topic_type_selected'] = 'custom'
-    current_app.config['current_page'] = 1
-    return redirect(url_for('BP_search_topics.get_search_topics'))
+    return render_template('search-topics.html', topics=topics, selectedradiobutton=selectedradiobutton) 
 
 
 

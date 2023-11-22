@@ -5,56 +5,47 @@ Edit Account
 {% endblock %}
 
 
-
 {% block content %}
+    <div class="pt-5 user-account-container">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-6 col-xxl-4 text-center shadow-lg p-5 rounded bg-white">
+                <p class="display-5 text-center mb-5 mt-3 text-dark">Edit Account</p>
+                <form action="{{ url_for('BP_user_account.edit_account_information') }}" method="POST" novalidate>
 
-<div class="bg-light-blue1 py-5">
-    <div class="container-lg fs-5">
-        <div class="row justify-content-center align-items-center text-muted rounded">
-            <div class="col-12 col-sm-9 col-md-7 col-lg-7 bg-white p-5 shadow-lg rounded">
-                <div class="mb-3">
-                    <p class="display-5 text-center mb-5 mt-3 text-dark">Edit Account</p>
-                    <form action="{{ url_for('BP_user_account.edit_account_information') }}" method="POST" novalidate>
-
-                        <div class="mb-3">
-                            {{ form["fullname"].label(class="form-control-label") }}
-                            {% if form["fullname"].errors %}
-                                {{ form["fullname"](class="form-control form-control-md is-invalid") }}
-                                <div class="invalid-feedback">
-                                    {% for error in form["fullname"].errors %}
+                    <div class="mb-3">
+                        {{ form["fullname"].label(class="form-control-label") }}
+                        {% if form["fullname"].errors %}
+                            {{ form["fullname"](class="form-control form-control-md is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form["fullname"].errors %}
                                     <span>{{ error }}</span>
-                                    {% endfor %}
-                                </div>
-                            {% else %}
-                                {{ form["fullname"](class="form-control form-control-md", value=user.fullname) }}
-                            {% endif %}
-                        </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form["fullname"](class="form-control form-control-md", value=user.fullname) }}
+                        {% endif %}
+                    </div>
 
-                        <div class="mb-3">
-                            {{ form["email"].label(class="form-control-label") }}
-                            {% if form["email"].errors %}
-                                {{ form["email"](class="form-control form-control-md is-invalid") }}
-                                <div class="invalid-feedback">
-                                    {% for error in form["email"].errors %}
+                    <div class="mb-3">
+                        {{ form["email"].label(class="form-control-label text-start") }}
+                        {% if form["email"].errors %}
+                            {{ form["email"](class="form-control form-control-md is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form["email"].errors %}
                                     <span>{{ error }}</span>
-                                    {% endfor %}
-                                </div>
-                            {% else %}
-                                {{ form["email"](class="form-control form-control-md", value=user.email) }}
-                            {% endif %}
-                        </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form["email"](class="form-control form-control-md", value=user.email) }}
+                        {% endif %}
+                    </div>
 
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-primary mt-5">Save Changes</button>
-                        </div>
-                    </form>
-                </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary mt-5">Save Changes</button>
+                    </div>
+                </form>
             </div>
         </div>
-
-
     </div>
-    <br><br><br><br><br><br><br><br><br>
-</div>
 
 {% endblock %}

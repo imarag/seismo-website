@@ -22,9 +22,10 @@
 
 
 {% block article_pills %}
-    <a target="_blank" href="https://simple.wikipedia.org/wiki/Basin_(geology)"><span class="badge rounded-pill">subplot</span></a>
-    <a target="_blank" href="https://pubs.geoscienceworld.org/ssa/bssa/article-abstract/110/6/2892/588160/A-Method-to-Directly-Estimate-S-Wave-Site"><span class="badge rounded-pill">figure</span></a>
-    <a target="_blank" href="https://asp-eurasipjournals.springeropen.com/articles/10.1186/s13634-021-00765-z"><span class="badge rounded-pill">ax</span></a>
+    <a target="_blank" href="https://matplotlib.org/stable/plot_types/index.html"><span class="badge rounded-pill">Plots</span></a>
+    <a target="_blank" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots.html"><span class="badge rounded-pill">subplots</span></a>
+    <a target="_blank" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.figure.html"><span class="badge rounded-pill">Figure</span></a>
+    <a target="_blank" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes"><span class="badge rounded-pill">Axes</span></a>
 {% endblock %}
 
 {% block article_list_items %}
@@ -49,20 +50,22 @@
         <h1>Introduction</h1>
         <p>
             There are many Python libraries used for data visualization such as <i>Matplotlib</i> a comprehensive 2D plotting library, <i>Plotly</i> a Python graphing library that enables 
-            the creation of interactive, web-based visualizations , <i>Seaborn</i> a statistical data visualization library based on Matplotlib, <i>bokeh</i> a Python interactive 
+            the creation of interactive, web-based visualizations, <i>Seaborn</i> a statistical data visualization library based on Matplotlib, <i>bokeh</i> a Python interactive 
             visualization library that targets modern web browsers, providing elegant and interactive data visualizations for the web and more. However, <i>Matplotlib</i> provides a wide range
             of functionalities for creating various types of plots with a diverse set of plot types and offers extensive customization options. Matplotlib also has a large and active community 
             and it is compatible with multiple operating systems, making it easy to create consistent visualizations across different platforms. For these reasons, we will use Matplotlib for 
-            visualizing Seismological data.
+            visualizing seismological data.
         </p>
     </div>
     <div id="item-2">
         <h1>Basic Structure</h1>
         <p>
-            Matplotlib main structure consists of the <code>Figure</code> and the <code>Axes</code> containers. <code>Figure</code> is the main, top-level area of the graph and it contains one or more <code>Axes</code> objects
-            as well as other elements like titles, legends, and annotations. It is essentially, a plotting area that represents an individual plot or chart within the <code>Figure</code>. Note that <i>Axis</i> are the cartesian axis 
+            Matplotlib main structure consists of the <code>Figure</code> and the <code>Axes</code> containers. <code>Figure</code> is the main, top-level area of the graph and it contains one or more <code>Axes</code> objects. 
+            <code>Axes</code> refers to an individual plot or chart inside the main <code>Figure</code> that hosts the actual plot or visualization. It is the area where data is visualized, including the coordinate system, data points, labels, and other plot elements.
+            Note that <i>Axis</i> refers to the cartesian axis 
             and <i>Axes</i> is the Matplotlib plot area. When you create multiple <code>Axes</code> 
-            objects arranged in a grid (rows and columns), they are often referred to as <i>subplots</i>. A standard use is to create a <code>Figure</code> instance and one or more <code>Axes</code> plots inside the <code>Figure</code>.
+            objects arranged in a grid (rows and columns), they are often referred to as <i>subplots</i>. A standard use is to create a <code>Figure</code> instance and one or more <code>Axes</code> plots inside the 
+            <code>Figure</code>.
             There are many ways to achieve that however, to keep things simple, we will use the <code>matplotlib.pyplot.subplots</code> function. It creates a <code>Figure</code> and a set of subplots objects. 
             It provides a convenient way to create a grid of <code>Axes</code> or subplots in a single call.
         </p>
@@ -75,7 +78,7 @@
                 <p><span class="python-color1">import</span> matplotlib.pyplot <span class="python-color2">as</span> plt</p>
             </code></pre>
         </div>
-        <p>Initialize a <code>Figure</code> object with a signle <code>Axes</code> object:</p>
+        <p>Initialize a <code>Figure</code> object with a single <code>Axes</code> object:</p>
         <div class="input-code-block">
             <pre><code>
                 <p><span class="comment"># initialize the figure and a single axes object</span></p>
@@ -108,8 +111,8 @@
             </figure>
         </div>
         <p>
-            Apparently, the plots are overlapping between each other. There are various ways to solve this problem. Use the <code>plt.tight_layout()</code> function to 
-            automatically adjusts subplot parameters to ensure that the specified subplots fit within the figure area without overlapping. In addition, set <code>layout="constrained"</code>
+            Apparently, the plots are overlapping between each other. There are various ways to solve this problem. One of them includes the use of the <code>plt.tight_layout()</code> function to 
+            automatically adjust subplot parameters. This ensures that the specified subplots fit within the figure area without overlapping. Another way is to just set <code>layout="constrained"</code>
             in the <code>subplots</code> function:
         </p>
         <div class="input-code-block">
@@ -125,15 +128,17 @@
             </figure>
         </div>
         <p>
-            The return value of the <code>subplots</code> function that we used earlier, is a tuple of a <code>Figure</code> instance and a single 
-            <code>Axes</code> (in case of <code>nrows=1, ncols=1</code>) or an array of <code>Axes</code> objects. If you have a grid of multiple <code>Axes</code> objects, 
-            use the Python list indexing (subscripting) operator. For instance, to get the first <code>Axes</code> object, use <code>ax[0]</code>. The 
-            naming of the <code>subplots</code> return values does not matter. You can use "axes" instead of "ax" if it seems more straightforward.
+            The return value of the <code>subplots</code> function that we used earlier, is a tuple of a <code>Figure</code> instance as the first element and a single 
+            <code>Axes</code> (in case of <code>nrows=1, ncols=1</code>) or an array of <code>Axes</code> objects as the second element of the tuple. In case of multiple <code>Axes</code> objects, 
+            use the Python list indexing (subscripting) operator to refer to a specific subplot. For instance, in case of 1D array of subplots (e.g., <code>nrows=1, ncols=5</code> or <code>nrows=4, ncols=1</code>) 
+            use <code>ax[n]</code> operator to get the nth subplot in the array. If you have a 2D array of subplots (e.g., <code>nrows=2, ncols=5</code>) use the indexing operator two times to specify first 
+            the row and second the column of the subplot that you want to get (e.g., <code>ax[0,2]</code>). <b>Remember, in Python everything starts from 0</b>. The 
+            naming of the <code>subplots</code> return value does not matter. You can use "axes" instead of "ax" if it seems more straightforward (e.g., <code>fig, axes = plt.subplots()</code>).
         </p>
         <p>
-            Matplotlib <code>Axes</code> object contains several special methods that create various graphics or <i>primitives</i> inside of it. Such methods are the <code>plots()</code>
+            Matplotlib <code>Axes</code> object contains several special methods that create various graphics or <i>primitives</i> inside of it. Such methods are the <code>plot()</code>
             method that creates a line graphic (<code>Line2D</code>), the <code>text()</code> method that generates a <code>Text</code> instance, the <code>legend()</code> method that creates 
-            a <code>Legend</code> object etc. There are many more interesting things in the documentation but it is way better to learn about the library while plotting real Seismological data.
+            a <code>Legend</code> object etc. There are many more interesting things in the documentation but it is way better to learn about the library while plotting real seismological data.
             Consider reading the <a class="link-info" href="https://matplotlib.org/stable/tutorials/artists.html#sphx-glr-tutorials-artists-py" target="_blank">documentation</a> for more information.
         </p>
     </div>
@@ -141,7 +146,7 @@
         <h1>Basic graph styling</h1>
         <p>
             In this section, we'll explore fundamental styling techniques to enhance the visual appeal of the plot and include essential information to the graph area. This includes tasks 
-            like setting the graph title, adding titles to the x and y axes, adjusting the grid and legend, and styling the line objects within the graph.
+            like setting the graph title, adding titles to the x and y axis, adjusting the grid and legend, and styling the line objects within the graph.
         </p>
     </div>
     <div id="item-3-1">
@@ -187,7 +192,7 @@
         </p>
         <div class="input-code-block">
             <pre><code>
-                <p><span class="comment"># insert graph title and axis labels</span></p>
+                <p><span class="comment"># insert a graph title and axis labels</span></p>
                 <p>ax.<span class="python-color1">set_title</span>(<span class="python-color3">"Fourier Spectra values"</span>, size=22, color=<span class="python-color3">"navy"</span>, pad=15)</p>
                 <p>ax.<span class="python-color1">set_xlabel</span>(<span class="python-color3">"Frequency [Hz]"</span>, size=14, style=<span class="python-color3">"italic"</span>)</p>
                 <p>ax.<span class="python-color1">set_ylabel</span>(<span class="python-color3">"Magnitude"</span>, size=14, style=<span class="python-color3">"italic"</span>)</p>
@@ -196,19 +201,19 @@
         </div>
         <div class="figure-container">
             <figure>
-                <img src="{{ url_for('static', filename='img/fourier_data_plot_labels.png') }}" alt="Fourier spectra graph">
+                <img src="{{ url_for('static', filename='img/fourier_data_plot_labels.png') }}" alt="Fourier spectra graph, edit title and axis labels">
                 <figcaption>Edit title and axis labels</figcaption>
             </figure>
         </div>
         <p>
             Utilize various parameters to control the style of the labels such as <code>color</code> 
-            for the color, <code>size</code> for the size of the corresponding label, <code>pad</code> for the distance of the label from the graph and more. Check <a class="link-info" href="https://matplotlib.org/stable/api/text_api.html#matplotlib.text.Text" target="_blank">here</a> for various <code>Text</code> properties.
+            for the color, <code>size</code> for the size of the corresponding label, <code>pad</code> for the distance of the label from the graph and more. There are more <a class="link-info" href="https://matplotlib.org/stable/api/text_api.html#matplotlib.text.Text" target="_blank">text properties</a> at the documentation.
         </p>
     </div>
     <div id="item-3-3">
         <h2>Configure Grid And Ticks</h2>
         <p>
-            At this point we are going to configure the x and y axis ticks, which are the numbers and the lines that show the data labels. Matplotlib contain the <code>tick_params</code> function to
+            At this point we are going to configure the x and y axis ticks, which are the numbers and the lines that show the data labels. Matplotlib contains the <code>tick_params</code> function to
             change the appearance of ticks, tick labels and grid. In addition, utilize the Matplotlib <code>grid</code> function to style the grid of the graph:
         </p>
         <div class="input-code-block">
@@ -225,21 +230,21 @@
         </div>
         <div class="figure-container">
             <figure>
-                <img src="{{ url_for('static', filename='img/fourier_data_plot_grid_ticks.png') }}" alt="Fourier spectra graph">
+                <img src="{{ url_for('static', filename='img/fourier_data_plot_grid_ticks.png') }}" alt="Fourier spectra graph, edit ticks and grid">
                 <figcaption>Edit axis ticks and grid style</figcaption>
             </figure>
         </div>
         <p>
             Since the Fourier Spectra data is usually plotted with "log" scale we use the Matplotlib <code>set_xscale</code> and <code>set_yscale</code> functions to set the scale of the x and y axis respectively. The we 
-            utilize the <code>tick_params</code> function to configure the tick lines and labels. Check <a class="link-info" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.tick_params.html" target="_blank">here</a> for more information.
-            Activate the grid using the Matplotlib <code>grid</code> function and configure its color, width and opacity. Since grid is a set of multiple lines, we use similar <a class="link-info" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.lines.Line2D.html" target="_blank">parameters</a> to control the Fourier 2D Line.
+            utilize the <code>tick_params</code> function to configure the tick lines and labels. There are various other <a class="link-info" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.tick_params.html" target="_blank">parameters</a> that you can control, presented at the documentation.
+            Activate the grid using the Matplotlib <code>grid</code> function and configure its color, width and opacity (<code>alpha</code>). 
         </p>
     </div>
     <div id="item-3-4">
         <h2>Configure The Legend</h2>
         <p>
-            Last thing left to style is the legend. Legend consists one of the most important graph characteristics, since it provides information about the graph content. Assume that the record that generated the 
-            Fourier Spectra happened on 14 of July, 2014 at 14:08:05 and was recorded by station CHN1. To add the legend, we need to re-plot the data and add a <code>label</code> parameter at the <code>plot()</code> function.:
+            The last styling to apply is on the legend of the graph. Legend is one of the most important graph characteristics, since it provides information about the graph content. Assume that the record that generated the 
+            Fourier Spectra happened on 14 of July, 2014 at 14:08:05 and was recorded by station CHN1. To add the legend, we need to re-plot the data and add a <code>label</code> parameter at the <code>plot()</code> function.
         </p>
         <div class="input-code-block">
             <pre><code>
@@ -266,32 +271,31 @@
         <div class="figure-container">
             <figure>
                 <img src="{{ url_for('static', filename='img/fourier_data_plot_legend.png') }}" alt="matplotlib graph with legend">
-                <figcaption>Insert a legend on the graph and style it</figcaption>
+                <figcaption>Add and style the legend of the graph</figcaption>
             </figure>
         </div>
         <p>
             There are many <a class="link-info" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.legend.html" target="_blank">ways</a> to add a legend in a graph. However, the recommend way is to add the 
             <code>label</code> parameter at the <code>plot</code> function. That way, matplotlib knows which item on the graph to refer to. There are a number of parameters to control the appearance of the 
-            legend. For instance, use the <code>loc</code> parameter to position the legend, the <code>framealpha</code> parameter to control the opacity of the legend, <code>title</code> to add a title to the legend 
-            and more.
+            legend. For instance, use the <code>loc</code> parameter to position the legend, the <code>framealpha</code> parameter to control the opacity of the legend, <code>title</code> to add a title to the legend etc.
         </p>
     </div> 
     <div id="item-3-5">
         <h2>Configure The Line</h2>
         <p>
-            Last, it is of great importance the styling of the line of a graph (the blue line in the previous graphs). The configuration of the line is similar to the parameters used to edit the grid of the graph. Some
+            Last, it is of great importance the styling of the line in a graph (the Fourier Spectra line in the previous graphs). The configuration of the line is similar to the parameters used to edit the grid of the graph. Some
             of the characteristics that we can use to configure the line are:
         </p>
         <ul>
-            <li>linewidth or lw, sets the width of the line</li>
-            <li>linestyle or ls, styles the line (<a class="link-info" href="https://matplotlib.org/stable/gallery/lines_bars_and_markers/linestyles.html" target="_blank">line styles</a>)</li>
-            <li>color, that controls the color of the line (<a class="link-info" href="https://matplotlib.org/stable/gallery/color/named_colors.html" target="_blank">named colors</a>)</li>
-            <li>marker, that sets the style of the marker (<a class="link-info" href="https://matplotlib.org/stable/api/markers_api.html" target="_blank">marker styles</a></li>
-            <li>markerfacecolor or mfc, sets the fill color of the marker</li>
-            <li>markeredgecolor or mec, sets the color of the edge of the marker</li>
-            <li>markersize or ms, sets the size of the marker</li>
+            <li><i>linewidth</i> or <i>lw</i>, sets the width of the line</li>
+            <li><i>linestyle</i> or <i>ls</i>, styles the line (<a class="link-info" href="https://matplotlib.org/stable/gallery/lines_bars_and_markers/linestyles.html" target="_blank">line styles</a>)</li>
+            <li><i>color</i>, that controls the color of the line (<a class="link-info" href="https://matplotlib.org/stable/gallery/color/named_colors.html" target="_blank">named colors</a>)</li>
+            <li><i>marker</i>, that sets the style of the marker (<a class="link-info" href="https://matplotlib.org/stable/api/markers_api.html" target="_blank">marker styles</a>)</li>
+            <li><i>markerfacecolor</i> or <i>mfc</i>, sets the fill color of the marker</li>
+            <li><i>markeredgecolor</i> or <i>mec</i>, sets the color of the edge of the marker</li>
+            <li><i>markersize</i> or <i>ms</i>, sets the size of the marker</li>
         </ul>
-        <p>There are many other parameters that control the appearance of the line. Find them <a class="link-info" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html" target="_blank">here</a></p>
+        <p>There are many other parameters that control the appearance of the line at the <a class="link-info" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html" target="_blank">documentation</a>.</p>
     </div> 
     <div id="item-4">
         <h1>Plot Seismic Records</h1>
@@ -334,7 +338,7 @@
             <pre><code>
                 <p><span class="comment"># create a matplotlib Figure and three Axes vertically since we have three components</span></p>
                 <p>fig, ax = plt.<span class="python-color1">subplots</span>(nrows=3, ncols=1)</p>
-                <p><span class="comment"># loop through each trace inside the stream object</span></p>
+                <p><span class="comment"># loop through each trace inside the stream object (use the Python "len" function to get the total traces)</span></p>
                 <p><span class="python-color2">for</span> i <span class="python-color2">in</span> <span class="python-color1">range</span>(<span class="python-color1">len</span>(st)):</p>
                 <p class="pad"><span class="comment"># get the current trace using a simple Python indexing operation</span></p>
                 <p class="pad">curr_tr = st[i]</p>
@@ -381,7 +385,7 @@
         </p>
         <div class="figure-container">
             <figure>
-                <img src="{{ url_for('static', filename='img/matplotlib_vertical_lines.png') }}" alt="matplotlib vertical lines">
+                <img src="{{ url_for('static', filename='img/matplotlib_vertical_lines.png') }}" alt="matplotlib vertical lines of P and S wave arrivals">
                 <figcaption>Matplotlib vertical lines depicting the arrivals of the P and the S waves</figcaption>
             </figure>
         </div>
@@ -408,15 +412,15 @@
             </figure>
         </div>
         <p>
-            Lastly, other useful functions that may come handy are the Matplotlib <code>ax.set_xlim()</code> and <code>ax.set_ylim()</code> that set the axis x and y limits, the <code>ax.text()</code> function 
-            that generates a text at a specific position at the graph, the <code>ax.annotate()</code> function that creates a box with a text and optionally an arrow that points to a specific location on the 
-            graph, <code>ax.scatter()</code> that creates a scatter plot and more.
+            Lastly, other useful functions that may come handy are the Matplotlib <a class="link-info" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.set_xlim.html" target="_blank"><code>ax.set_xlim()</code></a> 
+            and <a class="link-info" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.set_ylim.html" target="_blank"><code>ax.set_ylim()</code></a> that set the axis x and y limits, 
+            the <a class="link-info" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.text.html" target="_blank"><code>ax.text()</code></a> function 
+            that generates a text at a specific position at the graph, the <a class="link-info" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.annotate.html" target="_blank"><code>ax.annotate()</code></a> 
+            function that creates a box with a text and optionally an arrow that points to a specific location on the 
+            graph, <a class="link-info" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.scatter.html" target="_blank"><code>ax.scatter()</code></a> that creates a scatter plot and more.
         </p>
         
     </div> 
         
-    
-    
-    
 
 {% endblock %}

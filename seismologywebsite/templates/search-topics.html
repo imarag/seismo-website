@@ -10,199 +10,75 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb my-5">
                 <li class="breadcrumb-item"><a href="{{ url_for('home') }}">Home</a></li>
-                <li class="breadcrumb-item active" aria-current="page">All Topics</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Search Topic</a></li>
             </ol>
         </nav>
-
-        <div class="row justify-content-center">
-            <div class="col-10 col-md-5 col-lg-4 bg-white text-center p-5">
-                <div class="bg-light rounded border mb-5">
-                    <div class="bg-light p-3">
-                        <form class="d-flex" role="search" method="POST"
+        <p class="text-center display-3 my-5 fw-semibold">
+            Discover Various Seismic Articles And Tools 
+        </p>
+        <div class="row justify-content-center align-items-center my-4">
+            <div class="col-10 col-md-8 col-lg-6 col-xl-5 text-center">
+                <p class="text-center fs-4 text-muted mt-5 mb-3 fw-semibold">Search for a topic</p>
+                <form role="search" method="GET"
                             action="{{ url_for('BP_search_topics.search_topic') }}">
-                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
-                                name="search-param">
-                            <button class="btn btn-outline-info" type="submit">Search</button>
-                        </form>
+                        
+                    <input class="form-control form-control-lg me-2" type="search" placeholder="Search" aria-label="Search"
+                        name="search-param">
+                    <div class="text-center my-3">
+                        <button class="btn btn-dark" type="submit">Search</button>
                     </div>
-                </div>
-                <div class="bg-light rounded border">
-                    <div class="bg-light">
-                        <p class="fs-3 my-0 text-dark">Topic type</p>
-                    </div>
-                    <div class="p-4 bg-white">
-                        <form method="POST" action="{{ url_for('BP_search_topics.filter_topics') }}">
-                            <div class="form-check">
-                                {% if selectedradiobutton == 'all topics' %}
-                                    <input class="form-check-input" type="radio" name="topictype" id="all-topics-radio"
-                                        value="all topics" checked>
-                                {% else %}
-                                    <input class="form-check-input" type="radio" name="topictype" id="all-topics-radio"
-                                        value="all topics">
-                                {% endif %}
-                                <label class="form-check-label" for="all-topics-radio">
-                                    All topics
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                {% if selectedradiobutton == 'articles' %}
-                                    <input class="form-check-input" type="radio" name="topictype" id="static-topics-radio"
-                                        value="articles" checked>
-                                {% else %}
-                                    <input class="form-check-input" type="radio" name="topictype" id="static-topics-radio"
-                                        value="articles">
-                                {% endif %}
-                                <label class="form-check-label" for="static-topics-radio">
-                                    Articles
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                {% if selectedradiobutton == 'interactive tools' %}
-                                    <input class="form-check-input" type="radio" name="topictype"
-                                        id="interactive-topics-radio" value="interactive tools" checked>
-                                {% else %}
-                                    <input class="form-check-input" type="radio" name="topictype"
-                                        id="interactive-topics-radio" value="interactive tools">
-                                {% endif %}
-                                <label class="form-check-label" for="interactive-topics-radio">
-                                    Interactive tools
-                                </label>
-                            </div>
-                            <button class="btn btn-dark mt-3 px-4" type="submit">save</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="col-11 col-md-7 col-lg-8">
-                {% if not topics %}
-                    <div class="row">
-                        <div class="col">
-                            <p class="text-muted fs-3">The server scientists cannot find what you are looking for...
-                            </p>
-                            <img class="img-fluid"
-                                src="{{ url_for('static', filename='img/page-not-found-images/minions.png') }}">
-                        </div>
-                    </div>
-                {% else %}
-                    <div>
-                        <div class="row justify-content-center align-items-center mb-4">
-                            <div class="col-auto text-center">
-                                <nav aria-label="Topic navigation" class="text-center mx-auto">
-                                    <ul class="pagination">
-                                        {% if previous_state == 'enabled' %}
-                                            <li class="page-item"><a class="page-link" href="{{ url_for('BP_search_topics.previous_page') }}" style="width: 100px;">Previous</a></li>
-                                        {% else %}
-                                            <li class="page-item disabled" ><a class="page-link" href="{{ url_for('BP_search_topics.previous_page') }}" style="width: 100px;">Previous</a></li>
-                                        {% endif %}
-                                        
-                                        {% for i in range(1, total_show_pages + 1) %}
-                                            {% if i == mark_page %}
-                                                <li class="page-item "><a class="page-link bg-info text-light fw-bold" href="{{ url_for('BP_search_topics.topic_number_page', topic_number=i) }}">{{ i }}</a></li>
-                                            {% else %}
-                                                <li class="page-item"><a class="page-link" href="{{ url_for('BP_search_topics.topic_number_page', topic_number=i) }}">{{ i }}</a></li>
-                                            {% endif %}
-                                        {% endfor %}
-                                            
-                                        {% if next_state == 'enabled' %}
-                                            <li class="page-item"><a class="page-link" href="{{ url_for('BP_search_topics.next_page') }}"  style="width: 100px;">Next</a></li>
-                                        {% else %}
-                                            <li class="page-item disabled" ><a class="page-link" href="{{ url_for('BP_search_topics.next_page') }}"  style="width: 100px;">Next</a></li>                                            
-                                        {% endif %}
-                                    </ul>
-                                </nav>
-                            </div>
-                        </div>
-                        <div class="row justify-content-center align-items-center gy-0">
-                            {% for tpc in topics %}
-                                {% set filename = tpc['image_name'] %}
-                                <div class="col-8 col-sm-8 col-md-8 col-lg-8 col-xl-6 col-xxl-4 text-center">
-                                    <a href="{{ url_for('show_topic', topic_tmp_name=tpc['template_name']) }}" class="text-decoration-none text-dark">
-                                        <div class="card text-bg-dark" style="margin:10px auto;" id="all-topics-card">
-                                            <img src="{{ url_for('static', filename='img/' ~ filename) }}" class="card-img mx-auto" style="opacity: 0.4; width:250px; height:200px;">
-                                            <div class="card-img-overlay">
-                                                <h5 class="card-title fw-bold text-center text-info fs-4">{{ tpc['title'] }}</h5>
-                                                <br>
-                                                <p class="text-center fs-5 m-0 p-0">{{ tpc['description'][:60] }}...</p>
-                                            </div>
-                                        </div>
-                                    </a>
-                                
-                                </div>
-                                
-                                
-
-                                <!-- <div class="col-8 col-sm-8 col-md-8 col-lg-8 col-xl-6 col-xxl-4 text-center">
-                                    <div class="position-relative  rounded my-3 pb-3 shadow-lg text-center p-4 p-md-2"
-                                        style="background-image: url('/static/img/templates-icons/{{ filename }}'); background-repeat: no-repeat;background-position: center center; opacity: 0.5;
-                                        background-size: cover; height:220px;  margin-left: auto; margin-right: auto;"
-                                        id="all-topics-card">
-                                        <a href="{{ url_for('show_topic', topic_tmp_name=tpc['template_name']) }}"
-                                        class="text-decoration-none text-dark" style="position: absolute; top: 0px; z-index: 199;">
-                                            <p class="fs-5 fw-semibold text-center">{{ tpc['title'] }}</p>
-                                            <hr class="w-75 border border-secondary mx-auto">
-                                            <div class="row justify-content-around align-items-center px-2">
-                                                <div class="col-md-4 col-lg-4 text-center d-none d-md-block">
-                                                    <img src="{{ url_for('static', filename='img/templates-icons/' ~ filename) }}"
-                                                        class="img-fluid">
-                                                </div>
-                                                <div class="col-md-7 col-lg-7 text-center text-md-start text-muted">
-                                                    <p class="fs-6">{{ tpc['description'][:60] }}...</p>
-                                                </div>
-                                            </div>
-                                            {% if tpc['type'] == 'static' %}
-                                            <span class="badge text-bg-light position-absolute bottom-0 end-0 translate-start me-3 mb-2">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-card-text" viewBox="0 0 16 16">
-                                                    <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
-                                                    <path d="M3 5.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 8zm0 2.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5z"/>
-                                                </svg>
-                                            </span>
-                                            {% else %}
-                                            <span class="badge position-absolute bottom-0 end-0 translate-start me-3 mb-2">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="black" class="bi bi-gear-fill" viewBox="0 0 16 16">
-                                                    <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/>
-                                                </svg>
-                                            </span>
-                                            {% endif %}
-                                        </a>
-                                    </div>
-                                </div> -->
-                            {% endfor %}
-                        </div>
-                        <div class="row justify-content-center align-items-center my-5">
-                            <div class="col-auto text-center">
-                                <nav aria-label="Topic navigation" class="text-center mx-auto">
-                                    <ul class="pagination">
-                                        {% if previous_state == 'enabled' %}
-                                            <li class="page-item"><a class="page-link" href="{{ url_for('BP_search_topics.previous_page') }}" style="width: 100px;">Previous</a></li>
-                                        {% else %}
-                                            <li class="page-item disabled" ><a class="page-link" href="{{ url_for('BP_search_topics.previous_page') }}" style="width: 100px;">Previous</a></li>
-                                        {% endif %}
-                                        
-                                        {% for i in range(1, total_show_pages + 1) %}
-                                            {% if i == mark_page %}
-                                                <li class="page-item "><a class="page-link bg-info text-light fw-bold" href="{{ url_for('BP_search_topics.topic_number_page', topic_number=i) }}">{{ i }}</a></li>
-                                            {% else %}
-                                                <li class="page-item"><a class="page-link" href="{{ url_for('BP_search_topics.topic_number_page', topic_number=i) }}">{{ i }}</a></li>
-                                            {% endif %}
-                                        {% endfor %}
-                                            
-                                        {% if next_state == 'enabled' %}
-                                            <li class="page-item"><a class="page-link" href="{{ url_for('BP_search_topics.next_page') }}"  style="width: 100px;">Next</a></li>
-                                        {% else %}
-                                            <li class="page-item disabled" ><a class="page-link" href="{{ url_for('BP_search_topics.next_page') }}"  style="width: 100px;">Next</a></li>                                            
-                                        {% endif %}
-                                    </ul>
-                                </nav>
-                            </div>
-                        </div>
-                    </div>
-                {% endif %}
             </div>
         </div>
-
+        <br><br>
+        <p class="text-center display-6 text-secondary mt-5 mb-3 fw-semibold">
+            {{ selectedradiobutton }}
+        </p>
+        <div class="row justify-content-center justify-content-lg-start align-items-center  mt-5 mb-2 gy-3">
+            <div class="col-8 col-md-auto text-center text-md-start">
+                <a class="btn btn-light mx-1" style="width:160px;" href="{{ url_for('BP_search_topics.filter_topics', topictype='all topics') }}">
+                    All Topics
+                </a>
+            </div>
+            <div class="col-8 col-md-auto text-center text-md-start">
+                <a class="btn btn-light mx-1" style="width:160px;" href="{{ url_for('BP_search_topics.filter_topics', topictype='articles') }}">
+                    Articles
+                </a>
+            </div>
+            <div class="col-8 col-md-auto text-center text-md-start">
+                <a class="btn btn-light mx-1" style="width:160px;" href="{{ url_for('BP_search_topics.filter_topics', topictype='interactive tools') }}">
+                    Interactive Tools
+                </a>
+            </div>
+        </div>
+        <div class="mb-5">
+            {% if not topics %}
+                <p class="text-muted fs-3 text-center my-5">The server scientists cannot find what you are looking for...</p>
+                <div class="row justify-content-center">
+                    <div class="col-8 col-md-6 col-lg-5 col-xl-4 text-center">
+                        <img class="img-fluid" src="{{ url_for('static', filename='img/minions.png') }}">
+                    </div>
+                </div>
+            {% else %}
+                <div class="row justify-content-center justify-content-lg-start align-items-center">
+                    {% for tpc in topics %}
+                        {% set filename = tpc['image_name'] %}
+                        <div class="col-9 col-sm-7 col-md-5 col-lg-4 col-xl-3 text-center">
+                            <a href="{{ url_for('show_topic', topic_tmp_name=tpc['template_name']) }}" class="text-decoration-none text-dark">
+                                <div class="card text-bg-dark" style="margin:10px auto;" id="all-topics-card">
+                                    <img src="{{ url_for('static', filename='img/' ~ filename) }}" class="card-img mx-auto img-fluid" style="opacity: 0.4">
+                                    <div class="card-img-overlay">
+                                        <h5 class="card-title fw-bold text-center text-info fs-4">{{ tpc['title'] }}</h5>
+                                        <br>
+                                        <p class="text-center fs-5 m-0 p-0">{{ tpc['description'][:70] }}...</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}    
+                </div>
+            {% endif %}
+        </div>
     </section>
 </div>
-
-<script src="{{ url_for('static', filename='js/topics.js') }}"></script>
 
 {% endblock %}
