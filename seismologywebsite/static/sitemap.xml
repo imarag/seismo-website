@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+<url>
+  <loc>https://ioannis9595.eu.pythonanywhere.com/</loc>
+  <lastmod>2023-11-28T22:40:07+00:00</lastmod>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>https://ioannis9595.eu.pythonanywhere.com/index</loc>
+  <lastmod>2023-11-28T22:40:07+00:00</lastmod>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>https://ioannis9595.eu.pythonanywhere.com/show-topic/obspy</loc>
+  <lastmod>2023-11-28T22:40:07+00:00</lastmod>
+  <priority>1</priority>
+</url>
+<url>
+  <loc>https://ioannis9595.eu.pythonanywhere.com/show-topic/site-effect</loc>
+  <lastmod>2023-11-28T22:40:07+00:00</lastmod>
+  <priority>1</priority>
+</url>
+<url>
+  <loc>https://ioannis9595.eu.pythonanywhere.com/show-topic/seismology-intro</loc>
+  <lastmod>2023-11-28T22:40:07+00:00</lastmod>
+  <priority>0.6</priority>
+</url>
+<url>
+  <loc>https://ioannis9595.eu.pythonanywhere.com/show-topic/fourier</loc>
+  <lastmod>2023-11-28T22:40:07+00:00</lastmod>
+  <priority>1</priority>
+</url>
+<url>
+  <loc>https://ioannis9595.eu.pythonanywhere.com/show-topic/signal-processing</loc>
+  <lastmod>2023-11-28T22:40:07+00:00</lastmod>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://ioannis9595.eu.pythonanywhere.com/show-topic/pick-arrivals</loc>
+  <lastmod>2023-11-28T22:40:07+00:00</lastmod>
+  <priority>1</priority>
+</url>
+<url>
+  <loc>https://ioannis9595.eu.pythonanywhere.com/show-topic/file-to-mseed</loc>
+  <lastmod>2023-11-28T22:40:07+00:00</lastmod>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://ioannis9595.eu.pythonanywhere.com/show-topic/file-manipulation</loc>
+  <lastmod>2023-11-28T22:40:07+00:00</lastmod>
+  <priority>0.7</priority>
+</url>
+<url>
+  <loc>https://ioannis9595.eu.pythonanywhere.com/show-topic/matplotlib</loc>
+  <lastmod>2023-11-28T22:40:07+00:00</lastmod>
+  <priority>0.6</priority>
+</url>
+<url>
+  <loc>https://ioannis9595.eu.pythonanywhere.com/show-topic/distance-between-points</loc>
+  <lastmod>2023-11-28T22:40:07+00:00</lastmod>
+  <priority>0.8</priority>
+</url>
+<url>
+  <loc>https://ioannis9595.eu.pythonanywhere.com/show-topic/fourier</loc>
+  <lastmod>2023-11-28T22:40:07+00:00</lastmod>
+  <priority>0.6</priority>
+</url>
+
+
+</urlset>

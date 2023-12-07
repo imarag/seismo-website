@@ -66,7 +66,7 @@
                                 Don't have a seismic data file ? Click <a href="{{ url_for('show_topic', topic_tmp_name='file-to-mseed') }}"
                                     class="link-info">here</a> to convert data stored in a file (such as .csv, .txt or .xlsx) to the seismic MiniSEED data file format
                                 or <a href="{{ url_for('static', filename='static-files/test-mseed-file.mseed') }}"
-                                    class="link-info">download</a> one to experiment with the tool. Please inform me of any encountered bugs through the <a class="link-info" href="{{ url_for('help_and_support') }}">Help & Support</a> page.
+                                    class="link-info">download</a> one to experiment with the tool. Please inform me of any encountered bugs through the <a class="link-info" href="{{ url_for('get_page', page_name='help-and-support') }}">Help & Support</a> page.
                             </p>
                         {% endif %}
                         

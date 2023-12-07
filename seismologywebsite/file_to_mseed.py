@@ -137,7 +137,7 @@ def read_file():
 
     # Convert the first 5 rows to HTML table
     table_html = first_5_rows.to_html().replace('class="', 'class="table text-secondary ')
-
+    
     # save the file
     file_path = create_path('file-to-mseed.csv')
     df.to_csv(file_path, index=False, header=None)

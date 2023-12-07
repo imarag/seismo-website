@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, current_app, redirect, url_for
 import re
 import math
-from . import Topic, User, db
+from . import Topic, db
 
 
 bp = Blueprint('BP_search_topics', __name__, url_prefix = '/search-topics')

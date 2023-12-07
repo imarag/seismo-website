@@ -37,23 +37,23 @@ Fourier Spectra
             {% for topic in topics %}
                 <hr class="border-2 border-top">
                 <div class="row justify-content-center align-items-center fs-5 bg-info text-dark rounded">
-                    <div class="col-1 text-center">
-                        <p>{{ topic['id'] }}</p>
+                    <div class="col-12 col-lg-1 text-center">
+                        <p style="overflow-x: auto; width:100%; white-space: nowrap;">{{ topic['id'] }}</p>
                     </div>
-                    <div class="col-2 text-center">
-                        <p>{{ topic['title'] }}</p>
+                    <div class="col-12 col-lg-2 text-center">
+                        <p style="overflow-x: auto; width:100%; white-space: nowrap;">{{ topic['title'] }}</p>
                     </div>
-                    <div class="col-3 text-center">
-                        <p style="max-width: 100%; max-height: 100px;" class="overflow-auto">{{ topic['description'] }}</p>
+                    <div class="col-12 col-lg-3 text-center">
+                        <p style="max-height: 100px;" class="overflow-auto">{{ topic['description'] }}</p>
                     </div>
-                    <div class="col-2 text-center">
-                        <p>{{ topic['image_name'] }}</p>
+                    <div class="col-12 col-lg-2 text-center">
+                        <p style="overflow-x: auto; width:100%; white-space: nowrap;">{{ topic['image_name'] }}</p>
                     </div>
-                    <div class="col-2 text-center">
-                        <p>{{ topic['type'] }}</p>
+                    <div class="col-12 col-lg-2 text-center">
+                        <p style="overflow-x: auto; width:100%; white-space: nowrap;">{{ topic['type'] }}</p>
                     </div>
-                    <div class="col-2 text-center">
-                        <p>{{ topic['template_name'] }}</p>
+                    <div class="col-12 col-lg-2 text-center">
+                        <p style="overflow-x: auto; width:100%; white-space: nowrap;">{{ topic['template_name'] }}</p>
                     </div>
                 </div>
                 <div class="row justify-content-center align-items-center mb-5 my-3">

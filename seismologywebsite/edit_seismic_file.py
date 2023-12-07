@@ -84,6 +84,7 @@ def upload():
         error_message = 'The uploaded seismic file is empty. There are no records in the file!'
         return raise_error(error_message)
 
+
     # get the file path to save the uploaded file as miniseed in the server
     seismic_file_save_path = create_path('edit-seismic-file-tool-stream.mseed')  
 

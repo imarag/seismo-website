@@ -8,7 +8,8 @@ body {
 
 
 
-/* ------------------------- BASE PAGE ----------------------------*/
+
+/* ------------------------- BASE PAGE TOP MENU ----------------------------*/
 
 #index-top-menu .nav-item:hover {
     filter: opacity(1);
@@ -30,34 +31,39 @@ body {
 
 .dropdown-menu a:hover {
     background-color: #343a3a;
-    color: rgb(232, 226, 226) !important;
+    color: rgb(232, 226, 226);
    
 }
 
 .dropdown-menu a {
-    color: rgb(153, 148, 148) !important;
+    color: rgb(153, 148, 148);
 }
 
-.user-account-container {
-    height: 100vh;
-    background-color: #f7f7f3;
+#about-me-icons-container .about-me-icon-div {
+    transition: transform 0.8s;
+}
+
+#about-me-icons-container .about-me-icon-div:hover {
+    transform: translateY(150px) translateX(150px);
 }
 
 /* ------------------------- INDEX PAGE ----------------------------*/
 
-#main-index-background-image {
-    background-image: url("/static/img/main-background-image.png");
+#main-index-background-image-div {
+    background-image: url("/static/img/img-carous1.jpg");
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
+    opacity: 0.9;
+    min-height: 500px !important;
 }
 
-.home-badge:hover {
+.index-interactive-tools-badge:hover {
     transform: scale(1.1);
 }
 
-.home-badge {
-    width: 150px;
+.index-interactive-tools-badge {
+    width: 160px;
 }
 
 #interactive-tools-video li:hover {
@@ -65,7 +71,8 @@ body {
     color: #54B4D3 !important;
 }
 
-.index-card:hover {
+
+.index-article-card:hover {
     box-shadow: 0 0 !important;
 }
 
@@ -78,14 +85,13 @@ body {
 
 #all-topics-card:hover {
     transform:  scale(1.1);
-    border: 1px solid black;
 }
 
 
 /* ------------------------- ARRIVALS PICKING PAGE ----------------------------*/
 
 #picking-graph-container {
-    height: 480px;
+    min-height: 480px;
 }
 
 
@@ -381,14 +387,14 @@ body {
 
 .article-main-content h1{
     text-align: left;
-    font-size: 60px;
+    font-size: 45px;
     color: #1a1dbb;
     margin: 80px 0px 50px 0px;
 }
 
 .article-main-content h2{
     text-align: center;
-    font-size: 45px;
+    font-size: 35px;
     color: #242425;
     margin: 35px 0px 25px 0px;
 }
@@ -397,7 +403,7 @@ body {
 
 .article-main-content p{
     font-weight: 100;
-    font-size: 25px;
+    font-size: 20px;
     color: #383839;
 }
 
@@ -580,12 +586,84 @@ body {
     margin: 110px 0px;
 }
 
+
+
+#about-me-container {
+    width: 50%; 
+    height: 2200px; 
+    border-right: 4px dotted rgb(86, 86, 86); 
+    position: relative;
+}
+
+.my-story-circle {
+    width:20px; 
+    height:20px; 
+    transform: translateX(12px);  
+    border-radius: 50%; 
+    background-color: white; 
+    border: black 4px solid;
+    position: absolute; 
+    right: 0%;
+}
+
+.my-story-year {
+   width:80px; 
+   height:50px; 
+   text-align: center; 
+   font-weight: bold; 
+   font-size: 30px; 
+   position: absolute; 
+   right: 0%;
+   transform: translate(40px,-50px);
+   transition: transform 0.8s;
+}
+
+
+
+.my-story-text {
+    width:170%; 
+    text-align: center; 
+    font-size: 17px; 
+    position: absolute; 
+    right: 0%;
+    background-color: #ffffff;
+    transform: translate(50%,30%);
+    transition: transform 0.8s;
+ }
+
+.pos-top-1 {
+    top: 5%;
+} 
+
+.pos-top-2 {
+    top: 25%;
+} 
+
+.pos-top-3 {
+    top: 45%;
+}   
+
+.pos-top-4 {
+    top: 65%;
+} 
+
+.pos-top-5 {
+    top: 85%;
+} 
+
+
+
+
+
 @media (min-width: 768px) {
     .article-main-content {
         padding: 0px 25px;
     }
     .article-main-content img {
         width: 60%;
+    }
+    .my-story-text {
+        width:100%; 
     }
 }
 
@@ -618,6 +696,26 @@ body {
     .article-main-content img {
         width: 50%;
     }
+    .year-pos-right {
+        transform: translate(100px,-50px);
+     }
+    .year-pos-left {
+        transform: translate(-20px,-50px);
+    }
+    .my-story-text {
+        width:80%; 
+    }
+    
+     .text-pos-right {
+        transform: translate(120%,70%);
+     }
+     .text-pos-left {
+        transform: translate(-20%,70%);
+     }
+     .my-story-text {
+        text-align: left;
+     }
+     
    
  
 }

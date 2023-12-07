@@ -43,7 +43,7 @@ def upload():
 
     if stream_validation_message != 'ok':
         return raise_error(stream_validation_message)
-
+    
     # get the file path to save the uploaded file as miniseed in the server
     mseed_file_save_path = create_path('fourier-spectra-tool-stream.mseed')  
 

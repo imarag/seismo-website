@@ -25,6 +25,13 @@
     //     imageTectPlatesAnimation.src = '/static/img/home-images/tectonic-plates-earthquakes-start.gif';
     // });
 
+    const myCarouselElement = document.querySelector('#indexCarouselImages');
+
+    const carousel = new bootstrap.Carousel(myCarouselElement, {
+        interval: 2000,
+        touch: false
+      })
+      
 
 
     let imageHover = document.querySelector('#image-hover');
