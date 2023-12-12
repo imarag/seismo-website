@@ -70,21 +70,11 @@
             It provides a convenient way to create a grid of <code>Axes</code> or subplots in a single call.
         </p>
         <p>
-            Start by importing the <code>matplotlib.pyplot</code> class:
+            Start by importing the function that we will use throughout the tutorial:
         </p>
-        <div class="input-code-block">
-            <pre><code>
-                <p><span class="comment"># initialize the matplotlib.pyplot library</span></p>
-                <p><span class="python-color1">import</span> matplotlib.pyplot <span class="python-color2">as</span> plt</p>
-            </code></pre>
-        </div>
+        <script src="https://gist.github.com/imarag/8268032c009d3f0060a1f7e43cf59299.js"></script>
         <p>Initialize a <code>Figure</code> object with a single <code>Axes</code> object:</p>
-        <div class="input-code-block">
-            <pre><code>
-                <p><span class="comment"># initialize the figure and a single axes object</span></p>
-                <p>fig, ax = plt.<span class="python-color1">subplots</span>()</p>
-            </code></pre>
-        </div>
+        <script src="https://gist.github.com/imarag/e8418a6a0bcb97eb73e01d7b0204fa44.js"></script>
         <p>
             If you don't define any parameters in the <code>subplots</code> function, it is assumed one row and one column in the grid, that means one <code>Axes</code> object (<code>nrows=1</code> and <code>ncols=1</code>):
         </p>
@@ -98,12 +88,7 @@
             In case you need to plot multiple plots in a grid, manipulate the <code>nrows</code> and <code>ncols</code> parameters of the <code>subplots</code> function. Let's build a <code>Figure</code> container with a grid,
             of two rows and 3 columns, that is in total six plots:
         </p>
-        <div class="input-code-block">
-            <pre><code>
-                <p><span class="comment"># create a figure with 2 rows and 3 columns</span></p>
-                <p>fig, ax = plt.<span class="python-color1">subplots</span>(nrows=2, ncols=3)</p>
-            </code></pre>
-        </div>
+        <script src="https://gist.github.com/imarag/d74eda06aca9a3f7ac44401ef1ad3c4f.js"></script>
         <div class="figure-container">
             <figure>
                 <img src="{{ url_for('static', filename='img/matplotlib_figure_grid.png') }}" alt="matplotlib grid 2 rows and 3 columns">
@@ -115,12 +100,7 @@
             automatically adjust subplot parameters. This ensures that the specified subplots fit within the figure area without overlapping. Another way is to just set <code>layout="constrained"</code>
             in the <code>subplots</code> function:
         </p>
-        <div class="input-code-block">
-            <pre><code>
-                <p><span class="comment"># adjust plots to not overlap</span></p>
-                <p>fig, ax = plt.<span class="python-color1">subplots</span>(nrows=2, ncols=3, layout=<span class="python-color3">"constrained"</span>)</p>
-            </code></pre>
-        </div>
+        <script src="https://gist.github.com/imarag/2c1523e27d92b43b981af64c74c145b7.js"></script>
         <div class="figure-container">
             <figure>
                 <img src="{{ url_for('static', filename='img/matplotlib_figure_grid_tight_layout.png') }}" alt="matplotlib grid 2 rows and 3 columns, tight layout">
@@ -154,14 +134,7 @@
         <p>
             Start by reading a file containing the Fourier Spectra of a record using Python Pandas:
         </p>
-        <div class="input-code-block">
-            <pre><code>
-                <p><span class="comment"># read a file that contains the Fourier Spectra of a record using Pandas</span></p>
-                <p><span class="python-color1">import</span> pandas <span class="python-color2">as</span> pd</p>
-                <p>df = pd.<span class="python-color1">read_csv</span>(<span class="python-color3">'1_fourier-spectra_data.txt'</span>, sep=<span class="python-color3">"\s+"</span>)</p>
-                <p>df</p>
-            </code></pre>
-        </div>
+        <script src="https://gist.github.com/imarag/4c32ddd25f8a498c2b906824c4929926.js"></script>
         <div class="figure-container">
             <figure>
                 <img src="{{ url_for('static', filename='img/pandas_fourier_dataframe.png') }}" alt="pandas dataframe">
@@ -169,15 +142,7 @@
             </figure>
         </div>
         <p>Plot the Fourier Spectra of the <i>E</i> component of the record:</p>
-        <div class="input-code-block">
-            <pre><code>
-                <p><span class="comment"># plot the Fourier Spectra of E component</span></p>
-                <p><span class="comment"># initialize a figure and axes objects</span></p>
-                <p>fig, ax = plt.<span class="python-color1">subplots</span>()</p>
-                <p><span class="comment"># plot the data</span></p>
-                <p>ax.<span class="python-color1">plot</span>(df[<span class="python-color3">'freq'</span>], df[<span class="python-color3">'E-signal'</span>])</p>
-            </code></pre>
-        </div>
+        <script src="https://gist.github.com/imarag/3f6d0d9144e5e4083d3aebcb8a28a147.js"></script>
         <div class="figure-container">
             <figure>
                 <img src="{{ url_for('static', filename='img/fourier_data_plot.png') }}" alt="Fourier Spectra graph">
@@ -190,15 +155,7 @@
         <p>
             Start by inserting a title for the graph and labels for the graph axis:
         </p>
-        <div class="input-code-block">
-            <pre><code>
-                <p><span class="comment"># insert a graph title and axis labels</span></p>
-                <p>ax.<span class="python-color1">set_title</span>(<span class="python-color3">"Fourier Spectra values"</span>, size=22, color=<span class="python-color3">"navy"</span>, pad=15)</p>
-                <p>ax.<span class="python-color1">set_xlabel</span>(<span class="python-color3">"Frequency [Hz]"</span>, size=14, style=<span class="python-color3">"italic"</span>)</p>
-                <p>ax.<span class="python-color1">set_ylabel</span>(<span class="python-color3">"Magnitude"</span>, size=14, style=<span class="python-color3">"italic"</span>)</p>
-                <p>fig</p>
-            </code></pre>
-        </div>
+        <script src="https://gist.github.com/imarag/411a0b7439613d96761094d413bc0809.js"></script>
         <div class="figure-container">
             <figure>
                 <img src="{{ url_for('static', filename='img/fourier_data_plot_labels.png') }}" alt="Fourier spectra graph, edit title and axis labels">
@@ -216,18 +173,7 @@
             At this point we are going to configure the x and y axis ticks, which are the numbers and the lines that show the data labels. Matplotlib contains the <code>tick_params</code> function to
             change the appearance of ticks, tick labels and grid. In addition, utilize the Matplotlib <code>grid</code> function to style the grid of the graph:
         </p>
-        <div class="input-code-block">
-            <pre><code>
-                <p><span class="comment"># edit axis ticks and grid</span></p>
-                <p>ax.<span class="python-color1">tick_params</span>(axis=<span class="python-color3">'both'</span>, which=<span class="python-color3">'both'</span>, direction=<span class="python-color3">'in'</span>, length=4, width=1, colors=<span class="python-color3">'black'</span>)</p>
-                <p><span class="comment"># set axis scale to log</span></p>
-                <p>ax.<span class="python-color1">set_xscale</span>(<span class="python-color2">"log"</span>)</p>
-                <p>ax.<span class="python-color1">set_yscale</span>(<span class="python-color2">"log"</span>)</p>
-                <p><span class="comment"># style the grid</span></p>
-                <p>ax.<span class="python-color1">grid</span>(<span class="python-color2">True</span>, linestyle=<span class="python-color3">'-'</span>, alpha=0.1, color=<span class="python-color3">"grey"</span>, which=<span class="python-color1">"both"</span>, lw=2)</p>
-                <p>fig</p>
-            </code></pre>
-        </div>
+        <script src="https://gist.github.com/imarag/8e58f7430b529b9e17e9376db2b2349d.js"></script>
         <div class="figure-container">
             <figure>
                 <img src="{{ url_for('static', filename='img/fourier_data_plot_grid_ticks.png') }}" alt="Fourier spectra graph, edit ticks and grid">
@@ -246,28 +192,7 @@
             The last styling to apply is on the legend of the graph. Legend is one of the most important graph characteristics, since it provides information about the graph content. Assume that the record that generated the 
             Fourier Spectra happened on 14 of July, 2014 at 14:08:05 and was recorded by station CHN1. To add the legend, we need to re-plot the data and add a <code>label</code> parameter at the <code>plot()</code> function.
         </p>
-        <div class="input-code-block">
-            <pre><code>
-                <p><span class="comment"># edit the legend</span></p>
-                <p><span class="comment"># initialize a figure and axes objects</span></p>
-                <p>fig, ax = plt.<span class="python-color1">subplots</span>()</p>
-                <p><span class="comment"># plot the data</span></p>
-                <p>ax.plot(df[<span class="python-color3">'freq'</span>], df[<span class="python-color3">'E-signal'</span>], label=<span class="python-color3">"E-component"</span>)</p>
-                <p><span class="comment"># insert graph title and axis labels</span></p>
-                <p>ax.<span class="python-color1">set_title</span>(<span class="python-color3">"Fourier Spectra values"</span>, size=22, color=<span class="python-color3">"navy"</span>, pad=15)</p>
-                <p>ax.<span class="python-color1">set_xlabel</span>(<span class="python-color3">"Frequency [Hz]"</span>, size=14, style=<span class="python-color3">'italic'</span>)</p>
-                <p>ax.<span class="python-color1">set_ylabel</span>(<span class="python-color3">"Magnitude"</span>, size=14, style=<span class="python-color3">'italic'</span>)</p>
-                <p><span class="comment"># edit axis ticks</span></p>
-                <p>ax.<span class="python-color1">tick_params</span>(axis=<span class="python-color3">'both'</span>, which=<span class="python-color3">'both'</span>, direction=<span class="python-color3">'in'</span>, length=4, width=1, colors=<span class="python-color3">'black'</span>)</p>
-                <p><span class="comment"># edit x and y scale</span></p>
-                <p>ax.<span class="python-color1">set_xscale</span>(<span class="python-color3">"log"</span>)</p>
-                <p>ax.<span class="python-color1">set_yscale</span>(<span class="python-color3">"log"</span>)</p>
-                <p><span class="comment"># style the grid</span></p>
-                <p>ax.<span class="python-color1">grid</span>(<span class="python-color2">True</span>, linestyle=<span class="python-color3">'-'</span>, alpha=0.1, color=<span class="python-color3">"grey"</span>, which=<span class="python-color3">"both"</span>, lw=2)</p>
-                <p><span class="comment"># style the legend</span></p>
-                <p>ax.<span class="python-color1">legend</span>(title=<span class="python-color3">"2014-07-14 14:08:05 CHN1"</span>, loc=<span class="python-color3">"upper right"</span>, framealpha=0.1, shadow=<span class="python-color2">True</span>)</p>
-            </code></pre>
-        </div>
+        <script src="https://gist.github.com/imarag/1a7de9a3db6563b3b0bced18a424f787.js"></script>
         <div class="figure-container">
             <figure>
                 <img src="{{ url_for('static', filename='img/fourier_data_plot_legend.png') }}" alt="matplotlib graph with legend">
@@ -306,60 +231,14 @@
             single continuous time series of seismic data, and a <code>Stream</code> can contain multiple traces that are related, such as different components of the same seismic station or data 
             from different stations. Check the <a class="link-info" href="{{ url_for('show_topic', topic_tmp_name='obspy') }}">Obspy tutorial</a> for more information.
         </p>
-        <p>Start by importing the <code>read</code> function and the Matplotlib library:</p>
-        <div class="input-code-block">
-            <pre><code>
-                <p><span class="python-color1">from</span> <span class="python-color2">obspy.core</span> <span class="python-color1">import</span> read</p>
-                <p><span class="python-color1">import</span> matplotlib.pyplot <span class="python-color2">as</span> plt</p>
-            </code></pre>
-        </div>
         <p>Read a seismic record that took place in 24 of July, 2015 at the <i>KRL1</i> station, into a <code>stream</code> object:</p>
-        <div class="input-code-block">
-            <pre><code>
-                <p><span class="comment"># read the recording</span></p>
-                <p>st = <span class="python-color1">read</span>(<span class="python-color3">"20150724_095834_KRL1.mseed"</span>)</p>
-                <p><span class="python-color1">print</span>(st)</p>
-            </code></pre>
-        </div>
-        <div class="output-code-block">
-            <pre><code>
-                <p>3 Trace(s) in Stream:</p>
-                <p>.KRL1..E | 1970-01-01T00:00:00.000000Z - 1970-01-01T00:08:25.990000Z | 100.0 Hz, 50600 samples</p>
-                <p>.KRL1..N | 1970-01-01T00:00:00.000000Z - 1970-01-01T00:08:25.990000Z | 100.0 Hz, 50600 samples</p>
-                <p>.KRL1..Z | 1970-01-01T00:00:00.000000Z - 1970-01-01T00:08:25.990000Z | 100.0 Hz, 50600 samples</p>
-            </code></pre>
-        </div>
+        <script src="https://gist.github.com/imarag/54e96cdc768acda93f33ff4e14d3cf50.js"></script>
         <p>
             This <code>Stream</code> object contains 3 traces or single time series with different components (E, N, Z). To plot the data, start by looping through the traces contained inside the 
             <code>Stream</code> object. Use the <code>.data</code> attribute of each <code>Trace</code> object to get the data values and the <code>.times()</code> method to get the time from 
             zero till the total record duration length:
         </p>
-        <div class="input-code-block">
-            <pre><code>
-                <p><span class="comment"># create a matplotlib Figure and three Axes vertically since we have three components</span></p>
-                <p>fig, ax = plt.<span class="python-color1">subplots</span>(nrows=3, ncols=1)</p>
-                <p><span class="comment"># loop through each trace inside the stream object (use the Python "len" function to get the total traces)</span></p>
-                <p><span class="python-color2">for</span> i <span class="python-color2">in</span> <span class="python-color1">range</span>(<span class="python-color1">len</span>(st)):</p>
-                <p class="pad"><span class="comment"># get the current trace using a simple Python indexing operation</span></p>
-                <p class="pad">curr_tr = st[i]</p>
-                <p class="pad"><span class="comment"># get the current Axes again using a simple Python indexing operation</span></p>
-                <p class="pad">curr_ax = ax[i]</p>
-                <p class="pad"><span class="comment"># get the component of the current trace using the .stats["channel"] method</span></p>
-                <p class="pad">curr_compo = curr_tr.stats[<span class="python-color3">"channel"</span>]</p>
-                <p class="pad"><span class="comment"># get the time series data values</span></p>
-                <p class="pad">ydata = curr_tr.<span class="python-color2">data</span></p>
-                <p class="pad"><span class="comment"># get the time values</span></p>
-                <p class="pad">xdata = curr_tr.<span class="python-color1">times()</span></p>
-                <p class="pad"><span class="comment"># plot the current trace at the respective Axes with some styling</span></p>
-                <p class="pad">curr_ax.<span class="python-color1">plot</span>(xdata, ydata, color=<span class="python-color3">"navy"</span>, lw=1, label=curr_compo)</p>
-                <p class="pad"><span class="comment"># add the legend at the top right corner of the graph</span></p>
-                <p class="pad">curr_ax.legend(loc=<span class="python-color3">"upper right"</span>)</p>
-                <p><span class="comment"># fix the overlapping graphs</span></p>
-                <p>plt.<span class="python-color1">tight_layout</span>()</p>
-                <p><span class="comment"># set the title of the figure by setting the title of the first Axes</span></p>
-                <p>ax[0].<span class="python-color1">set_title</span>(<span class="python-color3">"20150724_095834_KRL1"</span>, size=12, pad=15)</p>
-            </code></pre>
-        </div>
+        <script src="https://gist.github.com/imarag/d0726d5e4cb334ef51ed7ce7167c5bbe.js"></script>
         <div class="figure-container">
             <figure>
                 <img src="{{ url_for('static', filename='img/matplotlib_mseed_plot.png') }}" alt="matplotlib mseed plot">

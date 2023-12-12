@@ -65,91 +65,29 @@
             efficient format that includes information about the station, location, timing, and the actual waveform data. MiniSEED files are widely
             used in seismology and are the standard format for sharing and archiving seismic data.
         </p>
+        <p>
+            Before we continue, start by initializing the functions that we will use throughout the rest of the tutorial:
+        </p>
+        <script src="https://gist.github.com/imarag/71ebe8e74a737bdaec527ed955bdf4b7.js"></script>
     </div>
     <div id="item-2">
         <h1>Obspy Date and Time Manipulation</h1>
         <p>
             Obspy offers extensive support for date and time manipulation. It includes the <code>UTCDateTime</code> object to represent date and time. 
             For instance the start date and the end date of a recording, which are saved as <code>starttime</code> and <code>endtime</code> in the metadata information
-            of a <code>Trace</code> object (the <code>.stats</code> attribute), are both a <code>UTCDateTime</code> data type. Start by initializing the function:
+            of a <code>Trace</code> object (the <code>.stats</code> attribute), are both a <code>UTCDateTime</code> data type.
         </p>
-        <div class="input-code-block">
-            <pre><code>
-                <p><span class="python-color1">from</span> <span class="python-color2">obspy.core</span> <span class="python-color1">import</span> UTCDateTime</p>
-            </code></pre>
-        </div>
         <p>
-            Create a <code>UTCDateTime</code> object from a Pyton string:
+            One way to create a <code>UTCDateTime</code> object is by using a Pyton string:
         </p>
-        <div class="input-code-block">
-            <pre><code>
-                <p><span class="comment"># create a UTCDateTime object from a Python string</span></p>
-                <p>dt <span class="python-color2">=</span> <span class="python-color1">UTCDateTime</span>(<span class="python-color3">"2012-09-07T12:15:00"</span>)</p>
-                <p><span class="python-color1">print</span>(dt, <span class="python-color1">type</span>(dt))</p>
-            </code></pre>
-        </div>
-        <div class="output-code-block">
-            <pre><code>
-                <p>2012-09-07T12:15:00.000000Z &lt;class 'obspy.core.utcdatetime.UTCDateTime'&gt;</p>
-            </code></pre>
-        </div>
+        <script src="https://gist.github.com/imarag/c44b83682d43a63c8a3fdef9acd59301.js"></script>
         <p>
             You can perform addition, subtraction and extract multiple attributes from this object using the dot notation:
         </p>
-        <div class="input-code-block">
-            <pre><code>
-                <p><span class="comment"># add 20 seconds</span></p>
-                <p>dt += 20</p>
-                <p><span class="python-color1">print</span>(dt)</p>
-                <p><span class="python-color1">print</span>()</p>
-                <p><span class="comment"># get some datetime attributes</span></p>
-                <p><span class="python-color1">print</span>(<span class="python-color3">"dt.date      -> "</span>, dt.<span class="python-color2">date</span>)</p>
-                <p><span class="python-color1">print</span>(<span class="python-color3">"dt.time      -> "</span>, dt.<span class="python-color2">time</span>)</p>
-                <p><span class="python-color1">print</span>(<span class="python-color3">"dt.year      -> "</span>, dt.<span class="python-color2">year</span>)</p>
-                <p><span class="python-color1">print</span>(<span class="python-color3">"dt.month     -> "</span>, dt.<span class="python-color2">month</span>)</p>
-                <p><span class="python-color1">print</span>(<span class="python-color3">"dt.day       -> "</span>, dt.<span class="python-color2">day</span>)</p>
-                <p><span class="python-color1">print</span>(<span class="python-color3">"dt.hour      -> "</span>, dt.<span class="python-color2">hour</span>)</p>
-                <p><span class="python-color1">print</span>(<span class="python-color3">"dt.minute    -> "</span>, dt.<span class="python-color2">minute</span>)</p>
-                <p><span class="python-color1">print</span>(<span class="python-color3">"dt.second    -> "</span>, dt.<span class="python-color2">second</span>)</p>
-                <p><span class="python-color1">print</span>(<span class="python-color3">"dt.timestamp -> "</span>, dt.<span class="python-color2">timestamp</span>)</p>
-                <p><span class="python-color1">print</span>(<span class="python-color3">"dt.weekday   -> "</span>, dt.<span class="python-color2">weekday</span>)</p>
-            </code></pre>
-        </div>
-        <div class="output-code-block">
-            <pre><code>
-                <p>2012-09-07T12:15:20.000000Z</p>
-                <p></p>
-                <p>dt.date      ->  2012-09-07</p>
-                <p>dt.time      ->  12:15:20</p>
-                <p>dt.year      ->  2012</p>
-                <p>dt.month     ->  9</p>
-                <p>dt.day       ->  7</p>
-                <p>dt.hour      ->  12</p>
-                <p>dt.minute    ->  15</p>
-                <p>dt.second    ->  20</p>
-                <p>dt.timestamp ->  1347020120.0</p>
-                <p>dt.weekday   ->  4</p>
-            </code></pre>
-        </div>
+        <script src="https://gist.github.com/imarag/1c7cc6560801d1997a3778d43a6afe3b.js"></script>
+        
         <p>Last but not least, one can subtract <code>UTCDateTime</code> objects and get the difference of them in seconds:</p>
-        <div class="input-code-block">
-            <pre><code>
-                <p><span class="comment"># create another UTCDateTime object</span></p>
-                <p>dt2 = <span class="python-color1">UTCDateTime</span>(<span class="python-color3">"2012-09-07T12:20:00"</span>)</p>
-                <p><span class="python-color1">print</span>(dt2)</p>
-                <p><span class="python-color1">print</span>()</p>
-                <p><span class="comment"># calculate the difference of the two UTCDateTime objects</span></p>
-                <p>diff = dt2 - dt</p>
-                <p><span class="python-color1">print</span>(diff)</p>
-            </code></pre>
-        </div>
-        <div class="output-code-block">
-            <pre><code>
-                <p>2012-09-07T12:20:00.000000Z</p>
-                <p></p>
-                <p>280.0</p>
-                </code></pre>
-        </div>
+        <script src="https://gist.github.com/imarag/d02d9c3c8c936bea6292c4112873311b.js"></script>
         <p>
             The <code>starttime</code> and <code>endtime</code> keys in the header information of the recordings need to be in a <code>UTCDateTime</code> data type.  
             Therefore, if you intend to modify these keys within 
@@ -163,35 +101,13 @@
             Within ObsPy, you'll find an array of attributes and methods 
             associated with the <code>Trace</code> class for accessing 
             recording information, seismic file handling, and applying 
-            waveform processing techniques. To begin with, let's use the Obspy
-            <code>read()</code> function for reading seismic 
-            files. We'll initiate by importing this function:
-        </p>
-        <div class="input-code-block">
-            <pre><code>
-                <p><span class="python-color1">from</span> <span class="python-color2">obspy.core</span> <span class="python-color1">import</span> read</p>
-            </code></pre>
-        </div>
-        <p>
-            To continue, let's read a file of a recording took place on <code>04 April, 2014</code> 
+            waveform processing techniques. To begin with, utilize the Obspy
+            <code>read()</code> function to read a file of a recording took 
+            place on <code>04 April, 2014</code> 
             at <code>20:08:20</code> and recorded by <i>CH03</i> station:
         </p>
-        <div class="input-code-block">
-            <pre><code>
-                <p><span class="comment"># read the recording</span></p>
-                <p>st = <span class="python-color1">read</span>(<span class="python-color3">"20140404_200820_CH03.mseed"</span>)</p>
-                <p><span class="python-color1">print</span>(st)</p>
-            </code></pre>
-        </div>
+        <script src="https://gist.github.com/imarag/cef71d4af3fa102e54e6fe888ff774a6.js"></script>
 
-        <div class="output-code-block">
-            <pre><code>
-                <p>3 Trace(s) in Stream:</p>
-                <p>.CH03..E | 2014-04-04T20:08:20.000000Z - 2014-04-04T20:11:10.000000Z | 100.0 Hz, 17001 samples</p>
-                <p>.CH03..N | 2014-04-04T20:08:20.000000Z - 2014-04-04T20:11:10.000000Z | 100.0 Hz, 17001 samples</p>
-                <p>.CH03..Z | 2014-04-04T20:08:20.000000Z - 2014-04-04T20:11:10.000000Z | 100.0 Hz, 17001 samples</p>
-            </code></pre>
-        </div>
         <p>
             The file is a MiniSEED file that contains 3 traces or records 
             each with a different component (E, N, Z). We can see the start 
@@ -199,31 +115,7 @@
             and the total samples. Let's get this information for the first 
             trace of the <code>Stream</code> object:
         </p>
-        <div class="input-code-block">
-            <pre><code>
-                <p><span class="comment"># get the first trace</span></p>
-                <p>first_trace = st[0]</p>
-                <p><span class="comment"># output the header information of that trace object</span></p>
-                <p><span class="python-color1">print</span>(first_trace<span class="python-color2">.stats</span>)</p>
-            </code></pre>
-        </div>
-
-        <div class="output-code-block">
-            <pre><code>
-                <p>network:</p> 
-                <p>station: CH03</p>
-                <p>location:</p> 
-                <p>channel: E</p>
-                <p>starttime: 2014-04-04T20:08:20.000000Z</p>
-                <p>endtime: 2014-04-04T20:11:10.000000Z</p>
-                <p>sampling_rate: 100.0</p>
-                <p>delta: 0.01</p>
-                <p>npts: 17001</p>
-                <p>calib: 1.0</p>
-                <p>_format: MSEED</p>
-                <p>mseed: AttribDict({'dataquality': 'D', 'number_of_records': 34, 'encoding': 'FLOAT64', 'byteorder': '>', 'record_length': 4096, 'filesize': 417792})</p>
-            </code></pre>
-        </div>
+        <script src="https://gist.github.com/imarag/13ce0156258101d85cfacc4930d42e04.js"></script>
         <p>
             We can observe multiple key-value pairs that contain the seismic parameters, such as the station code or name which is <i>CH03</i>, the component of the record which is East-West (E) and the the sampling frequency or sampling rate 
             of 100 Hz. Several other parameters are also apparent like the starting and the ending date of the record (starttime, endtime), the sample distance in seconds (dt), the total number of sample
@@ -232,29 +124,7 @@
         <p>
             In order to check the recordings visually, get the sample data and the time information using the <code>.data</code> and the <code>.times()</code> methods respectively.
         </p>
-        <div class="input-code-block">
-            <pre><code>
-                <p><span class="comment"># import the matplotlib library </span></p>
-                <p><span class="python-color1">import</span> matplotlib.pyplot <span class="python-color2">as</span> plt</p>
-                <p></p>
-                <p><span class="comment"># Initialize a matplotlib figure and axes with the total</span></p>
-                <p><span class="comment"># number of plots equal to the number of traces len(st)</span></p>
-                <p>fig, ax = plt.<span class="python-color1">subplots</span>(<span class="python-color1">len</span>(st), 1)</p>
-                <p></p>
-                <p><span class="comment"># Loop through all the traces in the stream object (st)</span></p>
-                <p><span class="python-color2">for</span> n, tr <span class="python-color2">in</span> <span class="python-color1">enumerate</span>(st):</p>
-                <p class="pad"><span class="comment"># get the time information of the current trace</span></p>
-                <p class="pad">xdata = tr.<span class="python-color1">times</span>()</p>
-                <p class="pad"><span class="comment"># get the data of the current trace</span></p>
-                <p class="pad">ydata = tr.<span class="python-color2">data</span></p>
-                <p class="pad"><span class="comment"># plot the graph with legend, the trace channel</span></p>
-                <p class="pad">ax[n].<span class="python-color1">plot</span>(xdata, ydata, label=tr<span class="python-color2">.stats.channel</span>)</p>
-                <p class="pad"><span class="comment"># add the legend on the plot</span></p>
-                <p class="pad">ax[n].<span class="python-color1">legend</span>()</p>
-                <p><span class="comment"># adjust the subplots so they do not overlap</span></p>
-                <p>plt.<span class="python-color1">tight_layout</span>()</p>
-            </code></pre>
-        </div>
+        <script src="https://gist.github.com/imarag/cfb72283ff0b9cc284c56f141a55a850.js"></script>
         <div class="figure-container">
             <figure>
                 <img src="/static/img/ch03_mseed_plot.png" alt="mseed plot">
@@ -262,13 +132,8 @@
             </figure>
         </div>
         <p>
-            We could achieve a similar result by just using the <code>.plot()</code> method of the <code>Stream</code> object (st):
+            We could achieve a similar result by just using the <code>st.plot()</code> method of the <code>Stream</code> object (st):
         </p>
-        <div class="input-code-block">
-            <pre><code>
-                <p>st.<span class="python-color1">plot</span>()</p>
-            </code></pre>
-        </div>
         <div class="figure-container">
             <figure>
                 <img src="/static/img/ch03_mseed_plot_method.png" alt="mseed plot">
@@ -294,14 +159,7 @@
             Start by applying a bandpass filter to the records from 1 to 5 Hz to remove the surrounding noise and facilitate the arrival selection. 
             Utilize the Obspy <code>filter()</code> function:
         </p>
-        <div class="input-code-block">
-            <pre><code>
-                <p><span class="comment"># apply an inplace bandpass filter of 1-5 Hz</span></p>
-                <p>st.<span class="python-color1">filter</span>(<span class="python-color3">'bandpass'</span>, freqmin=1, freqmax=5)</p>
-                <p><span class="comment"># plot the recordings</span></p>
-                <p>st.<span class="python-color1">plot</span>()</p>
-            </code></pre>
-        </div>
+        <script src="https://gist.github.com/imarag/d54cb68d57ebf3759dbc963474a48a6c.js"></script>
         <div class="figure-container">
             <figure>
                 <img src="/static/img/obspy-stream-filtered.png" alt="mseed plot">
@@ -314,42 +172,7 @@
             can use Matplotlib to mark these time points with vertical 
             lines. Here's an example of how you can do it in Python:
         </p>
-        <div class="input-code-block">
-            <pre><code>
-                <p><span class="comment"># Initialize a matplotlib figure and axes with the total</span></p>
-                <p><span class="comment"># number of plots equal to the number of traces len(st)</span></p>
-                <p>fig, ax = plt.<span class="python-color1">subplots</span>(<span class="python-color1">len</span>(st), 1)</p>
-                <p></p>
-                <p><span class="comment"># Define the P and S wave arrivals as UTCDateTime objects</span></p>
-                <p>Parr = <span class="python-color1">UTCDateTime(</span><span class="python-color3">'2014-04-04 20:08:33'</span>)</p>
-                <p>Sarr = <span class="python-color1">UTCDateTime(</span><span class="python-color3">'2014-04-04 20:08:58'</span>)</p>
-                <p></p>
-                <p><span class="comment"># Get the start date of the records from the first trace of the stream object</span></p>
-                <p>start_date = st[0]<span class="python-color2">.stats.starttime</span></p>
-                <p></p>
-                <p><span class="comment"># Calculate the P and S arrivals in seconds from the start date</span></p>
-                <p>Parr_sec = Parr - start_date</p>
-                <p>Sarr_sec = Sarr - start_date</p>
-                <p></p>
-                <p><span class="comment"># Loop through all the traces in the stream object (st)</span></p>
-                <p><span class="python-color2">for</span> n, tr <span class="python-color2">in</span> <span class="python-color1">enumerate</span>(st):</p>
-                <p class="pad"><span class="comment"># get the time series time information of the current trace</span></p>
-                <p class="pad">xdata = tr<span class="python-color1">.times</span>()</p>
-                <p class="pad"><span class="comment"># get the data of the current trace</span></p>
-                <p class="pad">ydata = tr<span class="python-color2">.data</span></p>
-                <p class="pad"><span class="comment"># plot the graph with legend, the trace channel</span></p>
-                <p class="pad">ax[n].<span class="python-color1">plot</span>(xdata, ydata, label=tr<span class="python-color2">.stats.channel</span>)</p>
-                <p class="pad">    </p>
-                <p class="pad"><span class="comment"># add two vertical lines that represent the arrivals</span></p>
-                <p class="pad">ax[n].<span class="python-color1">axvline</span>(x=Parr_sec, ymin=0, ymax=1, lw=2, ls=<span class="python-color3">'--'</span>, color=<span class="python-color3">'red'</span>, label=<span class="python-color3">'P arrival'</span>)</p>
-                <p class="pad">ax[n].<span class="python-color1">axvline</span>(x=Sarr_sec, ymin=0, ymax=1, lw=2, ls=<span class="python-color3">'--'</span>, color=<span class="python-color3">'black'</span>, label=<span class="python-color3">'S arrival'</span>)</p>
-                <p class="pad">    </p>
-                <p class="pad"><span class="comment"># add the legend on the plot</span></p>
-                <p class="pad">ax[n].<span class="python-color1">legend</span>(loc=<span class="python-color3">'upper right'</span>)</p>
-                <p>    <span class="comment"># adjust the subplots so they do not overlap</span></p>
-                <p>    plt.<span class="python-color1">tight_layout</span>()</p>
-            </code></pre>
-        </div>
+        <script src="https://gist.github.com/imarag/20e1b4548a1b69fe4e5f11c295361c45.js"></script>
         <div class="figure-container">
             <figure>
                 <img src="/static/img/arrivals.png" alt="mseed plot">
@@ -361,49 +184,7 @@
             Both windows will share the same duration or length of 10 seconds. The first window 
             will start from the S wave arrival and the second one will begin 10 seconds before the P wave arrival. Let's visualize these windows: 
         </p>
-        <div class="input-code-block">
-            <pre><code>
-                <p><span class="comment"># Initialize a matplotlib figure and axes with the total</span></p>
-                <p><span class="comment"># number of plots equal to the number of traces len(st)</span></p>
-                <p>fig, ax = plt.<span class="python-color1">subplots</span>(<span class="python-color1">len</span>(st), 1)</p>
-                <p></p>
-                <p><span class="comment"># Define the P and S wave arrivals as UTCDateTime objects</span></p>
-                <p>Parr = <span class="python-color1">UTCDateTime(</span><span class="python-color3">'2014-04-04 20:08:33'</span>)</p>
-                <p>Sarr = <span class="python-color1">UTCDateTime(</span><span class="python-color3">'2014-04-04 20:08:58'</span>)</p>
-                <p></p>
-                <p><span class="comment"># Get the start date of the records from the first trace of the stream object</span></p>
-                <p>start_date = st[0]<span class="python-color2">.stats.starttime</span></p>
-                <p></p>
-                <p><span class="comment"># Calculate the P and S arrivals in seconds from the start date</span></p>
-                <p>Parr_sec = Parr - start_date</p>
-                <p>Sarr_sec = Sarr - start_date</p>
-                <p></p>
-                <p><span class="comment"># initialize the window length</span></p>
-                <p>window_length = 10</p>
-                <p></p>
-                <p><span class="comment"># Loop through all the traces in the stream object (st)</span></p>
-                <p><span class="python-color2">for</span> n, tr <span class="python-color2">in</span> <span class="python-color1">enumerate</span>(st):</p>
-                <p class="pad"><span class="comment"># get the time series time information of the current trace</span></p>
-                <p class="pad">xdata = tr<span class="python-color1">.times</span>()</p>
-                <p class="pad"><span class="comment"># get the data of the current trace</span></p>
-                <p class="pad">ydata = tr<span class="python-color2">.data</span></p>
-                <p class="pad"><span class="comment"># plot the graph with legend, the trace channel</span></p>
-                <p class="pad">ax[n].<span class="python-color1">plot</span>(xdata, ydata, label=tr<span class="python-color2">.stats.channel</span>)</p>
-                <p class="pad"></p>
-                <p class="pad"><span class="comment"># add two vertical lines that represent the arrivals</span></p>
-                <p class="pad">ax[n].<span class="python-color1">axvline</span>(x=Parr_sec, ymin=0, ymax=1, lw=2, ls=<span class="python-color3">'--'</span>, color=<span class="python-color3">'red'</span>, label=<span class="python-color3">'P arrival'</span>)</p>
-                <p class="pad">ax[n].<span class="python-color1">axvline</span>(x=Sarr_sec, ymin=0, ymax=1, lw=2, ls=<span class="python-color3">'--'</span>, color=<span class="python-color3">'black'</span>, label=<span class="python-color3">'S arrival'</span>)</p>
-                <p class="pad"></p>
-                <p class="pad"><span class="comment"># create the signal and the noise window on the waveforms</span></p>
-                <p class="pad">ax[n].<span class="python-color1">fill_betweenx</span>([-1.8,1.8], x1=Sarr_sec, x2=Sarr_sec+window_length, alpha=0.5, facecolor=<span class="python-color3">'orange'</span>, zorder=2, label=<span class="python-color3">'signal window'</span>)</p>
-                <p class="pad">ax[n].<span class="python-color1">fill_betweenx</span>([-1.8,1.8], x1=Parr_sec-window_length, x2=Parr_sec, alpha=0.5, facecolor=<span class="python-color3">'red'</span>, zorder=2, label=<span class="python-color3">'noise window'</span>)</p>
-                <p class="pad"></p>
-                <p class="pad"><span class="comment"># add the legend on the plot</span></p>
-                <p class="pad">ax[n].<span class="python-color1">legend</span>(loc=<span class="python-color3">'upper right'</span>)</p>
-                <p><span class="comment"># adjust the subplots so they do not overlap</span></p>
-                <p>plt.<span class="python-color1">tight_layout</span>()</p>
-            </code></pre>
-        </div>
+        <script src="https://gist.github.com/imarag/fb383cf8879d821871f1438d920a0650.js"></script>
         <div class="figure-container">
             <figure>
                 <img src="/static/img/windows.png" alt="mseed plot">
@@ -413,61 +194,7 @@
         <p>
             To continue, trim the waveforms at the two windows using the Obspy <code>trim()</code> function. Here's how you can do it in Python:
         </p>
-        <div class="input-code-block">
-            <pre><code>
-                <p><span class="comment"># Initialize a matplotlib figure and axes with the total</span></p>
-                <p><span class="comment"># number of plots equal to the number of traces plus 3</span></p>
-                <p><span class="comment"># a signal and a noise part for each trace (3) </span></p>
-                <p>fig, ax = plt.<span class="python-color1">subplots</span>(<span class="python-color1">len</span>(st)+3, 1, figsize=(8,10))</p>
-                <p></p>
-                <p><span class="comment"># Define the P and S wave arrivals as UTCDateTime objects</span></p>
-                <p>Parr = <span class="python-color1">UTCDateTime(</span><span class="python-color3">'2014-04-04 20:08:33'</span>)</p>
-                <p>Sarr = <span class="python-color1">UTCDateTime(</span><span class="python-color3">'2014-04-04 20:08:58'</span>)</p>
-                <p></p>
-                <p><span class="comment"># Get the start date of the records from the first trace of the stream object</span></p>
-                <p>start_date = st[0]<span class="python-color2">.stats.starttime</span></p>
-                <p></p>
-                <p><span class="comment"># Calculate the P and S arrivals in seconds from the start date</span></p>
-                <p>Parr_sec = Parr - start_date</p>
-                <p>Sarr_sec = Sarr - start_date</p>
-                <p></p>
-                <p><span class="comment"># initialize the window length</span></p>
-                <p>window_length = 10</p>
-                <p></p>
-                <p><span class="comment"># trim the waveforms at the respective windows</span></p>
-                <p><span class="comment"># noise window: from Parr - window_length to Parr</span></p>
-                <p><span class="comment"># signal window: from Sarr to Sarr + window_length</span></p>
-                <p><span class="comment"># Since the trim() function happens inplace, create new streams</span></p>
-                <p><span class="comment"># using the copy() function to trim the traces separately</span></p>
-                <p>st_signal = st.<span class="python-color2">copy</span>().<span class="python-color1">trim</span>(starttime=start_date+Sarr_sec, endtime=start_date+Sarr_sec+window_length)</p>
-                <p>st_noise = st.<span class="python-color2">copy</span>().<span class="python-color1">trim</span>(starttime=start_date+Parr_sec-window_length, endtime=start_date+Parr_sec)</p>
-                <p></p>
-                <p><span class="comment"># Loop through all the traces in the noise Stream</span></p>
-                <p><span class="comment"># and plot them in the first 3 plots for each trace</span></p>
-                <p><span class="python-color2">for</span> n, tr_noise <span class="python-color2">in</span> <span class="python-color1">enumerate</span>(st_noise):</p>
-                <p class="pad"><span class="comment"># get the time series time information of the current trace</span></p>
-                <p class="pad">xdata = tr_noise<span class="python-color1">.times</span>()</p>
-                <p class="pad"><span class="comment"># get the data of the current trace</span></p>
-                <p class="pad">ydata = tr_noise<span class="python-color2">.data</span></p>
-                <p class="pad"><span class="comment"># plot the graph</span></p>
-                <p class="pad">ax[n].<span class="python-color1">plot</span>(xdata, ydata, label=f<span class="python-color3">'noise window, channel: {tr_noise.stats.channel}'</span>)</p>
-                <p class="pad">ax[n].<span class="python-color1">legend</span>(loc=<span class="python-color3">'upper left'</span>)</p>
-                <p></p>
-                <p><span class="comment"># Loop through all the traces in the signal Stream</span></p>
-                <p><span class="comment"># and plot them in the next 3 plots for each trace</span></p>
-                <p><span class="python-color2">for</span> n, tr_signal <span class="python-color2">in</span> <span class="python-color1">enumerate</span>(st_signal, start=3):</p>
-                <p class="pad"><span class="comment"># get the time series time information of the current trace</span></p>
-                <p class="pad">xdata = tr_signal<span class="python-color1">.times</span>()</p>
-                <p class="pad"><span class="comment"># get the data of the current trace</span></p>
-                <p class="pad">ydata = tr_signal<span class="python-color2">.data</span></p>
-                <p class="pad"><span class="comment"># plot the graph</span></p>
-                <p class="pad">ax[n].<span class="python-color1">plot</span>(xdata, ydata, label=f<span class="python-color3">'signal window, channel: {tr_signal.stats.channel}'</span>)</p>
-                <p class="pad">ax[n].<span class="python-color1">legend</span>(loc=<span class="python-color3">'upper left'</span>)</p>
-                <p></p>
-                <p><span class="comment"># adjust the subplots so they do not overlap</span></p>
-                <p>plt.<span class="python-color1">tight_layout</span>()</p>
-            </code></pre>
-        </div>
+        <script src="https://gist.github.com/imarag/e250f716129c581c748d408a686d55fc.js"></script>
         <div class="figure-container">
             <figure>
                 <img src="/static/img/trimmed.png" alt="mseed plot">
@@ -477,61 +204,7 @@
         <p>
             Lastly, taper the waveforms, in order to smooth the left and the right side of the waveforms, using the obspy <code>taper()</code> function:
         </p>
-        <div class="input-code-block">
-            <pre><code>
-                <p><span class="comment"># Initialize a matplotlib figure and axes with the total</span></p>
-                <p><span class="comment"># number of plots equal to the number of traces plus 3</span></p>
-                <p><span class="comment"># a signal and a noise part for each trace (3) </span></p>
-                <p>fig, ax = plt.<span class="python-color1">subplots</span>(<span class="python-color1">len</span>(st)+3, 1, figsize=(8,10))</p>
-                <p></p>
-                <p><span class="comment"># Define the P and S wave arrivals as UTCDateTime objects</span></p>
-                <p>Parr = <span class="python-color1">UTCDateTime(</span><span class="python-color3">'2014-04-04 20:08:33'</span>)</p>
-                <p>Sarr = <span class="python-color1">UTCDateTime(</span><span class="python-color3">'2014-04-04 20:08:58'</span>)</p>
-                <p></p>
-                <p><span class="comment"># Get the start date of the records from the first trace of the stream object</span></p>
-                <p>start_date = st[0]<span class="python-color2">.stats.starttime</span></p>
-                <p></p>
-                <p><span class="comment"># Calculate the P and S arrivals in seconds from the start date</span></p>
-                <p>Parr_sec = Parr - start_date</p>
-                <p>Sarr_sec = Sarr - start_date</p>
-                <p></p>
-                <p><span class="comment"># initialize the window length</span></p>
-                <p>window_length = 10</p>
-                <p></p>
-                <p><span class="comment"># trim the waveforms at the respective windows</span></p>
-                <p><span class="comment"># noise window: from Parr - window_length to Parr</span></p>
-                <p><span class="comment"># signal window: from Sarr to Sarr + window_length</span></p>
-                <p><span class="comment"># Since the trim() function happens inplace, create new streams</span></p>
-                <p><span class="comment"># using the copy() function to trim the traces separately</span></p>
-                <p>st_signal = st.<span class="python-color2">copy</span>().<span class="python-color1">trim</span>(starttime=start_date+Sarr_sec, endtime=start_date+Sarr_sec+window_length)</p>
-                <p>st_noise = st.<span class="python-color2">copy</span>().<span class="python-color1">trim</span>(starttime=start_date+Parr_sec-window_length, endtime=start_date+Parr_sec)</p>
-                <p></p>
-                <p><span class="comment"># taper the waveforms at the respective windows 30% on the left and 30% on the right side</span></p>
-                <p><span class="comment"># again use the copy() function to apply the taper on new stream object</span></p>
-                <p>st_signal_taper = st_signal<span class="python-color2">.copy</span>()<span class="python-color1">.taper</span>(side=<span class="python-color3">'both'</span>, max_percentage=0.3)</p>
-                <p>st_noise_taper = st_noise<span class="python-color2">.copy</span>()<span class="python-color1">.taper</span>(side=<span class="python-color3">'both'</span>, max_percentage=0.3)</p>
-                <p></p>
-                <p><span class="comment"># Loop through the number of traces in the noise Stream</span></p>
-                <p><span class="python-color2">for</span> i <span class="python-color2">in</span> <span class="python-color1">range</span>(<span class="python-color1">len</span></span>(st_noise)):</p>
-                <p class="pad"><span class="comment"># plot the trimmed waveforms with blue color</span></p>                
-                <p class="pad">ax[i].<span class="python-color1">plot</span>(st_noise[i]<span class="python-color1">.times</span>(), st_noise[i]<span class="python-color2">.data</span>, label=f'trimmed noise window, channel: {st_noise[i]<span class="python-color2">.stats.channel</span>}', color=<span class="python-color3">"blue"</span>)</p>
-                <p class="pad"><span class="comment"># plot the tappered waveforms with orange color</span></p>
-                <p class="pad">ax[i].<span class="python-color1">plot</span>(st_noise_taper[i]<span class="python-color1">.times</span>(), st_noise_taper[i]<span class="python-color2">.data</span>, label=f<span class="python-color3">'tapered'</span>, lw=3, color=<span class="python-color3">"orange"</span>)</p>
-                <p class="pad">ax[i].<span class="python-color1">legend</span>(loc=<span class="python-color3">'upper center'</span>)</p>
-                <p></p>
-                <p><span class="comment"># Loop through the number of traces in the signal Stream</span></p>
-                <p><span class="python-color2">for</span> i <span class="python-color2">in</span> <span class="python-color1">range</span>(<span class="python-color1">len</span></span>(st_signal)):</p>
-                <p class="pad"><span class="comment"># plot the trimmed waveforms with blue color</span></p>
-                <p class="pad">ax[i+3].<span class="python-color1">plot</span>(st_signal[i]<span class="python-color1">.times</span>(), st_signal[i]<span class="python-color2">.data</span>, label=f'trimmed signal window, channel: {st_signal[i]<span class="python-color2">.stats.channel</span>}', color=<span class="python-color3">"blue"</span>)</p>
-                <p class="pad"><span class="comment"># plot the tappered waveforms with orange color</span></p>
-                <p class="pad">ax[i+3].<span class="python-color1">plot</span>(st_signal_taper[i]<span class="python-color1">.times</span>(), st_signal_taper[i]<span class="python-color2">.data</span>, label=f<span class="python-color3">'tapered'</span>, lw=3, color=<span class="python-color3">"orange"</span>)</p>
-                <p class="pad">ax[i+3].<span class="python-color1">legend</span>(loc=<span class="python-color3">'upper center'</span>)</p>
-                <p></p>
-                <p><span class="comment"># adjust the subplots so they do not overlap</span></p>
-                <p>plt.<span class="python-color1">tight_layout</span>()</p>
-            </code></pre>
-        </div>
-     
+        <script src="https://gist.github.com/imarag/dd697ea2048b6f6b930b1f3f2aa5aa4b.js"></script>
         <div class="figure-container">
             <figure>
                 <img src="/static/img/taper.png" alt="mseed plot">
@@ -543,13 +216,7 @@
             To save the final tappered and/or trimmed <code>Stream</code> objects, utilize the Obspy <code>write()</code> function to write the seismic data from a <code>Stream</code> object to a file in 
             various supported formats. It allows you to save the seismic data, including metadata, to a file for further analysis or sharing with others.
         </p>
-        <div class="input-code-block">
-            <pre><code>
-                <p><span class="comment"># write the tappered noise and signal stream object into a MiniSEED file</span></p>
-                <p>st_signal_taper<span class="python-color1">.write</span>(<span class="python-color3">"tappered_signal_waveform.mseed"</span>)</p>
-                <p>st_noise_taper<span class="python-color1">.write</span>(<span class="python-color3">"tappered_noise_waveform.mseed"</span>)</p>
-                </code></pre>
-        </div>
+        <script src="https://gist.github.com/imarag/3ff579872ada6cee57f0bb47936ac965.js"></script>
         <p>
             In this section we have explored several attributes and methods of the Obspy <code>Trace</code> object,
             including the <code>read</code> and <code>write</code> methods to upload and save seismic files, the <code>.data</code> 
@@ -587,98 +254,17 @@
             of the recording and transform them into a numpy <code>ndarray</code> form. Lastly, create one <code>Trace</code> for each recording and then a 
             <code>Stream</code> object from the traces.
         </p>
-        <div class="input-code-block">
-            <pre><code>
-                <p><span class="comment"># open the file and read its metadata</span></p>
-                <p><span class="python-color2">with</span> <span class="python-color1">open</span>(<span class="python-color3">'20140207-085940-LEF2-data.txt'</span>) <span class="python-color2">as</span> fr:</p>
-                <p class="pad"><span class="comment"># skip the first line</span></p>
-                <p class="pad">fr.<span class="python-color1">readline</span>()</p>
-                <p class="pad"><span class="comment"># read the station name</span></p>
-                <p class="pad">station = fr.<span class="python-color1">readline</span>()<span class="python-color1">.split</span>(<span class="python-color3">':'</span>)</span>[1]</span>.<span class="python-color1">strip</span>()</p>
-                <p class="pad"><span class="comment"># read the starting date of the record</span></p>
-                <p class="pad">dt_start = fr.<span class="python-color1">readline</span>()<span class="python-color1">.split</span>(<span class="python-color3">':'</span>, 1)[1].<span class="python-color1">strip</span>()</p>
-                <p class="pad"><span class="comment"># read the sampling frequency in Hz</span></p>
-                <p class="pad">fs =  fr.<span class="python-color1">readline</span>()<span class="python-color1">.split</span>(<span class="python-color3">':'</span>)</span>[1].<span class="python-color1">strip</span>(<span class="python-color3">' Hz\n'</span>)</p>
-                <p class="pad"><span class="comment"># read the number of sample points</span></p>
-                <p class="pad">npts = fr.<span class="python-color1">readline</span>()<span class="python-color1">.split</span>(<span class="python-color3">':'</span>)</span>[1].<span class="python-color1">strip</span>()</p>
-                <p class="pad"><span class="comment"># skip 2 lines</span></p>
-                <p class="pad">fr.<span class="python-color1">readline</span>()</p>
-                <p class="pad">fr.<span class="python-color1">readline</span>()</p>
-                <p class="pad"><span class="comment"># read the components</span></p>
-                <p class="pad">compos = fr.<span class="python-color1">readline</span>()<span class="python-color1">.split</span>(<span class="python-color3">':'</span>)[1].<span class="python-color1">split</span>()</p>
-                <p class="pad"><span class="comment"># show all the parameters that we read from the header of the file</span></p>
-                <p class="pad"><span class="python-color1">print(</span>station, dt_start, fs, npts, compos<span class="python-color1">)</span></p>
-            </code></pre>
-        </div>
-        <div class="output-code-block">
-            <pre><code>
-                <p>LEF2 2014-02-07T08:59:40.000000Z 100.0 18100 ['E', 'N', 'Z']</p>
-            </code></pre>
-        </div>
+        <script src="https://gist.github.com/imarag/aa31087909ed1dd16eafd7dcf73a8961.js"></script>
         <p>
             Before we add the metadata into the dictionary, we convert the number of points (npts) into a Python <code>int</code> datatype, the
             sampling frequency (fs) into a <code>float</code> datatype and the start time of the record (<code>starttime</code>) into a <code>UTCDateTime</code> object.
             Also it is important for the keys of the dictionary, to be one of the options provided in the 
             <a target="_blank" href="https://docs.obspy.org/packages/autogen/obspy.core.trace.Stats.html"><code>obspy.core.trace.Stats</code> </a> object. 
-            Then we use the python Pandas library to read the data of the record:
+            Then we use the python Pandas library to read the data of the record. At this time we have the metadata and the data of the traces. Using these two parameters, we can create the <code>Trace</code> objects. To do this, loop trough the components, create a header dictionary file for each <code>Trace</code> and add its data:
         </p>
-        <div class="input-code-block">
-            <pre><code>
-                <p><span class="comment"># use the Pandas read-csv method to read the data from text file</span></p>
-                <p>df_data = pd<span class="python-color1">.read_csv(</span><span class="python-color3">'20140207-085940-LEF2-data.txt'</span>, skiprows=10, sep=<span class="python-color3">'\s+'</span>, header=None)</p>
-                <p><span class="comment"># assign the previous components list into the columns</span></p>
-                <p>df_data<span class="python-color2">.columns</span> = compos</p>
-                <p><span class="python-color1">print</span>(df_data)
-            </code></pre></p>
-        </div>
-        <p>
-            At this time we have the metadata and the data of the traces. Using these two parameters, we can create the <code>Trace</code> objects. To do this, loop trough the components, create a header dictionary file for each <code>Trace</code> and add its data:
-        </p>
-        <div class="input-code-block">
-            <pre><code>
-                <p><span class="comment"># create an empty list to append each trace object</span></p>
-                <p>lt_traces = []</p>
-                <p><span class="comment"># then create a trace for each component</span></p>
-                <p><span class="python-color2">for</span> compo <span class="python-color2">in</span> compos:</p>
-                <p class="pad"><span class="comment indent"># create a dictionary object and add there the metadata</span></p>
-                <p class="pad"><span class="indent">dict_header = {}</span></p>
-                <p class="pad"><span class="indent">dict_header[<span class="python-color3">"station"</span>] = station</span></p>
-                <p class="pad"><span class="indent">dict_header[<span class="python-color3">"npts"</span>] = <span class="python-color1">int</span>(npts)</p>
-                <p class="pad"><span class="indent">dict_header[<span class="python-color3">"sampling_rate"</span>] = float(fs)</span></p>
-                <p class="pad"><span class="indent">dict_header[<span class="python-color3">"starttime"</span>] = <span class="python-color1">UTCDateTime</span>(dt_start)</p>
-                <p class="pad"><span class="indent">dict_header[<span class="python-color3">"channel"</span>] = compo</span></p>
-                <p class="pad"><span class="comment"># create the trace object</span></p>
-                <p class="pad">tr = <span class="python-color1">Trace</span>(data=df_data[compo]<span class="python-color1">.to_numpy</span>(), header=dict_header)</p>
-                <p class="pad"><span class="comment"># append the trace into the traces list</span></p>
-                <p class="pad">lt_traces.<span class="python-color1">append</span>(tr)</p>
-                <p><span class="python-color1">print</span>(lt_traces)</p>
-            </code></pre>
-        </div>
-        <div class="output-code-block">
-            <pre><code>
-                <p>[</p>
-                <p class="pad">&lt;obspy.core.trace.Trace object at 0x0000020E0EFB25F0>,</p>
-                <p class="pad">&lt;obspy.core.trace.Trace object at 0x0000020E0F501FC0>,</p>
-                <p class="pad">&lt;obspy.core.trace.Trace object at 0x0000020E0F502890></p>
-                <p>]</p>
-        </code></pre>
-        </div>
+        <script src="https://gist.github.com/imarag/165bea0905ccd37d5f1f9497b3a1460a.js"></script>
         <p>Finally, create the <code>Stream</code> object, from the list of the traces:</p>
-        <div class="input-code-block">
-            <pre><code>
-                <p><span class="comment"># create the stream by inserting the list of traces into the obspy.core.stream.Stream class</span></p>
-                <p>st = <span class="python-color1">Stream</span>(lt_traces)</p>
-                <p><span class="python-color1">print</span>(st)</p>
-        </code></pre>
-        </div>
-        <div class="output-code-block">
-            <pre><code>
-                <p>3 Trace(s) in Stream:</p>
-                <p>.LEF2..E | 2014-02-07T08:59:40.000000Z - 2014-02-07T09:02:40.990000Z | 100.0 Hz, 18100 samples</p>
-                <p>.LEF2..N | 2014-02-07T08:59:40.000000Z - 2014-02-07T09:02:40.990000Z | 100.0 Hz, 18100 samples</p>
-                <p>.LEF2..Z | 2014-02-07T08:59:40.000000Z - 2014-02-07T09:02:40.990000Z | 100.0 Hz, 18100 samples</p>
-            </code></pre>
-        </div>
+        <script src="https://gist.github.com/imarag/ee7d33d5071c7199fc13a19c0452fd25.js"></script>
         <p>Finally, use the <code>stream</code> <code>write()</code> method to save the stream somewhere in your machine.</p>
     </div>
             

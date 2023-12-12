@@ -3,6 +3,40 @@
 
 {% extends 'base-articles.html' %}
 
+{% macro card(card_id, card_functions, card_desc, script_url) -%}
+    <div class="card-article" id={{ card_id }}>
+        <div class="card-row">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-braces-asterisk" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M1.114 8.063V7.9c1.005-.102 1.497-.615 1.497-1.6V4.503c0-1.094.39-1.538 1.354-1.538h.273V2h-.376C2.25 2 1.49 2.759 1.49 4.352v1.524c0 1.094-.376 1.456-1.49 1.456v1.299c1.114 0 1.49.362 1.49 1.456v1.524c0 1.593.759 2.352 2.372 2.352h.376v-.964h-.273c-.964 0-1.354-.444-1.354-1.538V9.663c0-.984-.492-1.497-1.497-1.6ZM14.886 7.9v.164c-1.005.103-1.497.616-1.497 1.6v1.798c0 1.094-.39 1.538-1.354 1.538h-.273v.964h.376c1.613 0 2.372-.759 2.372-2.352v-1.524c0-1.094.376-1.456 1.49-1.456v-1.3c-1.114 0-1.49-.362-1.49-1.456V4.352C14.51 2.759 13.75 2 12.138 2h-.376v.964h.273c.964 0 1.354.444 1.354 1.538V6.3c0 .984.492 1.497 1.497 1.6ZM7.5 11.5V9.207l-1.621 1.621-.707-.707L6.792 8.5H4.5v-1h2.293L5.172 5.879l.707-.707L7.5 6.792V4.5h1v2.293l1.621-1.621.707.707L9.208 7.5H11.5v1H9.207l1.621 1.621-.707.707L8.5 9.208V11.5h-1Z"/>
+            </svg>
+            {% for func in card_functions %}
+                <p><code>{{ func }}</code></p>
+            {% endfor %}
+        </div>
+        <div class="card-row">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-checklist" viewBox="0 0 16 16">
+                <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
+                <path d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0zM7 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0z"/>
+            </svg>
+            <p>{{ card_desc }}</p>
+        </div>
+        <div class="card-row">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-code mb-3" viewBox="0 0 16 16">
+                <path d="M5.854 4.854a.5.5 0 1 0-.708-.708l-3.5 3.5a.5.5 0 0 0 0 .708l3.5 3.5a.5.5 0 0 0 .708-.708L2.707 8l3.147-3.146zm4.292 0a.5.5 0 0 1 .708-.708l3.5 3.5a.5.5 0 0 1 0 .708l-3.5 3.5a.5.5 0 0 1-.708-.708L13.293 8l-3.147-3.146z"/>
+            </svg>
+            <script src={{ script_url }}></script>
+        </div>
+    </div>
+{%- endmacro %}
+
+{% macro create_list(list_lis) -%}
+    <ul class="article-ul-contents">
+        {% for el in list_lis %}
+            <li><a href={{ el[0] }}><code>{{ el[1] }}</code></a>{{ el[2] }}</li>
+        {% endfor %}
+    </ul>
+{%- endmacro %}
+
 
 {% block article_template_image %}
     <img 
@@ -47,6 +81,7 @@
             
   
     <div id="item-1">
+        
         <h1>Introduction</h1>
         <p>
             Python is a multitasking programming language. There are many tasks that someone can 
@@ -84,460 +119,54 @@
             The <code>os.path</code> module provides  functionality for managing file paths. Let's explore the diverse capabilities it offers for manipulating these path components:
         </p>
         
-        <ul class="article-ul-contents">
-            <li><a class="link-info" href="#func-getcwd"><code>os.getcwd()</code></a>, returns the current working directory
-                as a string
-            </li>
-            <li><a class="link-info" href="#func-basename"><code>os.path.basename(path)</code></a>, retrieves the final segment of a path that does not finish with a path separator character
-            </li>
-            <li><a class="link-info" href="#func-dirname"><code>os.path.dirname(path)</code></a>, returns the path up to the last segment that ends with a path separator character
-            </li>
-            <li><a class="link-info" href="#func-split"><code>os.path.split(path)</code></a>, returns a tuple with the basename and the dirname of the given path
-            </li>
-            <li><a class="link-info" href="#func-splitext"><code>os.path.splitext(path)</code></a>, splits a file path into the file path without its extension 
-            and the file extension
-            </li>
-            <li><a class="link-info" href="#func-join"><code>os.path.join(path, *path)</code></a>, joins multiple path
-                components into a single path
-            </li>
-            <li><a class="link-info" href="#func-exists"><code>os.path.exists(path)</code></a>, checks if a file or directory
-                exists at the specified path
-            </li>
-            <li><a class="link-info" href="#func-isdir"><code>os.path.isdir(path)</code></a>, checks if the given path points
-                to a directory
-            </li>
-            <li><a class="link-info" href="#func-isfile"><code>os.path.isfile(path)</code></a>, checks if the given path
-                points to a file
-            </li>
-        </ul>
+        {{ create_list(
+            [
+                ("func-getcwd", "os.getcwd()", ", returns the current working directory as a string"),
+                ("func-basename", "os.path.basename(path)", ", retrieves the final segment of a path that does not finish with a path separator character"),
+                ("func-dirname", "os.path.dirname(path)", ", returns the path up to the last segment that ends with a path separator character"), 
+                ("func-split", "os.path.split(path)", ", returns a tuple with the basename and the dirname of the given path"),
+                ("func-splitext", "os.path.splitext(path)", ", splits a file path into the file path without its extension  and the file extension"),
+                ("func-join", "os.path.join(path, *path)", ", joins multiple path components into a single path"),
+                ("func-exists", "os.path.exists(path)", ", checks if a file or directory exists at the specified path"),
+                ("func-isdir", "os.path.isdir(path)", ", checks if the given path points to a directory"),
+                ("func-isfile", "os.path.isfile(path)", ", checks if the given path points to a file")
+            ]
+        ) }}
         
         
-        <div class="card-article" id="func-getcwd">
-            <div class="card-row">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-braces-asterisk" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M1.114 8.063V7.9c1.005-.102 1.497-.615 1.497-1.6V4.503c0-1.094.39-1.538 1.354-1.538h.273V2h-.376C2.25 2 1.49 2.759 1.49 4.352v1.524c0 1.094-.376 1.456-1.49 1.456v1.299c1.114 0 1.49.362 1.49 1.456v1.524c0 1.593.759 2.352 2.372 2.352h.376v-.964h-.273c-.964 0-1.354-.444-1.354-1.538V9.663c0-.984-.492-1.497-1.497-1.6ZM14.886 7.9v.164c-1.005.103-1.497.616-1.497 1.6v1.798c0 1.094-.39 1.538-1.354 1.538h-.273v.964h.376c1.613 0 2.372-.759 2.372-2.352v-1.524c0-1.094.376-1.456 1.49-1.456v-1.3c-1.114 0-1.49-.362-1.49-1.456V4.352C14.51 2.759 13.75 2 12.138 2h-.376v.964h.273c.964 0 1.354.444 1.354 1.538V6.3c0 .984.492 1.497 1.497 1.6ZM7.5 11.5V9.207l-1.621 1.621-.707-.707L6.792 8.5H4.5v-1h2.293L5.172 5.879l.707-.707L7.5 6.792V4.5h1v2.293l1.621-1.621.707.707L9.208 7.5H11.5v1H9.207l1.621 1.621-.707.707L8.5 9.208V11.5h-1Z"/>
-                </svg>
-                <p><code>os.getcwd()</code></p>
-            </div>
-            <div class="card-row">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-checklist" viewBox="0 0 16 16">
-                    <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
-                    <path d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0zM7 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0z"/>
-                </svg>
-                <p>
-                    This function returns the current absolute working directory of your Python script as a string
-                </p>
-            </div>
-            <div class="card-row">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-code" viewBox="0 0 16 16">
-                    <path d="M5.854 4.854a.5.5 0 1 0-.708-.708l-3.5 3.5a.5.5 0 0 0 0 .708l3.5 3.5a.5.5 0 0 0 .708-.708L2.707 8l3.147-3.146zm4.292 0a.5.5 0 0 1 .708-.708l3.5 3.5a.5.5 0 0 1 0 .708l-3.5 3.5a.5.5 0 0 1-.708-.708L13.293 8l-3.147-3.146z"/>
-                </svg>
-                <div class="input-code-block">
-                    <pre><code>
-                        <p><span class="python-color1">print</span>(os.<span class="python-color1">getcwd</span>())</p>
-                    </code></pre>
-                </div>
-            </div>
-            <div class="card-row">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-code-slash" viewBox="0 0 16 16">
-                    <path d="M10.478 1.647a.5.5 0 1 0-.956-.294l-4 13a.5.5 0 0 0 .956.294l4-13zM4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0zm6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0z"/>
-                </svg>
-                <div class="output-code-block">
-                    <pre><code>
-                        <p>C:\Users\Ioannis\Desktop\projects\seismologywebsite\seismologywebsite\notebooks</p>
-                    </code></pre>
-                </div>
-            </div>
-        </div>
-        
-        
-        <div class="card-article" id="func-basename">
-            <div class="card-row">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-braces-asterisk" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M1.114 8.063V7.9c1.005-.102 1.497-.615 1.497-1.6V4.503c0-1.094.39-1.538 1.354-1.538h.273V2h-.376C2.25 2 1.49 2.759 1.49 4.352v1.524c0 1.094-.376 1.456-1.49 1.456v1.299c1.114 0 1.49.362 1.49 1.456v1.524c0 1.593.759 2.352 2.372 2.352h.376v-.964h-.273c-.964 0-1.354-.444-1.354-1.538V9.663c0-.984-.492-1.497-1.497-1.6ZM14.886 7.9v.164c-1.005.103-1.497.616-1.497 1.6v1.798c0 1.094-.39 1.538-1.354 1.538h-.273v.964h.376c1.613 0 2.372-.759 2.372-2.352v-1.524c0-1.094.376-1.456 1.49-1.456v-1.3c-1.114 0-1.49-.362-1.49-1.456V4.352C14.51 2.759 13.75 2 12.138 2h-.376v.964h.273c.964 0 1.354.444 1.354 1.538V6.3c0 .984.492 1.497 1.497 1.6ZM7.5 11.5V9.207l-1.621 1.621-.707-.707L6.792 8.5H4.5v-1h2.293L5.172 5.879l.707-.707L7.5 6.792V4.5h1v2.293l1.621-1.621.707.707L9.208 7.5H11.5v1H9.207l1.621 1.621-.707.707L8.5 9.208V11.5h-1Z"/>
-                </svg>
-                <p><code>os.path.basename(path)</code></p>
-            </div>
-            <div class="card-row">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-checklist" viewBox="0 0 16 16">
-                    <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
-                    <path d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0zM7 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0z"/>
-                </svg>
-                <p>
-                    Extract the base name of a file path. In other words, it is the last segment of a path that does not conclude with a path separator character
-                </p>
-            </div>
-            <div class="card-row">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-code" viewBox="0 0 16 16">
-                    <path d="M5.854 4.854a.5.5 0 1 0-.708-.708l-3.5 3.5a.5.5 0 0 0 0 .708l3.5 3.5a.5.5 0 0 0 .708-.708L2.707 8l3.147-3.146zm4.292 0a.5.5 0 0 1 .708-.708l3.5 3.5a.5.5 0 0 1 0 .708l-3.5 3.5a.5.5 0 0 1-.708-.708L13.293 8l-3.147-3.146z"/>
-                </svg>
-                <div class="input-code-block">
-                    <pre><code>
-                        <p><span class="python-color1">print</span>(os.path.<span class="python-color1">basename</span>(<span class="python-color3">"c:/Users/User/Desktop/myfile.txt"</span>))</p>
-                        <p><span class="python-color1">print</span>(os.path.<span class="python-color1">basename</span>(<span class="python-color3">"c:/Users/User/Desktop"</span>))</p>
-                        <p><span class="python-color1">print</span>(os.path.<span class="python-color1">basename</span>(<span class="python-color3">"c:/Users/User/Desktop/"</span>))</p>
-                    </code></pre>
-                </div>
-            </div>
-            <div class="card-row">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-code-slash" viewBox="0 0 16 16">
-                    <path d="M10.478 1.647a.5.5 0 1 0-.956-.294l-4 13a.5.5 0 0 0 .956.294l4-13zM4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0zm6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0z"/>
-                </svg>
-                <div class="output-code-block">
-                    <pre><code>
-                        <p><span>myfile.txt</span></p>
-                        <p><span>Desktop</span></p>
-                        <p><span>&nbsp;</span></p>
-                    </code></pre>
-                </div>
-            </div>
-        </div>
-        
-        
-        <div class="card-article" id="func-dirname">
-            <div class="card-row">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-braces-asterisk" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M1.114 8.063V7.9c1.005-.102 1.497-.615 1.497-1.6V4.503c0-1.094.39-1.538 1.354-1.538h.273V2h-.376C2.25 2 1.49 2.759 1.49 4.352v1.524c0 1.094-.376 1.456-1.49 1.456v1.299c1.114 0 1.49.362 1.49 1.456v1.524c0 1.593.759 2.352 2.372 2.352h.376v-.964h-.273c-.964 0-1.354-.444-1.354-1.538V9.663c0-.984-.492-1.497-1.497-1.6ZM14.886 7.9v.164c-1.005.103-1.497.616-1.497 1.6v1.798c0 1.094-.39 1.538-1.354 1.538h-.273v.964h.376c1.613 0 2.372-.759 2.372-2.352v-1.524c0-1.094.376-1.456 1.49-1.456v-1.3c-1.114 0-1.49-.362-1.49-1.456V4.352C14.51 2.759 13.75 2 12.138 2h-.376v.964h.273c.964 0 1.354.444 1.354 1.538V6.3c0 .984.492 1.497 1.497 1.6ZM7.5 11.5V9.207l-1.621 1.621-.707-.707L6.792 8.5H4.5v-1h2.293L5.172 5.879l.707-.707L7.5 6.792V4.5h1v2.293l1.621-1.621.707.707L9.208 7.5H11.5v1H9.207l1.621 1.621-.707.707L8.5 9.208V11.5h-1Z"/>
-                </svg>
-                <p><code>os.path.dirname(path)</code></p>
-            </div>
-            <div class="card-row">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-checklist" viewBox="0 0 16 16">
-                    <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
-                    <path d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0zM7 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0z"/>
-                </svg>
-                <p>
-                    This function essentially extracts everything from the beginning of the path up to the last path component with a 
-                    path separator at its end. However, it will remove the last forward slash when it finds it. This is the <i>directory path</i> described 
-                    above without the forward slash at the end
-                </p>
-            </div>
-            <div class="card-row">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-code" viewBox="0 0 16 16">
-                    <path d="M5.854 4.854a.5.5 0 1 0-.708-.708l-3.5 3.5a.5.5 0 0 0 0 .708l3.5 3.5a.5.5 0 0 0 .708-.708L2.707 8l3.147-3.146zm4.292 0a.5.5 0 0 1 .708-.708l3.5 3.5a.5.5 0 0 1 0 .708l-3.5 3.5a.5.5 0 0 1-.708-.708L13.293 8l-3.147-3.146z"/>
-                </svg>
-                <div class="input-code-block">
-                    <pre><code>
-                        <p><span class="python-color1">print</span>(os.path.<span class="python-color1">dirname</span>(<span class="python-color3">"c:/Users/User/Desktop/myfile.txt"</span>))</p>
-                        <p><span class="python-color1">print</span>(os.path.<span class="python-color1">dirname</span>(<span class="python-color3">"c:/Users/User/Desktop"</span>))</p>
-                        <p><span class="python-color1">print</span>(os.path.<span class="python-color1">dirname</span>(<span class="python-color3">"c:/Users/User/Desktop/"</span>))</p>
-                    </code></pre>
-                </div>
-            </div>
-            <div class="card-row">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-code-slash" viewBox="0 0 16 16">
-                    <path d="M10.478 1.647a.5.5 0 1 0-.956-.294l-4 13a.5.5 0 0 0 .956.294l4-13zM4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0zm6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0z"/>
-                </svg>
-                <div class="output-code-block">
-                    <pre><code>
-                        <p>c:/Users/User/Desktop</p>
-                        <p>c:/Users/User</p>
-                        <p>c:/Users/User/Desktop</p>
-                    </code></pre>
-                </div>
-            </div>
-        </div>
-        
-        
-        <div class="card-article" id="func-split">
-            <div class="card-row">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-braces-asterisk" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M1.114 8.063V7.9c1.005-.102 1.497-.615 1.497-1.6V4.503c0-1.094.39-1.538 1.354-1.538h.273V2h-.376C2.25 2 1.49 2.759 1.49 4.352v1.524c0 1.094-.376 1.456-1.49 1.456v1.299c1.114 0 1.49.362 1.49 1.456v1.524c0 1.593.759 2.352 2.372 2.352h.376v-.964h-.273c-.964 0-1.354-.444-1.354-1.538V9.663c0-.984-.492-1.497-1.497-1.6ZM14.886 7.9v.164c-1.005.103-1.497.616-1.497 1.6v1.798c0 1.094-.39 1.538-1.354 1.538h-.273v.964h.376c1.613 0 2.372-.759 2.372-2.352v-1.524c0-1.094.376-1.456 1.49-1.456v-1.3c-1.114 0-1.49-.362-1.49-1.456V4.352C14.51 2.759 13.75 2 12.138 2h-.376v.964h.273c.964 0 1.354.444 1.354 1.538V6.3c0 .984.492 1.497 1.497 1.6ZM7.5 11.5V9.207l-1.621 1.621-.707-.707L6.792 8.5H4.5v-1h2.293L5.172 5.879l.707-.707L7.5 6.792V4.5h1v2.293l1.621-1.621.707.707L9.208 7.5H11.5v1H9.207l1.621 1.621-.707.707L8.5 9.208V11.5h-1Z"/>
-                </svg>
-                <p><code>os.path.split(path)</code></p>
-            </div>
-            <div class="card-row">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-checklist" viewBox="0 0 16 16">
-                    <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
-                    <path d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0zM7 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0z"/>
-                </svg>
-                <p>
-                    This function takes the path as input and returns a tuple with <code>os.path.dirname</code> as the first
-                    element and <code>os.path.basename</code> as the second element
-                </p>
-            </div>
-            <div class="card-row">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-code" viewBox="0 0 16 16">
-                    <path d="M5.854 4.854a.5.5 0 1 0-.708-.708l-3.5 3.5a.5.5 0 0 0 0 .708l3.5 3.5a.5.5 0 0 0 .708-.708L2.707 8l3.147-3.146zm4.292 0a.5.5 0 0 1 .708-.708l3.5 3.5a.5.5 0 0 1 0 .708l-3.5 3.5a.5.5 0 0 1-.708-.708L13.293 8l-3.147-3.146z"/>
-                </svg>
-                <div class="input-code-block">
-                    <pre><code>
-                        <p>dir_name, bs_name = os.path.<span class="python-color1">split</span>(<span class="python-color3">"c:/Users/User/Desktop/myfile.txt"</span>)</p>
-                        <p><span class="python-color1">print</span>(dir_name, bs_name)</p>
-                    </code></pre>
-                </div>
-            </div>
-            <div class="card-row">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-code-slash" viewBox="0 0 16 16">
-                    <path d="M10.478 1.647a.5.5 0 1 0-.956-.294l-4 13a.5.5 0 0 0 .956.294l4-13zM4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0zm6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0z"/>
-                </svg>
-                <div class="output-code-block">
-                    <pre><code>
-                        <p>c:/Users/User/Desktop myfile.txt</p>
-                    </code></pre>
-                </div>
-            </div>
-        </div>
-        
-        
-        <div class="card-article" id="func-splitext">
-            <div class="card-row">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-braces-asterisk" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M1.114 8.063V7.9c1.005-.102 1.497-.615 1.497-1.6V4.503c0-1.094.39-1.538 1.354-1.538h.273V2h-.376C2.25 2 1.49 2.759 1.49 4.352v1.524c0 1.094-.376 1.456-1.49 1.456v1.299c1.114 0 1.49.362 1.49 1.456v1.524c0 1.593.759 2.352 2.372 2.352h.376v-.964h-.273c-.964 0-1.354-.444-1.354-1.538V9.663c0-.984-.492-1.497-1.497-1.6ZM14.886 7.9v.164c-1.005.103-1.497.616-1.497 1.6v1.798c0 1.094-.39 1.538-1.354 1.538h-.273v.964h.376c1.613 0 2.372-.759 2.372-2.352v-1.524c0-1.094.376-1.456 1.49-1.456v-1.3c-1.114 0-1.49-.362-1.49-1.456V4.352C14.51 2.759 13.75 2 12.138 2h-.376v.964h.273c.964 0 1.354.444 1.354 1.538V6.3c0 .984.492 1.497 1.497 1.6ZM7.5 11.5V9.207l-1.621 1.621-.707-.707L6.792 8.5H4.5v-1h2.293L5.172 5.879l.707-.707L7.5 6.792V4.5h1v2.293l1.621-1.621.707.707L9.208 7.5H11.5v1H9.207l1.621 1.621-.707.707L8.5 9.208V11.5h-1Z"/>
-                </svg>
-                <p><code>os.path.splitext(path)</code></p>
-            </div>
-            <div class="card-row">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-checklist" viewBox="0 0 16 16">
-                    <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
-                    <path d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0zM7 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0z"/>
-                </svg>
-                <p>
-                    This function is used to split a file path into the file path without its extension and the file extension (including the dot). In other words, it splits the path into a part up to the dot of the file (if there is a file) and a part that includes the dot and the extension. If there is no extension, the second returned element will be empty.
-                  
-                </p>
-            </div>
-            <div class="card-row">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-code" viewBox="0 0 16 16">
-                    <path d="M5.854 4.854a.5.5 0 1 0-.708-.708l-3.5 3.5a.5.5 0 0 0 0 .708l3.5 3.5a.5.5 0 0 0 .708-.708L2.707 8l3.147-3.146zm4.292 0a.5.5 0 0 1 .708-.708l3.5 3.5a.5.5 0 0 1 0 .708l-3.5 3.5a.5.5 0 0 1-.708-.708L13.293 8l-3.147-3.146z"/>
-                </svg>
-                <div class="input-code-block">
-                    <pre><code>
-                        <p><span class="python-color1">print</span>(os.path.<span class="python-color1">splitext</span>(<span class="python-color3">"c:/Users/User/Desktop/myfile.txt"</span>))</p>
-                        <p><span class="python-color1">print</span>(os.path.<span class="python-color1">splitext</span>(<span class="python-color3">"c:/Users/User/Desktop/myfile"</span>))</p>
-                    </code></pre>
-                </div>
-            </div>
-            <div class="card-row">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-code-slash" viewBox="0 0 16 16">
-                    <path d="M10.478 1.647a.5.5 0 1 0-.956-.294l-4 13a.5.5 0 0 0 .956.294l4-13zM4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0zm6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0z"/>
-                </svg>
-                <div class="output-code-block">
-                    <pre><code>
-                        <p>('c:/Users/User/Desktop/myfile', '.txt')</p>
-                        <p>('c:/Users/User/Desktop/myfile', '')</p>
-                    </code></pre>
-                </div>
-            </div>
-        </div>
-        
-        
-        <div class="card-article" id="func-join">
-            <div class="card-row">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-braces-asterisk" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M1.114 8.063V7.9c1.005-.102 1.497-.615 1.497-1.6V4.503c0-1.094.39-1.538 1.354-1.538h.273V2h-.376C2.25 2 1.49 2.759 1.49 4.352v1.524c0 1.094-.376 1.456-1.49 1.456v1.299c1.114 0 1.49.362 1.49 1.456v1.524c0 1.593.759 2.352 2.372 2.352h.376v-.964h-.273c-.964 0-1.354-.444-1.354-1.538V9.663c0-.984-.492-1.497-1.497-1.6ZM14.886 7.9v.164c-1.005.103-1.497.616-1.497 1.6v1.798c0 1.094-.39 1.538-1.354 1.538h-.273v.964h.376c1.613 0 2.372-.759 2.372-2.352v-1.524c0-1.094.376-1.456 1.49-1.456v-1.3c-1.114 0-1.49-.362-1.49-1.456V4.352C14.51 2.759 13.75 2 12.138 2h-.376v.964h.273c.964 0 1.354.444 1.354 1.538V6.3c0 .984.492 1.497 1.497 1.6ZM7.5 11.5V9.207l-1.621 1.621-.707-.707L6.792 8.5H4.5v-1h2.293L5.172 5.879l.707-.707L7.5 6.792V4.5h1v2.293l1.621-1.621.707.707L9.208 7.5H11.5v1H9.207l1.621 1.621-.707.707L8.5 9.208V11.5h-1Z"/>
-                </svg>
-                <p><code>os.path.join(path, *path)</code></p>
-            </div>
-            <div class="card-row">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-checklist" viewBox="0 0 16 16">
-                    <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
-                    <path d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0zM7 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0z"/>
-                </svg>
-                <p>
-                    This function is used to join one or more path components together to create a valid file path. The return
-                    value is a concatenation of all the provided components
-                </p>
-            </div>
-            <div class="card-row">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-code" viewBox="0 0 16 16">
-                    <path d="M5.854 4.854a.5.5 0 1 0-.708-.708l-3.5 3.5a.5.5 0 0 0 0 .708l3.5 3.5a.5.5 0 0 0 .708-.708L2.707 8l3.147-3.146zm4.292 0a.5.5 0 0 1 .708-.708l3.5 3.5a.5.5 0 0 1 0 .708l-3.5 3.5a.5.5 0 0 1-.708-.708L13.293 8l-3.147-3.146z"/>
-                </svg>
-                <div class="input-code-block">
-                    <pre><code>
-                        <p><span class="python-color1">print</span>(os.path.<span class="python-color1">join</span>(<span class="python-color3">"c:/Users/User"</span>, <span class="python-color3">"Desktop"</span>, <span class="python-color3">"new_folder/myfile.txt"</span>))</p>
-                        <p><span class="python-color1">print</span>(os.path.<span class="python-color1">join</span>(<span class="python-color3">"c:/Users/User"</span>, <span class="python-color3">"Desktop"</span>, <span class="python-color3">"myfile.txt"</span>))</p>
-                        <p><span class="python-color1">print</span>(os.path.<span class="python-color1">join</span>(<span class="python-color3">"c:/Users"</span>, <span class="python-color3">"User/Desktop"</span>, <span class="python-color3">"myfile.txt"</span>))</p>
-                        <p>filename = <span class="python-color3">"index.html"</span></p>
-                        <p><span class="python-color1">print</span>(os.path.<span class="python-color1">join</span>(<span class="python-color3">"c:/Users/User"</span>, <span class="python-color3">"Desktop"</span>, filename))</p>
-                    </code></pre>
-                </div>
-            </div>
-            <div class="card-row">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-code-slash" viewBox="0 0 16 16">
-                    <path d="M10.478 1.647a.5.5 0 1 0-.956-.294l-4 13a.5.5 0 0 0 .956.294l4-13zM4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0zm6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0z"/>
-                </svg>
-                <div class="output-code-block">
-                    <pre><code>
-                       <p>c:/Users/User\Desktop\new_folder/myfile.txt</p>
-                       <p>c:/Users/User\Desktop\myfile.txt</p>
-                       <p>c:/Users\User/Desktop\myfile.txt</p>
-                       <p>c:/Users/User\Desktop\index.html</p>
-                    </code></pre>
-                </div>
-            </div>
-        </div>
-        
-        
-        <div class="card-article" id="func-exists">
-            <div class="card-row">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-braces-asterisk" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M1.114 8.063V7.9c1.005-.102 1.497-.615 1.497-1.6V4.503c0-1.094.39-1.538 1.354-1.538h.273V2h-.376C2.25 2 1.49 2.759 1.49 4.352v1.524c0 1.094-.376 1.456-1.49 1.456v1.299c1.114 0 1.49.362 1.49 1.456v1.524c0 1.593.759 2.352 2.372 2.352h.376v-.964h-.273c-.964 0-1.354-.444-1.354-1.538V9.663c0-.984-.492-1.497-1.497-1.6ZM14.886 7.9v.164c-1.005.103-1.497.616-1.497 1.6v1.798c0 1.094-.39 1.538-1.354 1.538h-.273v.964h.376c1.613 0 2.372-.759 2.372-2.352v-1.524c0-1.094.376-1.456 1.49-1.456v-1.3c-1.114 0-1.49-.362-1.49-1.456V4.352C14.51 2.759 13.75 2 12.138 2h-.376v.964h.273c.964 0 1.354.444 1.354 1.538V6.3c0 .984.492 1.497 1.497 1.6ZM7.5 11.5V9.207l-1.621 1.621-.707-.707L6.792 8.5H4.5v-1h2.293L5.172 5.879l.707-.707L7.5 6.792V4.5h1v2.293l1.621-1.621.707.707L9.208 7.5H11.5v1H9.207l1.621 1.621-.707.707L8.5 9.208V11.5h-1Z"/>
-                </svg>
-                <p><code>os.path.exists(path)</code></p>
-            </div>
-            <div class="card-row">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-checklist" viewBox="0 0 16 16">
-                    <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
-                    <path d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0zM7 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0z"/>
-                </svg>
-                <p>
-                    This function is used to check whether a file or directory exists at a given path (in our case it does)
-                </p>
-            </div>
-            <div class="card-row">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-code" viewBox="0 0 16 16">
-                    <path d="M5.854 4.854a.5.5 0 1 0-.708-.708l-3.5 3.5a.5.5 0 0 0 0 .708l3.5 3.5a.5.5 0 0 0 .708-.708L2.707 8l3.147-3.146zm4.292 0a.5.5 0 0 1 .708-.708l3.5 3.5a.5.5 0 0 1 0 .708l-3.5 3.5a.5.5 0 0 1-.708-.708L13.293 8l-3.147-3.146z"/>
-                </svg>
-                <div class="input-code-block">
-                    <pre><code>
-                        <p><span class="python-color1">print</span>(os.path.<span class="python-color1">exists</span>(<span class="python-color3">"c:/Users/User/Desktop/myfile.txt"</span>))</p>
-                    </code></pre>
-                </div>
-            </div>
-            <div class="card-row">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-code-slash" viewBox="0 0 16 16">
-                    <path d="M10.478 1.647a.5.5 0 1 0-.956-.294l-4 13a.5.5 0 0 0 .956.294l4-13zM4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0zm6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0z"/>
-                </svg>
-                <div class="output-code-block">
-                    <pre><code>
-                        <p>True</p>
-                    </code></pre>
-                </div>
-            </div>
-        </div>
-        
-        
-        <div class="card-article" id="func-isdir">
-            <div class="card-row">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-braces-asterisk" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M1.114 8.063V7.9c1.005-.102 1.497-.615 1.497-1.6V4.503c0-1.094.39-1.538 1.354-1.538h.273V2h-.376C2.25 2 1.49 2.759 1.49 4.352v1.524c0 1.094-.376 1.456-1.49 1.456v1.299c1.114 0 1.49.362 1.49 1.456v1.524c0 1.593.759 2.352 2.372 2.352h.376v-.964h-.273c-.964 0-1.354-.444-1.354-1.538V9.663c0-.984-.492-1.497-1.497-1.6ZM14.886 7.9v.164c-1.005.103-1.497.616-1.497 1.6v1.798c0 1.094-.39 1.538-1.354 1.538h-.273v.964h.376c1.613 0 2.372-.759 2.372-2.352v-1.524c0-1.094.376-1.456 1.49-1.456v-1.3c-1.114 0-1.49-.362-1.49-1.456V4.352C14.51 2.759 13.75 2 12.138 2h-.376v.964h.273c.964 0 1.354.444 1.354 1.538V6.3c0 .984.492 1.497 1.497 1.6ZM7.5 11.5V9.207l-1.621 1.621-.707-.707L6.792 8.5H4.5v-1h2.293L5.172 5.879l.707-.707L7.5 6.792V4.5h1v2.293l1.621-1.621.707.707L9.208 7.5H11.5v1H9.207l1.621 1.621-.707.707L8.5 9.208V11.5h-1Z"/>
-                </svg>
-                <p><code>os.path.isdir(path)</code></p>
-            </div>
-            <div class="card-row">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-checklist" viewBox="0 0 16 16">
-                    <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
-                    <path d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0zM7 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0z"/>
-                </svg>
-                <p>
-                    This function is used to check whether a given path corresponds to a directory (<code>True</code>) or not
-                    (<code>False</code>). If the provided path does not exists, it will always return <code>False</code>
-                </p>
-            </div>
-            <div class="card-row">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-code" viewBox="0 0 16 16">
-                    <path d="M5.854 4.854a.5.5 0 1 0-.708-.708l-3.5 3.5a.5.5 0 0 0 0 .708l3.5 3.5a.5.5 0 0 0 .708-.708L2.707 8l3.147-3.146zm4.292 0a.5.5 0 0 1 .708-.708l3.5 3.5a.5.5 0 0 1 0 .708l-3.5 3.5a.5.5 0 0 1-.708-.708L13.293 8l-3.147-3.146z"/>
-                </svg>
-                <div class="input-code-block">
-                    <pre><code>
-                        <p><span class="python-color1">print</span>(os.path.<span class="python-color1">isdir</span>(<span class="python-color3">"c:/Users/User/Desktop/myfile.txt"</span>))</p>
-                    </code></pre>
-                </div>
-            </div>
-            <div class="card-row">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-code-slash" viewBox="0 0 16 16">
-                    <path d="M10.478 1.647a.5.5 0 1 0-.956-.294l-4 13a.5.5 0 0 0 .956.294l4-13zM4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0zm6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0z"/>
-                </svg>
-                <div class="output-code-block">
-                    <pre><code>
-                        <p>False</p>
-                    </code></pre>
-                </div>
-            </div>
-        </div>
-        <div class="card-article" id="func-isfile">
-            <div class="card-row">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-braces-asterisk" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M1.114 8.063V7.9c1.005-.102 1.497-.615 1.497-1.6V4.503c0-1.094.39-1.538 1.354-1.538h.273V2h-.376C2.25 2 1.49 2.759 1.49 4.352v1.524c0 1.094-.376 1.456-1.49 1.456v1.299c1.114 0 1.49.362 1.49 1.456v1.524c0 1.593.759 2.352 2.372 2.352h.376v-.964h-.273c-.964 0-1.354-.444-1.354-1.538V9.663c0-.984-.492-1.497-1.497-1.6ZM14.886 7.9v.164c-1.005.103-1.497.616-1.497 1.6v1.798c0 1.094-.39 1.538-1.354 1.538h-.273v.964h.376c1.613 0 2.372-.759 2.372-2.352v-1.524c0-1.094.376-1.456 1.49-1.456v-1.3c-1.114 0-1.49-.362-1.49-1.456V4.352C14.51 2.759 13.75 2 12.138 2h-.376v.964h.273c.964 0 1.354.444 1.354 1.538V6.3c0 .984.492 1.497 1.497 1.6ZM7.5 11.5V9.207l-1.621 1.621-.707-.707L6.792 8.5H4.5v-1h2.293L5.172 5.879l.707-.707L7.5 6.792V4.5h1v2.293l1.621-1.621.707.707L9.208 7.5H11.5v1H9.207l1.621 1.621-.707.707L8.5 9.208V11.5h-1Z"/>
-                </svg>
-                <p><code>os.path.isfile(path)</code></p>
-            </div>
-            <div class="card-row">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-checklist" viewBox="0 0 16 16">
-                    <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
-                    <path d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0zM7 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0z"/>
-                </svg>
-                <p>
-                    This function is used to check whether a given path corresponds to a file (<code>True</code>) or not
-                    (<code>False</code>). If the provided path does not exists, it will always return <code>False</code>
-                </p>
-            </div>
-            <div class="card-row">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-code" viewBox="0 0 16 16">
-                    <path d="M5.854 4.854a.5.5 0 1 0-.708-.708l-3.5 3.5a.5.5 0 0 0 0 .708l3.5 3.5a.5.5 0 0 0 .708-.708L2.707 8l3.147-3.146zm4.292 0a.5.5 0 0 1 .708-.708l3.5 3.5a.5.5 0 0 1 0 .708l-3.5 3.5a.5.5 0 0 1-.708-.708L13.293 8l-3.147-3.146z"/>
-                </svg>
-                <div class="input-code-block">
-                    <pre><code>
-                        <p><span class="python-color1">print</span>(os.path.<span class="python-color1">isfile</span>(<span class="python-color3">"c:/Users/User/Desktop/myfile.txt"</span>))</p>
-                    </code></pre>
-                </div>
-            </div>
-            <div class="card-row">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-code-slash" viewBox="0 0 16 16">
-                    <path d="M10.478 1.647a.5.5 0 1 0-.956-.294l-4 13a.5.5 0 0 0 .956.294l4-13zM4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0zm6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0z"/>
-                </svg>
-                <div class="output-code-block">
-                    <pre><code>
-                        <p>True</p>
-                    </code></pre>
-                </div>
-            </div>
-        </div>
+        {{ card("func-getcwd", ["os.path.basename(path)"], "This function returns the current absolute working directory of your Python script as a string", "https://gist.github.com/imarag/7475b8df4646f293e373a9381ab88d94.js") }}
+
+        {{ card("func-basename", ["os.path.basename(path)"], "Extract the base name of a file path. In other words, it is the last segment of a path that does not conclude with a path separator character", "https://gist.github.com/imarag/c74ea1a972e7d6c1394bcd5cbd1a411c.js") }}
+
+        {{ card("func-dirname", ["os.path.dirname(path)"], "This function essentially extracts everything from the beginning of the path up to the last path component with a path separator at its end. However, it will remove the last forward slash when it finds it. This is the <i>directory path</i> described above without the forward slash at the end", "https://gist.github.com/imarag/d2ccf05df4227dc6ca1e526e7a16cab2.js") }}
+
+        {{ card("func-split", ["os.path.split(path)"], "This function takes the path as input and returns a tuple with <code>os.path.dirname</code> as the first element and <code>os.path.basename</code> as the second element", "https://gist.github.com/imarag/abba4dccddc4c780bf6617dd2dc22638.js") }}
+
+        {{ card("func-splitext", ["os.path.splitext(path)"], "This function is used to split a file path into the file path without its extension and the file extension (including the dot). In other words, it splits the path into a part up to the dot of the file (if there is a file) and a part that includes the dot and the extension. If there is no extension, the second returned element will be empty.", "https://gist.github.com/imarag/0783c09af77a46fc8d2947d51a346f68.js") }}
+
+        {{ card("func-join", ["os.path.join(path, *path)"], "This function is used to join one or more path components together to create a valid file path. The return value is a concatenation of all the provided components", "https://gist.github.com/imarag/1bffd7db2bc51a60be7e800c19f0a338.js") }}
+
+        {{ card("func-exists", ["os.path.exists(path)"], "This function is used to check whether a file or directory exists at a given path", "https://gist.github.com/imarag/fe72743fac29012559a7643352986998.js") }}
+
+        {{ card("func-isdir", ["os.path.isdir(path)"], "This function is used to check whether a given path corresponds to a directory (<code>True</code>) or not (<code>False</code>). If the provided path does not exist, it will always return <code>False</code>", "https://gist.github.com/imarag/a551903963d8c32afc0fd9e464918ba5.js") }}
+
+        {{ card("func-isfile", ["os.path.isfile(path)"], "This function is used to check whether a given path corresponds to a file (<code>True</code>) or not (<code>False</code>). If the provided path does not exist, it will always return <code>False</code>", "https://gist.github.com/imarag/0f5142826db3709fac39662cdf7b4a42.js") }}
+
+
         <p>Let's see some examples of using these functions together. Let's define a path of a file to use for the examples:</p>
-        <div class="input-code-block">
-            <pre><code>
-                <p><span class="comment"># initialize a file to use</span></p>
-                <p>myfile = <span class="python-color3">"c:/Users/User/Desktop/mysite/templates/login.html"</span></p>
-            </code></pre>
-        </div>
+        <script src="https://gist.github.com/imarag/f2ad5cc0c143874cbdab6b017e5bfb52.js"></script>
         <p>Start by getting the name of the parent directory of the file (<i>directory name</i>):</p>
-        <div class="input-code-block">
-            <pre><code>
-                <p><span class="comment"># get the name of the parent folder</span></p>
-                <p>parent_dir_name = os.path.<span class="python-color1">basename</span>(os.path.<span class="python-color1">dirname</span>(myfile))</p>
-                <p><span class="python-color1">print</span>(parent_dir_name)</p>
-            </code></pre>
-        </div>
-        <div class="output-code-block">
-            <pre><code>
-                <p>templates</p>
-            </code></pre>
-        </div>
+        <script src="https://gist.github.com/imarag/e8c84d018ed3486abdf66b04fecad2f0.js"></script>
         <p>
             To continue, suppose that we need to move the file inside a folder called <i>auth</i> 
             that is located at the current working directory, with name "login.html" and we want to get the new file path:
         </p>
-        <div class="input-code-block">
-            <pre><code>
-                <p><span class="comment"># get the new file path</span></p>
-                <p>new_path = os.path.<span class="python-color1">join</span>(os.path.<span class="python-color1">dirname</span>(myfile), <span class="python-color3">"auth"</span>, <span class="python-color3">"login.html"</span>)</p>
-                <p><span class="python-color1">print</span>(new_path)</p>
-            </code></pre>
-        </div>
-        <div class="output-code-block">
-            <pre><code>
-                <p>c:/Users/User/Desktop/mysite/templates\auth\login.html</p>
-            </code></pre>
-        </div>
+        <script src="https://gist.github.com/imarag/fac28193745712c28836bb9a70fc87d0.js"></script>
         <p>
             Lastly, let's say that we need to rename that <i>login.html</i> file that is located 
             in the <i>auth</i> folder, to <i>login-template.html.</i>
         </p>
-        <div class="input-code-block">
-            <pre><code>
-                <p><span class="comment"># create a new path of the renamed file</span></p>
-                <p>new_renamed_file_path = os.path.<span class="python-color1">splitext</span>(new_path)[0]</p>
-                <p>new_renamed_file_ext = os.path.<span class="python-color1">splitext</span>(new_path)[1]</p>
-                <p>new_renamed_path = new_renamed_file_path + <span class="python-color3">"-template"</span> + new_renamed_file_ext</p>
-                <p><span class="python-color1">print</span>(new_renamed_path)</p>
-            </code></pre>
-        </div>
-        <div class="output-code-block">
-            <pre><code>
-                <p>c:/Users/User/Desktop/mysite/templates\auth\login-template.html</p>
-            </code></pre>
-        </div>
+        <script src="https://gist.github.com/imarag/a672b7c03b57caaf4d4e35cb6378e0e1.js"></script>
         <p>
             There are easier ways to achieve the previous tasks. However, we do it this way for instructional purposes.
         </p>
@@ -558,38 +187,30 @@
             <i>pathlib</i> on a Windows system, this wraping will return a <code>WindowsPath</code> path object that
             is used to represent <i>pathlib</i> file paths. Similarly, it will return a <code>PosixPath</code> for a Linux system. 
         </p>
-        <div class="input-code-block">
-            <pre><code>
-                <p><span class="comment"># Initialize a pathlib path by wrapping your path with the pathlib.Path class</span></p>
-                <p><span class="python-color2">from</span> pathlib <span class="python-color1">import</span> Path</p>
-                <p>pathlib_path = <span class="python-color1">Path</span>(myfile)</p>
-                <p><span class="python-color1">print</span>(<span class="python-color1">type</span>(pathlib_path))</p>
-            </code></pre>
-        </div>
-        <div class="output-code-block">
-            <pre><code>
-                <p>&lt;class 'pathlib.WindowsPath'&gt;</p>
-            </code></pre>
-        </div>
+        <script src="https://gist.github.com/imarag/986fc8d3b4efc75583d6491a494fb279.js"></script>
         <p>
             Just put your path inside the <code>pathlib.Path</code> class and you will have access to
             the following <i>pathlib</i> functionality. Note that with "pathlib path" we refer to the returned pathlib <code>WindowsPath</code> in case of Windows operating system or
             <code>PosixPath</code> in case of a Linux system. 
         </p>
         
-        <ul class="article-ul-contents">
-            <li><a class="link-info" href="#pathlib-path-parts"><code>WindowsPath.name</code></a>, returns the last component of the pathlib path which is the file name with its extension, as a string</li>
-            <li><a class="link-info" href="#pathlib-path-parts"><code>WindowsPath.stem</code></a>, provides the file name of the path without the file extension as a string</li>
-            <li><a class="link-info" href="#pathlib-path-parts"><code>WindowsPath.suffix</code></a>, retrieves the file extension, including the period, as a string</li>
-            <li><a class="link-info" href="#pathlib-path-parts"><code>WindowsPath.suffixes</code></a>, returns a list of file extensions for files with multiple extensions (e.g., .tar.gz)</li>
-            <li><a class="link-info" href="#pathlib-path-parts"><code>WindowsPath.parent</code></a>, extracts the directory path of the current path as a pathlib path</li>
-            <li><a class="link-info" href="#pathlib-path-parts"><code>WindowsPath.parents</code></a>, returns an iterator over all parent directories of the current path, as pathlib path objects</li>
-            <li><a class="link-info" href="#pathlib-path-parts"><code>WindowsPath.parts</code></a>, generates a tuple that contains all the path components, as strings</li>
-            <li><a class="link-info" href="#pathlib-new-path"><code>WindowsPath.with_suffix</code></a>, returns the current pathlib path object with a modified file extension</li>
-            <li><a class="link-info" href="#pathlib-new-path"><code>WindowsPath.with_name</code></a>, returns the current pathlib path object with different file name</li>
-            <li><a class="link-info" href="#pathlib-new-path"><code>WindowsPath.with_stem</code></a>, returns the current pathlib path object with modified stem</li>
-            <li><a class="link-info" href="#pathlib-join-path"><code>WindowsPath.joinpath</code></a>, joins one or more path components to the current pathlib path</li>
-        </ul>
+        {{ create_list(
+            [
+                ("pathlib-path-parts", "WindowsPath.name",", returns the last component of the pathlib path which is the file name with its extension, as a string"),
+                ("pathlib-path-parts", "WindowsPath.stem",", provides the file name of the path without the file extension as a string"),
+                ("pathlib-path-parts", "WindowsPath.suffix", ", retrieves the file extension, including the period, as a string"), 
+                ("pathlib-path-parts", "WindowsPath.suffixes", ", returns a list of file extensions for files with multiple extensions (e.g., .tar.gz)"),
+                ("pathlib-path-parts", "WindowsPath.parents", ", extracts the directory path of the current path as a pathlib path"),
+                ("pathlib-path-parts", "WindowsPath.stem", ", returns an iterator over all parent directories of the current path, as pathlib path objects"),
+                ("pathlib-path-parts", "WindowsPath.parts", ", generates a tuple that contains all the path components, as strings"),
+                ("pathlib-new-path", "WindowsPath.with_suffix", ", returns the current pathlib path object with a modified file extension"),
+                ("pathlib-new-path", "WindowsPath.with_name", ", returns the current pathlib path object with different file name"),
+                ("pathlib-new-path", "WindowsPath.with_stem", ", returns the current pathlib path object with modified stem"),
+                ("pathlib-join-path", "WindowsPath.joinpath", ", joins one or more path components to the current pathlib path")
+            ]
+        ) }}
+
+     
         <p>
             Let's explore these functions below to gain a deeper understanding of how they are used. Because of my Windows operating system, i will use <code>WindowsPath</code> as the 
             pathlib path. 

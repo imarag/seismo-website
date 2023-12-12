@@ -2,16 +2,16 @@ from flask import Flask, render_template, send_file, request, flash, session, re
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from flask_mail import Mail, Message
-import datetime
 import os
 from markupsafe import escape
 import random 
 import string 
-
+import re
 
 
 db = SQLAlchemy()
 mail = Mail()
+
 
 
 
@@ -70,11 +70,15 @@ def create_app(test_config=None):
 
     @app.route('/show-topic/<topic_tmp_name>')
     def show_topic(topic_tmp_name):
-        if not session['user_id']:
+        if 'user_id' not in session:
             user_id = ''.join(random.choices(string.ascii_letters + string.digits, k=25))
             session['user_id'] = user_id
         topic = Topic.query.filter_by(template_name=topic_tmp_name).first()
         return render_template(f'topics/{topic_tmp_name}.html', topic_object = topic)
+    
+    @app.route('/nada')
+    def nada():
+        return render_template(f'test.html')
     
     @app.route('/get-page/<page_name>')
     def get_page(page_name):
