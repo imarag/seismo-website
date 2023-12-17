@@ -1,39 +1,5 @@
 (()=>{
 
-    // let imageFaultAnimation = document.querySelector('#fault-animation');
-    // let imageSiteEffectAnimation = document.querySelector('#site-effect-animation');
-    // let imageTectPlatesAnimation = document.querySelector('#image-id-earthquakes');
-
-    // imageFaultAnimation.addEventListener('mouseover', ()=>{
-    //     imageFaultAnimation.src = '/static/img/home-images/fault-animation.gif';
-    // });
-    // imageFaultAnimation.addEventListener('mouseleave', ()=>{
-    //     imageFaultAnimation.src = '/static/img/home-images/fault-animation-start.jpg';
-    // });
-
-    // imageSiteEffectAnimation.addEventListener('mouseover', ()=>{
-    //     imageSiteEffectAnimation.src = '/static/img/home-images/site-effect-animation.gif';
-    // });
-    // imageSiteEffectAnimation.addEventListener('mouseleave', ()=>{
-    //     imageSiteEffectAnimation.src = '/static/img/home-images/site-effect-animation-start.jpg';
-    // });
-
-    // imageTectPlatesAnimation.addEventListener('mouseover', ()=>{
-    //     imageTectPlatesAnimation.src = '/static/img/home-images/tectonic-plates-earthquakes.gif';
-    // });
-    // imageTectPlatesAnimation.addEventListener('mouseleave', ()=>{
-    //     imageTectPlatesAnimation.src = '/static/img/home-images/tectonic-plates-earthquakes-start.gif';
-    // });
-
-    const myCarouselElement = document.querySelector('#indexCarouselImages');
-
-    const carousel = new bootstrap.Carousel(myCarouselElement, {
-        interval: 2000,
-        touch: false
-      })
-      
-
-
     let imageHover = document.querySelector('#image-hover');
     let trimHoverLi =  document.querySelector('#trim-hover-li');
     let taperHoverLi =  document.querySelector('#taper-hover-li');
