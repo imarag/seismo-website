@@ -489,19 +489,19 @@ body {
 
 @media (min-width: 768px) {
     .article-main-content img {
-        width: 60%;
+        width: 72%;
     }
 }
 
 @media (min-width: 992px) {
     .article-main-content img {
-        width: 50%;
+        width: 62%;
     }
 }
 
 @media (min-width: 1200px) {
     .article-main-content img {
-        width: 40%;
+        width: 52%;
     }
 }
 

@@ -4,7 +4,7 @@
 
 {% block tool_template_image %}
     <img 
-        src="{{ url_for('static', filename='img/' + topic_object.image_name) }}"  
+        src="{{ url_for('static', filename='img/template-images/resized/' + topic_object.image_name) }}"
         alt="{{ topic_object.title }} - template image"
         class="img-fluid"
     >

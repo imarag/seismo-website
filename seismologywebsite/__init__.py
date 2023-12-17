@@ -13,8 +13,6 @@ db = SQLAlchemy()
 mail = Mail()
 
 
-
-
 class Topic(db.Model, UserMixin):
     __tablename__ = 'topics'
 

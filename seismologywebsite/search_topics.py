@@ -24,7 +24,7 @@ def filter_topics():
     elif filter_selected == 'interactive tools':
         topics = Topic.query.filter_by(type='interactive').all()
 
-    return render_template('search-topics.html', topics=topics, selectedradiobutton=filter_selected.title()) 
+    return render_template('search-topics.html', topics=topics, selectedtopic=filter_selected.title()) 
         
 
 
@@ -48,12 +48,12 @@ def search_topic():
             if search_param in lower_description or search_param in lower_title:
                 found_topics_list.append(tp)
         topics = found_topics_list
-        selectedradiobutton = f'Topics that contain: {search_param}'
+        selectedtopic = f'Topics that contain: {search_param}'
     else:
-        selectedradiobutton = 'All Topics'
+        selectedtopic = 'All Topics'
 
     
-    return render_template('search-topics.html', topics=topics, selectedradiobutton=selectedradiobutton) 
+    return render_template('search-topics.html', topics=topics, selectedtopic=selectedtopic) 
 
 
 

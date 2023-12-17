@@ -40,7 +40,7 @@
         </div>
         <br><br>
         <p class="text-center display-6 mt-5 mb-2 fw-semibold">
-            {{ selectedradiobutton }}
+            {{ selectedtopic }}
         </p>
         <div class="row justify-content-center justify-content-lg-start align-items-center  mt-5 mb-2 gy-3">
             <div class="col-8 col-md-auto text-center text-md-start">
@@ -74,7 +74,7 @@
                         <div class="col-9 col-sm-7 col-md-5 col-lg-4 col-xl-3 text-center">
                             <a href="{{ url_for('show_topic', topic_tmp_name=tpc['template_name']) }}" class="text-decoration-none text-dark">
                                 <div class="card text-bg-dark" style="margin:10px auto;" id="all-topics-card">
-                                    <img src="{{ url_for('static', filename='img/' ~ filename) }}" class="card-img mx-auto img-fluid" style="opacity: 0.4">
+                                    <img src="{{ url_for('static', filename='img/template-images/resized/' ~ filename) }}" class="card-img mx-auto img-fluid" style="opacity: 0.4">
                                     <div class="card-img-overlay">
                                         <h5 class="card-title fw-bold text-center text-info fs-4">{{ tpc['title'] }}</h5>
                                         <br>
