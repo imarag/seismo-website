@@ -7,25 +7,23 @@
                 <div class="py-3 container-lg">
                     <div class="row justify-content-center align-items-center  pt-5 mb-0 gy-4 gx-5">
                         <div class="col-4 col-sm-3 col-md-3 col-lg-3 col-xl-2">
-                            {% block article_template_image %}
-
-                            {% endblock %}
+                            <img 
+                                src="{{ url_for('static', filename='img/template-images/resized/' + topic_object.image_name) }}" 
+                                alt="{{ topic_object.title }} - template image"
+                                class="img-fluid"
+                            >
                         </div>
                         <div class="col-12 col-sm-11 col-md-8 col-lg-8 col-xl-8">
                             <p class="text-center text-md-start display-4 fw-semibold">
-                                {% block article_title %}
-
-                                {% endblock %}
+                                {{ topic_object.title }}
                             </p>
                             <p class="text-muted fs-2 text-center text-md-start">
-                                {% block article_title_description %}
-
-                                {% endblock %}
+                                {{ topic_object.description }}
                             </p>
                         </div>
                     </div>
                 </div>
-                <div class="text-center fs-5 my-5 top-level-pills-container" style="position: relative; top: 13px;">
+                <div class="text-center fs-6 my-5 top-level-pills-container" style="position: relative; top: 13px;">
                     {% block article_pills %}
     
                     {% endblock %}
@@ -34,7 +32,7 @@
         </section>
         <section>
             <div class="article-main-content">
-                <div class="container-lg">
+                <div class="container-lg my-5 lead">
                     {% block article_main_content %}
     
                     {% endblock %}

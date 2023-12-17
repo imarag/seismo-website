@@ -289,11 +289,6 @@ body {
 }
 
 
-
-.justified-container p {
-    text-align: justify;
-}
-
 .first-line-indent {
     text-indent: 40px;
 }
@@ -348,27 +343,26 @@ body {
 }
 
 .article-main-content p{
-    font-weight: 100;
     font-size: 20px;
-    color: #383839;
 }
 
 .article-main-content ul {
-    font-weight: 100;
-    font-size: 22px;
-    color: #383839;
+    font-size: 20px;
 }
 
 .article-main-content ol {
-    font-weight: 100;
-    font-size: 22px;
-    color: #383839;
+    font-size: 20px;
+}
+
+.article-main-content ul li, .article-main-content ol li {
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .article-main-content .figure-container {
     text-align: center;
-    margin-top: 30px;
-    margin-bottom: 30px;
+    margin-top: 40px;
+    margin-bottom: 40px;
 }
 
 .article-main-content img {
@@ -388,7 +382,7 @@ body {
     font-size: 16px;
     font-style: italic;
     color: #4b4ee5;
-    margin-top: 30px;
+    margin-top: 40px;
     margin-bottom: 20px;
     text-align: left;
 }
@@ -409,15 +403,16 @@ body {
     font-weight: 20;
 }
 
-/* .article-main-content table {
+ .article-main-content .table-article {
     border-collapse: collapse;
     width: 100%;
     margin-bottom: 20px;
     margin-bottom: 40px;
     text-align: center;
-} */
+    margin-bottom: 40px;
+}
   
-/* .article-main-content th {
+ .article-main-content .table-article th {
     background-color: #f2f2f2;
     font-weight: bold;
     text-align: center;
@@ -426,15 +421,15 @@ body {
 }
   
 
-.article-main-content tr:nth-child(even) {
+.article-main-content .table-article tr:nth-child(even) {
     background-color: #f2f2f2;
 }
   
 
-.article-main-content td {
+.article-main-content .table-article td {
     padding: 10px;
     border: 1px solid #ddd;
-} */
+}
 
 .article-main-content .output-code-block {
     background-color: #3e3e3e;
@@ -489,19 +484,19 @@ body {
 
 @media (min-width: 768px) {
     .article-main-content img {
-        width: 72%;
+        width: 65%;
     }
 }
 
 @media (min-width: 992px) {
     .article-main-content img {
-        width: 62%;
+        width: 55%;
     }
 }
 
 @media (min-width: 1200px) {
     .article-main-content img {
-        width: 52%;
+        width: 45%;
     }
 }
 

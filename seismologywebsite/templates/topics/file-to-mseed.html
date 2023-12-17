@@ -1,27 +1,7 @@
 {% extends 'base-interactive-tools.html' %}
 
-
-{% block tool_template_image %}
-    <img 
-        src="{{ url_for('static', filename='img/template-images/resized/' + topic_object.image_name) }}"
-        alt="{{ topic_object.title }} - template image"
-        class="img-fluid"
-    >
-{% endblock %}
-
-
-{% block tool_title %}
-    {{ topic_object.title }}
-{% endblock %}
-
-
 {% block tool_title_description %}
     Convert data from a file to MiniSEED format
-{% endblock %}
-
-
-{% block tool_intro_description %}
-    {{ topic_object.description }}
 {% endblock %}
 
 {% block tool_user_guide %}
@@ -65,7 +45,12 @@
 
 
 {% block tool_body %}
-    <div class="container-lg">
+    <p class="text-center text-secondary d-block d-md-none my-5">
+        Sorry, but it seems like you're accessing our tool from a mobile device. Currently, our tool is optimized for desktop use to 
+        provide the best user experience. For the optimal experience, please switch to a desktop or laptop computer. We appreciate 
+        your understanding and apologize for any inconvenience.
+    </p>
+    <div class="d-none d-md-block">
         <p class="display-3 text-info text-center mt-5 mb-4">
             1. Upload a file
         </p>
@@ -192,7 +177,7 @@
                                                 </button>
                                                 <input class="form-check-input" type="checkbox" id="excel-has-headers">
                                                 <label class="form-check-label text-center text-md-start text-secondary" for="excel-has-headers">
-                                                  has headers
+                                                    has headers
                                                 </label>
                                             </div>
                                         </div>
@@ -288,7 +273,7 @@
                                                 </button>
                                                 <input class="form-check-input" type="checkbox" id="csv-has-headers">
                                                 <label class="form-check-label text-center text-md-start text-secondary" for="csv-has-headers">
-                                                  has headers
+                                                    has headers
                                                 </label>
                                             </div>
                                         </div>
@@ -405,7 +390,7 @@
                                                 </button>
                                                 <input class="form-check-input" type="checkbox" id="txt-has-headers">
                                                 <label class="form-check-label text-center text-md-start text-secondary" for="txt-has-headers">
-                                                  has headers
+                                                    has headers
                                                 </label>
                                             </div>
                                         </div>
@@ -597,8 +582,6 @@
                     </div>
                 </div>
             </div>
-                        
-   
         </div>
         <div class="text-center  bg-red text-red mt-3" id="seismic-parameters-spinner-div">
             <div class="spinner-border spinner-border-xl text-warning" role="status">
@@ -606,8 +589,6 @@
             </div>
         </div>
     </div>
-
-
     <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
     <script src="/static/js/file-to-mseed.js"></script>
 {% endblock %}

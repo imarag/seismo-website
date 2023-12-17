@@ -1,44 +1,11 @@
 
 {% extends 'base-articles.html' %}
 
-
-{% block article_template_image %}
-    <img 
-        src="{{ url_for('static', filename='img/template-images/resized/' + topic_object.image_name) }}" 
-        alt="{{ topic_object.title }} - template image"
-        class="img-fluid"
-    >
-{% endblock %}
-
-
-{% block article_title %}
-    {{ topic_object.title }}
-{% endblock %}
-
-
-{% block article_title_description %}
-    {{ topic_object.description }}
-{% endblock %}
-
-
 {% block article_pills %}
     <a target="_blank" href="https://docs.obspy.org/tutorial/index.html"><span class="badge rounded-pill">Obspy</span></a>
     <a target="_blank" href="https://docs.obspy.org/packages/autogen/obspy.core.stream.Stream.html"><span class="badge rounded-pill">Stream</span></a>
     <a target="_blank" href="https://docs.obspy.org/packages/autogen/obspy.core.trace.Trace.html"><span class="badge rounded-pill">Trace</span></a>
-    <a target="_blank" href="https://docs.obspy.org/packages/autogen/obspy.core.stream.read.html"><span class="badge rounded-pill">read</span></a>
-{% endblock %}
-
-{% block article_list_items %}
-    <li><a href="#item-1">Introduction</a></li>
-    <li><a href="#item-2">Basic Structure</a></li>
-    <li><a href="#item-3">Basic graph styling</a></li>
-    <li><a class="sub-chapter" href="#item-3-1">Import And Plot The Data</a></li>
-    <li><a class="sub-chapter" href="#item-3-2">Style Graph And Titles</a></li>
-    <li><a class="sub-chapter" href="#item-3-3">Configure Grid And Ticks</a></li>
-    <li><a class="sub-chapter" href="#item-3-4">Configure The Legend</a></li>
-    <li><a class="sub-chapter" href="#item-3-5">Configure The Line</a></li>
-    <li><a href="#item-4">Plot Seismic Records</a></li>
-    <li><a href="#item-5">Miscellaneous Functions</a></li>
+    <a target="_blank" href="https://www.thefouriertransform.com/"><span class="badge rounded-pill">Fourier</span></a>
 {% endblock %}
 
 {% block article_main_content %}

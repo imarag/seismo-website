@@ -1,32 +1,9 @@
 
 {% extends 'base-interactive-tools.html' %}
 
-
-{% block tool_template_image %}
-    <img 
-        src="{{ url_for('static', filename='img/template-images/resized/' + topic_object.image_name) }}"
-        alt="{{ topic_object.title }} - template image"
-        class="img-fluid"
-    >
-{% endblock %}
-
-
-{% block tool_title %}
-    {{ topic_object.title }}
-{% endblock %}
-
-
-
 {% block tool_title_description %}
     Compute the Fourier Spectra between a window on the waveform
 {% endblock %}
-
-
-{% block tool_intro_description %}
-    {{ topic_object.description }}
-{% endblock %}
-
-
 
 {% block tool_user_guide %}
     <p>
@@ -63,180 +40,181 @@
 
 
 {% block tool_body %}
-    <div class="fs-5 lead my-5">
-        <div class="row justify-content-center">
-            <div class="col-12 col-md-11 col-lg-10 col-xl-9 col-xxl-8">
-                <div class="text-bg-dark rounded p-5 mt-5">
-                    <div class="mb-4">
-                        <button class="btn btn-outline-info" id="upload-file-button">Upload file</button>
-                        <input 
-                            type="file" 
-                            id="upload-file-input" 
-                            value="upload-file-input" 
-                            name="upload-file-input"
-                            style="display: none;"
-                        >
+    <p class="text-center text-secondary d-block d-md-none my-5">
+        Sorry, but it seems like you're accessing our tool from a mobile device. Currently, our tool is optimized for desktop use to 
+        provide the best user experience. For the optimal experience, please switch to a desktop or laptop computer. We appreciate 
+        your understanding and apologize for any inconvenience.
+    </p>
+    <div class="d-none d-md-block">
+        <div class="text-bg-dark rounded p-5 mt-5">
+            <div class="mb-4">
+                <button class="btn btn-outline-info" id="upload-file-button">Upload file</button>
+                <input 
+                    type="file" 
+                    id="upload-file-input" 
+                    value="upload-file-input" 
+                    name="upload-file-input"
+                    style="display: none;"
+                >
+            </div>
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="time-series-tab" data-bs-toggle="tab"
+                        data-bs-target="#time-series-tab-pane" type="button" role="tab"
+                        aria-controls="time-series-tab-pane" aria-selected="true">Time Series</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="fourier-tab" data-bs-toggle="tab"
+                        data-bs-target="#fourier-tab-pane" type="button" role="tab" aria-controls="fourier-tab-pane"
+                        aria-selected="false" disabled>Fourier</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="hvsr-tab" data-bs-toggle="tab" data-bs-target="#hvsr-tab-pane"
+                        type="button" role="tab" aria-controls="hvsr-tab-pane" aria-selected="false"
+                        disabled>HVSR</button>
+                </li>
+            </ul>
+            <div class="tab-content" id="graphs-area-fourier">
+                <div class="tab-pane fade show active" id="time-series-tab-pane" role="tabpanel"
+                    aria-labelledby="time-series-tab" tabindex="0">
+                    <div class="row justify-content-center align-items-center"
+                        id="fourier-spectra-start-by-upload-container">
+                        <div class="col text-center">
+                            <p class="fs-3">Start by <button class="btn btn-outline-info"
+                                    id="upload-another-file-button">uploading</button> a seismic data file</p>
+                            <input type="file" id="upload-another-file-input" value="upload-another-file-input"
+                                name="upload-another-file-input" style="display: none;">
+                        </div>
                     </div>
-                    <ul class="nav nav-tabs" id="myTab" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="time-series-tab" data-bs-toggle="tab"
-                                data-bs-target="#time-series-tab-pane" type="button" role="tab"
-                                aria-controls="time-series-tab-pane" aria-selected="true">Time Series</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="fourier-tab" data-bs-toggle="tab"
-                                data-bs-target="#fourier-tab-pane" type="button" role="tab" aria-controls="fourier-tab-pane"
-                                aria-selected="false" disabled>Fourier</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="hvsr-tab" data-bs-toggle="tab" data-bs-target="#hvsr-tab-pane"
-                                type="button" role="tab" aria-controls="hvsr-tab-pane" aria-selected="false"
-                                disabled>HVSR</button>
-                        </li>
-                    </ul>
-                    <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade show active" id="time-series-tab-pane" role="tabpanel"
-                            aria-labelledby="time-series-tab" tabindex="0">
-                            <div class="row justify-content-center align-items-center"
-                                id="fourier-spectra-start-by-upload-container">
-                                <div class="col text-center">
-                                    <p class="fs-3">Start by <button class="btn btn-outline-info"
-                                            id="upload-another-file-button">uploading</button> a seismic data file</p>
-                                    <input type="file" id="upload-another-file-input" value="upload-another-file-input"
-                                        name="upload-another-file-input" style="display: none;">
-                                </div>
+                    <div id="time-series-graph">
+    
+                    </div>
+                    <div id="options-menu" class="mt-2 fs-6">
+                        <div class="row g-3 align-items-center justify-content-start">
+                            <div class="col-auto">
+                            <label for="signal-left-side-input" class="col-form-label">Signal window left side</label>
                             </div>
-                            <div id="time-series-graph">
-            
+                            <div class="col-auto">
+                            <input type="text" maxlength="7" id="signal-left-side-input" class="form-control form-control-sm" aria-describedby="signal-left-side-input" style="width: 60px">
                             </div>
-                            <div id="options-menu" class="mt-2 fs-6">
-                                <div class="row g-3 align-items-center justify-content-start">
-                                    <div class="col-auto">
-                                    <label for="signal-left-side-input" class="col-form-label">Signal window left side</label>
-                                    </div>
-                                    <div class="col-auto">
-                                    <input type="text" maxlength="7" id="signal-left-side-input" class="form-control form-control-sm" aria-describedby="signal-left-side-input" style="width: 60px">
-                                    </div>
-                                    <div class="col-auto">
-                                        <span>sec</span>
-                                    </div>
-                                </div>
-                                <input style="width: 100%" type="range" min="0" max="100" value="50" step="1"
-                                    id="signal-window-left-side-slider">
-                                <div class="row g-3 align-items-center justify-content-start">
-                                    <div class="col-auto">
-                                    <label for="window-length-input" class="col-form-label">Window length</label>
-                                    </div>
-                                    <div class="col-auto">
-                                    <input type="text" maxlength="7" id="window-length-input" class="form-control form-control-sm" aria-describedby="window-length-input" style="width: 60px">
-                                    </div>
-                                    <div class="col-auto">
-                                        <span>sec</span>
-                                    </div>
-                                </div>
-                                <input style="width: 100%" type="range" min="0" max="100" value="50" step="1"
-                                    id="window-length-slider">
+                            <div class="col-auto">
+                                <span>sec</span>
+                            </div>
+                        </div>
+                        <input style="width: 100%" type="range" min="0" max="100" value="50" step="1"
+                            id="signal-window-left-side-slider">
+                        <div class="row g-3 align-items-center justify-content-start">
+                            <div class="col-auto">
+                            <label for="window-length-input" class="col-form-label">Window length</label>
+                            </div>
+                            <div class="col-auto">
+                            <input type="text" maxlength="7" id="window-length-input" class="form-control form-control-sm" aria-describedby="window-length-input" style="width: 60px">
+                            </div>
+                            <div class="col-auto">
+                                <span>sec</span>
+                            </div>
+                        </div>
+                        <input style="width: 100%" type="range" min="0" max="100" value="50" step="1"
+                            id="window-length-slider">
 
-                                <div class="row justify-content-start align-items-center  mt-2">
-                                    <div class="col-5">
-                                        <p>Use the whole time series as the window</p>
-                                    </div>
-                                    <div class="col-5">
-                                        <button id="whole-signal-button" class="btn btn-success">apply</button>
-                                    </div>
+                        <div class="row justify-content-start align-items-center  mt-2">
+                            <div class="col-5">
+                                <p>Use the whole time series as the window</p>
+                            </div>
+                            <div class="col-5">
+                                <button id="whole-signal-button" class="btn btn-success">apply</button>
+                            </div>
+                        </div>
+            
+                        <div class="row justify-content-start align-items-center mt-3">
+                            <div class="col-5">
+                                <p>Add a noise window</p>
+                            </div>
+                            <div class="col-5">
+                                <button id="add-noise-button" class="btn btn-success">Add+</button>
+                                <button id="remove-noise-button" class="btn btn-danger">Remove</button>
+                            </div>
+                        </div>
+            
+                        <div id="noise-slider-div">
+                            <div class="row g-3 align-items-center justify-content-start">
+                                <div class="col-auto">
+                                <label for="noise-right-side-input" class="col-form-label">Noise window right side</label>
                                 </div>
-                    
-                                <div class="row justify-content-start align-items-center mt-3">
-                                    <div class="col-5">
-                                        <p>Add a noise window</p>
-                                    </div>
-                                    <div class="col-5">
-                                        <button id="add-noise-button" class="btn btn-success">Add+</button>
-                                        <button id="remove-noise-button" class="btn btn-danger">Remove</button>
-                                    </div>
+                                <div class="col-auto">
+                                <input type="text" maxlength="7" id="noise-right-side-input" class="form-control form-control-sm" aria-describedby="noise-right-side-input" style="width: 60px">
                                 </div>
-                    
-                                <div id="noise-slider-div">
-                                    <div class="row g-3 align-items-center justify-content-start">
-                                        <div class="col-auto">
-                                        <label for="noise-right-side-input" class="col-form-label">Noise window right side</label>
-                                        </div>
-                                        <div class="col-auto">
-                                        <input type="text" maxlength="7" id="noise-right-side-input" class="form-control form-control-sm" aria-describedby="noise-right-side-input" style="width: 60px">
-                                        </div>
-                                        <div class="col-auto">
-                                            <span>sec</span>
-                                        </div>
-                                    </div>
-                                    <input style="width: 100%" type="range" min="0" max="100" value="50" step="1"
-                                    id="noise-window-right-side-slider">
+                                <div class="col-auto">
+                                    <span>sec</span>
                                 </div>
-                    
-                                <div class="row justify-content-center align-items-center mt-5">
-                                    <div class="col-auto text-center">
-                                        <button class="btn btn-primary p-3" id="computeFourierButton">Compute Fourier</button>
-                                    </div>
-                                </div>
-                                <div class="row justify-content-center align-items-center mt-3">
-                                    <div class="col-auto text-center">
-                                        <div class="form-check">
-                                            <div>
-                                                <input class="form-check-input" type="checkbox" value="" id="calculate-hvsr-checkbox" checked>
-                                                <label class="form-check-label" for="calculate-hvsr-checkbox">
-                                                Compute HVSR
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-auto text-center">
-                                        <span>Vertical component: </span>
-                                        <select name="vertical-component-select" id="vertical-component-select"
-                                        style="width:80px">
-                                        </select>
+                            </div>
+                            <input style="width: 100%" type="range" min="0" max="100" value="50" step="1"
+                            id="noise-window-right-side-slider">
+                        </div>
+            
+                        <div class="row justify-content-center align-items-center mt-5">
+                            <div class="col-auto text-center">
+                                <button class="btn btn-primary p-3" id="computeFourierButton">Compute Fourier</button>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center align-items-center mt-3">
+                            <div class="col-auto text-center">
+                                <div class="form-check">
+                                    <div>
+                                        <input class="form-check-input" type="checkbox" value="" id="calculate-hvsr-checkbox" checked>
+                                        <label class="form-check-label" for="calculate-hvsr-checkbox">
+                                        Compute HVSR
+                                        </label>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="tab-pane fade" id="fourier-tab-pane" role="tabpanel" aria-labelledby="fourier-tab"
-                            tabindex="1">
-                            <div class="row justify-content-center align-items-center">
-                                <div class="col-12 col-lg-8 text-center">
-                                    <div id="fourier-graph">
-            
-                                    </div>
-                                </div>
-                                <div class="col-12 col-lg-4 text-center">
-                                    <p class="display-6">Download:</p>
-                                    <a href="{{ url_for('BP_fourier_spectra.download', what_output='graph-fourier') }}"
-                                        class="btn btn-lg btn-primary d-inline">Graph</a>
-                                    <a href="{{ url_for('BP_fourier_spectra.download', what_output='data-fourier') }}"
-                                        class="btn btn-lg btn-danger d-inline">Data</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="hvsr-tab-pane" role="tabpanel" aria-labelledby="hvsr-tab"
-                            tabindex="2">
-                            <div class="row justify-content-center align-items-center">
-                                <div class="col-12 col-lg-8 text-center">
-                                    <div id="hvsr-graph">
-            
-                                    </div>
-                                </div>
-                                <div class="col-12 col-lg-4 text-center">
-                                    <p class="display-6">Download:</p>
-                                    <a href="{{ url_for('BP_fourier_spectra.download', what_output='graph-hvsr') }}"
-                                        class="btn btn-lg btn-primary d-inline">Graph</a>
-                                    <a href="{{ url_for('BP_fourier_spectra.download', what_output='data-hvsr') }}"
-                                        class="btn btn-lg btn-danger d-inline" >Data</a>
-                                </div>
+                            <div class="col-auto text-center">
+                                <span>Vertical component: </span>
+                                <select name="vertical-component-select" id="vertical-component-select"
+                                style="width:80px">
+                                </select>
                             </div>
                         </div>
                     </div>
-                    <div class="text-center  bg-red text-red mt-3" id="spinner-div">
-                        <div class="spinner-border spinner-border-xl text-warning" role="status">
-                            <span class="visually-hidden">Loading...</span>
+                </div>
+                <div class="tab-pane fade" id="fourier-tab-pane" role="tabpanel" aria-labelledby="fourier-tab"
+                    tabindex="1">
+                    <div class="row justify-content-center align-items-center">
+                        <div class="col-12 col-lg-8 text-center">
+                            <div id="fourier-graph">
+    
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-4 text-center">
+                            <p class="display-6">Download:</p>
+                            <a href="{{ url_for('BP_fourier_spectra.download', what_output='graph-fourier') }}"
+                                class="btn btn-lg btn-primary d-inline">Graph</a>
+                            <a href="{{ url_for('BP_fourier_spectra.download', what_output='data-fourier') }}"
+                                class="btn btn-lg btn-danger d-inline">Data</a>
                         </div>
                     </div>
+                </div>
+                <div class="tab-pane fade" id="hvsr-tab-pane" role="tabpanel" aria-labelledby="hvsr-tab"
+                    tabindex="2">
+                    <div class="row justify-content-center align-items-center">
+                        <div class="col-12 col-lg-8 text-center">
+                            <div id="hvsr-graph">
+    
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-4 text-center">
+                            <p class="display-6">Download:</p>
+                            <a href="{{ url_for('BP_fourier_spectra.download', what_output='graph-hvsr') }}"
+                                class="btn btn-lg btn-primary d-inline">Graph</a>
+                            <a href="{{ url_for('BP_fourier_spectra.download', what_output='data-hvsr') }}"
+                                class="btn btn-lg btn-danger d-inline" >Data</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center  bg-red text-red mt-3" id="spinner-div">
+                <div class="spinner-border spinner-border-xl text-warning" role="status">
+                    <span class="visually-hidden">Loading...</span>
                 </div>
             </div>
         </div>

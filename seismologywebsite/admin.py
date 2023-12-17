@@ -144,7 +144,7 @@ def reset_topics():
     tp12 = Topic(
         title="Compute Fourier Spectra On A Window",
         description="An article that computes the Fourier Spectra between a window on the waveforms",
-        image_name="fourier-on-window.png",
+        image_name="fourier-on-window-icon.png",
         type="static",
         template_name="compute-fourier-on-window"
     )

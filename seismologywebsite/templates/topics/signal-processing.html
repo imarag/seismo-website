@@ -1,29 +1,8 @@
 {% extends 'base-interactive-tools.html' %}
 
-
-{% block tool_template_image %}
-    <img 
-        src="{{ url_for('static', filename='img/template-images/resized/' + topic_object.image_name) }}"
-        alt="{{ topic_object.title }} - template image"
-        class="img-fluid"
-    >
-{% endblock %}
-
-
-{% block tool_title %}
-    {{ topic_object.title }}
-{% endblock %}
-
-
 {% block tool_title_description %}
     Manipulate seismic data files
 {% endblock %}
-
-
-{% block tool_intro_description %}
-    {{ topic_object.description }}
-{% endblock %}
-
 
 
 {% block tool_user_guide %}
@@ -51,7 +30,12 @@
 
 
 {% block tool_body %}
-    <div class="container-lg">
+    <p class="text-center text-secondary d-block d-md-none my-5">
+        Sorry, but it seems like you're accessing our tool from a mobile device. Currently, our tool is optimized for desktop use to 
+        provide the best user experience. For the optimal experience, please switch to a desktop or laptop computer. We appreciate 
+        your understanding and apologize for any inconvenience.
+    </p>
+    <div class="d-none d-md-block">
         <div class="px-4 py-2 border-bottom border-dark mb-4 mt-5">
             <button class="btn btn-light" id="upload-file-button">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-upload" viewBox="0 0 16 16">
@@ -69,10 +53,6 @@
             </a>
             <input type="file" id="upload-file-input" name="upload-file-input" style="display: none;">
         </div>
-    </div> 
-
-
-    <div class="container-lg">
         <div class="bg-info px-3 py-2">
             <div class="d-block d-lg-none">
                 <div class="row justify-content-center align-items-center">
@@ -244,7 +224,7 @@
                                 <a href="https://docs.obspy.org/packages/autogen/obspy.core.trace.Trace.taper.html" target="_blank" class="link-dark">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
                                         <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
-                                      </svg>
+                                        </svg>
                                 </a>
                             </div>
                         </div>
@@ -332,17 +312,10 @@
                 </div>
             </div>
         </div>
-    </div>
-
-
-
-    <div class="mb-5 container-lg">
-
         <div class="bg-dark">
             <div class="row gx-2 justify-content-center" id="processing-pills-container">
 
             </div> 
-
             <div id="spinner-div">
                 <div class="text-center">
                     <div class="spinner-border my-3  bg-warning" role="status" >

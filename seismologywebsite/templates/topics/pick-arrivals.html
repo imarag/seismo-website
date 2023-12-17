@@ -1,27 +1,7 @@
 {% extends 'base-interactive-tools.html' %}
 
-
-{% block tool_template_image %}
-    <img 
-        src="{{ url_for('static', filename='img/template-images/resized/' + topic_object.image_name) }}"
-        alt="{{ topic_object.title }} - template image"
-        class="img-fluid"
-    >
-{% endblock %}
-
-
-{% block tool_title %}
-    {{ topic_object.title }}
-{% endblock %}
-
-
 {% block tool_title_description %}
     Select the P & S wave arrivals
-{% endblock %}
-
-
-{% block tool_intro_description %}
-    {{ topic_object.description }}
 {% endblock %}
 
 
@@ -67,8 +47,13 @@
 
 
 {% block tool_body %}
-    <div style="position: relative;">
-        <div class="container-lg fs-4 lead text-secondary">
+    <p class="text-center text-secondary d-block d-md-none my-5">
+        Sorry, but it seems like you're accessing our tool from a mobile device. Currently, our tool is optimized for desktop use to 
+        provide the best user experience. For the optimal experience, please switch to a desktop or laptop computer. We appreciate 
+        your understanding and apologize for any inconvenience.
+    </p>
+    <div class="d-none d-md-block">
+        <div style="position: relative;">
             <div class="row bg-dark2 p-3 mt-5">
                 <div class="col">
                     <button class="btn btn-outline-info me-3" id="upload-file-button">Upload</button>
@@ -99,9 +84,8 @@
                     </select>
                 </div>
             </div>
-            
             <div class="row bg-secondary border-start border-end border-dark border-5">
-                <div class="col-12 text-center ms-0 ps-0" id="picking-graph-container">
+                <div class="col-12 text-center" id="picking-graph-container">
         
                 </div>
             </div>
@@ -113,7 +97,6 @@
                     <input class="rounded form-control-sm" type="text" id="right-filter-input" placeholder="eg. 1"  disabled>
                 </div>
             </div>
-
             <div id="spinner-div" style="position: absolute; top: 50%; left: 50%;">
                 <div class="text-center">
                     <div class="spinner-border my-3 text-warning" role="status" >

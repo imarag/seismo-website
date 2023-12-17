@@ -1,28 +1,7 @@
 {% extends 'base-interactive-tools.html' %}
 
-
-{% block tool_template_image %}
-    <img 
-        src="{{ url_for('static', filename='img/template-images/resized/' + topic_object.image_name) }}"  
-        alt="{{ topic_object.title }} - template image"
-        class="img-fluid"
-    >
-{% endblock %}
-
-
-{% block tool_title %}
-    {{ topic_object.title }}
-{% endblock %}
-
-
-
 {% block tool_title_description %}
     Calculate the distance between two points on the WGS84
-{% endblock %}
-
-
-{% block tool_intro_description %}
-    {{ topic_object.description }}
 {% endblock %}
 
 
@@ -55,106 +34,96 @@
 
 
 {% block tool_body %}
-    <div class="container-lg">
-        <h2 class="fs-1  text-info my-5 text-center fw-semibold">Calculate the distance</h2>
-
-        <div class="row justify-content-center align-items-center">
-            <div class="col-8 col-md-4">
-                <h2 class="text-center fs-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
-                        <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
-                    </svg>
-                    Point 1
-                </h2>
-                <hr class="border-top border-secondary border-2">
-                <div class="row justify-content-center align-items-center">
-                    <div class="col">
-                        <div class="mb-3">
-                            <label for="point1-lat-input" class="form-label  text-muted fs-4" title="Insert the latitude of the point with value from -90 to 90 degrees">Latitude</label>
-                            <input type="number" class="form-control" id="point1-lat-input" name="point1-lat-input">
-                        </div>
+    
+    <h2 class="fs-1  text-info my-5 text-center fw-semibold">Calculate the distance</h2>
+    <div class="row justify-content-center align-items-center">
+        <div class="col-8 col-md-4">
+            <h2 class="text-center fs-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                    <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                </svg>
+                Point 1
+            </h2>
+            <hr class="border-top border-secondary border-2">
+            <div class="row justify-content-center align-items-center">
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="point1-lat-input" class="form-label  text-muted fs-4" title="Insert the latitude of the point with value from -90 to 90 degrees">Latitude</label>
+                        <input type="number" class="form-control" id="point1-lat-input" name="point1-lat-input">
                     </div>
-                    <div class="col">
-                        <div class="mb-3">
-                            <label for="point1-lon-input" class="form-label  text-muted fs-4" title="Insert the longitude of the point with value from -180 to 180 degrees">Longitude</label>
-                            <input type="number" class="form-control" id="point1-lon-input" name="point1-lon-input">
-                        </div>
+                </div>
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="point1-lon-input" class="form-label  text-muted fs-4" title="Insert the longitude of the point with value from -180 to 180 degrees">Longitude</label>
+                        <input type="number" class="form-control" id="point1-lon-input" name="point1-lon-input">
                     </div>
                 </div>
             </div>
-
-            <div class="col-8 col-md-4">
-                <h2 class="text-center fs-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
-                        <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
-                    </svg>
-                    Point 2
-                </h2>
-                <hr class="border-top border-secondary border-2">
-                <div class="row justify-content-center align-items-center">
-                    <div class="col">
-                        <div class="mb-3">
-                            <label for="point2-lat-input" class="form-label  text-muted fs-4" title="Insert the latitude of the point with value from -90 to 90 degrees">Latitude</label>
-                            <input type="number" class="form-control" id="point2-lat-input" name="point2-lat-input">
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="mb-3">
-                            <label for="point2-lon-input" class="form-label  text-muted fs-4" title="Insert the longitude of the point with value from -180 to 180 degrees">Longitude</label>
-                            <input type="number" class="form-control" id="point2-lon-input" name="point2-lon-input">
-                        </div>
+        </div>
+        <div class="col-8 col-md-4">
+            <h2 class="text-center fs-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                    <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                </svg>
+                Point 2
+            </h2>
+            <hr class="border-top border-secondary border-2">
+            <div class="row justify-content-center align-items-center">
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="point2-lat-input" class="form-label  text-muted fs-4" title="Insert the latitude of the point with value from -90 to 90 degrees">Latitude</label>
+                        <input type="number" class="form-control" id="point2-lat-input" name="point2-lat-input">
                     </div>
                 </div>
-                
-            </div>
-        </div>
-        <div class="row justify-content-center align-items-center gx-1 gy-1 my-5">
-            <div class="col-8 col-sm-auto text-center">
-                    <button class="btn btn-success" style="width:120px;" id="compute-button" title="calculate the distance between the points">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calculator-fill" viewBox="0 0 16 16">
-                            <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm2 .5v2a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 0-.5-.5h-7a.5.5 0 0 0-.5.5zm0 4v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5zM4.5 9a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1zM4 12.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5zM7.5 6a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1zM7 9.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5zm.5 2.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1zM10 6.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5zm.5 2.5a.5.5 0 0 0-.5.5v4a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 0-.5-.5h-1z"/>
-                        </svg>
-                        Compute
-                    </button>
-            </div>
-            <div class="col-8 col-sm-auto text-center">
-                <button class="btn btn-danger" style="width:120px;" id="clear-button" title="empty the coordinate entries">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eraser-fill" viewBox="0 0 16 16">
-                        <path d="M8.086 2.207a2 2 0 0 1 2.828 0l3.879 3.879a2 2 0 0 1 0 2.828l-5.5 5.5A2 2 0 0 1 7.879 15H5.12a2 2 0 0 1-1.414-.586l-2.5-2.5a2 2 0 0 1 0-2.828l6.879-6.879zm.66 11.34L3.453 8.254 1.914 9.793a1 1 0 0 0 0 1.414l2.5 2.5a1 1 0 0 0 .707.293H7.88a1 1 0 0 0 .707-.293l.16-.16z"/>
-                    </svg>
-                    Clear
-                </button>
-            </div>
-            <div class="col-8 col-sm-auto text-center">
-                <button class="btn btn-warning" style="width:120px;" id="map-button" title="show the defined points on the map">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-crosshair2" viewBox="0 0 16 16">
-                        <path d="M8 0a.5.5 0 0 1 .5.5v.518A7.001 7.001 0 0 1 14.982 7.5h.518a.5.5 0 0 1 0 1h-.518A7.001 7.001 0 0 1 8.5 14.982v.518a.5.5 0 0 1-1 0v-.518A7.001 7.001 0 0 1 1.018 8.5H.5a.5.5 0 0 1 0-1h.518A7.001 7.001 0 0 1 7.5 1.018V.5A.5.5 0 0 1 8 0Zm-.5 2.02A6.001 6.001 0 0 0 2.02 7.5h1.005A5.002 5.002 0 0 1 7.5 3.025V2.02Zm1 1.005A5.002 5.002 0 0 1 12.975 7.5h1.005A6.001 6.001 0 0 0 8.5 2.02v1.005ZM12.975 8.5A5.002 5.002 0 0 1 8.5 12.975v1.005a6.002 6.002 0 0 0 5.48-5.48h-1.005ZM7.5 12.975A5.002 5.002 0 0 1 3.025 8.5H2.02a6.001 6.001 0 0 0 5.48 5.48v-1.005ZM10 8a2 2 0 1 0-4 0 2 2 0 0 0 4 0Z"/>
-                    </svg>
-                    Locate
-                </button>
-            </div>
-        </div>
-        <div class="row justify-content-center">
-            <div class="col-8">
-                <p class="text-secondary fs-4 lead text-center">
-                The distance (in kilometers) between the two points is:
-                </p>
-                <p class="text-center text-secondary fs-4"><span id="result-span" class="fw-bold"></span></p>
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="point2-lon-input" class="form-label  text-muted fs-4" title="Insert the longitude of the point with value from -180 to 180 degrees">Longitude</label>
+                        <input type="number" class="form-control" id="point2-lon-input" name="point2-lon-input">
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+    <div class="row justify-content-center align-items-center gx-1 gy-1 my-5">
+        <div class="col-8 col-sm-auto text-center">
+                <button class="btn btn-success" style="width:120px;" id="compute-button" title="calculate the distance between the points">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calculator-fill" viewBox="0 0 16 16">
+                        <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm2 .5v2a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 0-.5-.5h-7a.5.5 0 0 0-.5.5zm0 4v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5zM4.5 9a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1zM4 12.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5zM7.5 6a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1zM7 9.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5zm.5 2.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1zM10 6.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5zm.5 2.5a.5.5 0 0 0-.5.5v4a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 0-.5-.5h-1z"/>
+                    </svg>
+                    Compute
+                </button>
+        </div>
+        <div class="col-8 col-sm-auto text-center">
+            <button class="btn btn-danger" style="width:120px;" id="clear-button" title="empty the coordinate entries">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eraser-fill" viewBox="0 0 16 16">
+                    <path d="M8.086 2.207a2 2 0 0 1 2.828 0l3.879 3.879a2 2 0 0 1 0 2.828l-5.5 5.5A2 2 0 0 1 7.879 15H5.12a2 2 0 0 1-1.414-.586l-2.5-2.5a2 2 0 0 1 0-2.828l6.879-6.879zm.66 11.34L3.453 8.254 1.914 9.793a1 1 0 0 0 0 1.414l2.5 2.5a1 1 0 0 0 .707.293H7.88a1 1 0 0 0 .707-.293l.16-.16z"/>
+                </svg>
+                Clear
+            </button>
+        </div>
+        <div class="col-8 col-sm-auto text-center">
+            <button class="btn btn-warning" style="width:120px;" id="map-button" title="show the defined points on the map">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-crosshair2" viewBox="0 0 16 16">
+                    <path d="M8 0a.5.5 0 0 1 .5.5v.518A7.001 7.001 0 0 1 14.982 7.5h.518a.5.5 0 0 1 0 1h-.518A7.001 7.001 0 0 1 8.5 14.982v.518a.5.5 0 0 1-1 0v-.518A7.001 7.001 0 0 1 1.018 8.5H.5a.5.5 0 0 1 0-1h.518A7.001 7.001 0 0 1 7.5 1.018V.5A.5.5 0 0 1 8 0Zm-.5 2.02A6.001 6.001 0 0 0 2.02 7.5h1.005A5.002 5.002 0 0 1 7.5 3.025V2.02Zm1 1.005A5.002 5.002 0 0 1 12.975 7.5h1.005A6.001 6.001 0 0 0 8.5 2.02v1.005ZM12.975 8.5A5.002 5.002 0 0 1 8.5 12.975v1.005a6.002 6.002 0 0 0 5.48-5.48h-1.005ZM7.5 12.975A5.002 5.002 0 0 1 3.025 8.5H2.02a6.001 6.001 0 0 0 5.48 5.48v-1.005ZM10 8a2 2 0 1 0-4 0 2 2 0 0 0 4 0Z"/>
+                </svg>
+                Locate
+            </button>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-8">
+            <p class="text-secondary fs-4 lead text-center">
+            The distance (in kilometers) between the two points is:
+            </p>
+            <p class="text-center text-secondary fs-4"><span id="result-span" class="fw-bold"></span></p>
+        </div>
+    </div>
     <div class="my-5">
-        <div class="container-lg fs-4 lead">
-            <div class="row justify-content-center">
-                <div class="col-12 col-md-9 col-lg-8">
-                    <p class="fs-4 lead text-secondary"> Python Script:</p>
-                    <div class="fs-5 bg-dark text-light p-3 rounded" style="white-space: nowrap; overflow-x: auto; font-family: 'Courier New', Courier, monospace;">
-                        <p class="my-0">from obspy.geodetics.base import gps2dist_azimuth</p>
-                        <p class="my-0">result = gps2dist_azimuth(<span id="lat1">lat1</span>, <span id="lon1">lon1</span>, <span id="lat2">lat2</span>, <span id="lon2">lon2</span>)[0] / 1000</p>
-                        <p class="my-0">result = round(result, 3)</p>
-                    </div>
-                </div>
-            </div>
+        <p class="fs-4 lead text-secondary"> Python Script:</p>
+        <div class="fs-5 bg-dark text-light p-3 rounded" style="white-space: nowrap; overflow-x: auto; font-family: 'Courier New', Courier, monospace;">
+            <p class="my-0">from obspy.geodetics.base import gps2dist_azimuth</p>
+            <p class="my-0">result = gps2dist_azimuth(<span id="lat1">lat1</span>, <span id="lon1">lon1</span>, <span id="lat2">lat2</span>, <span id="lon2">lon2</span>)[0] / 1000</p>
+            <p class="my-0">result = round(result, 3)</p>
         </div>
     </div>
     <script src="/static/js/distance-between-points.js"></script>
