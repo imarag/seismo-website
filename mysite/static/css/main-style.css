@@ -6,8 +6,35 @@ body {
     margin: 0px;
 }
 
+/* --------------------------HELP AND SUPPORT --------------------------*/
 
+.support-cards-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
 
+.support-card {
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #a5b7ff;
+    transition: background-color 0.7s;
+    margin: 0px 20px;
+    width: 200px;
+}
+
+.support-card:hover {
+    background-color: #6dacff;
+}
+
+/* ------------------------- ADMIN LOGIN PAGE -----------------------------*/
+
+#admin-login-container {
+    background-image: url("/static/img/seismogram-bg-image.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position:  bottom 55% right 20px;
+}
 
 /* ------------------------- BASE PAGE TOP MENU ----------------------------*/
 

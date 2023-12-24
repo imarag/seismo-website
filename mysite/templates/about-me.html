@@ -11,12 +11,10 @@
     <div class="container-lg">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb my-5">
-                <li class="breadcrumb-item"><a href="{{ url_for('home') }}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{{ url_for('get_page', page_name='index') }}">Home</a></li>
                 <li class="breadcrumb-item active" aria-current="page">About Me</a></li>
             </ol>
         </nav>
-        
-        
         <div class="row justify-content-center align-items-center my-5">
             <div class="col-12 col-md-10 col-lg-6">
                 <p class="text-center display-5 my-5">
@@ -120,13 +118,7 @@
                 </p>
             </div>
         </div>
-     
-
     </div>
-
-
-
-
 {% endblock %}
 
 

@@ -1,16 +1,15 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    500 Error
+    {{ e.code }}
 {% endblock %}
 
 
 {% block content %}
     <div class="row justify-content-center my-5">
         <div class="col-12 col-md-7 text-center">
-            <h1 class="fs-2 text-center">Uh-oh, the Minions are confused!</h1>
-            <h1 class="fs-2 text-center">Something went wrong (500)</h1>
-            <p class="fs-3 text-center text-muted mt-4">We are experiencing some trouble on our end. Please try again later!</p>
+            <h1 class="fs-2 text-center">Uh-oh, something is wrong. The Minions are confused with your request!</h1>
+            <p class="fs-3 text-center text-muted mt-4">Please check your input and try again</p>
         </div>
     </div>
     <div class="row justify-content-center my-5">

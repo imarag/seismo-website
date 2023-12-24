@@ -1,17 +1,11 @@
 {% extends 'base.html' %}
 
-{% block title %}
-Fourier Spectra
-{% endblock %}
-
-
 
 {% block content %}
     <div class="container-lg">
         <div class="py-4">
             <a href="{{ url_for('BP_admin.add_topic_template') }}" class="btn btn-primary">add new topic</a>
             <a href="{{ url_for('BP_admin.admin_index') }}" class="btn btn-success ms-4">admin index</a>
-            <a href="{{ url_for('BP_admin.reset_topics') }}" class="btn btn-danger ms-4">Reset the topics</a>
         </div>
             <div class="bg-dark text-light p-4">
             <div class="row justify-content-center align-items-center fs-3 text-light rounded">

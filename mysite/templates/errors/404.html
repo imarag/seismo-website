@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    404 Error
+    {{ e.code }}
 {% endblock %}
 
 
@@ -9,7 +9,7 @@
     <div class="row justify-content-center my-5">
         <div class="col-12 col-md-7 text-center">
             <h1 class="fs-2 text-center">Uh-oh, the Minions are confused!</h1>
-            <h1 class="fs-2 text-center">This page doesn't exist (404)</h1>
+            <h1 class="fs-2 text-center">This page doesn't exist!</h1>
             <p class="fs-3 text-center text-muted mt-4">Please try a different location</p>
         </div>
     </div>

@@ -7,88 +7,84 @@ Resources
 
 
 {% block content %}
-
-<div class="container-lg">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb my-5">
-            <li class="breadcrumb-item"><a href="{{ url_for('home') }}">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Resources</a></li>
-        </ol>
-    </nav>
-    <p class="text-center display-3 mt-5 mb-4 fw-semibold">
-        Resources 
-    </p>
-    <div class="row justify-content-center">
-        <div class="col-10 col-md-9 col-lg-8 text-center">
-            <p class="text-muted fs-3 fw-semibold fst-italic mb-5">
-                Explore our collection of resources for a richer seismology experience!
-            </p>
+    <div class="container-lg">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb my-5">
+                <li class="breadcrumb-item"><a href="{{ url_for('get_page', page_name='index') }}">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Resources</a></li>
+            </ol>
+        </nav>
+        <p class="text-center display-3 mt-5 mb-4 fw-semibold">
+            Resources 
+        </p>
+        <div class="row justify-content-center">
+            <div class="col-10 col-md-9 col-lg-8 text-center">
+                <p class="text-muted fs-3 fw-semibold fst-italic mb-5">
+                    Explore our collection of resources for a richer seismology experience!
+                </p>
+            </div>
         </div>
-    </div>
-
-    <div class="row justify-content-center align-items-center mt-5">
-        <div class="col-lg-4 col-md-8 col-10 me-4">
-            <h1 class="fs-3 fw-semibold text-center text-lg-start">Fourier Spectra Script</h1>
-            <p class="text-center text-lg-start test-muted fs-5 fst-italic">Download the Python script used to calculate
-                the
-                Fourier Spectra at the "Fourier Spectra" interactive tool</p>
-            <p class="text-center text-lg-start">
-                <a href="{{ url_for('download_static_file', file='fourier_spectra_calculation_script.txt') }}">Download resource 
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-file-earmark-arrow-down-fill ms-1" viewBox="0 0 16 16">
-                        <path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0zM9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1zm-1 4v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L7.5 11.293V7.5a.5.5 0 0 1 1 0z"/>
-                    </svg>
-                </a>
-            </p>
-        </div>
-        <div class="col-lg-4 col-md-6 col-10">
-            <img src="{{ url_for('static', filename='img/resource_fourier_script.png') }}"
-                alt="fourier spectra images" class="img-fluid">
-        </div>
-    </div>
-    <hr>
-    <div class="row justify-content-center align-items-center mt-5">
-        <div class="col-lg-4 col-md-8 col-10 me-4">
-            <h1 class="fs-3 fw-semibold text-center text-lg-start">Picking Tool</h1>
-            <p class="text-center text-lg-start test-muted fs-5 fst-italic">Get a graphical user interface built, using
-                Python
-                PyQt5 and Pyqtgraph for the first arrivals selection in multiple MSEED files</p>
-            <p class="text-center text-lg-start">
-                <span class="me-4">
-                    <a href="mailto: seismoweb95@gmail.com">
-                        send email 
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-envelope-fill ms-1" viewBox="0 0 16 16">
-                            <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555ZM0 4.697v7.104l5.803-3.558L0 4.697ZM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757Zm3.436-.586L16 11.801V4.697l-5.803 3.546Z"/>
+        <div class="row justify-content-center align-items-center mt-5">
+            <div class="col-lg-4 col-md-8 col-10 me-4">
+                <h1 class="fs-3 fw-semibold text-center text-lg-start">Fourier Spectra Script</h1>
+                <p class="text-center text-lg-start test-muted fs-5 fst-italic">Download the Python script used to calculate
+                    the
+                    Fourier Spectra at the "Fourier Spectra" interactive tool</p>
+                <p class="text-center text-lg-start">
+                    <a href="{{ url_for('download_static_file', file='fourier_spectra_calculation_script.txt') }}">Download resource 
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-file-earmark-arrow-down-fill ms-1" viewBox="0 0 16 16">
+                            <path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0zM9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1zm-1 4v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L7.5 11.293V7.5a.5.5 0 0 1 1 0z"/>
                         </svg>
                     </a>
-                </span>
-            </p>
+                </p>
+            </div>
+            <div class="col-lg-4 col-md-6 col-10">
+                <img src="{{ url_for('static', filename='img/resource_fourier_script.png') }}"
+                    alt="fourier spectra images" class="img-fluid">
+            </div>
         </div>
-        <div class="col-lg-4 col-md-6 col-10">
-            <img src="{{ url_for('static', filename='img/resource_picking_tool.png') }}"
-                alt="fourier spectra images" class="img-fluid">
+        <hr>
+        <div class="row justify-content-center align-items-center mt-5">
+            <div class="col-lg-4 col-md-8 col-10 me-4">
+                <h1 class="fs-3 fw-semibold text-center text-lg-start">Picking Tool</h1>
+                <p class="text-center text-lg-start test-muted fs-5 fst-italic">Get a graphical user interface built, using
+                    Python
+                    PyQt5 and Pyqtgraph for the first arrivals selection in multiple MSEED files</p>
+                <p class="text-center text-lg-start">
+                    <span class="me-4">
+                        <a href="mailto: seismoweb95@gmail.com">
+                            send email 
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-envelope-fill ms-1" viewBox="0 0 16 16">
+                                <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555ZM0 4.697v7.104l5.803-3.558L0 4.697ZM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757Zm3.436-.586L16 11.801V4.697l-5.803 3.546Z"/>
+                            </svg>
+                        </a>
+                    </span>
+                </p>
+            </div>
+            <div class="col-lg-4 col-md-6 col-10">
+                <img src="{{ url_for('static', filename='img/resource_picking_tool.png') }}"
+                    alt="fourier spectra images" class="img-fluid">
+            </div>
+        </div>
+        <hr>
+        <div class="row justify-content-center align-items-center my-5">
+            <div class="col-lg-4 col-md-8 col-10 me-4">
+                <h1 class="fs-3 fw-semibold text-center text-lg-start">Test MSEED file</h1>
+                <p class="text-center text-lg-start test-muted fs-5 fst-italic">Download a testing MSEED file to interact
+                    with the website</p>
+                <p class="text-center text-lg-start">
+                    <a href="{{ url_for('download_static_file', file='test-mseed-file.mseed') }}">
+                        Download resource
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-file-earmark-arrow-down-fill ms-1" viewBox="0 0 16 16">
+                            <path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0zM9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1zm-1 4v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L7.5 11.293V7.5a.5.5 0 0 1 1 0z"/>
+                        </svg>
+                    </a>
+                </p>
+            </div>
+            <div class="col-lg-4 col-md-6 col-10">
+                <img src="{{ url_for('static', filename='img/resource_test_mseed.png') }}"
+                    alt="fourier spectra images" class="img-fluid">
+            </div>
         </div>
     </div>
-    <hr>
-    <div class="row justify-content-center align-items-center my-5">
-        <div class="col-lg-4 col-md-8 col-10 me-4">
-            <h1 class="fs-3 fw-semibold text-center text-lg-start">Test MSEED file</h1>
-            <p class="text-center text-lg-start test-muted fs-5 fst-italic">Download a testing MSEED file to interact
-                with the website</p>
-            <p class="text-center text-lg-start">
-                <a href="{{ url_for('download_static_file', file='test-mseed-file.mseed') }}">
-                    Download resource
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-file-earmark-arrow-down-fill ms-1" viewBox="0 0 16 16">
-                        <path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0zM9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1zm-1 4v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L7.5 11.293V7.5a.5.5 0 0 1 1 0z"/>
-                    </svg>
-                </a>
-            </p>
-        </div>
-        <div class="col-lg-4 col-md-6 col-10">
-            <img src="{{ url_for('static', filename='img/resource_test_mseed.png') }}"
-                alt="fourier spectra images" class="img-fluid">
-        </div>
-    </div>
-</div>
-
-
 {% endblock %}

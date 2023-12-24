@@ -6,6 +6,9 @@ import string
 import secrets
 import random
 
+def generate_random_string():
+    return ''.join(random.choices(string.ascii_letters + string.digits, k=25))
+
 def raise_error(error_message):
     response = jsonify({'error_message': error_message})
     return make_response(response, 400)

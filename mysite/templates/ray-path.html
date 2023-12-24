@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Ray Path
+{% endblock %}
+
+
+
+{% block content %}
+
+<button class="btn btn-outline-info" id="upload-file-button">Upload file</button>
+<input type="file" id="upload-file-input" value="upload-file-input" name="upload-file-input"style="display: none;">
+
+<form id="style-form" action="/raypath/update-styles" method="POST">
+    <div class="accordion" id="style-container">
+        <div class="row justify-content-center align-items-start">
+            <div class="col-4">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#line-style-menu" aria-expanded="true" aria-controls="line-style-menu">
+                        Style Line
+                    </button>
+                    </h2>
+                    <div id="line-style-menu" class="accordion-collapse collapse" data-bs-parent="#style-container">
+                        <div class="accordion-body">
+                            <label for="line-style" class="form-label">Style</label>
+                            <select class="form-select" name="line-style" id="line-style" aria-label="Default select example">
+                                <option value="-" selected>-</option>
+                                <option value="--">--</option>
+                                <option value=".-">.-</option>
+                            </select>
+                            <label for="line-width" class="form-label">Width</label>
+                            <input type="range" name="line-width" class="form-range" id="line-width" min="0" max="20">
+                            <label for="line-color" class="form-label">Color picker</label>
+                            <input type="color" name="line-color" class="form-control form-control-color" id="line-color" value="#563d7c" title="Choose your color">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#station-marker-style-menu" aria-expanded="true" aria-controls="station-marker-style-menu">
+                        Style Station Marker
+                    </button>
+                    </h2>
+                    <div id="station-marker-style-menu" class="accordion-collapse collapse" data-bs-parent="#style-container">
+                        <div class="accordion-body">
+                            <label for="station-marker-style" class="form-label">Style</label>
+                            <select class="form-select" name="station-marker-style" id="station-marker-style" aria-label="Default select example">
+                                <option value="*" selected>*</option>
+                                <option value="o">o</option>
+                                <option value="^">^</option>
+                            </select>
+                            <label for="station-marker-size" class="form-label">Size</label>
+                            <input type="range" name="station-marker-size" class="form-range" id="station-marker-size" min="0" max="200">
+                            <label for="station-marker-color" class="form-label">Color picker</label>
+                            <input type="color" name="station-marker-color" class="form-control form-control-color" id="station-marker-color" value="#563d7c" title="Choose your color">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#earth-marker-style-menu" aria-expanded="true" aria-controls="earth-marker-style-menu">
+                        Style Earthquake Marker
+                    </button>
+                    </h2>
+                    <div id="earth-marker-style-menu" class="accordion-collapse collapse" data-bs-parent="#style-container">
+                        <div class="accordion-body">
+                            <label for="earth-marker-style" class="form-label">Style</label>
+                            <select class="form-select" name="earth-marker-style" id="earth-marker-style" aria-label="Default select example">
+                                <option value="*" selected>*</option>
+                                <option value="o">o</option>
+                                <option value="^">^</option>
+                            </select>
+                            <label for="earth-marker-size" class="form-label">Size</label>
+                            <input type="range" name="earth-marker-size" class="form-range" id="earth-marker-size" min="0" max="200">
+                            <label for="earth-marker-color" class="form-label">Color picker</label>
+                            <input type="color" name="earth-marker-color" class="form-control form-control-color" id="earth-marker-color" value="#563d7c" title="Choose your color">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="text-center my-4">
+        <button type="submit" class="btn btn-dark">Save</button>
+    </div>
+</form>
+
+<div class="row justify-content-center align-items-center">
+    <div class="col-6 text-center">
+        <div class="text-center">
+            <img src="" alt="" id="mapElement">
+        </div>
+    </div>
+</div>
+
+
+<script src="/static/js/raypath.js"></script>
+{% endblock %}

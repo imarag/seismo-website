@@ -1,11 +1,5 @@
 {% extends 'base.html' %}
 
-{% block title %}
-Fourier Spectra
-{% endblock %}
-
-
-
 {% block content %}
     <div class="container-lg">
         <div class="text-start py-4">
@@ -18,30 +12,30 @@ Fourier Spectra
                     <div class="row justify-content-center align-items-center my-5">
                         <div class="col text-center">
                             <label for="topic-id">Topic id</label><br>
-                            <input type="text" id="topic-id" name="topic-id" value="{{ topic['id'] }}" readonly>
+                            <input type="text" id="topic-id" name="topic-id" value={{ topic['id'] }} readonly>
                         </div>
                     </div>
                     <div class="col text-center">
                         <label for="topic-title-input">topic title</label><br>
-                        <input type="text" id="topic-title-input" name="topic-title-input" value="{{ topic['title'] }}">
+                        <input type="text" id="topic-title-input" name="topic-title-input" value={{ topic['title'] }}>
                     </div>
                 </div>
                 <div class="row justify-content-center align-items-center my-5">
                     <div class="col text-center">
                         <label for="topic-image-name-input">image url</label><br>
-                        <input type="text" id="topic-image-name-input" name="topic-image-name-input" value="{{ topic['image_name'] }}">
+                        <input type="text" id="topic-image-name-input" name="topic-image-name-input" value={{ topic['image_name'] }}>
                     </div>
                 </div>
                 <div class="row justify-content-center align-items-center my-5">
                     <div class="col text-center">
                         <label for="topic-type-input">Topic type</label><br>
-                        <input type="text" id="topic-type-input" name="topic-type-input" value="{{ topic['type'] }}">
+                        <input type="text" id="topic-type-input" name="topic-type-input" value={{ topic['type'] }}>
                     </div>
                 </div>
                 <div class="row justify-content-center align-items-center my-5">
                     <div class="col text-center">
                         <label for="topic-template-name-input">template name</label><br>
-                        <input type="text" id="topic-template-name-input" name="topic-template-name-input" value="{{ topic['template_name'] }}">
+                        <input type="text" id="topic-template-name-input" name="topic-template-name-input" value={{ topic['template_name'] }}>
                     </div>
                 </div>
                 <div class="row justify-content-center align-items-center my-5">

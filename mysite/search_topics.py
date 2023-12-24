@@ -1,8 +1,7 @@
 from flask import Blueprint, render_template, request, current_app, redirect, url_for
 import re
 import math
-from . import Topic, db
-
+import json
 
 bp = Blueprint('BP_search_topics', __name__, url_prefix = '/search-topics')
 
@@ -15,16 +14,23 @@ def filter_topics():
     else:
         filter_selected = request.args.get('topictype')
 
-    if filter_selected == "all topics":
-        topics = Topic.query.all()
+    with open(current_app.config["ALL_TOPICS_FILE"], "r") as fjson:
+        topics = json.load(fjson)["topics"]
 
-    elif filter_selected == "articles":
-        topics = Topic.query.filter_by(type='static').all()
+    filtered_topics = []
+    if filter_selected == "articles":
+        for tp in topics:
+            if tp["type"] == "static":
+                filtered_topics.append(tp)
 
     elif filter_selected == 'interactive tools':
-        topics = Topic.query.filter_by(type='interactive').all()
+        for tp in topics:
+            if tp["type"] == "interactive":
+                filtered_topics.append(tp)
+    else:
+        filtered_topics = topics
 
-    return render_template('search-topics.html', topics=topics, selectedtopic=filter_selected.title()) 
+    return render_template('search-topics.html', topics=filtered_topics, selectedtopic=filter_selected.title()) 
         
 
 
@@ -33,7 +39,8 @@ def search_topic():
     # get the search parameter that the user inserted
     search_param = request.args.get('search-param').lower()
     # get firstly all the topics
-    topics = Topic.query.all()
+    with open(current_app.config["ALL_TOPICS_FILE"]) as fjson:
+        topics = json.load(fjson)["topics"]
 
     if search_param: 
         # create an initial empty list to append the found topics
@@ -41,19 +48,20 @@ def search_topic():
         # loop through all the topics
         for tp in topics:
             # get the description of each topic
-            lower_description = tp.description.lower()
-            lower_title = tp.title.lower()
+            lower_description = tp["description"].lower()
+            lower_title = tp["title"].lower()
             # if the search parameter that the user inserted is somewhere in the topic description,
             # append the current topic to the found list created above
             if search_param in lower_description or search_param in lower_title:
                 found_topics_list.append(tp)
-        topics = found_topics_list
+
         selectedtopic = f'Topics that contain: {search_param}'
     else:
+        found_topics_list = topics
         selectedtopic = 'All Topics'
 
     
-    return render_template('search-topics.html', topics=topics, selectedtopic=selectedtopic) 
+    return render_template('search-topics.html', topics=found_topics_list, selectedtopic=selectedtopic) 
 
 
 
