@@ -129,7 +129,7 @@ def delete_topic(topic_id):
 
 @bp.route('/reset-topics', methods=['GET', 'POST'])
 def reset_topics():
-    with open(os.path.join(current_app.instance_path, "all-topics-backup.json")) as fr:
+    with open(current_app.config["ALL_TOPICS_BACKUP_FILE"]) as fr:
         backed_up_topics = json.load(fr)
     
     topics_to_json(backed_up_topics)

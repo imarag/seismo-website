@@ -20,21 +20,8 @@ def create_path(name):
     return path
 
 
-def check_parameter_input(param):
-    if not param:
-        return None
-    else:
-        try:
-            ret_value = int(param)
-        except:
-            error_message = 'You need to provide an integer for "Rows to read" and/or "Skiprows"!'
-            return raise_error(error_message)
-        else:
-            return ret_value
-
-
-@bp.route('/read-file', methods=['POST'])
-def read_file():
+@bp.route('/upload-file', methods=['POST'])
+def upload_file():
 
     uploaded_file = request.files.get('file')
 
@@ -45,38 +32,21 @@ def read_file():
 
     # get the request parameters
     format = request.form.get('format')
-    has_headers = request.form.get('has-headers')
-    columns_to_read = request.form.get('columns-to-read')
-    rows_to_read = request.form.get('rows-to-read')
-    skip_rows = request.form.get('skip-rows')
+    has_headers = request.form.get('has-headers', None)
+    skip_rows = request.form.get('skip-rows', None)
+    delim = request.form.get('delimiter', None)
 
-    # check the two parameters
-    nrows_param = check_parameter_input(rows_to_read)
-    skiprows_param = check_parameter_input(skip_rows)
-
-    # check the columns_to_read
-    if not columns_to_read:
-        usecols_param = None
-    else:
-        if format == 'excel':
-            error_message = 'The "columns to read" option must be in the form n1,n2 or n1,n2,n3 where n, the excel column letter. For example: A,B or A,C,D'
-            regex_patt = '^[A-Za-z](,[A-Za-z])*,?$'
-        else:
-            error_message = 'The "columns to read" option must be in the form n1,n2 or n1,n2,n3 where n, the column number from 1 to 9. For example: 1,3 or 1,2,4 or 2, 3, 1'
-            regex_patt = '^[0-9](,[0-9])*,?$'
-        
-        if not re.search(regex_patt, columns_to_read.strip(' ,')):
+    # check the skip rows parameter
+    if skip_rows:
+        try:
+            skip_rows = int(skip_rows)
+        except:
+            error_message = 'You need to provide an integer for the "skiprows" option!'
             return raise_error(error_message)
-        
-        usecols_param = "".join(columns_to_read.strip(' ,').split()).split(',')
-        if format == 'excel':
-            usecols_param = [el.strip().upper() for el in usecols_param]
         else:
-            usecols_param = [int(el.strip()) for el in usecols_param]
-            # because the user will use 1 for the first column , 2 for the second column, etc... and because the python starts from 0
-            # i subtract 1 so that when the user wants for example the first column and he passes 1, then in the python code a 0 will be inserted
-            usecols_param = [col_int - 1 for col_int in usecols_param]
-
+            skiprows_param = skip_rows
+    else:
+        skiprows_param = None
 
     # check the has_header
     if has_headers == 'false':
@@ -88,10 +58,7 @@ def read_file():
         try:
             df = pd.read_excel(
                 uploaded_file,
-                header = header_param,
-                nrows = nrows_param,
-                skiprows = skiprows_param,
-                usecols = usecols_param
+                header = header_param
             )
         except Exception as e:
             error_message = str(e)
@@ -100,11 +67,7 @@ def read_file():
         try:
             df = pd.read_csv(
                 uploaded_file,
-                header = header_param,
-                nrows = nrows_param,
-                skiprows = skiprows_param,
-                usecols = usecols_param,
-                sep = ','
+                header = header_param
             )
         except Exception as e:
             error_message = str(e)
@@ -114,36 +77,33 @@ def read_file():
             df = pd.read_csv(
                 uploaded_file,
                 header = header_param,
-                nrows = nrows_param,
                 skiprows = skiprows_param,
-                usecols = usecols_param,
-                sep = request.form.get('delimiter')
+                sep = delim
             )
         except Exception as e:
             error_message = str(e)
             return raise_error(error_message)
 
-
-    if len(df.columns) not in [2, 3]:
-        error_message = 'You are limited to uploading either two or three columns from your file. The two columns are in cases where your record comprises just one horizontal and one vertical component. If encountering this error, first check the delimiter selection, in case you upload a TXT file. If not, check the <columns to read> option. If your file contains more than three columns you need to select specific two or three column to upload. Finally, if your file contains only one column or none, it is not going to work. You must upload two or three data columns in order to work effectively.'
-        return raise_error(error_message)
-    
     if df.empty:
-        error_message = 'The uploaded file is empty. You might skipped too many rows, read none row or your file is empty indeed!.'
+        error_message = 'The uploaded file seems empty. Please, check the content of your input file and the input delimiter of your columns (in case of a .txt or .dat file) and try again!'
+        return raise_error(error_message)
+    
+    if len(df.columns) <= 1:
+        error_message = 'The uploaded file does not have enough columns to use at this tool. You need at least two columns with data (in case of one horizontal and one vertical component)!'
         return raise_error(error_message)
 
-    # Get the first 5 rows
-    first_5_rows = df.head()
+    if has_headers == 'false':
+        new_columns = [f'col{i}' for i in range(1, len(df.columns)+1)]
+        df.columns = new_columns
 
-    # Convert the first 5 rows to HTML table
-    table_html = first_5_rows.to_html().replace('class="', 'class="table text-secondary ')
-    
     # save the file
     file_path = create_path('file-to-mseed.csv')
-    df.to_csv(file_path, index=False, header=None)
+    df.to_csv(file_path, index=False)
 
-    # return as json, the html table and the file path
-    return jsonify({'table-html': table_html, 'file-name-uploaded': file_path, "number_of_traces": len(df.columns) })
+    column_names = list(df.columns) + ["select column"]
+
+    # return as json
+    return jsonify({"column-names": column_names})
 
 
 
@@ -155,25 +115,32 @@ def convert_file_to_mseed():
     time = request.args.get('time')
     sampling_frequency_radio = request.args.get('fs-radio')
     parameterValue = request.args.get('parameter-value')
-    total_traces = int(request.args.get("total-traces"))
-    
-    compo1 = request.args.get('compo1')
-    compo2 = request.args.get('compo2')
-    compo3 = request.args.get('compo3')
+    is_two_components = request.args.get('is-two-components')
 
-    # check the components
-    if total_traces == 2:
-        compos = [compo1, compo2]
-        if len(set(compos)) !=2 or 'Z' not in compos:
-            error_message = 'You have uploaded 2 columns so you need to select one vertical (Z) and one horizontal (E or N) component!'
-            return raise_error(error_message)
+    vert_compo_column = request.args.get('vert-compo')
+    hor_compo1_column = request.args.get('hor-compo1')
+    hor_compo2_column = request.args.get('hor-compo2')
+
+    if is_two_components == 'true' and (vert_compo_column == "select column" or hor_compo1_column == "select column"):
+        error_message = 'You need to select a column of your file for each of the two components!'
+        return raise_error(error_message)
+    elif is_two_components == 'false' and (vert_compo_column == "select column" or hor_compo1_column == "select column" or hor_compo2_column == "select column"):
+        error_message = 'You need to select a column of your file for each of the three components!'
+        return raise_error(error_message)
     
+    if is_two_components == 'true' and len(set([vert_compo_column, hor_compo1_column])) != 2:
+        error_message = 'You cannot have the same column for two components!'
+        return raise_error(error_message)
+    elif is_two_components == 'false' and len(set([vert_compo_column, hor_compo1_column, hor_compo2_column])) != 3:
+        error_message = 'You cannot have the same column for two components!'
+        return raise_error(error_message)
+
+    if is_two_components == 'true':
+        selected_columns = [vert_compo_column, hor_compo1_column]
     else:
-        compos = [compo1, compo2, compo3]
-        if len(set(compos)) !=3 or 'Z' not in compos:
-            error_message = 'You have uploaded 3 columns so you need to select one vertical (Z) and two horizontal (E and N) components!'
-            return raise_error(error_message)
+        selected_columns = [vert_compo_column, hor_compo1_column, hor_compo2_column]
 
+        
     # initialize the parameter dictionary to put the paremeters
     params_dict = {}
 
@@ -185,9 +152,9 @@ def convert_file_to_mseed():
         
         params_dict['station'] = station.strip().upper()
     else:
-        params_dict['station'] = 'STAT'
+        params_dict['station'] = 'STA'
 
-    
+
     if date and not time:
         datetime_param = str(date) + " " + "00:00:00"
     elif date and time:
@@ -203,15 +170,14 @@ def convert_file_to_mseed():
         error_message = str(e)
         return raise_error(error_message)
    
-
     if not parameterValue:
-        error_message = 'You need to insert a valid value for the select parameter (fs or dt)!'
+        error_message = 'You need to insert a valid value for the sampling parameters (fs or dt)!'
         return raise_error(error_message)
     else:
         try:
             float(parameterValue)
         except:
-            error_message = 'You need to insert a number at the parameter selected!'
+            error_message = 'You need to insert a number or the sampling parameters!'
             return raise_error(error_message)
     
     if sampling_frequency_radio == 'true':
@@ -219,16 +185,19 @@ def convert_file_to_mseed():
     else:
         params_dict['delta'] = float(parameterValue)
 
-    df = pd.read_csv(
-        create_path('file-to-mseed.csv'),
-        header=None
-    )
+    df = pd.read_csv(create_path('file-to-mseed.csv'))
 
-    df.columns = compos
+    df = df.loc[:, selected_columns]
+
+    if is_two_components == 'true':
+        df.columns = ['Z', 'E']
+    else:
+        df.columns = ['Z', 'E', 'N']
 
     lt_traces = []
-    for compo in compos:
-        trace_data = pd.to_numeric(df[compo], errors='coerce').to_numpy()
+    for compo in df.columns:
+        trace_data = pd.to_numeric(df[compo], errors='coerce')
+        trace_data = trace_data.fillna(0).to_numpy()
         params_dict['channel'] = compo
         trace = Trace(
             data=trace_data, 
@@ -242,6 +211,5 @@ def convert_file_to_mseed():
     st.write(
         mseed_file_save_path
     )
-
 
     return send_file(mseed_file_save_path, as_attachment=True,   download_name="mseed-stream.mseed")

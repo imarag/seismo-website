@@ -17,14 +17,14 @@ body {
 .support-card {
     padding: 20px;
     border-radius: 10px;
-    background-color: #a5b7ff;
+    background-color: #f6f8ff;
     transition: background-color 0.7s;
     margin: 0px 20px;
     width: 200px;
 }
 
 .support-card:hover {
-    background-color: #6dacff;
+    background-color: #4e99fa;
 }
 
 /* ------------------------- ADMIN LOGIN PAGE -----------------------------*/

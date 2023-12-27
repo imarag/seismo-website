@@ -57,8 +57,8 @@
                                 </div>
                             </div>
                         </div>
-                        {% if topic_object.title != 'File to MiniSEED' %}
-                            <p class="text-muted text-center mt-5 fs-5">
+                        {% if topic_object["title"] != 'Data Files To MiniSEED' %}
+                            <p class="text-muted text-center mt-5 fs-6">
                                 Don't have a seismic data file ? Click <a href="{{ url_for('show_topic', topic_tmp_name='file-to-mseed') }}"
                                     class="link-info">here</a> to convert data stored in a file (such as .csv, .txt or .xlsx) to the seismic MiniSEED data file format
                                 or <a href="{{ url_for('static', filename='static-files/test-mseed-file.mseed') }}"
@@ -70,7 +70,7 @@
             </div>
         </section>
         <section>
-            <div class="container-lg my-5 lead">
+            <div class="container-lg my-5 lead text-muted fs-4">
                 {% block tool_body %}
     
                 {% endblock %}

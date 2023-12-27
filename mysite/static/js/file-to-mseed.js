@@ -13,23 +13,20 @@
   let dateInput = document.querySelector("#date-input");
   let timeInput = document.querySelector("#time-input");
   let samplingFrequencyRadio = document.querySelector("#fs-radio");
-  let firstComponentSelect = document.querySelector("#compo1");
-  let secondComponentSelect = document.querySelector("#compo2");
-  let thirdComponentSelect = document.querySelector("#compo3");
+  let verticalComponent = document.querySelector("#compo1");
+  let horizontalComponent1 = document.querySelector("#compo2");
+  let horizontalComponent2 = document.querySelector("#compo3");
   let parameterValue = document.querySelector("#parameter-value");
 
+  let twoComponentsCheck = document.querySelector("#two-components-check");
+  
   // get the spinenr divs 
-  fileParsingSpinnerDiv = document.querySelector("#file-parsing-spinner-div");
-  seismicParametersSpinnerDiv = document.querySelector("#seismic-parameters-spinner-div");
-
-  let totalTraces;
+  let fileParsingSpinnerDiv = document.querySelector("#file-parsing-spinner-div");
+  let seismicParametersSpinnerDiv = document.querySelector("#seismic-parameters-spinner-div");
 
   // display none to the spinners
   fileParsingSpinnerDiv.style.display = 'none';
   seismicParametersSpinnerDiv.style.display = 'none';
-
-
-
 
 
   // when clicked open the file input
@@ -54,7 +51,18 @@
     handleFileUpload(ev, "txt");
   });
 
-  seismicParamsButton.addEventListener("click", submitSeismicParameters);
+  seismicParamsButton.addEventListener("click", () => {
+    submitSeismicParameters()
+  });
+
+  twoComponentsCheck.addEventListener("change", () => {
+    if (twoComponentsCheck.checked) {
+      horizontalComponent2.disabled = true;
+    }
+    else {
+      horizontalComponent2.disabled = false;
+    }
+  })
 
   function handleFileUpload(event, which) {
 
@@ -72,22 +80,23 @@
     // activate the spinner
     fileParsingSpinnerDiv.style.display = 'block';
 
+    excelUploadInput.value = null;
+    csvUploadInput.value = null;
+    txtUploadInput.value = null;
+
     // create the form data to upload to the POST
     const formData = new FormData();
 
-    // insert the user selected 
     formData.append('file', uploaded_file);
     formData.append('format', which);
-    formData.append('rows-to-read', document.querySelector(`#${which}-rows-to-read`).value);
-    formData.append('skip-rows', document.querySelector(`#${which}-skiprows`).value);
     formData.append('has-headers', document.querySelector(`#${which}-has-headers`).checked);
-    formData.append('columns-to-read', document.querySelector(`#${which}-columns-to-read`).value);
 
-    if (which === 'txt'){
-      formData.append('delimiter', document.querySelector('#txt-delimiter').value);
+    if (which === 'txt') {
+      formData.append('skip-rows', document.querySelector(`#${which}-skiprows`).value);
+      formData.append('delimiter', document.querySelector(`#${which}-delimiter`).value);
     }
 
-    fetch('/file-to-mseed/read-file', {
+    fetch('/file-to-mseed/upload-file', {
       method: 'POST',
       body: formData
     })
@@ -112,67 +121,61 @@
         // if ok just return the json response
         return response.json()
       })
-      .then(data => { // the data is a dictionary in this form: {'table-html': table_html, 'file-name-uploaded': file_path, "number_of_traces": len(df.columns) }
+      .then(data => {
 
         // deactivate the spinner
         fileParsingSpinnerDiv.style.display = 'none';
-        
-        // get the table html
-        let tableHTML = data['table-html'];
-        
-        // define the total traces that the user inserted 2 or 3
-        totalTraces = data["number_of_traces"];
-
-        // this is the header that will say that this is the first 5 rows of your file
-        let headerTopHTML = `
-          <p class="text-center text-secondary fs-3">First five (5) rows of your file</p>
-          <hr>
-        `;
-
-        // i change the inner html of the table container to be the header and the table
-        document.querySelector("#table-container-preview").innerHTML = headerTopHTML + tableHTML ;
-        
-        // set the upload input value to null so that the user
-        // can select the same file
-        excelUploadInput.value = null;
-        csvUploadInput.value = null;
-        txtUploadInput.value = null;
-
-        // if the user inserted 2 traces then disable the second select widget at the components at the seismic parameters and put its dfault value to be "not-selected"
-        if (data["number_of_traces"] === 2){
-          thirdComponentSelect.disabled = true; 
-          thirdComponentSelect.style.backgroundColor = 'grey';
-          thirdComponentSelect.value = "not-selected";
-        }
-        else {
-          thirdComponentSelect.disabled = false;
-          thirdComponentSelect.style.backgroundColor = 'white';
-        }
 
         // actiate the modal message for a succesful computation
-        document.querySelector("#modal-message").textContent = 'The file has been successfully uploaded. Examine the initial five rows at the table below, to ensure that the reading is accurate. If your file does not have any headers, ignore the bold numbers at the columns and the rows. Focus on verifying the table values. If everything appears correct, proceed to complete the seismic parameter entries at the end.';
-        document.querySelector("#modal-title").textContent = 'Succesful calculation!';
+        document.querySelector("#modal-message").textContent = 'The file has been successfully uploaded. Proceed to define the seismic parameters of the MiniSEED file, below.';
+        document.querySelector("#modal-title").textContent = 'Succesful file upload!';
         document.querySelector("#modal-header").style.backgroundColor = "green";
         document.querySelector("#modal-button-triger").click();
 
         seismicParamsButton.disabled = false;
+
+        let allColumns = data["column-names"];
         
+        verticalComponent.innerHTML = '';
+        horizontalComponent1.innerHTML = '';
+        horizontalComponent2.innerHTML = '';
+        
+        for (let i = 0; i < allColumns.length; i++) {
+            let columnName = allColumns[i];
+
+            // Create options for each select element
+            let newOptionCompo1 = createOption(columnName, columnName);
+            verticalComponent.appendChild(newOptionCompo1);
+
+            let newOptionCompo2 = createOption(columnName, columnName);
+            horizontalComponent1.appendChild(newOptionCompo2);
+
+            let newOptionCompo3 = createOption(columnName, columnName);
+            horizontalComponent2.appendChild(newOptionCompo3);
+        }
+
+        verticalComponent.value = "select column";
+        horizontalComponent1.value = "select column";
+        horizontalComponent2.value = "select column";
 
       })
       .catch(error => { 
         console.error('Error:', error);
       })
-      
   }
 
+  function createOption(value, text) {
+    let option = document.createElement("option");
+    option.value = value;
+    option.text = text;
+    return option;
+  } 
 
-
-  function submitSeismicParameters(){
+  function submitSeismicParameters() {
     // activate the spinner
     seismicParametersSpinnerDiv.style.display = 'block';
 
-    queryURL = `/file-to-mseed/convert-file-to-mseed?station=${stationNameInput.value}&date=${dateInput.value}&time=${timeInput.value}&fs-radio=${samplingFrequencyRadio.checked}&parameter-value=${parameterValue.value}&total-traces=${totalTraces}&compo1=${firstComponentSelect.value}&compo2=${secondComponentSelect.value}&compo3=${thirdComponentSelect.value}`;
-
+    queryURL = `/file-to-mseed/convert-file-to-mseed?station=${stationNameInput.value}&date=${dateInput.value}&time=${timeInput.value}&fs-radio=${samplingFrequencyRadio.checked}&parameter-value=${parameterValue.value}&is-two-components=${twoComponentsCheck.checked}&vert-compo=${verticalComponent.value}&hor-compo1=${horizontalComponent1.value}&hor-compo2=${horizontalComponent2.value}`;
     fetch(queryURL)
       // when i read the file with pandas i convert it to html table with pandas
       // and the response that i return is text. The html is text.

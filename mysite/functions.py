@@ -5,6 +5,15 @@ import pandas as pd
 import string
 import secrets
 import random
+import json
+
+def get_topic(topic_info_name, topic_info_value):
+    with open(current_app.config["ALL_TOPICS_FILE"]) as fjson:
+        topics = json.load(fjson)["topics"]
+        for tp in topics:
+            if tp[topic_info_name] == topic_info_value:
+                topic = tp
+                return topic
 
 def generate_random_string():
     return ''.join(random.choices(string.ascii_letters + string.digits, k=25))
