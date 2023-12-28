@@ -89,7 +89,7 @@ def upload_file():
         return raise_error(error_message)
     
     if len(df.columns) <= 1:
-        error_message = 'The uploaded file does not have enough columns to use at this tool. You need at least two columns with data (in case of one horizontal and one vertical component)!'
+        error_message = 'It seems that the uploaded file does not have enough columns to use at this tool. You need at least two columns with data (in case of one horizontal and one vertical component). If this is not the case, check the delimiter applied again, if you uploaded a TXT/DAT file!'
         return raise_error(error_message)
 
     if has_headers == 'false':
