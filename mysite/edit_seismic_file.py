@@ -20,39 +20,6 @@ def create_path(name):
         )
     return path
 
-def convert_mseed_to_json(stream):
-    traces_data_dict = {}
-    first_trace = stream[0]
-    starttime = first_trace.stats["starttime"]
-    fs = float(first_trace.stats["sampling_rate"])
-    station = first_trace.stats["station"]
-    if not station:
-        station = 'STATION'
-    rec_name = str(starttime.date) + "_" + str(starttime.time) + "_" + station
-    rec_name = rec_name.replace(":", "").replace("-", "")
-    starttime = starttime.isoformat()
-    
-    for n, trace in enumerate(stream):
-        ydata = trace.data.tolist()
-        xdata = trace.times().tolist()
-
-        trace_data = {
-            'record-name': rec_name,
-            'ydata': ydata,
-            'xdata': xdata,
-            'stats': {
-                'channel': trace.stats["channel"],
-                'npts': trace.stats["npts"],
-                'sampling_rate': trace.stats["sampling_rate"],
-                'station': trace.stats["station"],
-                'date': trace.stats["starttime"].date.isoformat(),
-                'time': trace.stats["starttime"].time.isoformat()
-            },
-            }
-        traces_data_dict[f'trace-{n}'] = trace_data
-    return jsonify(traces_data_dict)
-
-
 
 @bp.route('/upload-seismic-file', methods=['POST'])
 def upload():
@@ -74,16 +41,28 @@ def upload():
         error_message = str(e)
         return raise_error(error_message)
     
-    # condition to only upload files up to 6 records because of decreased performance
-    if len(stream) > 6:
-        error_message = f'When uploading a seismic file, please be aware that for optimal user experience, it is recommended to limit the number of traces to 6 or fewer. Uploading a seismic file with more than 6 records may result in decreased performance and could impact your overall experience on the platform. The uploaded file contains in total {len(stream)} traces.'
-        return raise_error(error_message)
-    
     # if the seismic file is empty then error
     if len(stream) == 0:
         error_message = 'The uploaded seismic file is empty. There are no records in the file!'
         return raise_error(error_message)
-
+    
+    # if the seismic file is empty then error
+    if len(stream) > 30:
+        error_message = f'The uploaded seismic file contains an excessive number of traces ({len(stream)}). This may impact the performance of the tool. Please upload a file with fewer traces!'
+        return raise_error(error_message)
+    
+    for tr in stream:
+        if len(tr.data) > 300000:
+            error_message = f'The uploaded seismic file contains records with excessive number of sample points, npts (>300000). This may impact the performance of the tool. Please upload a file with less number of sample points!'
+            return raise_error(error_message)
+        
+    # check if the data of the traces are indeed numbers and not any string
+    for tr in stream:
+        try:
+            pd.to_numeric(tr.data, errors='raise')
+        except:
+            error_message = f'The data in one of your records contain a non-valid input value in their data. Only numbers and NaN values are allowed!'
+            return error_message
 
     # get the file path to save the uploaded file as miniseed in the server
     seismic_file_save_path = create_path('edit-seismic-file-tool-stream.mseed')  
@@ -92,20 +71,54 @@ def upload():
     stream.write(seismic_file_save_path)
 
     # convert the uploaded mseed file to json
-    json_data = convert_mseed_to_json(stream)
-    
+    json_data = jsonify([f"trace-{i}" for i in range(1, len(stream)+1)])
     return json_data
 
 
-@bp.route('/update-header', methods=['GET'])
+@bp.route('/get-trace-info', methods=['GET'])
+def get_trace_info():
+    selected_trace = request.args.get("selected-trace")
+
+    # read the uploaded seismic file
+    seismic_file = create_path('edit-seismic-file-tool-stream.mseed')  
+    
+    # try to read the seimsic file
+    try:
+        st = read(seismic_file)
+    except Exception as e:
+        error_message = str(e)
+        return raise_error(error_message)
+    
+    number_in_array = int(selected_trace[-1]) - 1
+
+    tr = st[number_in_array]
+
+    trace_dict = {
+        'ydata': tr.data.tolist(),
+        'xdata': tr.times().tolist(),
+        'number_in_array': number_in_array,
+        'stats': {
+            'channel': tr.stats["channel"],
+            'npts': tr.stats["npts"],
+            'sampling_rate': tr.stats["sampling_rate"],
+            'station': tr.stats["station"],
+            'date': tr.stats["starttime"].date.isoformat(),
+            'time': tr.stats["starttime"].time.isoformat()
+            }
+    }
+
+    return jsonify(trace_dict)
+
+
+
+@bp.route('/update-header', methods=['POST'])
 def update_header():
     # get the fetch request query parameters
-    station = request.args.get('station')
-    date = request.args.get('date')
-    time = request.args.get('time')
-    sampling_rate = request.args.get('sampling_rate')
-    npts = request.args.get('npts')
-    components = request.args.get('components')
+    selected_trace = request.form["trace-selected"]
+    station = request.form.get('station')
+    date = request.form.get('date')
+    time = request.form.get('time')
+    component = request.form.get('component')
 
     # read the uploaded seismic file
     seismic_file = create_path('edit-seismic-file-tool-stream.mseed')  
@@ -117,18 +130,12 @@ def update_header():
         error_message = str(e)
         return raise_error(error_message)
 
-    # if the station exists, then strip for blanks left and right and replace all spaces 
-    # between the characters to empty string
     station = station.strip()
-    if station:
-        station = "".join(station.split())
-        if len(station) > 8 or len(station) < 2:
-            error_message = 'The station name must contain 2 up to 8 characters or numbers!'
+    if station: 
+        if not re.search("^[a-zA-Z0-9]{2,6}$", station):
+            error_message = 'The station name must contain 2 up to 6 characters or numbers (a-z, A-Z, 0-9)!'
             return raise_error(error_message)
-        
-    date = date.strip()
-    time = time.strip()
-
+    
     if not date:
         date = "1970-01-01"
     if not time:
@@ -137,43 +144,27 @@ def update_header():
     try:
         starttime = UTCDateTime(date + " " + time)
     except Exception as e:
-        error_message = 'This is not a valid date or time. The date input must be in the form: e.g., 2015-07-24 and the time format: e.g., 09:58:49'
+        error_message = str(e)
         return raise_error(error_message)
 
-    # convert sampling rate to float and npts to int
-    sampling_rate = float(sampling_rate)
-    npts = int(npts)
-
-    components = components.strip()
-    # if the user didnt fill the components field, put some default values
-    if not components:
-        compos = [f'ch{i}' for i in range(len(st))]
-    else:
-        components = "".join(components.split())
-        compos = components.split(",")
-        compos = [cp.upper() for cp in compos]
-
-        if len(compos) != len(st):
-            error_message = 'The number of the components inserted at the "components" field, does not match the number of traces present in the seismic file. Please ensure that you input the same number of components as there are traces, separated by commas.'
+    component = component.strip()
+    if component:
+        if not re.search("^[a-zA-Z0-9]{1,3}$", component):
+            error_message = 'The component must contain 1 up to 3 characters or numbers (a-z, A-Z, 0-9)!'
             return raise_error(error_message)
+        
+        component = component.upper()
 
-        for cp in compos:
-            if not re.search("^[A-Z0-9]{1,4}$", cp):
-                error_message = 'These are not valid components. Each component must contain 1 up to 4 characters (A-Z) or numbers (0-9)! Then, separate each component using comas e.g., E,N,Z or X,Y or N,V,T or E1,E2,Z'
-                return raise_error(error_message)
+    number_in_array = int(selected_trace[-1]) - 1
 
-    for i in range(len(st)):
-        tr = st[i]
-        tr.stats['station'] = station
-        tr.stats['starttime'] = starttime
-        tr.stats['channel'] = compos[i]
+    st[number_in_array].stats['station'] = station
+    st[number_in_array].stats['starttime'] = starttime
+    st[number_in_array].stats['channel'] = component
 
     updated_stream  = create_path('edit-seismic-file-tool-stream.mseed')
     st.write(updated_stream)
+
     return jsonify({"update":"succesful"})
-    
-
-
 
 
 @bp.route('/download-file', methods=['GET'])
@@ -225,4 +216,32 @@ def download_data():
         csv_path,
         as_attachment=True,
         download_name=get_record_name(seismic_file) + '.csv'
+    )
+
+@bp.route('/download-header', methods=['GET'])
+def download_header():
+    seismic_file = create_path('edit-seismic-file-tool-stream.mseed')  
+    # try to read the seimsic file
+    try:
+        stream = read(seismic_file)
+    except Exception as e:
+        error_message = str(e)
+        return raise_error(error_message)
+    
+    # create a csv path to save the pandas dataframe as csv file
+    txt_path = create_path('header-info.txt')
+    
+    with open(txt_path, 'w') as fw:
+        for n, tr in enumerate(stream, start=1):
+            fw.write(f"Trace {n}\n")
+            fw.write(f"----------------\n")
+            for k in tr.stats:
+                fw.write(f"{k} : {tr.stats[k]}\n")
+            fw.write("\n\n")
+
+    # return the saved file
+    return send_file(
+        txt_path,
+        as_attachment=True,
+        download_name=get_record_name(seismic_file) + '-info.txt'
     )

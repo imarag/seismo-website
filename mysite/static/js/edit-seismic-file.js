@@ -1,13 +1,13 @@
-uploadFileInput = document.querySelector("#upload-file-input");
-headerPlotContainer = document.querySelector("#header-plot-container");
+let uploadFileInput = document.querySelector("#upload-file-input");
+let headerPlotContainer = document.querySelector("#header-plot-container");
+let tracesSelect = document.querySelector("#traces-select");
 
-stationInput = document.querySelector("#station");
-componentsInput = document.querySelector("#components");
-dateInput = document.querySelector("#date");
-timeInput = document.querySelector("#time");
-samplingRateInput = document.querySelector("#sampling-rate");
-nptsInput = document.querySelector("#npts");
-
+let stationInput = document.querySelector("#station");
+let dateInput = document.querySelector("#date");
+let timeInput = document.querySelector("#time");
+let samplingRateInput = document.querySelector("#sampling-rate");
+let nptsInput = document.querySelector("#npts");
+let componentInput = document.querySelector("#component");
 
 // get the spinner div 
 spinnerDiv = document.querySelector("#spinner-div");
@@ -26,19 +26,23 @@ let config = {
     modeBarButtons: [['pan2d', 'zoom2d', 'resetScale2d', 'resetViews']]
 };
 
-let layout;
-
-
 // when clicked open the file input
 document.querySelector("#upload-file-button").addEventListener('click', () => {
     uploadFileInput.click()
 })
 
 // when the change event happends, open the browse window
-uploadFileInput.addEventListener('change', uploadSeismicFile);
+uploadFileInput.addEventListener('change', (e) => {
+    uploadSeismicFile(e)
+});
 
+tracesSelect.addEventListener('change', () => {
+    getTraceInfo(tracesSelect.value)
+})
 
-document.querySelector("#update-header-button").addEventListener('click', updateHeader);
+document.querySelector("#update-trace").addEventListener("click", () => {
+    updateHeader(tracesSelect.value)
+})
 
 // call this function when the user uploads a file
 function uploadSeismicFile(ev) {
@@ -89,38 +93,25 @@ function uploadSeismicFile(ev) {
         // if ok just return the json response
         return response.json()
     })
-    .then(seismicData => {
+    .then(tracesLabelsList => {
         // deactivate spinner
         spinnerDiv.style.display = 'none';
 
         // display block to the container that contains the header menu and the graph
         headerPlotContainer.style.display = 'block';
-        
-        // convert the returned json object to a form that i can use to plot the graph
-        let convertedSeismicData = prepareTracesList(seismicData);
 
-        // create the plot
-        Plotly.newPlot('time-series-graph', convertedSeismicData, layout, config);
+        tracesSelect.innerHTML = "";
 
-        // get the seismic parameter values returned with json from the serrver
-        // and assign them to the seismic parameters widgets
-        stationInput.value = seismicData["trace-0"]["stats"]["station"]; 
-        dateInput.value = seismicData["trace-0"]["stats"]["date"]; 
-        timeInput.value = seismicData["trace-0"]["stats"]["time"];
-        samplingRateInput.value = seismicData["trace-0"]["stats"]["sampling_rate"]; 
-        nptsInput.value = seismicData["trace-0"]["stats"]["npts"];
-        // for the components just loop through the trace objects and add the 
-        // components to the "componentsText"
-        componentsText = '';
-        for (tr in seismicData) {
-            let channel = seismicData[tr]["stats"]["channel"];
-            componentsText += channel + ",";
+        for (tr of tracesLabelsList) {
+            let newOption = document.createElement("option");
+            newOption.value = tr;
+            newOption.text = tr;
+            tracesSelect.appendChild(newOption);
         }
-        // because i add a comma after the channel, the final component will have 
-        // a comma at the end. We don't want it
-        componentsInput.value = componentsText.slice(0, -1)
-        
 
+        tracesSelect.value = "trace-1";
+
+        getTraceInfo("trace-1");
     })
     .catch(error => {
         // Handle any errors during the upload process
@@ -129,67 +120,26 @@ function uploadSeismicFile(ev) {
 }
 
 
+function updateHeader(traceSelected) {
 
+    // create the formData
+    let formData = new FormData();
 
-function prepareTracesList(seismicDataObject) {
-    let xData;
-    let yData;
-    // append here all the traces in an Object form (check below)
-    let tracesList = [];
-    let metr = 1;
+    // Append the MSeed file to the FormData object
+    formData.append('trace-selected', traceSelected);
+    formData.append('station', stationInput.value);
+    formData.append('date', dateInput.value);
+    formData.append('time', timeInput.value);
+    formData.append('component', componentInput.value);
 
-    // define the colors of the record signals
-    let colors = ['black', '#6495ED', '#FF5677', '#DAF7A6', '#FFFFFF', '#DBF3A6']
+    // activate the spinner
+    spinnerDiv.style.display = 'block';
 
-    for (tr in seismicDataObject) {
-        tracesList.push(
-            { 
-                x: seismicDataObject[tr]['xdata'], 
-                y: seismicDataObject[tr]['ydata'], 
-                type: 'scatter', 
-                mode: 'lines', 
-                name: `${seismicDataObject[tr]['stats']['channel']}` , 
-                xaxis:`x${metr}`, 
-                yaxis: `y${metr}`,
-                line: {color: colors[metr-1], width: 1}
-            }
-        );
-        metr += 1;
-    };
-
-    layout = {
-        title: '',
-        margin: {
-            l: 40,
-            r: 15,
-            t: 40,
-            b: 40
-        },
-        grid: {rows: tracesList.length, columns: 1, pattern: 'independent'},
-        plot_bgcolor: 'white',
-        paper_bgcolor: 'white',
-        legend: {
-            orientation: 'h', 
-            x: 0.5,           
-            y: 1.15,
-            xanchor: 'center',
-            font: {
-            size: 20 // Adjust the font size as desired
-            },
-        }
-    };
-
-    return tracesList;
-}
-
-
-
-function updateHeader() {
-    // create the fetch url
-    let fetchURL = `/edit-seismic-file/update-header?station=${stationInput.value}&date=${dateInput.value}&time=${timeInput.value}&sampling_rate=${samplingRateInput.value}&npts=${nptsInput.value}&components=${componentsInput.value}`;
-    
     // fetch to the upload-seimsic-file in flask and do a POST request
-    fetch(fetchURL)
+    fetch('/edit-seismic-file/update-header', {
+        method: 'POST',
+        body: formData
+    })
     .then(response => { 
         // if not ok deactivate the spinner and show the modal message
         if (!response.ok) {
@@ -210,13 +160,86 @@ function updateHeader() {
         return response.json()
     })
     .then(response => {
-        
-        document.querySelector("#modal-message").textContent = 'You have succesfully updated the header of the seismic file! Use the "Download File" option to download the seismic file with the new header.';
-        document.querySelector("#modal-title").textContent = 'Succesful update'
+        // deactivate spinner
+        spinnerDiv.style.display = 'none';
+
+        document.querySelector("#modal-message").textContent = 'You have succesfully updated the seismic parameters of the respective record. Feel free to download the updated seismic file and/or the updated seismic header information, using the <Download File> and the <Download Header> options below the graph, respectively.';
+        document.querySelector("#modal-title").textContent = 'Succesful Header Update'
         document.querySelector("#modal-header").style.backgroundColor = "green";
         document.querySelector("#modal-button-triger").click()
-        
+    })
+    .catch(error => {
+        // Handle any errors during the upload process
+        console.error('Error uploading MSeed file:', error);
+    });
+}
 
+
+function getTraceInfo(selectedTrace) {
+    fetch(`/edit-seismic-file/get-trace-info?selected-trace=${selectedTrace}`)
+    .then(response => { 
+        // if not ok deactivate the spinner and show the modal message
+        if (!response.ok) {
+            // deactivate spinner
+            spinnerDiv.style.display = 'none';
+
+            // get the error json
+            return response.json()
+                .then(errorMessage => {
+                    document.querySelector("#modal-message").textContent = errorMessage['error_message'];
+                    document.querySelector("#modal-title").textContent = 'An error has occured!'
+                    document.querySelector("#modal-header").style.backgroundColor = "red";
+                    document.querySelector("#modal-button-triger").click()
+                    throw new Error(errorMessage);
+                })
+        }
+        // if ok just return the json response
+        return response.json()
+    })
+    .then(traceDataObject => {
+        stationInput.value = traceDataObject["stats"]["station"];
+        dateInput.value = traceDataObject["stats"]["date"];
+        timeInput.value = traceDataObject["stats"]["time"];
+        samplingRateInput.value = traceDataObject["stats"]["sampling_rate"];
+        nptsInput.value = traceDataObject["stats"]["npts"];
+        componentInput.value = traceDataObject["stats"]["channel"];
+
+        let tracePlotObject = { 
+            x: traceDataObject['xdata'], 
+            y: traceDataObject['ydata'], 
+            type: 'scatter', 
+            mode: 'lines', 
+            name: traceDataObject['stats']['channel'], 
+            xaxis: `x1`, 
+            yaxis: `y1`,
+            line: {color: '#527bf7', width: 1}
+        }
+
+        let layout= {
+            title: '',
+            margin: {
+                l: 40,
+                r: 15,
+                t: 40,
+                b: 40
+            },
+            autosize: true,
+            height: 500,
+            grid: {rows: 1, columns: 1},
+            plot_bgcolor: 'white',
+            paper_bgcolor: 'white',
+            legend: {
+                orientation: 'h', 
+                x: 0.5,           
+                y: 1.15,
+                xanchor: 'center',
+                font: {
+                size: 20 // Adjust the font size as desired
+                },
+            }
+        };
+
+        Plotly.newPlot('time-series-graph', [tracePlotObject], layout, config);
     })
     .catch(error => {
         // Handle any errors during the upload process

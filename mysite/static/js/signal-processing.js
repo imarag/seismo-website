@@ -370,7 +370,7 @@
         // then create a button that we will put it in the col div and add a bootstrap class, a text and an event listener to delete the current filter
         // when it is clicked
         let newProcessingPillButton = document.createElement('button');
-        newProcessingPillButton.className = 'btn btn-primary fs-6';
+        newProcessingPillButton.className = 'btn btn-secondary fs-6';
         newProcessingPillButton.textContent = pillText;
         newProcessingPillButton.addEventListener('click', () => {
             deletePillFilter(newProcessingPillColumn, newProcessingPillButton);
