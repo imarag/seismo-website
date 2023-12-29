@@ -1,6 +1,7 @@
 import os, shutil
+from flask import current_app
 
-data_file_folder = "data_files"
+data_file_folder = os.path.join(current_app.root_path, "data_files")
 shutil.rmtree(data_file_folder)
 
 try:

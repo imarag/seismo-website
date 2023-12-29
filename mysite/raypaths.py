@@ -46,7 +46,6 @@ def plot_data():
 
     file_save_path = create_path("input-file.xlsx")
     df = pd.read_excel(file_save_path)
-    print(df.columns)
     df = df[[latstation_col, lonstation_col, latearth_col, lonearth_col]]
 
     df = df.rename(columns = {
@@ -56,6 +55,21 @@ def plot_data():
         lonearth_col: 'earthquake_lon'
         })
     
+    edited_file_save_path = create_path("input-file-edited.xlsx")
+
+    df.to_excel(edited_file_save_path, index=None)
+    
     dict_format = df.to_dict(orient="list")
     return jsonify(dict_format)
+
+@bp.route('/get-data', methods=['GET'])
+def get_data():
+
+    edited_file_save_path = create_path("input-file-edited.xlsx")
+    df = pd.read_excel(edited_file_save_path)
+    dict_format = df.to_dict(orient="list")
+    return jsonify(dict_format)
+
+    
+   
 

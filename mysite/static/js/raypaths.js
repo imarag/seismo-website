@@ -4,6 +4,8 @@ let lonStationSelect = document.querySelector("#lonstation");
 let latEarthSelect = document.querySelector("#latearth");
 let lonEarthSelect = document.querySelector("#lonearth");
 let buttonPlot = document.querySelector("#button-plot");
+let buttonUpdateStyles = document.querySelector("#button-update-styles");
+
 
 document.querySelector("#upload-file-button").addEventListener('click', function() {
     uploadFileInput.click();
@@ -17,6 +19,9 @@ buttonPlot.addEventListener("click", () => {
     plotMapData()
 })
 
+buttonUpdateStyles.addEventListener("click", () => {
+    updateStyles()
+})
 
 
 function uploadSeismicFile(ev) {
@@ -114,18 +119,28 @@ function plotMapData() {
         let earthquakeLon = jsonData["earthquake_lon"];
         let earthquakeLat = jsonData["earthquake_lat"];
         
-        var data = [{
+        var data = [
+            {
             type:'scattermapbox',
             lat: stationLat,
             lon: stationLon,
-            mode:'markers',
-            marker: {
-              size:14
-            },
-          }]
-         
-          
-          Plotly.newPlot('graph-area', data)
+            marker: { color: "fuchsia", size: 4 }
+          },
+          {
+            type:'scattermapbox',
+            lat: earthquakeLat,
+            lon: earthquakeLon,
+            marker: { color: "red", size: 4 }
+          }
+        ];
+
+        var layout = {
+			dragmode: "zoom",
+			mapbox: { style: "open-street-map", center: { lat: 38, lon: 25 }, zoom: 3 },
+			margin: { r: 0, t: 0, b: 0, l: 0 }
+		};
+
+          Plotly.newPlot("graph-area", data, layout);
           
 
     })
@@ -133,4 +148,67 @@ function plotMapData() {
     // Handle any errors during the upload process
     console.error('Error uploading MSeed file:', error);
     });
+}
+
+function updateStyles() {
+    let lineColor = document.querySelector("#line-color");
+    let lineWidth = document.querySelector("#line-width");
+    let lineOpacity = document.querySelector("#line-opacity");
+    let stationMarkerColor = document.querySelector("#station-marker-color");
+    let stationMarkerSize = document.querySelector("#station-marker-size");
+    let stationMarkerOpacity = document.querySelector("#station-marker-opacity");
+    let earthquakeMarkerColor = document.querySelector("#earthquake-marker-color");
+    let earthquakeMarkerSize = document.querySelector("#earthquake-marker-size");
+    let earthquakeMarkerOpacity = document.querySelector("#earthquake-marker-opacity");
+    console.log(stationMarkerColor.value,stationMarkerSize.value,stationMarkerOpacity.value )
+    fetch('/raypaths/get-data')
+    .then(response => { 
+        // if not ok deactivate the spinner and show the modal message
+        if (!response.ok) {
+            return response.json()
+                .then(errorMessage => {
+                    throw new Error(errorMessage);
+                })
+        }
+        // if ok just return the json response
+        return response.json()
+    })
+    .then(jsonData => {
+        let stationLon = jsonData["station_lon"];
+        let stationLat = jsonData["station_lat"];
+        let earthquakeLon = jsonData["earthquake_lon"];
+        let earthquakeLat = jsonData["earthquake_lat"];
+        console.log(stationLon);
+        var data = [
+            {
+            type:'scattermapbox',
+            lat: stationLat,
+            lon: stationLon,
+            marker: { color: stationMarkerColor.value, size: stationMarkerSize.value, opacity: stationMarkerOpacity.value, symbol: "circle-stroked" },
+            
+          },
+          {
+            type:'scattermapbox',
+            lat: earthquakeLat,
+            lon: earthquakeLon,
+            marker: { color: earthquakeMarkerColor.value, size: earthquakeMarkerSize.value, opacity: earthquakeMarkerOpacity.value, symbol:"triangle" },
+            
+          }
+        ];
+
+        var layout = {
+			dragmode: "zoom",
+			mapbox: { style: "open-street-map", center: { lat: 38, lon: 25 }, zoom: 3 },
+			margin: { r: 0, t: 0, b: 0, l: 0 }
+		};
+
+          Plotly.newPlot("graph-area", data, layout);
+          
+
+    })
+    .catch(error => {
+    // Handle any errors during the upload process
+    console.error('Error uploading MSeed file:', error);
+    });
+
 }

@@ -11,9 +11,19 @@ def create_app():
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_pyfile('config.py', silent=True)
 
-    app.config["DATA_FILES_FOLDER"] = os.path.join(app.root_path, 'data_files')
+    app.config['DATA_FILES_FOLDER'] = os.path.join(app.root_path, 'data_files')
     app.config["ALL_TOPICS_FILE"] = os.path.join(app.root_path, "all-topics.json")
     app.config["ALL_TOPICS_BACKUP_FILE"] = os.path.join(app.root_path, "all-topics-backup.json")
+
+    # Set admin credentials in the configuration
+    app.config["ADMIN_USERNAME"] = "ioannis95"
+    app.config["ADMIN_PASSWORD"] = "Seismologia95@"
+
+    app.config['MAIL_USE_TLS'] = False
+    app.config['MAIL_USE_SSL'] = True
+
+    app.config['SECRET_KEY'] = 'asdf12345po45i34OI'
+
     mail.init_app(app)
    
     try:
@@ -117,14 +127,14 @@ def create_app():
         }
         return render_template('base-error.html', error=error), 503
 
-    @app.errorhandler(Exception)
-    def handle_exception(error):
-        error = {
-            "title": "Internal Server Error!",
-            "description": "An unexpected error occurred on our server, rendering it temporarily inaccessible. Our technical team has been alerted and is diligently working to resolve the issue. We appreciate your patience and recommend trying your request again shortly",
-            "code": 500
-        }
-        return render_template('base-error.html', error=error), 500
+    # @app.errorhandler(Exception)
+    # def handle_exception(error):
+    #     error = {
+    #         "title": "Internal Server Error!",
+    #         "description": "An unexpected error occurred on our server, rendering it temporarily inaccessible. Our technical team has been alerted and is diligently working to resolve the issue. We appreciate your patience and recommend trying your request again shortly",
+    #         "code": 500
+    #     }
+    #     return render_template('base-error.html', error=error), 500
     
     from . import fourier
     from . import pick_arrivals
