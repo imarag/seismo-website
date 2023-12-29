@@ -144,7 +144,6 @@ def create_app():
     from . import admin
     from . import distance_between_points
     from . import edit_seismic_file
-    from . import raypaths
 
     app.register_blueprint(fourier.bp)
     app.register_blueprint(pick_arrivals.bp)
@@ -154,6 +153,5 @@ def create_app():
     app.register_blueprint(search_topics.bp)
     app.register_blueprint(distance_between_points.bp)
     app.register_blueprint(edit_seismic_file.bp)
-    app.register_blueprint(raypaths.bp)
 
     return app
