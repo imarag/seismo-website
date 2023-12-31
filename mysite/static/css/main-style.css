@@ -8,23 +8,13 @@ body {
 
 /* --------------------------HELP AND SUPPORT --------------------------*/
 
-.support-cards-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
+.help-support-contents-div {
+  background-color: #92c1ff !important;
+  transition: background-color 0.5s;
 }
 
-.support-card {
-  padding: 20px;
-  border-radius: 10px;
-  background-color: #f6f8ff;
-  transition: background-color 0.7s;
-  margin: 0px 20px;
-  width: 200px;
-}
-
-.support-card:hover {
-  background-color: #4e99fa;
+.help-support-contents-div:hover {
+  background-color: #6283f9 !important;
 }
 
 /* ------------------------- ADMIN LOGIN PAGE -----------------------------*/
@@ -75,7 +65,7 @@ body {
 /* ------------------------- INDEX PAGE ----------------------------*/
 
 #main-index-background-image-div {
-  background-image: url("/static/img/img-carous1.jpg");
+  background-image: url("/static/img/index-background-image.jpg");
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;

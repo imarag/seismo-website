@@ -69,17 +69,30 @@ def create_app():
 
     @app.route("/receive-feedback", methods=["POST"])
     def receive_feedback():
+        feedback_user_email = request.form["feedback-email"]
         feedback_input_text = request.form["feedback-input"]
 
-        if feedback_input_text:
+        if not feedback_user_email:
+            flash("Feedback has not been sent. An email address is required!", "danger")
+            return redirect(url_for("get_page", page_name="help-and-support"))
+
+        if not feedback_input_text:
+            flash(
+                "Feedback has not been sent. A feedback message is required!", "danger"
+            )
+            return redirect(url_for("get_page", page_name="help-and-support"))
+
+        try:
             msg = Message(
                 subject=f"Feedback",
-                sender="seismoweb95@gmail.com",
+                sender=feedback_user_email,
                 recipients=["seismoweb95@gmail.com"],
                 body=escape(feedback_input_text),
             )
             mail.send(msg)
             flash("Thank you for your feedback!", "info")
+        except Exception as e:
+            flash(str(e))
 
         return redirect(url_for("get_page", page_name="help-and-support"))
 
