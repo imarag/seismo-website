@@ -1,151 +1,178 @@
-
 {% extends 'base-articles.html' %}
 
 {% block article_pills %}
-    <a target="_blank" href="https://docs.obspy.org/tutorial/index.html"><span class="badge rounded-pill">Obspy</span></a>
-    <a target="_blank" href="https://docs.obspy.org/packages/autogen/obspy.core.stream.Stream.html"><span class="badge rounded-pill">Stream</span></a>
-    <a target="_blank" href="https://docs.obspy.org/packages/autogen/obspy.core.trace.Trace.html"><span class="badge rounded-pill">Trace</span></a>
-    <a target="_blank" href="https://www.thefouriertransform.com/"><span class="badge rounded-pill">Fourier</span></a>
+<a target="_blank" href="https://docs.obspy.org/tutorial/index.html"><span class="badge rounded-pill">Obspy</span></a>
+<a target="_blank" href="https://docs.obspy.org/packages/autogen/obspy.core.stream.Stream.html"><span
+        class="badge rounded-pill">Stream</span></a>
+<a target="_blank" href="https://docs.obspy.org/packages/autogen/obspy.core.trace.Trace.html"><span
+        class="badge rounded-pill">Trace</span></a>
+<a target="_blank" href="https://www.thefouriertransform.com/"><span class="badge rounded-pill">Fourier</span></a>
 {% endblock %}
 
 {% block article_main_content %}
-    <h1>Task Description</h1>
-    <p>
-        In this tutorial, our aim is to compute the Fourier spectra within a specific window on the waveforms.
-        This process involves a series of crucial preprocessing steps which enchance the quality of the data and ensure that the subsequent Fourier spectra 
-        analysis is conducted on a refined and targeted portion of the seismic recordings. The preprocessing steps can be summarized as follows:
-    </p>
-    <ul>
-        <li>
-            <b>Apply a bandpass filter (1 to 5 Hz)</b>:
-            The initial step involves the application of a bandpass filter with a frequency range of 1 to 5 Hz. This filtering operation is designed to 
-            eliminate unwanted noise from the seismic signal, ensuring that only the relevant frequency band is retained for further analysis.
-        </li>
-        <li>
-            <b>Select the P & S wave arrival times</b>:
-            Following the bandpass filtering, the identification and selection of arrivals corresponding to the P (primary) and S (secondary) waves are 
-            essential. This step aims to define the edges of the signal and the noise windows at a subsequent step.
-        </li>
-        <li>
-            <b>Define the signal and the noise window</b>:
-            At this point we define the left signal window side to be S wave arrival time and the right side to be 10 seconds later. Likewise, the 
-            left side of the noise window is positioned 10 seconds prior to the P wave arrival time, and its right side aligns with the P wave arrival. 
+<h1>Task Description</h1>
+<p>
+    In this tutorial, our aim is to compute the Fourier spectra within a specific window on the waveforms.
+    This process involves a series of crucial preprocessing steps which enchance the quality of the data and ensure that
+    the subsequent Fourier spectra
+    analysis is conducted on a refined and targeted portion of the seismic recordings. The preprocessing steps can be
+    summarized as follows:
+</p>
+<ul>
+    <li>
+        <b>Apply a bandpass filter (1 to 5 Hz)</b>:
+        The initial step involves the application of a bandpass filter with a frequency range of 1 to 5 Hz. This
+        filtering operation is designed to
+        eliminate unwanted noise from the seismic signal, ensuring that only the relevant frequency band is retained for
+        further analysis.
+    </li>
+    <li>
+        <b>Select the P & S wave arrival times</b>:
+        Following the bandpass filtering, the identification and selection of arrivals corresponding to the P (primary)
+        and S (secondary) waves are
+        essential. This step aims to define the edges of the signal and the noise windows at a subsequent step.
+    </li>
+    <li>
+        <b>Define the signal and the noise window</b>:
+        At this point we define the left signal window side to be S wave arrival time and the right side to be 10
+        seconds later. Likewise, the
+        left side of the noise window is positioned 10 seconds prior to the P wave arrival time, and its right side
+        aligns with the P wave arrival.
 
-        </li>
-        <li>
-            <b>Trim recordings inside the 10-second window</b>:
-            This step is applied to cut the waveforms into signal and noise windows, created in relation to the P and S wave arrivals. Both windows 
-            will have a consistent duration of 10 seconds.
-        </li>
-        <li>
-            <b>Taper the Waveforms</b>:
-            The last step involves the smoothing of the trimmed waveforms in order to ensure zero acceleration values at the edges.
-        </li>
-    </ul>
-    <h1>Reading the Input Data</h1>
-    <p>
-        In this article we will make use of the Obspy Python library to apply the seismological computations and the Python Matplotlib library to plot the 
-        waveform time series. For this reason, we will start by initializing the libraries that we will use throughout the rest of the article:
-    </p>
-    <script src="https://gist.github.com/imarag/377e201b37db4672889749ced36a8f1f.js"></script>
-    <p>
-        To proceed, read a MiniSEED file containing a record from April 4, 2014, at 20:08:20, recorded by the CH03 station:
-    </p>
-    <script src="https://gist.github.com/imarag/b4a989c62a798ecdd73d8a5445b0953e.js"></script>
-    <h1>Application Of the Pre-Processing Steps</h1>
-    <h2>Apply A Bandpass Filter</h2>
-    <p>
-        Initiate the process by applying a bandpass filter to the records within the frequency range of 1 to 5 Hz. This step aims to eliminate surrounding 
-        noise and facilitate the arrival selection. Utilize the Obspy 
-        <a href="https://docs.obspy.org/packages/autogen/obspy.core.stream.Stream.filter.html" class="link-info" target="_blank"><code>filter()</code></a> function
-        for this purpose:
-    </p>
-    <script src="https://gist.github.com/imarag/d54cb68d57ebf3759dbc963474a48a6c.js"></script>
-    <div class="figure-container">
-        <figure>
-            <img src="/static/img/obspy-stream-filtered.png" alt="mseed plot">
-            <figcaption>Recordings after applying a bandpass filter of 1-5 Hz</figcaption>
-        </figure>
-    </div>
-    <h2>Select The P And S Wave Arrivals</h2>
-    <p>
-        It's clear from the filtered waveforms, that the P wave arrivals occurs roughly at <code>20:08:36</code> and the S wave arrivals at <code>20:08:58</code>. 
-        Convert these into Obspy <code>UTCDateTime</code> objects and convert the arrival values as total seconds from the starting date:
-    </p>
-    <script src="https://gist.github.com/imarag/f5af9772fadcaeedb9dbeafd243f2235.js"></script>
-    <p>
-        To plot the P-wave and S-wave arrivals on the waveforms, we use Matplotlib to mark these time points with vertical 
-        lines. Here's an example of how you can do it in Python:
-    </p>
-    <script src="https://gist.github.com/imarag/20e1b4548a1b69fe4e5f11c295361c45.js"></script>
-    <div class="figure-container">
-        <figure>
-            <img src="/static/img/arrivals.png" alt="mseed plot">
-            <figcaption>Arrivals of the P (red dashed line) and the S (black dashed line) waves</figcaption>
-        </figure>
-    </div>
-    <h2>Define The Signal And Noise Windows</h2>
-    <p>
-        At this stage we define two windows to calculate the Fourier Spectra, one for the signal part of the waveform and one for the noise part.
-        Both windows will share the same duration or length of 10 seconds. The first window 
-        will start from the S wave arrival and the second one will begin 10 seconds before the P wave arrival. Let's visualize these windows: 
-    </p>
-    <script src="https://gist.github.com/imarag/fb383cf8879d821871f1438d920a0650.js"></script>
-    <div class="figure-container">
-        <figure>
-            <img src="/static/img/windows.png" alt="mseed plot">
-            <figcaption>Define the signal and the noise window to calculate the Fourier Spectra. Both will have the same duration of 10 seconds. The signal window 
-                starts at the S wave arrival and ends 10 seconds later. Similarly, the noise window initiates 10 seconds prior the P wave arrival and ends at the 
-                P wave arrival.
-            </figcaption>
-        </figure>
-    </div>
-    <h2>Trim The Waveforms Between The Windows</h2>
-    <p>
-        To continue, trim the waveforms at the two windows using the Obspy 
-        <a href="https://docs.obspy.org/packages/autogen/obspy.core.stream.Stream.trim.html" class="link-info" target="_blank"><code>trim()</code></a> function. 
-        Because the trimming happens inplace, create copies of the orginal <code>Stream</code> object using the <code>copy()</code> method:
-    </p>
-    <script src="https://gist.github.com/imarag/8fd9990f4451e595c1a9f5c131dd9110.js"></script>
-    <p>
-        Then plot the trimmed waveforms using the Matplotlib library:
-    </p>
-    <script src="https://gist.github.com/imarag/e250f716129c581c748d408a686d55fc.js"></script>
-    <div class="figure-container">
-        <figure>
-            <img src="/static/img/trimmed.png" alt="mseed plot">
-            <figcaption>Trimmed waveforms at the noise and the signal windows for all the components</figcaption>
-        </figure>
-    </div>
-    <h2>Smooth the waveforms</h2>
-    <p>
-        At the last step, generate another copy of two obects from the previous trimmed recordings and smooth the left and the right side of the waveforms, using the obspy 
-        <a href="https://docs.obspy.org/packages/autogen/obspy.core.trace.Trace.taper.html" class="link-info" target="_blank"><code>taper()</code></a> function:
-    </p>
-    <script src="https://gist.github.com/imarag/14572aaf70ea874461d23ae6ea0c8f74.js"></script>
-    <p>
-        Lastly, plot the results using Matplotlib:
-    </p>
-    <script src="https://gist.github.com/imarag/dd697ea2048b6f6b930b1f3f2aa5aa4b.js"></script>
-    <div class="figure-container">
-        <figure>
-            <img src="/static/img/taper.png" alt="mseed plot">
-            <figcaption>Trimmed (blue) and tappered (orange) waveforms at the noise and the signal window for all the components</figcaption>
-        </figure>
-    </div>
-    <h2>Compute The Fourier Spectra</h2>
-    <p>
-        Finally we can calculate the Fourier Spectra at the noise and the signal window on the filtered, trimmed and tappered waveforms: 
-    </p>
-    <script src="https://gist.github.com/imarag/e859b97f8e8490d6c9de33aff1e1c73b.js"></script>
-    <p>
-        And we present the results:
-    </p>
-    <script src="https://gist.github.com/imarag/6b9de7c48fc3c140ee63260e83586b70.js"></script>
-    <div class="figure-container">
-        <figure>
-            <img src="/static/img/fourier-plot.png" alt="mseed plot">
-            <figcaption>Fourier Spectra of the signal (bold curve) and the noise (muted curve) window for each component of the tappered <code>Stream</code> object</figcaption>
-        </figure>
-    </div>
+    </li>
+    <li>
+        <b>Trim recordings inside the 10-second window</b>:
+        This step is applied to cut the waveforms into signal and noise windows, created in relation to the P and S wave
+        arrivals. Both windows
+        will have a consistent duration of 10 seconds.
+    </li>
+    <li>
+        <b>Taper the Waveforms</b>:
+        The last step involves the smoothing of the trimmed waveforms in order to ensure zero acceleration values at the
+        edges.
+    </li>
+</ul>
+<h1>Reading the Input Data</h1>
+<p>
+    In this article we will make use of the Obspy Python library to apply the seismological computations and the Python
+    Matplotlib library to plot the
+    waveform time series. For this reason, we will start by initializing the libraries that we will use throughout the
+    rest of the article:
+</p>
+<script src="https://gist.github.com/imarag/377e201b37db4672889749ced36a8f1f.js"></script>
+<p>
+    To proceed, read a MiniSEED file containing a record from April 4, 2014, at 20:08:20, recorded by the CH03 station:
+</p>
+<script src="https://gist.github.com/imarag/b4a989c62a798ecdd73d8a5445b0953e.js"></script>
+<h1>Application Of the Pre-Processing Steps</h1>
+<h2>Apply A Bandpass Filter</h2>
+<p>
+    Initiate the process by applying a bandpass filter to the records within the frequency range of 1 to 5 Hz. This step
+    aims to eliminate surrounding
+    noise and facilitate the arrival selection. Utilize the Obspy
+    <a href="https://docs.obspy.org/packages/autogen/obspy.core.stream.Stream.filter.html" class="link-info"
+        target="_blank"><code>filter()</code></a> function
+    for this purpose:
+</p>
+<script src="https://gist.github.com/imarag/d54cb68d57ebf3759dbc963474a48a6c.js"></script>
+<div class="figure-container">
+    <figure>
+        <img src="/static/img/obspy-stream-filtered.png" alt="mseed plot">
+        <figcaption>Recordings after applying a bandpass filter of 1-5 Hz</figcaption>
+    </figure>
+</div>
+<h2>Select The P And S Wave Arrivals</h2>
+<p>
+    It's clear from the filtered waveforms, that the P wave arrivals occurs roughly at <code>20:08:36</code> and the S
+    wave arrivals at <code>20:08:58</code>.
+    Convert these into Obspy <code>UTCDateTime</code> objects and convert the arrival values as total seconds from the
+    starting date:
+</p>
+<script src="https://gist.github.com/imarag/f5af9772fadcaeedb9dbeafd243f2235.js"></script>
+<p>
+    To plot the P-wave and S-wave arrivals on the waveforms, we use Matplotlib to mark these time points with vertical
+    lines. Here's an example of how you can do it in Python:
+</p>
+<script src="https://gist.github.com/imarag/20e1b4548a1b69fe4e5f11c295361c45.js"></script>
+<div class="figure-container">
+    <figure>
+        <img src="/static/img/arrivals.png" alt="mseed plot">
+        <figcaption>Arrivals of the P (red dashed line) and the S (black dashed line) waves</figcaption>
+    </figure>
+</div>
+<h2>Define The Signal And Noise Windows</h2>
+<p>
+    At this stage we define two windows to calculate the Fourier Spectra, one for the signal part of the waveform and
+    one for the noise part.
+    Both windows will share the same duration or length of 10 seconds. The first window
+    will start from the S wave arrival and the second one will begin 10 seconds before the P wave arrival. Let's
+    visualize these windows:
+</p>
+<script src="https://gist.github.com/imarag/fb383cf8879d821871f1438d920a0650.js"></script>
+<div class="figure-container">
+    <figure>
+        <img src="/static/img/windows.png" alt="mseed plot">
+        <figcaption>Define the signal and the noise window to calculate the Fourier Spectra. Both will have the same
+            duration of 10 seconds. The signal window
+            starts at the S wave arrival and ends 10 seconds later. Similarly, the noise window initiates 10 seconds
+            prior the P wave arrival and ends at the
+            P wave arrival.
+        </figcaption>
+    </figure>
+</div>
+<h2>Trim The Waveforms Between The Windows</h2>
+<p>
+    To continue, trim the waveforms at the two windows using the Obspy
+    <a href="https://docs.obspy.org/packages/autogen/obspy.core.stream.Stream.trim.html" class="link-info"
+        target="_blank"><code>trim()</code></a> function.
+    Because the trimming happens inplace, create copies of the orginal <code>Stream</code> object using the
+    <code>copy()</code> method:
+</p>
+<script src="https://gist.github.com/imarag/8fd9990f4451e595c1a9f5c131dd9110.js"></script>
+<p>
+    Then plot the trimmed waveforms using the Matplotlib library:
+</p>
+<script src="https://gist.github.com/imarag/e250f716129c581c748d408a686d55fc.js"></script>
+<div class="figure-container">
+    <figure>
+        <img src="/static/img/trimmed.png" alt="mseed plot">
+        <figcaption>Trimmed waveforms at the noise and the signal windows for all the components</figcaption>
+    </figure>
+</div>
+<h2>Smooth the waveforms</h2>
+<p>
+    At the last step, generate another copy of two obects from the previous trimmed recordings and smooth the left and
+    the right side of the waveforms, using the obspy
+    <a href="https://docs.obspy.org/packages/autogen/obspy.core.trace.Trace.taper.html" class="link-info"
+        target="_blank"><code>taper()</code></a> function:
+</p>
+<script src="https://gist.github.com/imarag/14572aaf70ea874461d23ae6ea0c8f74.js"></script>
+<p>
+    Lastly, plot the results using Matplotlib:
+</p>
+<script src="https://gist.github.com/imarag/dd697ea2048b6f6b930b1f3f2aa5aa4b.js"></script>
+<div class="figure-container">
+    <figure>
+        <img src="/static/img/taper.png" alt="mseed plot">
+        <figcaption>Trimmed (blue) and tappered (orange) waveforms at the noise and the signal window for all the
+            components</figcaption>
+    </figure>
+</div>
+<h2>Compute The Fourier Spectra</h2>
+<p>
+    Finally we can calculate the Fourier Spectra at the noise and the signal window on the filtered, trimmed and
+    tappered waveforms:
+</p>
+<script src="https://gist.github.com/imarag/e859b97f8e8490d6c9de33aff1e1c73b.js"></script>
+<p>
+    And we present the results:
+</p>
+<script src="https://gist.github.com/imarag/6b9de7c48fc3c140ee63260e83586b70.js"></script>
+<div class="figure-container">
+    <figure>
+        <img src="/static/img/fourier-plot.png" alt="mseed plot">
+        <figcaption>Fourier Spectra of the signal (bold curve) and the noise (muted curve) window for each component of
+            the tappered <code>Stream</code> object</figcaption>
+    </figure>
+</div>
 {% endblock %}
