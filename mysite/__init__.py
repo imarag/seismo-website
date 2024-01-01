@@ -20,7 +20,23 @@ mail = Mail()
 def create_app():
     app = Flask(__name__, instance_relative_config=True)
 
-    app.config.from_pyfile("config.py", silent=True)
+    app.config["DATA_FILES_FOLDER"] = os.path.join(app.root_path, "data_files")
+    app.config["ALL_TOPICS_FILE"] = os.path.join(app.root_path, "all-topics.json")
+    app.config["ALL_TOPICS_FILE_BACKUP"] = os.path.join(
+        app.root_path, "all-topics.json"
+    )
+
+    app.config["ADMIN_USERNAME"] = "ioannis95"
+    app.config["ADMIN_PASSWORD"] = "Seismologia95@"
+
+    app.config["MAIL_SERVER"] = "smtp.gmail.com"
+    app.config["MAIL_PORT"] = 465
+    app.config["MAIL_USERNAME"] = "seismoweb95@gmail.com"
+    app.config["MAIL_PASSWORD"] = "qppnzstyxltfjcnz"
+    app.config["MAIL_USE_TLS"] = False
+    app.config["MAIL_USE_SSL"] = True
+
+    app.config["SECRET_KEY"] = "asdf12345po45i34OI"
 
     mail.init_app(app)
 
@@ -85,13 +101,14 @@ def create_app():
         try:
             msg = Message(
                 subject=f"Feedback",
-                sender=feedback_user_email,
+                sender="seismoweb95@gmail.com",
                 recipients=["seismoweb95@gmail.com"],
-                body=escape(feedback_input_text),
+                body=escape(feedback_input_text + f"\n from: {feedback_user_email}"),
             )
             mail.send(msg)
             flash("Thank you for your feedback!", "info")
         except Exception as e:
+            print(e, "**************")
             flash(str(e))
 
         return redirect(url_for("get_page", page_name="help-and-support"))
