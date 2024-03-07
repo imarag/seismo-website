@@ -13,6 +13,7 @@ from flask_mail import Mail, Message
 import os
 from .functions import generate_random_string, get_topic
 from markupsafe import escape
+import json
 
 mail = Mail()
 
@@ -108,10 +109,34 @@ def create_app():
             mail.send(msg)
             flash("Thank you for your feedback!", "info")
         except Exception as e:
-            print(e, "**************")
             flash(str(e))
 
         return redirect(url_for("get_page", page_name="help-and-support"))
+
+    @app.route("/filter-topics/<topictype>", methods=["GET", "POST"])
+    def filter_topics(topictype):
+
+        with open(app.config["ALL_TOPICS_FILE"], "r") as fjson:
+            topics = json.load(fjson)["topics"]
+
+        filtered_topics = []
+        if topictype == "articles":
+            for tp in topics:
+                if tp["type"] == "static":
+                    filtered_topics.append(tp)
+
+        elif topictype == "interactive-tools":
+            for tp in topics:
+                if tp["type"] == "interactive":
+                    filtered_topics.append(tp)
+        else:
+            filtered_topics = topics
+
+        return render_template(
+            "search-topics.html",
+            topics=filtered_topics,
+            selectedtopic=topictype.title(),
+        )
 
     @app.errorhandler(400)
     def error_400(error):
@@ -162,8 +187,6 @@ def create_app():
     from . import pick_arrivals
     from . import file_to_mseed
     from . import signal_processing
-    from . import search_topics
-    from . import admin
     from . import distance_between_points
     from . import edit_seismic_file
 
@@ -171,8 +194,6 @@ def create_app():
     app.register_blueprint(pick_arrivals.bp)
     app.register_blueprint(file_to_mseed.bp)
     app.register_blueprint(signal_processing.bp)
-    app.register_blueprint(admin.bp)
-    app.register_blueprint(search_topics.bp)
     app.register_blueprint(distance_between_points.bp)
     app.register_blueprint(edit_seismic_file.bp)
 

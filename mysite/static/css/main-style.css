@@ -6,6 +6,15 @@ body {
   margin: 0px;
 }
 
+.interactive-tools-index-div {
+  position: relative;
+}
+
+.interactive-tools-index-div span {
+  position: absolute;
+  right: 0;
+}
+
 /* --------------------------HELP AND SUPPORT --------------------------*/
 
 .help-support-contents-div {
