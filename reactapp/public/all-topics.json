@@ -5,7 +5,7 @@
       "title": "Python Obspy",
       "description": "An open-source Python library designed for advanced analysis, processing, and manipulation of seismological data",
       "image_name": "obspy-icon.png",
-      "type": "python-tutorials",
+      "type": "seismic-articles",
       "template_name": "obspy"
     },
     {
@@ -27,6 +27,7 @@
     {
       "id": 4,
       "title": "Data Files To MiniSEED",
+      "template_path": "file-to-mseed",
       "description": "An interactive tool to transform data files into the seismic MiniSEED format. To begin, upload your file at the specific file format menu, and specify the relevant parameters (e.g., delimiter and skip rows). Afterward, choose the corresponding seismic parameters to complete the conversion process.",
       "image_name": "file-to-mseed-icon.png",
       "type": "seismic-tools",
@@ -69,7 +70,7 @@
       "title": "Python File Manipulation",
       "description": "Utilization of various Python libraries to manipulate system files and paths",
       "image_name": "file-manipulation-icon.png",
-      "type": "python-tutorials",
+      "type": "seismic-articles",
       "template_name": "file-manipulation"
     },
     {
@@ -77,7 +78,7 @@
       "title": "Python Matplotlib Plotting",
       "description": "A basic tutorial to plot seismic data using various Matplotlib functions and methods",
       "image_name": "matplotlib-icon.png",
-      "type": "python-tutorials",
+      "type": "seismic-articles",
       "template_name": "matplotlib"
     },
     {

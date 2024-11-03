@@ -1,63 +1,46 @@
+import { useState } from "react"
+import NavMenu from "../components/NavMenu"
+import NavSearchInput from "../components/NavSearchInput"
 import Logo from "../img/logo.png"
 import { Link, Outlet } from 'react-router-dom'
 
 export default function RootLayout() {
 
-    function handleSidebar() {
-        document.querySelector(".offnav").classList.toggle("active")
-    }
+    const [offNavActive, setOffnavActive] = useState(false);
 
   return (
     <>
-        <header className="flex flex-row justify-between items-center py-5 mx-auto container">
-            <div>
+        <header className="flex flex-row justify-start items-center px-5 py-5 mx-auto container">
+            <div className="me-10">
                 <Link to="/">
                     <img src={Logo} className="w-20"/>
                 </Link>
             </div>
             <nav className="hidden lg:flex">
-                <ul className="flex flex-row gap-x-6 text-lg">
-                    <li>
-                        <Link to="/">Home</Link>
-                    </li>
-                    <li>
-                        <Link to="about">About</Link>
-                    </li>
-                    <li>
-                        <Link to="articles-search">Articles</Link>
-                    </li>
-                    <li>
-                        <Link to="tools-search">Tools</Link>
-                    </li>
-                    <li>
-                        <Link to="donation">Donate</Link>
-                    </li>
-                    <li>
-                        <Link to="contact">Contact</Link>
-                    </li>
-                </ul>
+                <NavMenu classParameters="flex-row items-center justify-center" />
             </nav>
-            <div className="hidden lg:flex">
-                <form>
-                    <div className="flex items-center justify-evenly gap-x-4 bg-gray-100 border-gray-100 border pe-4 rounded-lg">
-                        <input className="bg-gray-100 py-1 rounded-lg" id="search" type="search" />
-                        <label htmlFor="search">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="size-4 stroke-1 stroke-gray-800" viewBox="0 0 16 16">
-                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+            {
+                offNavActive && (
+                    <nav className="flex fixed left-0 top-0 bottom-0 w-full sm:w-72 bg-emerald-50/95 shadow-lg overflow-hidden">
+                        <NavMenu classParameters="flex-col items-center justify-center w-full" />
+                        <button type="button" onClick={(e) => setOffnavActive(false)} className="rounded p-1 hover:bg-gray-200 absolute top-6 right-6">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
                             </svg>
-                        </label>
-                    </div>
-                </form>
+                        </button>
+                    </nav>
+                )
+            }
+            <div className="ms-auto hidden lg:flex">
+                <NavSearchInput />
             </div>
-            <button className="lg:hidden" onClick={handleSidebar}>
+            <button className="lg:hidden ms-auto" onClick={() => setOffnavActive(!offNavActive)}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="size-7" viewBox="0 0 16 16">
                     <path fillRule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
                 </svg>
             </button>
-            
-
         </header>
-        <main className="text-lg font-normal">
+        <main className="text-xl font-normal">
             <Outlet />
         </main>
         <footer>

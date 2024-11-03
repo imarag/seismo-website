@@ -1,13 +1,14 @@
+
 import CH03MSEEDPlot from "../../img/ch03_mseed_plot.png"
 import ObspyStructure from "../../img/obspy-structure.png"
 import CH03MSEEDPlotMethod from "../../img/ch03_mseed_plot_method.png"
-import RecordTXTFile from "../../img/record-txt-file.png"
 import ObspyTrimmedTrace from "../../img/obspy-trimmed-trace.png"
 import ObspyFilterMSEED from "../../img/obspy-filter-mseed.png"
+import RecordTXTFile from "../../img/record-txt-file.png"
 
 export default function Obspy() {
   return (
-    <div>
+    <>
         <h1>Basic structure</h1>
         <p>
             The main structure of the Obspy library consists of the <code>Trace</code> and the <code>Stream</code> objects. The
@@ -21,14 +22,12 @@ export default function Obspy() {
             several attributes that provide information about the recording and
             methods that apply a calculation on the respective recording.
         </p>
-        <div>
-            <figure>
-                <img src={ObspyStructure} alt="mseed record ASCII file" />
-                <figcaption>The structure of the obspy library. A <code>Stream</code> object consists of one or more
-                    <code>Trace</code> objects. Each <code>Trace</code> represents a single waveform or recording and has
-                    different methods (.taper(), .filter(), etc.) and attributes (.data, .stats, etc.)</figcaption>
-            </figure>
-        </div>
+        <figure>
+            <img src={ObspyStructure} />
+            <figcaption>The structure of the obspy library. A <code>Stream</code> object consists of one or more
+                <code>Trace</code> objects. Each <code>Trace</code> represents a single waveform or recording and has
+                different methods (<code>.taper()</code>, <code>.filter()</code>, etc.) and attributes (<code>.data</code>, <code>.stats</code>, etc.)</figcaption>
+        </figure>
         <p>
             For instance, the <code>.data</code> attribute of a <code>Trace</code> provides its time series data samples and the
             <code>.stats</code> returns an object that holds metadata or seismic parameters associated with the trace, such as
@@ -38,7 +37,7 @@ export default function Obspy() {
             cuts the time series between a specific start and end times.
         </p>
         <p>
-            Obspy supports several <a target="_blank" class="link-info"
+            Obspy supports several <a target="_blank" 
                 href="https://docs.obspy.org/packages/autogen/obspy.core.stream.read.html">file formats</a> to read data.
             One of the most used seimic file format is the MiniSEED format. It is a binary file used to store time series data
             in a compact and
@@ -113,25 +112,21 @@ export default function Obspy() {
             Python library.
         </p>
         <script src="https://gist.github.com/imarag/cfb72283ff0b9cc284c56f141a55a850.js"></script>
-        <div>
-            <figure>
-                <img src={CH03MSEEDPlot} alt="mseed plot" />
-                <figcaption>Recordings of the MiniSEED file plotted using the matplotlib library</figcaption>
-            </figure>
-        </div>
+        <figure>
+            <img src={CH03MSEEDPlot} />
+            <figcaption>Recordings of the MiniSEED file plotted using the matplotlib library</figcaption>
+        </figure>
         <p>
             We could achieve a similar result by just using the <code>st.plot()</code> method of the <code>Stream</code> object
             (st):
         </p>
-        <div>
-            <figure>
-                <img src={CH03MSEEDPlotMethod} alt="mseed plot" />
-                <figcaption>Recordings of the MiniSEED file plotted using the <code>.plot()</code> method of the
-                    <code>stream</code> object</figcaption>
-            </figure>
-        </div>
+        <figure>
+            <img src={CH03MSEEDPlotMethod} />
+            <figcaption>Recordings of the MiniSEED file plotted using the <code>.plot()</code> method of the
+                <code>stream</code> object</figcaption>
+        </figure>
         <p>
-            This method can get some <a class="link-info" target="_blank"
+            This method can get some <a  target="_blank"
                 href="https://docs.obspy.org/packages/autogen/obspy.core.stream.Stream.plot.html">parameters</a> to control the
             styling of the plots such as the color of the waveforms, the size of the plot, the rotation and size of the
             x axis labels and more.
@@ -140,30 +135,26 @@ export default function Obspy() {
             In addition, the <code>Trace</code> object includes several methods that apply a specific calculation on the time
             series of the recording.
             For example, apply a bandpass at the previous recording between 1 and 3 Hz using the Obspy <a target="_blank"
-                class="link-info"
+                
                 href="https://docs.obspy.org/packages/autogen/obspy.core.trace.Trace.filter.html">obspy.core.trace.Trace.filter</a>
             method.
         </p>
         <script src="https://gist.github.com/imarag/14848d53828c53eb1706b7a827ea7831.js"></script>
-        <div>
-            <figure>
-                <img src={ObspyFilterMSEED} alt="mseed plot" />
-                <figcaption>Apply a bandpass filter between 1 and 3 Hz at the recording using the Obspy <code>filter()</code>
-                    method</figcaption>
-            </figure>
-        </div>
+        <figure>
+            <img src={ObspyFilterMSEED} />
+            <figcaption>Apply a bandpass filter between 1 and 3 Hz at the recording using the Obspy <code>filter()</code>
+                method</figcaption>
+        </figure>
         <p>
             These computations can be applied on the <code>Stream</code> object at once, or at each <code>Trace</code> of the
             <code>Stream</code>, individually. For instance,
             trim each recording to get the signal part of the recordings:
         </p>
         <script src="https://gist.github.com/imarag/3f86114b356f449edf1d1a1ec8fdc069.js"></script>
-        <div>
-            <figure>
-                <img src={ObspyTrimmedTrace} alt="mseed plot" />
-                <figcaption>Trim the time series to get the signal part</figcaption>
-            </figure>
-        </div>
+        <figure>
+            <img src={ObspyTrimmedTrace} />
+            <figcaption>Trim the time series to get the signal part</figcaption>
+        </figure>
         <p>
             These computations happen inplace on the <code>Stream</code> object. Create a copy of it using the
             <code>.copy()</code> method to create a new object if you don't want to change it.
@@ -196,13 +187,11 @@ export default function Obspy() {
             assemble a <code>Stream</code>
             object comprising three individual traces.
         </p>
-        <div>
-            <figure>
-                <img src={RecordTXTFile} alt="mseed record ASCII file" />
-                <figcaption>Acceleration data in raw ASCII format. The first lines contain the record metadata and the rest of
-                    the lines the acceleration data of the three components</figcaption>
-            </figure>
-        </div>
+        <figure>
+            <img src={RecordTXTFile} />
+            <figcaption>Acceleration data in raw ASCII format. The first lines contain the record metadata and the rest of
+                the lines the acceleration data of the three components</figcaption>
+        </figure>
         <p>
             Start by reading the file and collecting the file header information in order to build a dictionary of the seismic
             parameters. Don't forget to convert
@@ -210,7 +199,7 @@ export default function Obspy() {
             <code>float</code> datatype and the start time of the record (<code>starttime</code>) into a
             <code>UTCDateTime</code> object.
             Also it is important for the keys of the dictionary, to be one of the options provided in the
-            <a target="_blank" class="link-info"
+            <a target="_blank" 
                 href="https://docs.obspy.org/packages/autogen/obspy.core.trace.Stats.html"><code>obspy.core.trace.Stats</code>
             </a> object:
         </p>
@@ -229,8 +218,8 @@ export default function Obspy() {
         <script src="https://gist.github.com/imarag/ee7d33d5071c7199fc13a19c0452fd25.js"></script>
         <p>
             If you require additional information about the ObsPy library, please refer to the <a target="_blank"
-                class="link-info" href="https://docs.obspy.org/tutorial/index.html"><code>documentation</code></a>.
+                 href="https://docs.obspy.org/tutorial/index.html"><code>documentation</code></a>.
         </p>
-    </div>
+    </>
   )
 }

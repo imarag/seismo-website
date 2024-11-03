@@ -7,7 +7,7 @@ import ObspyStreamFiltered from "../../img/obspy-stream-filtered.png"
 
 export default function ComputeFourierOnWindow() {
   return (
-    <div>
+    <>
         <h1>Task Description</h1>
         <p>
             In this tutorial, our aim is to compute the Fourier spectra within a specific window on the waveforms.
@@ -68,17 +68,15 @@ export default function ComputeFourierOnWindow() {
             Initiate the process by applying a bandpass filter to the records within the frequency range of 1 to 5 Hz. This step
             aims to eliminate surrounding
             noise and facilitate the arrival selection. Utilize the Obspy
-            <a href="https://docs.obspy.org/packages/autogen/obspy.core.stream.Stream.filter.html" class="link-info"
+            <a href="https://docs.obspy.org/packages/autogen/obspy.core.stream.Stream.filter.html" 
                 target="_blank"><code>filter()</code></a> function
             for this purpose:
         </p>
         <script src="https://gist.github.com/imarag/d54cb68d57ebf3759dbc963474a48a6c.js"></script>
-        <div>
-            <figure>
-                <img src={ObspyStreamFiltered} alt="mseed plot" />
-                <figcaption>Recordings after applying a bandpass filter of 1-5 Hz</figcaption>
-            </figure>
-        </div>
+        <figure>
+            <img src={ObspyStreamFiltered} />
+            <figcaption>Recordings after applying a bandpass filter of 1-5 Hz</figcaption>
+        </figure>
         <h2>Select The P And S Wave Arrivals</h2>
         <p>
             It's clear from the filtered waveforms, that the P wave arrivals occurs roughly at <code>20:08:36</code> and the S
@@ -92,12 +90,10 @@ export default function ComputeFourierOnWindow() {
             lines. Here's an example of how you can do it in Python:
         </p>
         <script src="https://gist.github.com/imarag/20e1b4548a1b69fe4e5f11c295361c45.js"></script>
-        <div>
-            <figure>
-                <img src={Arrivals} alt="mseed plot" />
-                <figcaption>Arrivals of the P (red dashed line) and the S (black dashed line) waves</figcaption>
-            </figure>
-        </div>
+        <figure>
+            <img src={Arrivals} />
+            <figcaption>Arrivals of the P (red dashed line) and the S (black dashed line) waves</figcaption>
+        </figure>
         <h2>Define The Signal And Noise Windows</h2>
         <p>
             At this stage we define two windows to calculate the Fourier Spectra, one for the signal part of the waveform and
@@ -107,21 +103,19 @@ export default function ComputeFourierOnWindow() {
             visualize these windows:
         </p>
         <script src="https://gist.github.com/imarag/fb383cf8879d821871f1438d920a0650.js"></script>
-        <div>
-            <figure>
-                <img src={Windows} alt="mseed plot" />
-                <figcaption>Define the signal and the noise window to calculate the Fourier Spectra. Both will have the same
-                    duration of 10 seconds. The signal window
-                    starts at the S wave arrival and ends 10 seconds later. Similarly, the noise window initiates 10 seconds
-                    prior the P wave arrival and ends at the
-                    P wave arrival.
-                </figcaption>
-            </figure>
-        </div>
+        <figure>
+            <img src={Windows} />
+            <figcaption>Define the signal and the noise window to calculate the Fourier Spectra. Both will have the same
+                duration of 10 seconds. The signal window
+                starts at the S wave arrival and ends 10 seconds later. Similarly, the noise window initiates 10 seconds
+                prior the P wave arrival and ends at the
+                P wave arrival.
+            </figcaption>
+        </figure>
         <h2>Trim The Waveforms Between The Windows</h2>
         <p>
             To continue, trim the waveforms at the two windows using the Obspy
-            <a href="https://docs.obspy.org/packages/autogen/obspy.core.stream.Stream.trim.html" class="link-info"
+            <a href="https://docs.obspy.org/packages/autogen/obspy.core.stream.Stream.trim.html" 
                 target="_blank"><code>trim()</code></a> function.
             Because the trimming happens inplace, create copies of the orginal <code>Stream</code> object using the
             <code>copy()</code> method:
@@ -131,17 +125,15 @@ export default function ComputeFourierOnWindow() {
             Then plot the trimmed waveforms using the Matplotlib library:
         </p>
         <script src="https://gist.github.com/imarag/e250f716129c581c748d408a686d55fc.js"></script>
-        <div>
-            <figure>
-                <img src={Trimmed} alt="mseed plot" />
-                <figcaption>Trimmed waveforms at the noise and the signal windows for all the components</figcaption>
-            </figure>
-        </div>
+        <figure>
+            <img src={Trimmed} />
+            <figcaption>Trimmed waveforms at the noise and the signal windows for all the components</figcaption>
+        </figure>
         <h2>Smooth the waveforms</h2>
         <p>
             At the last step, generate another copy of two obects from the previous trimmed recordings and smooth the left and
             the right side of the waveforms, using the obspy
-            <a href="https://docs.obspy.org/packages/autogen/obspy.core.trace.Trace.taper.html" class="link-info"
+            <a href="https://docs.obspy.org/packages/autogen/obspy.core.trace.Trace.taper.html" 
                 target="_blank"><code>taper()</code></a> function:
         </p>
         <script src="https://gist.github.com/imarag/14572aaf70ea874461d23ae6ea0c8f74.js"></script>
@@ -149,13 +141,11 @@ export default function ComputeFourierOnWindow() {
             Lastly, plot the results using Matplotlib:
         </p>
         <script src="https://gist.github.com/imarag/dd697ea2048b6f6b930b1f3f2aa5aa4b.js"></script>
-        <div>
-            <figure>
-                <img src={Taper} alt="mseed plot" />
-                <figcaption>Trimmed (blue) and tappered (orange) waveforms at the noise and the signal window for all the
-                    components</figcaption>
-            </figure>
-        </div>
+        <figure>
+            <img src={Taper} />
+            <figcaption>Trimmed (blue) and tappered (orange) waveforms at the noise and the signal window for all the
+                components</figcaption>
+        </figure>
         <h2>Compute The Fourier Spectra</h2>
         <p>
             Finally we can calculate the Fourier Spectra at the noise and the signal window on the filtered, trimmed and
@@ -166,13 +156,11 @@ export default function ComputeFourierOnWindow() {
             And we present the results:
         </p>
         <script src="https://gist.github.com/imarag/6b9de7c48fc3c140ee63260e83586b70.js"></script>
-        <div>
-            <figure>
-                <img src={FourierPlot} alt="mseed plot" />
-                <figcaption>Fourier Spectra of the signal (bold curve) and the noise (muted curve) window for each component of
-                    the tappered <code>Stream</code> object</figcaption>
-            </figure>
-        </div>
-    </div>
+        <figure>
+            <img src={FourierPlot} />
+            <figcaption>Fourier Spectra of the signal (bold curve) and the noise (muted curve) window for each component of
+                the tappered <code>Stream</code> object</figcaption>
+        </figure>
+    </>
   )
 }

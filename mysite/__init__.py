@@ -14,13 +14,14 @@ import os
 from .functions import generate_random_string, get_topic
 from markupsafe import escape
 import json
+from flask_cors import CORS
 
 mail = Mail()
 
 
 def create_app():
     app = Flask(__name__, instance_relative_config=True)
-
+    CORS(app)
     app.config["DATA_FILES_FOLDER"] = os.path.join(app.root_path, "data_files")
     app.config["ALL_TOPICS_FILE"] = os.path.join(app.root_path, "all-topics.json")
     app.config["ALL_TOPICS_FILE_BACKUP"] = os.path.join(

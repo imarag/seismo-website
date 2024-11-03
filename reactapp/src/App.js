@@ -14,10 +14,11 @@ import Home from "./pages/Home.js"
 import About from "./pages/About.js"
 import Donation from "./pages/Donation.js"
 import ArticlesSearch from "./pages/ArticlesSearch.js"
+import TopicsSearch from "./pages/TopicsSearch.js"
 import Article from "./pages/Article.js"
+import Tool from "./pages/Tool.js"
 import ToolsSearch from "./pages/ToolsSearch.js"
-import DistanceBetweenPoints from './pages/tools/DistanceBetweenPoints.js';
-import Matplotlib from "./pages/articles/Matplotlib.js"
+import Contact from './pages/Contact.js';
 
 const router = createBrowserRouter([
   {
@@ -37,12 +38,16 @@ const router = createBrowserRouter([
         element: <Donation />
       },
       {
-        path: "articles-search",
-        element: <ArticlesSearch />      
+        path: "contact",
+        element: <Contact />
       },
       {
-        path: "article/:articleName",
-        element: <Article />      
+        path: "topics-search",
+        element: <TopicsSearch />      
+      },
+      {
+        path: "articles-search",
+        element: <ArticlesSearch />      
       },
       {
         path: "tools-search",
@@ -53,9 +58,9 @@ const router = createBrowserRouter([
         element: <ArticlesLayout />,
         children: [
           {
-            path: "matplotlib",
-            element: <Matplotlib />      
-          },
+            path: ":articleName",
+            element: <Article />      
+          }
         ]
       },
       {
@@ -63,9 +68,9 @@ const router = createBrowserRouter([
         element: <ToolsLayout />,
         children: [
           {
-            path: "distance-between-points",
-            element: <DistanceBetweenPoints />      
-          },
+            path: ":toolName",
+            element: <Tool />      
+          }
         ]
       }
     ]

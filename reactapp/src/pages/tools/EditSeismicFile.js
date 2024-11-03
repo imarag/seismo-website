@@ -1,0 +1,187 @@
+import React from 'react'
+
+export default function EditSeismicFile() {
+  return (
+    <div>EditSeismicFile</div>
+  )
+}
+
+
+// {% extends 'base-interactive-tools.html' %}
+
+// {% block tool_title_description %}
+// Edit the content of a seismic file
+// {% endblock %}
+
+// {% block tool_user_guide %}
+// <p>
+//     Utilize this interactive tool if you have a seismic file (one of the <a target="_blank"
+//         href="https://docs.obspy.org/packages/autogen/obspy.core.stream.read.html">formats</a>
+//     supported by Obspy <code>read</code> function) and you need to inspect its contents (header and
+//     visualized data values) or update the header information (station name, components, etc.). Begin
+//     by uploading your seismic data file. At the top there is a dropdown that contains labels (the name "trace-" and
+//     appended a number that increases at each record count, e.g. "trace-2") of each record located inside your input
+//     file.
+//     Select a specific record to check its contents below.
+//     The fields will display the seismic parameters found in the
+//     uploaded file's header for the selected record. You can modify these parameters using the <kbd>Update Header</kbd>
+//     option, but note that the values for the sampling rate (fs) and total sample points (npts)
+//     cannot be changed. If you want to create a seismic MiniSEED file from scratch, use the
+//     <a href="{{ url_for('show_topic', topic_tmp_name='file-to-mseed') }}" class="link-info">File To MSEED</a>
+//     converter tool. Feel free to download the data of the seismic file in .CSV format using the <kbd>Download Data</kbd>
+//     option.
+//     Also in case you need the header information of the uploaded file, download it using the <kbd>Download Header</kbd>
+//     option. Lastly, if you modified the
+//     uploaded file header, use the <kbd>Download File</kbd> option to download the entire seismic file.
+// </p>
+// <p>
+//     Keep in mind the following:
+// </p>
+// <ul>
+//     <li>The station name should consist of 2 to 6 characters or numbers (a-z, A-Z, 0-9).</li>
+//     <li>The "component" field should consist of 1 to 3 characters or numbers (a-z, A-Z, 0-9).</li>
+//     <li>If the "Date" field is left empty, a default value of "1970-01-01" is goint to be applied.</li>
+// </ul>
+// {% endblock %}
+
+// {% block tool_body %}
+// <p class="text-center text-secondary d-block d-sm-none my-5">
+//     Sorry, but it seems like you're accessing our tool from a mobile device. Currently, our tool is optimized for
+//     desktop use to
+//     provide the best user experience. For the optimal experience, please switch to a desktop or laptop computer. We
+//     appreciate
+//     your understanding and apologize for any inconvenience.
+// </p>
+// <div class="d-none d-sm-block">
+//     <div class="text-center">
+//         <input class="form-control d-none" type="file" name="file" id="upload-file-input">
+//         <button class="btn btn-lg btn-primary" id="upload-file-button">Upload Seismic File</button>
+//         <div class="text-center  bg-red text-red mt-3" id="spinner-div">
+//             <div class="spinner-border spinner-border-xl text-warning" role="status">
+//                 <span class="visually-hidden">Loading...</span>
+//             </div>
+//         </div>
+//     </div>
+//     <div id="header-plot-container" class="my-5">
+//         <p class="text-center">Select a record to check its contents</p>
+//         <div class="row justify-content-center align-items-center">
+//             <div class="col-6 col-md-4 col-lg-3 fs-5">
+//                 <select class="form-select" id="traces-select" aria-label="edit traces select options">
+
+//                 </select>
+//             </div>
+//         </div>
+//         <div class="row justify-content-center align-items-center my-5 fs-5">
+//             <div class="col-8 col-sm-6 col-md-3 col-lg-3 text-center">
+//                 <div id="header">
+//                     <label for="station" class="form-label text-center mt-2">
+//                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+//                             class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+//                             <path
+//                                 d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
+//                         </svg>
+//                         station
+//                     </label>
+//                     <input type="text" id="station" name="station" class="form-control">
+//                     <label for="date" class="form-label text-center mt-2">
+//                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+//                             class="bi bi-calendar" viewBox="0 0 16 16">
+//                             <path
+//                                 d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z" />
+//                         </svg>
+//                         Date
+//                     </label>
+//                     <input type="date" id="date" name="date" class="form-control">
+//                     <label for="time" class="form-label text-center mt-2">
+//                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+//                             class="bi bi-clock" viewBox="0 0 16 16">
+//                             <path
+//                                 d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z" />
+//                             <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
+//                         </svg>
+//                         Time
+//                     </label>
+//                     <input type="time" id="time" name="time" class="form-control">
+//                     <label for="sampling-rate" class="form-label text-center mt-2">
+//                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+//                             class="bi bi-broadcast" viewBox="0 0 16 16">
+//                             <path
+//                                 d="M3.05 3.05a7 7 0 0 0 0 9.9.5.5 0 0 1-.707.707 8 8 0 0 1 0-11.314.5.5 0 0 1 .707.707zm2.122 2.122a4 4 0 0 0 0 5.656.5.5 0 1 1-.708.708 5 5 0 0 1 0-7.072.5.5 0 0 1 .708.708zm5.656-.708a.5.5 0 0 1 .708 0 5 5 0 0 1 0 7.072.5.5 0 1 1-.708-.708 4 4 0 0 0 0-5.656.5.5 0 0 1 0-.708zm2.122-2.12a.5.5 0 0 1 .707 0 8 8 0 0 1 0 11.313.5.5 0 0 1-.707-.707 7 7 0 0 0 0-9.9.5.5 0 0 1 0-.707zM10 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0z" />
+//                         </svg>
+//                         sampling rate *
+//                     </label>
+//                     <input type="number" id="sampling-rate" name="sampling-rate" class="form-control" readonly>
+//                     <label for="npts" class="form-label text-center mt-2">
+//                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+//                             class="bi bi-three-dots" viewBox="0 0 16 16">
+//                             <path
+//                                 d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z" />
+//                         </svg>
+//                         npts *
+//                     </label>
+//                     <input type="number" id="npts" name="npts" class="form-control" readonly>
+//                     <label for="component" class="form-label text-center mt-2">
+//                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+//                             class="bi bi-soundwave" viewBox="0 0 16 16">
+//                             <path fill-rule="evenodd"
+//                                 d="M8.5 2a.5.5 0 0 1 .5.5v11a.5.5 0 0 1-1 0v-11a.5.5 0 0 1 .5-.5zm-2 2a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zm4 0a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zm-6 1.5A.5.5 0 0 1 5 6v4a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm8 0a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm-10 1A.5.5 0 0 1 3 7v2a.5.5 0 0 1-1 0V7a.5.5 0 0 1 .5-.5zm12 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0V7a.5.5 0 0 1 .5-.5z" />
+//                         </svg>
+//                         component
+//                     </label>
+//                     <input type="text" id="component" name="component" class="form-control">
+//                     <div class="text-center my-4">
+//                         <button id="update-trace" class="btn btn-dark">Update Header</button>
+//                     </div>
+//                     <p class="text-center fs-6 text-muted">
+//                         The fields with the asterisk (*) are read only. They cannot be changed!
+//                     </p>
+//                 </div>
+//             </div>
+//             <div class="col-11 col-md-9 col-lg-9 text-center">
+//                 <div id="time-series-graph">
+
+//                 </div>
+//                 <div class="d-flex flex-row justify-content-center fs-6 my-4">
+//                     <div>
+//                         <a href="{{ url_for('BP_edit_seismic_file.download_file') }}"
+//                             class="mx-2 text-decoration-none link-primary">
+//                             <span>Download File</span>
+//                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+//                                 class="bi bi-file-earmark-arrow-down-fill" viewBox="0 0 16 16">
+//                                 <path
+//                                     d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1m-1 4v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L7.5 11.293V7.5a.5.5 0 0 1 1 0" />
+//                             </svg>
+//                         </a>
+//                     </div>
+//                     <div>
+//                         <a href="{{ url_for('BP_edit_seismic_file.download_data') }}"
+//                             class="mx-2 text-decoration-none link-primary">
+//                             <span>Download Data</span>
+//                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+//                                 class="bi bi-database-fill-down" viewBox="0 0 16 16">
+//                                 <path
+//                                     d="M12.5 9a3.5 3.5 0 1 1 0 7 3.5 3.5 0 0 1 0-7m.354 5.854 1.5-1.5a.5.5 0 0 0-.708-.708l-.646.647V10.5a.5.5 0 0 0-1 0v2.793l-.646-.647a.5.5 0 0 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0ZM8 1c-1.573 0-3.022.289-4.096.777C2.875 2.245 2 2.993 2 4s.875 1.755 1.904 2.223C4.978 6.711 6.427 7 8 7s3.022-.289 4.096-.777C13.125 5.755 14 5.007 14 4s-.875-1.755-1.904-2.223C11.022 1.289 9.573 1 8 1" />
+//                                 <path
+//                                     d="M2 7v-.839c.457.432 1.004.751 1.49.972C4.722 7.693 6.318 8 8 8s3.278-.307 4.51-.867c.486-.22 1.033-.54 1.49-.972V7c0 .424-.155.802-.411 1.133a4.51 4.51 0 0 0-4.815 1.843A12.31 12.31 0 0 1 8 10c-1.573 0-3.022-.289-4.096-.777C2.875 8.755 2 8.007 2 7m6.257 3.998L8 11c-1.682 0-3.278-.307-4.51-.867-.486-.22-1.033-.54-1.49-.972V10c0 1.007.875 1.755 1.904 2.223C4.978 12.711 6.427 13 8 13h.027a4.552 4.552 0 0 1 .23-2.002m-.002 3L8 14c-1.682 0-3.278-.307-4.51-.867-.486-.22-1.033-.54-1.49-.972V13c0 1.007.875 1.755 1.904 2.223C4.978 15.711 6.427 16 8 16c.536 0 1.058-.034 1.555-.097a4.507 4.507 0 0 1-1.3-1.905" />
+//                             </svg>
+//                         </a>
+//                     </div>
+//                     <div>
+//                         <a href="{{ url_for('BP_edit_seismic_file.download_header') }}"
+//                             class="mx-2 text-decoration-none link-primary">
+//                             <span>Download Header</span>
+//                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+//                                 class="bi bi-file-earmark-arrow-down-fill" viewBox="0 0 16 16">
+//                                 <path
+//                                     d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1m-1 4v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L7.5 11.293V7.5a.5.5 0 0 1 1 0" />
+//                             </svg>
+//                         </a>
+//                     </div>
+//                 </div>
+//             </div>
+//         </div>
+//     </div>
+// </div>
+// <script src="/static/js/edit-seismic-file.js"></script>
+// <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+// {% endblock %}

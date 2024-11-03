@@ -1,0 +1,35 @@
+.article-layout h1 {
+    @apply text-blue-800 text-5xl font-normal mt-12 mb-4
+}
+
+.article-layout h2 {
+    @apply text-blue-800 text-2xl font-normal mt-12 mb-4 text-start
+}
+
+.article-layout code {
+    @apply text-white bg-gray-800/95 text-sm px-2 py-1 rounded font-normal
+}
+
+.article-layout ul {
+    @apply my-4 list-disc list-inside
+}
+
+.article-layout li {
+    @apply my-2
+}
+
+.article-layout figure {
+    @apply my-12
+}
+
+.article-layout figure img {
+    @apply block mx-auto max-w-full
+}
+
+.article-layout figure figcaption {
+    @apply text-blue-700 mt-6 rounded font-normal text-center italic
+}
+
+.article-layout caption {
+    @apply text-blue-700 mt-6 rounded font-normal text-center italic
+}

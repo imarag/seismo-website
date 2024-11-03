@@ -3,7 +3,7 @@ import SeismologicalStationImage from "../img/seismological-station.jpg"
 
 export default function Donation() {
   return (
-    <div>
+    <div className="container mx-auto">
         <MainTitle title="Donation" subtitle="Contribute to our cause and help us make a positive impact with your donation"/>
         <div className="flex flex-row items-center justify-center my-12">
             <form action="https://www.paypal.com/donate" method="post" target="_top">

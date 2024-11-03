@@ -1,7 +1,10 @@
 import { Outlet } from "react-router-dom"
+
+import "../styles/ArticlesLayout.css"
+
 export default function ArticlesLayout() {
   return (
-    <div className="container mx-auto font-light text-lg">
+    <div className="article-layout container mx-auto font-light">
         <Outlet />
     </div>
   )

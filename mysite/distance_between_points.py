@@ -12,10 +12,10 @@ bp = Blueprint(
 @bp.route("/calculate-distance")
 def calculate_distance():
     # get the input coordinates
-    point1_lat = request.args.get("point1-lat-input")
-    point1_lon = request.args.get("point1-lon-input")
-    point2_lat = request.args.get("point2-lat-input")
-    point2_lon = request.args.get("point2-lon-input")
+    point1_lat = request.args.get("point1-lat")
+    point1_lon = request.args.get("point1-lon")
+    point2_lat = request.args.get("point2-lat")
+    point2_lon = request.args.get("point2-lon")
 
     # check the input values
     if not point1_lat or not point1_lon or not point2_lat or not point2_lon:
