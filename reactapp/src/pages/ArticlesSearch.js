@@ -24,21 +24,21 @@ export default function ArticlesSearch() {
             <ArticleSearchInput handleFillForm={handleFillForm} />
             <section>
                 {filteredTopics.length !== 0 && (
-                    <p className="text-start text-xl text-gray-500 my-6">{ filteredTopics.length } articles found</p>
+                    <p className="text-start mt-5">{ filteredTopics.length } articles found</p>
                 )}
                 {
                     filteredTopics.length !== 0 ? (
-                        <div className="grid grid-cols-1 justify-center gap-5">
+                        <div>
                             {
                                 filteredTopics.map(article => (
-                                    <section key={article.title}>
+                                    <section key={article.title} className="my-5">
                                         <ArticlePlaceholder  article={article}/>
                                     </section>
                                 ))
                             }
                         </div>
                     ) : (
-                        <p className="text-center text-xl text-gray-500 BG-">No topics found matching your search. Please try a different keyword.</p>                            
+                        <p className="text-center">No topics found matching your search. Please try a different keyword.</p>                            
                     )
                 }
                    

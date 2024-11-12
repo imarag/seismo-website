@@ -1,7 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { allTools } from '../all-topics';
-import Title from '../components/Title';
-import Subtitle from '../components/Subtitle';
+import Accordion from "../components/Accordion"
 
 export default function Tool() {
     const { toolName } = useParams();
@@ -12,11 +11,22 @@ export default function Tool() {
         }
     }
 
+
+
     return (
-        <div className="container mx-auto">
-            <Title text1={ComponentToRender.title} />
-            <p className="text-start font-light mt-20">{ComponentToRender.description}</p>
-            {ComponentToRender.component}
+        <div className="fw-light">
+            <div className="py-5 bg-light">
+                <h1 className="text-center display-3 fw-semibold mb-3">{ComponentToRender.title}</h1>
+                <h2 className="text-center fs-3 mb-4 fw-light">{ComponentToRender["small-description"]}</h2>
+                <img src={ComponentToRender.image_name} className="image image-md"/>
+            </div>
+            <section className="container-lg">
+                <div className="col-lg-8 mx-auto mt-5">
+                    <p className="mt-25">{ComponentToRender.description}</p>
+                    <Accordion label="User guide" description={ComponentToRender["user-guide"]}/>
+                </div>
+                {ComponentToRender.component}
+            </section>
         </div>
     )
 }

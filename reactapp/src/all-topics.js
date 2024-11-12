@@ -91,6 +91,7 @@ const allTools = [
   {
     "id": 1,
     "title": "Fourier Spectra calculation",
+    "small-description": "Compute the Fourier spectra at a window on the seismogram",
     "description": "An interactive tool to calculate the Fourier spectra at the signal and/or the noise window on the seismogram. Optionally, compute the Horizontal to Vertical Spectral Ratio (HVSR) using the generated Fourier spectra. Feel free to download the data and the figures at the results.",
     "image_name": FourierImage,
     "component": <Fourier />,
@@ -100,6 +101,7 @@ const allTools = [
   {
     "id": 2,
     "title": "Edit Seismic File",
+    "small-description": "Process seismic files using the interactive tools",
     "description": "A tool to look inside the content of a seismic file. Feel free to edit the header of it and download its data and header information",
     "image_name": EditSeismicFileImage,
     "component": <EditSeismicFile />,
@@ -109,6 +111,7 @@ const allTools = [
   {
     "id": 3,
     "title": "Distance between points",
+    "small-description": "calculate the distance between two points on the WGS84 ellipsoid",
     "description": "An interactive tool to compute the distance between two geographical points on the WGS84 ellipsoid. Use the \"locate\" option to open an interactive map and visually inspect the specified points.",
     "image_name": DistanceBetweenPointsImage,
     "component": <DistanceBetweenPoints />,
@@ -118,7 +121,9 @@ const allTools = [
   {
     "id": 4,
     "title": "Arrival Time Selection",
+    "small-description": "Select the P & S wave arrivals",
     "description": "An interactive tool to extract the P & S wave arrival times from the records. You can use either the built-in filters or manually set filters to filter the seismograms within a defined frequency range, simplifying the process of selecting the arrivals.",
+    "user-guide": "Begin by uploading a seismic data file using the Upload option. From the top menu, select either the P-wave (P button) or S-wave (S button) option, then click anywhere on the waveforms to select the arrival time of the chosen wave. To remove a previously applied arrival time, use the del P and del S buttons. Feel free to utilize the filter dropdown in the top menu to apply a pre-defined filter to the waveforms, which can facilitate your picking process. Additionally, you have the option to manually input a filter using the entry boxes located at the bottom right corner. If you input a value only in the left entry box, a highpass filter will be applied with the specified frequency. Similarly, you input a value only in the right entry box, a lowpass filter will be implemented using the specified frequency. If both entry boxes are filled, a bandpass filter will be applied. Once the mouse focus is in the left or right entry box, simply press the Enter key to confirm your input and apply the manual filters. Lastly, utilize the options located at the top right corner of the plot to zoom in, zoom out, and adjust the position of the waveforms. ",
     "image_name": PickArrivalsImage,
     "component": <PickArrivals />,
     "type": "seismic-tools",
@@ -127,6 +132,7 @@ const allTools = [
   {
     "id": 5,
     "title": "Data Files To MiniSEED",
+    "small-description": "Convert ASCII files to MSEED seismic files",
     "template_path": "file-to-mseed",
     "description": "An interactive tool to transform data files into the seismic MiniSEED format. To begin, upload your file at the specific file format menu, and specify the relevant parameters (e.g., delimiter and skip rows). Afterward, choose the corresponding seismic parameters to complete the conversion process.",
     "image_name": FileToMseedImage,
@@ -137,6 +143,7 @@ const allTools = [
   {
     "id": 6,
     "title": "Signal Processing",
+    "small-description": "Apply signal processing techniques to a seismogram",
     "description": "An interactive tool to process seismic records using various techniques to cut the waveforms between a specific time range, to apply a smoothing function using an appropriate filter and eliminate any pre-existing trend in the waveforms.",
     "image_name": SignalProcessingImage,
     "component": <SignalProcessing />,

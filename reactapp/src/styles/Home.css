@@ -1,0 +1,10 @@
+.mt-large {
+    margin-top: 100vh;
+}
+
+
+.bg-hero-seismogram {
+    background-image: url("../img/seismogram-large-cropped.svg");
+    background-repeat: no-repeat;
+    background-size: contain;
+}

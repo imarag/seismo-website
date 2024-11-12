@@ -16,18 +16,18 @@ export default function ToolsGallery() {
       
   return (
     <>
-        <div className="flex flex-row flex-wrap justify-center gap-x-10 mt-12 mb-4">
+        <div className="d-flex flex-row flex-wrap justify-content-center gap-4">
             <ToolsHoverButtons gifURL={FourierGif} icon={FourierGraphIcon} title="Fourier" />
             <ToolsHoverButtons gifURL={PickGif} icon={PickingIcon} title="Arrival Picking" />
             <ToolsHoverButtons gifURL={TrimGif} icon={AsciiToMseed} title="ASCII to MSEED" />
             <ToolsHoverButtons gifURL={TaperGif} icon={SignalProcessIcon} title="Signal processing" />
         </div>
-        <div className="bg-gray-200 flex flex-row justify-end gap-x-6 text-gray-500 py-4 px-8 rounded">
+        <div className="bg-light d-flex flex-row justify-content-end gap-4 py-4 px-5 rounded">
             <DashIcon />
             <WindowIcon />
             <XMarkIcon />
         </div>
-        <div className="border-2">
+        <div className="border">
             <img src={FourierGif} className="block mx-auto w-full display-image"/>
         </div>
     </>

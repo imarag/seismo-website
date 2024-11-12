@@ -25,7 +25,6 @@ def create_path(name):
     )
     return path
 
-
 @bp.route("/upload-seismic-file", methods=["POST"])
 def upload():
     # get the files (in our case just one)
@@ -52,7 +51,7 @@ def upload():
 
     # get the file path to save the uploaded file as miniseed in the server
     mseed_file_save_path = create_path("pick-arrivals-tool-stream.mseed")
-
+    
     # write the uploaded file
     stream.write(mseed_file_save_path)
 
@@ -66,10 +65,10 @@ def upload():
 def apply_filter():
     # get the filter value
     filter_value = request.args.get("filter")
-
+    
     # get the mseed file path on the server
     mseed_file_path = create_path("pick-arrivals-tool-stream.mseed")
-
+   
     # read it
     mseed_data = read(mseed_file_path)
 

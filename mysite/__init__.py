@@ -21,7 +21,7 @@ mail = Mail()
 
 def create_app():
     app = Flask(__name__, instance_relative_config=True)
-    CORS(app)
+    CORS(app, supports_credentials=True)
     app.config["DATA_FILES_FOLDER"] = os.path.join(app.root_path, "data_files")
     app.config["ALL_TOPICS_FILE"] = os.path.join(app.root_path, "all-topics.json")
     app.config["ALL_TOPICS_FILE_BACKUP"] = os.path.join(
@@ -37,6 +37,7 @@ def create_app():
     app.config["MAIL_PASSWORD"] = "qppnzstyxltfjcnz"
     app.config["MAIL_USE_TLS"] = False
     app.config["MAIL_USE_SSL"] = True
+    app.config['SESSION_PERMANENT'] = True
 
     app.config["SECRET_KEY"] = "asdf12345po45i34OI"
 
@@ -54,9 +55,9 @@ def create_app():
 
     @app.before_request
     def before_request():
+        # Check if 'user_id' already exists in the session; if not, generate it
         if "user_id" not in session:
-            user_id = generate_random_string()
-            session["user_id"] = user_id
+            session["user_id"] = generate_random_string()
 
     @app.route("/")
     @app.route("/index")

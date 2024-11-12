@@ -1,15 +1,19 @@
-
+import { useEffect, useRef } from "react"
 import CH03MSEEDPlot from "../../img/ch03_mseed_plot.png"
 import ObspyStructure from "../../img/obspy-structure.png"
 import CH03MSEEDPlotMethod from "../../img/ch03_mseed_plot_method.png"
 import ObspyTrimmedTrace from "../../img/obspy-trimmed-trace.png"
 import ObspyFilterMSEED from "../../img/obspy-filter-mseed.png"
 import RecordTXTFile from "../../img/record-txt-file.png"
+import ReactEmbedGist from 'react-embed-gist';
+
+
 
 export default function Obspy() {
   return (
     <>
         <h1>Basic structure</h1>
+        
         <p>
             The main structure of the Obspy library consists of the <code>Trace</code> and the <code>Stream</code> objects. The
             <code>Trace</code> represents
@@ -164,7 +168,6 @@ export default function Obspy() {
             <code>.write()</code> method:
         </p>
         <script src="https://gist.github.com/imarag/584c5b5ac81527032203a3b5be750df1.js"></script>
-
         <h1>Generating Trace and Stream objects from data</h1>
         <p>
             In addition to reading seismological file formats, you have the flexibility to create your own <code>Trace</code>

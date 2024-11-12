@@ -1,4 +1,6 @@
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import {
   createBrowserRouter,
   RouterProvider,
@@ -79,7 +81,7 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <RouterProvider router={router} />
+    <RouterProvider router={router}   future={{v7_startTransition: true,}}/>
   );
 }
 

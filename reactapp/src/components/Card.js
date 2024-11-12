@@ -1,16 +1,18 @@
 import { Link } from "react-router-dom"
 
-export default function Card({ title, description, imgURL, pageURL, imgWidth, imgHeight}) {
+export default function Card({ title, description, imgURL, pageURL}) {
   return (
-    <div>
-        <img src={imgURL} className={imgWidth + " " + imgHeight + " block mx-auto mb-4"} />
-        <h1 className="text-center text-2xl font-semibold mb-2">{ title }</h1>
-        <p className="text-center font-light">{ description }</p>
-        <div className="text-center mt-8">
-            <Link to={pageURL} className="bg-green-700 text-green-50 px-4 py-2 text-lg rounded">
-                Go to page
-            </Link>
+    <div class="card border-0">
+      <img src={imgURL} className="card-img-top img-fluid" />
+      <div class="card-body">
+        <h5 class="card-title text-center fw-bold fs-3">{ title }</h5>
+        <p class="card-text fw-light">{ description }</p>
+        <div className="text-center mt-3">
+          <Link to={pageURL} className="btn btn-primary">
+              Go to page
+          </Link>
         </div>
+      </div>
     </div>
   )
 }

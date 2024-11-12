@@ -1,8 +1,11 @@
-import { Outlet } from "react-router-dom"
+import { Outlet, useOutletContext } from "react-router-dom"
+  
+
 export default function ToolsLayout() {
+  const context = useOutletContext()
   return (
-    <div className="container mx-auto">
-        <Outlet />
+    <div>
+        <Outlet context={context} />
     </div>
   )
 }

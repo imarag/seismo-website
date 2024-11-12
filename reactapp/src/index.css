@@ -1,3 +1,16 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+.icon {
+    width: 1.4rem;
+}
+
+.image {
+    display: block;
+    margin-inline: auto;
+}
+
+.image-sm {
+    width: 5rem;
+}
+
+.image-md {
+    width: 10rem;
+}
