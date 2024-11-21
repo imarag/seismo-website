@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { json, useOutletContext } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
 import { UploadIcon, SaveIcon } from "../../SvgIcons"
 import { filterOptions, serverUrl } from "../../data";
 import ButtonWithIcon from "../../components/ButtonWithIcon"
@@ -40,28 +40,23 @@ export default function PickArrivals() {
     async function handleFileSelection(e) {
         e.preventDefault();
         setLoading(true);
-    
+        
         let formData = new FormData();
         formData.append('file', e.target.files[0]);
-    
-        try {
-            const res = await fetch(
-                `${serverUrl}/pick-arrivals/upload-seismic-file`, 
-                {
-                    method: 'POST',
-                    body: formData,
-                    credentials: 'include'
-                }
-            );
-    
+        
+        let endpoint = `${serverUrl}/upload-seismic-file`;
+        let options = {method: 'POST', body: formData, credentials: 'include'}
+
+        fetch(endpoint, options)
+        .then(res => {
             // Check if the response is successful
             if (!res.ok) {
-                const errorData = await res.json(); // Parse the response body to get the error message
+                const errorData = res.json(); // Parse the response body to get the error message
                 throw new Error(errorData.error_message || 'Unknown error occurred');
             }
-    
-            const jsonData = await res.json();
-            
+            return res.json()
+        })
+        .then(jsonData => {
             // Update the state after the successful upload
             setData(jsonData);
             setSelectedFile(e.target.files[0].name);
@@ -71,16 +66,17 @@ export default function PickArrivals() {
             setManualFilter({"left": "", "right": ""});
             setInfoMessage("Seismic file upload completed successfully");
             setTimeout(() => setInfoMessage(null), 5000);
-    
-        } catch (error) {
+        })
+        .catch(error => {
             // Handle any errors that occur during the async operation
             console.error('Error occurred during file upload:', error);
-            setInfoMessage(error.message || "Error uploading file. Please try again.");            
+            setErrorMessage(error.message || "Error uploading file. Please try again.");            
             setTimeout(() => setErrorMessage(null), 5000);
-        } finally {
+        })
+        .finally(() => {
             // Always execute this block after the try-catch, regardless of success or failure
             setLoading(false);
-        }
+        })
     }
     
 
@@ -91,39 +87,61 @@ export default function PickArrivals() {
     }
 
     // this function will be called by the filters dropdown and also by the manual filters handleEnterKey below
-    async function handleFilterChange(filter) {
-        setSelectedFilter(filter)
+    async function handleFilterChange(freqmin=null, freqmax=null) {
+        
         setLoading(true)
+        let endpoint = `${serverUrl}/arrivals/apply-filter`
 
-        try {
-            const res = await fetch(`${serverUrl}/pick-arrivals/apply-filter?filter=${filter}`, {credentials: 'include'})
-    
+        let jsonDataInput = {
+            freqmin: freqmin,
+            freqmax: freqmax,
+            seismic_data: data
+        }
+
+        let options = {method: 'POST', body: JSON.stringify(jsonDataInput), credentials: 'include', headers: {'Content-Type': 'application/json'}}
+
+        fetch(endpoint, options)
+        .then(res => {
             // Check if the response is successful
             if (!res.ok) {
-                const errorData = await res.json(); // Parse the response body to get the error message
+                const errorData = res.json(); // Parse the response body to get the error message
                 throw new Error(errorData.error_message || 'Unknown error occurred');
             }
-    
-            const jsonData = await res.json();
-            
+            return res.json()
+        })
+        .then(jsonData => {
             // Update the state after the successful upload
             setData(jsonData);
-    
-        } catch (error) {
+        })
+        .catch(error => {
             // Handle any errors that occur during the async operation
             console.error('Error occurred during file upload:', error);
-            setInfoMessage(error.message || "Error uploading file. Please try again.");            
+            setErrorMessage(error.message || "Error uploading file. Please try again.");            
             setTimeout(() => setErrorMessage(null), 5000);
-        } finally {
+        })
+        .finally(() => {
             // Always execute this block after the try-catch, regardless of success or failure
             setLoading(false);
+        })
+    }
+
+    // this function will be called from the dropdown filter
+    function handleDropdownFilterChange(e) {
+        setSelectedFilter(e.target.value)
+        const dropdownFilterValue = e.target.value;
+        if (dropdownFilterValue === "initial") {
+            handleFilterChange()
+        }
+        else {
+            const parts = dropdownFilterValue.split("-")
+            handleFilterChange(parts[0], parts[1])
         }
     }
 
     // this function will be called from the manual left or right filter on enter key pressed 
     function handleEnterKey(e) {
         if (e.key === 'Enter') {
-            handleFilterChange(`${manualFilter["left"]}-${manualFilter["right"]}`)
+            handleFilterChange(manualFilter["left"], manualFilter["right"])
         }
     }
 
@@ -133,43 +151,56 @@ export default function PickArrivals() {
         setArrivals(arrivals.filter(w => w.wave !== wave))
     }
 
+
     // this function will be called by the save arrivals button
     async function handleSaveArrivals() {
         setLoading(true)
+
+        let endpoint = `${serverUrl}/arrivals/save-arrivals?`
         
-        try {
-            const res = await fetch(`${serverUrl}/pick-arrivals/save-arrivals?Parr=${formattedArrivals["P"]}&Sarr=${formattedArrivals["S"]}`, {credentials: 'include'})
-    
+        if (formattedArrivals["P"]) {
+            endpoint += `Parr=${formattedArrivals["P"]}&`
+        }
+        
+        if (formattedArrivals["S"]) {
+            endpoint += `Sarr=${formattedArrivals["S"]}`
+        }
+
+        let options = {method: 'GET', credentials: 'include'}
+        console.log(endpoint)
+        fetch(endpoint, options)
+        .then(res => {
             // Check if the response is successful
             if (!res.ok) {
-                const errorData = await res.json(); // Parse the response body to get the error message
+                const errorData = res.json(); // Parse the response body to get the error message
                 throw new Error(errorData.error_message || 'Unknown error occurred');
             }
-    
-            const blobData = await res.blob();
-            const blobURL = URL.createObjectURL(blobData);
-            
-            // Create a temporary link to initiate the download
-            const link = document.createElement('a');
-            link.href = blobURL;
+            return res.blob();
+        })
+        .then(blobData => {
+            // Create a temporary URL for the blob
+            const downloadUrl = window.URL.createObjectURL(blobData);
 
-            // Set the desired filename for the download
-            link.download = "arrivals.txt";
+            // Create a temporary <a> element to trigger the download
+            const link = document.createElement("a");
+            link.href = downloadUrl;
+            link.download = "arrivals.txt"; // Set the filename for the downloaded file
+            document.body.appendChild(link);
             link.click();
 
             setInfoMessage("Arrivals downloaded succesfully");
             setTimeout(() => setInfoMessage(null), 5000);
-    
-        } catch (error) {
+        })
+        .catch(error => {
             // Handle any errors that occur during the async operation
             console.error('Error occurred during file upload:', error);
-            setInfoMessage(error.message || "Error uploading file. Please try again.");            
+            setErrorMessage(error.message || "Error uploading file. Please try again.");            
             setTimeout(() => setErrorMessage(null), 5000);
-        } finally {
+        })
+        .finally(() => {
             // Always execute this block after the try-catch, regardless of success or failure
             setLoading(false);
-        }
-
+        })
     }
 
     return (
@@ -217,7 +248,7 @@ export default function PickArrivals() {
                     aria-label="dropdown"
                     id="filters-dropdown"
                     value={selectedFilter}
-                    onChange={(e) => handleFilterChange(e.target.value)}
+                    onChange={handleDropdownFilterChange}
                     style={{width: "12rem"}}
                     disabled={!selectedFile}
                 >
@@ -228,7 +259,7 @@ export default function PickArrivals() {
                     }
                 </select>
             </div>
-            <Spinner hidden={!loading} />
+            { loading && <Spinner />}
             <div className="my-8">
                 {
                    Object.keys(data).map(tr => (

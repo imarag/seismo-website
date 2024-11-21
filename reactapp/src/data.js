@@ -16,4 +16,4 @@ export const filterOptions = [
     { name: "0.1-10", value: "0.1-10" }
 ];
 
-export const serverUrl = "http://127.0.0.1:5000"
+export const serverUrl = "http://127.0.0.1:8000"

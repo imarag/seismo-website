@@ -1,237 +1,363 @@
+import { useState } from "react"
 import { useOutletContext } from "react-router-dom";
+import { UploadIcon, SaveIcon } from "../../SvgIcons"
+import { serverUrl } from "../../data";
+import ButtonWithIcon from "../../components/ButtonWithIcon"
+import Spinner from "../../components/Spinner"
+import LineGraph from "../../components/LineGraph";
 
 export default function Fourier() {
-  return (
-    <div>Fourier</div>
-  )
+    // get the error and info states defined in the rootlayout to show errors and information
+    const { errorMessage, setErrorMessage, infoMessage, setInfoMessage } = useOutletContext();
+    // save here the uploaded file name (every component's disable state depends on this value)
+    const [selectedFile, setSelectedFile] = useState(null);
+    // initialize the data that will be used to create the plots
+    const [data, setData] = useState({
+        "trace-0": { "record-name": "", stats: { "channel": "", "duration": 0, "sampling_rate": 0 }, xdata: [], ydata: [] },
+        "trace-1": { "record-name": "", stats: { "channel": "", "duration": 0, "sampling_rate": 0 }, xdata: [], ydata: [] },
+        "trace-2": { "record-name": "", stats: { "channel": "", "duration": 0, "sampling_rate": 0 }, xdata: [], ydata: [] }
+    });
+    const [fourierHVSRData, setFourierHVSRData] = useState([])
+    // save a state to trigger it when we want the spinner to be active
+    const [loading, setLoading] = useState(false);
+    // save the signal window left side
+    const [signalLeftSide, setSignalLeftSide] = useState(10)
+    // save here the total window length
+    const [windowLength, setWindowLength] = useState(10)
+    // save the add a noise window state (true or false)
+    const [addNoiseWindow, setAddNoiseWindow] = useState(false)
+    // save the noise window right side
+    const [noiseRightSide, setNoiseRightSide] = useState(10)
+    // save whether the user wants to compute also the HVSR
+    const [isComputeHVSRChecked, setIsComputeHVSRChecked] = useState(false)
+    // save here the options of the select element of the vertical component
+    const [verticalComponentOptions, setVerticalComponentOptions] = useState([])
+    // here we save the selected vertical component
+    const [selectedVerticalComponent, setSelectedVerticalComponent] = useState("Z")
+
+    let duration = data["trace-0"]["stats"]["duration"]
+
+    let shapes = [];
+
+    if (selectedFile) {
+        shapes.push(
+            {
+                type: 'rect',
+                xref: 'x',
+                yref: 'paper',
+                x0: signalLeftSide,
+                y0: 0,
+                x1: signalLeftSide + windowLength,
+                y1: 1,
+                line: {
+                    color: '#1c1d21',
+                    width: 1
+                },
+                fillcolor: 'rgba(76, 88, 255, 0.4)'
+            }
+        )
+    }
+
+    if (addNoiseWindow) {
+        shapes.push(
+            {
+                type: 'rect',
+                xref: 'x',
+                yref: 'paper',
+                x0: noiseRightSide - windowLength,
+                y0: 0,
+                x1: noiseRightSide,
+                y1: 1,
+                line: {
+                    color: '#1c1d21',
+                    width: 1
+                },
+                fillcolor: 'rgba(231, 54, 56, 0.4)'
+            }
+        )
+    }
+
+
+    // this function will be called by the hidden input when using the .click() function in handleFileUpload below
+    async function handleFileSelection(e) {
+        e.preventDefault();
+        setLoading(true);
+
+        let formData = new FormData();
+        formData.append('file', e.target.files[0]);
+
+        let endpoint = `${serverUrl}/upload-seismic-file`;
+        let options = {method: 'POST',body: formData,credentials: 'include'};
+        
+        fetch(endpoint, options)
+            .then(res => {
+                // Check if the response is successful
+                if (!res.ok) {
+                    const errorData = res.json(); // Parse the response body to get the error message
+                    throw new Error(errorData.error_message || 'Unknown error occurred');
+                }
+                return res.json();
+            })
+            .then(jsonData => {
+                // get all the components of the traces
+                let components = [];
+                for (let trace in jsonData) {
+                    let channel = jsonData[trace]["stats"]["channel"];
+                    components.push(channel)
+                }
+            
+                // Update the state after the successful upload
+                setData(jsonData);
+                setVerticalComponentOptions(components)
+                setSelectedFile(e.target.files[0].name);
+                setSignalLeftSide(10)
+                setWindowLength(10)
+                setFourierHVSRData([])
+                setNoiseRightSide(10)
+                setAddNoiseWindow(false)
+                setIsComputeHVSRChecked(false)
+                setInfoMessage("Seismic file upload completed successfully");
+                setTimeout(() => setInfoMessage(null), 5000);
+
+                // click the time series tab when the user uploads a new file
+                document.querySelector("#time-series-tab").click()
+            })
+            .catch(error => {
+                // Handle any errors that occur during the async operation
+                console.error('Error occurred during file upload:', error);
+                setErrorMessage(error.message || "Error uploading file. Please try again.");
+                setTimeout(() => setErrorMessage(null), 5000);
+            })
+            .finally(() => {
+                setLoading(false);
+            })
+    }
+
+
+    // this function will be called by the upload file button
+    function handleFileUpload(e) {
+        e.preventDefault();
+        document.querySelector("#upload-seismic-file-input").click()
+    }
+
+    async function handleComputeFourier(e) {
+        e.preventDefault();
+        setLoading(true)
+
+        const jsonDataInput = {
+            "signal_window_left_side": signalLeftSide,
+            "window_length": windowLength,
+            "values": data,
+        } 
+
+        if (noiseRightSide) {
+            jsonDataInput["vertical_component"] = selectedVerticalComponent
+            jsonDataInput["noise_window_right_side"] = noiseRightSide
+        }
+       
+        let endpoint = `${serverUrl}/fourier/compute-fourier`;
+        let options = {method: 'POST', body: JSON.stringify(jsonDataInput), credentials: 'include', headers: {'Content-Type': 'application/json'}};
+        
+        fetch(endpoint, options)
+        .then(res => {
+            // Check if the response is successful
+            if (!res.ok) {
+                const errorData = res.json(); // Parse the response body to get the error message
+                throw new Error(errorData.error_message || 'Unknown error occurred');
+            }
+            return res.json();
+        })
+        .then(jsonData => {
+            setFourierHVSRData(jsonData)
+            setLoading(false)
+            setInfoMessage("The Fourier Spectra has been successfully caclulated. Click on the Fourier and the HVSR tabs to observe the spectra");
+            setTimeout(() => setInfoMessage(null), 5000);
+        })
+        .catch(error => {
+            // Handle any errors that occur during the async operation
+            console.error('Error occurred during file upload:', error);
+            setErrorMessage(error.message || "Error uploading file. Please try again.");
+            setTimeout(() => setErrorMessage(null), 5000);
+        })
+        .finally(() => {
+            // Always execute this block after the try-catch, regardless of success or failure
+            setLoading(false);
+        })
+    }
+
+    // this will run when the user adds the noise window
+    function handleAddNoiseWindow(e) {
+        setAddNoiseWindow(true)
+        setNoiseRightSide(windowLength)
+    }
+    
+    // this will run when the user wants to select the whole time series as the window of the signal
+    function handleSetWholeTimeSeries() {
+        setSignalLeftSide(0)
+        setWindowLength(duration)
+    }
+
+    return (
+        <section>
+            <div className="my-4">
+                <input name="file" type="file" onChange={handleFileSelection} id="upload-seismic-file-input" hidden />
+                <ButtonWithIcon text="Upload file" onClick={handleFileUpload}><UploadIcon /></ButtonWithIcon>
+            </div>
+            { loading && <Spinner />}
+            <ul className="nav nav-tabs" id="calculate-fourier-tab" role="tablist">
+                <li className="nav-item" role="presentation">
+                    <button className="nav-link active" id="time-series-tab" data-bs-toggle="tab"
+                        data-bs-target="#time-series-tab-pane" type="button" role="tab" aria-controls="time-series-tab-pane"
+                        aria-selected="true">Time Series</button>
+                </li>
+                <li className="nav-item" role="presentation">
+                    <button className="nav-link" id="fourier-tab" data-bs-toggle="tab" data-bs-target="#fourier-tab-pane"
+                        type="button" role="tab" aria-controls="fourier-tab-pane" aria-selected="false"
+                        disabled={fourierHVSRData.length===0}>Fourier</button>
+                </li>
+                <li className="nav-item" role="presentation">
+                    <button className="nav-link" id="hvsr-tab" data-bs-toggle="tab" data-bs-target="#hvsr-tab-pane"
+                        type="button" role="tab" aria-controls="hvsr-tab-pane" aria-selected="false" disabled={!isComputeHVSRChecked | fourierHVSRData.length===0}>HVSR</button>
+                </li>
+            </ul>
+            <div className="tab-content" id="graphs-area-fourier">
+                <div className="tab-pane fade show active" id="time-series-tab-pane" role="tabpanel"
+                    aria-labelledby="time-series-tab" tabIndex="0">
+                    <div className="my-8">
+                        {
+                            Object.keys(data).map((tr, ind) => (
+                                <div key={tr}>
+                                    {
+                                        <LineGraph 
+                                            xData={[data[tr]["xdata"]]} 
+                                            yData={[data[tr]["ydata"]]} 
+                                            height="220px"
+                                            legendTitle={`Component: ${data[tr]["stats"]["channel"]}`}
+                                            showGraphTitle={ind === 0}
+                                            graphTitle={data[tr]["record-name"]}
+                                            shapes={shapes}
+                                        />
+                                    }
+                                </div>
+                            ))
+                        }
+                    </div>
+                    <div id="options-menu" className="mt-4 fs-6">
+                        <div className="my-2 bg-info-subtle px-4 py-3 rounded">
+                            <label htmlFor="signal-left-side-input" className="col-form-label fw-semibold">Set signal window left side (sec)</label>
+                            <input type="number" id="signal-left-side-input"
+                                className="form-control form-control-sm" aria-describedby="signal-left-side-input"
+                                style={{ width: "90px" }} value={signalLeftSide} onChange={(e) => setSignalLeftSide(Number(e.target.value))} disabled={!selectedFile} />
+                            <input type="range" min="0" step="1" max={duration} id="signal-window-left-side-slider" className="d-block w-100"
+                                value={signalLeftSide} onChange={(e) => setSignalLeftSide(Number(e.target.value))} disabled={!selectedFile} />
+                        </div>
+                        <div className="my-2 bg-info-subtle px-4 py-3 rounded">
+                            <label htmlFor="window-length-input" className="col-form-label fw-semibold">Set window length (sec)</label>
+                            <input type="number" id="window-length-input"
+                                className="form-control form-control-sm" aria-describedby="window-length-input"
+                                style={{ width: "90px" }} value={windowLength} onChange={(e) => setWindowLength(Number(e.target.value))} disabled={!selectedFile} />
+                            <input type="range" min="0" step="1" max={duration} className="d-block w-100"
+                                id="window-length-slider" value={windowLength} onChange={(e) => setWindowLength(Number(e.target.value))} disabled={!selectedFile} />
+                            <button className="btn btn-primary btn-sm mt-2" onClick={handleSetWholeTimeSeries} disabled={addNoiseWindow | !selectedFile}>Select whole time series</button>
+                        </div>
+                        <div className="my-2 bg-info-subtle px-4 py-3 rounded">
+                            <h1 className="fs-6 fw-semibold">Add noise window</h1>
+                            {
+                                addNoiseWindow ? (
+                                    <button className="btn btn-sm btn-danger" onClick={() => setAddNoiseWindow(false)} disabled={!selectedFile}>Remove noise window</button>
+                                ) : (
+                                    <button className="btn btn-sm btn-primary" onClick={handleAddNoiseWindow} disabled={!selectedFile}>Add noise window</button>
+                                )
+                            }
+                            {
+                                addNoiseWindow && (
+                                    <div className="my-2 ps-3">
+                                        <label htmlFor="noise-right-side-input" className="col-form-label fw-semibold">Set noise window left side (sec)</label>
+                                        <input type="number" id="noise-right-side-input"
+                                            className="form-control form-control-sm" aria-describedby="noise-right-side-input"
+                                            style={{ width: "90px" }} value={noiseRightSide} onChange={(e) => setNoiseRightSide(Number(e.target.value))} />
+                                        <input type="range" min="0" max={duration} step="1" id="signal-window-left-side-slider" className="d-block w-100"
+                                            value={noiseRightSide} onChange={(e) => setNoiseRightSide(Number(e.target.value))} />
+                                    </div>
+                                )
+                            }
+                        </div>
+                        <div className="d-flex flex-row gap-4 align-items-center justify-content-center mt-4 mb-3">
+                            <div className="d-flex flex-row gap-2 align-items-center">
+                                <label className="form-check-label" htmlFor="compute-hvsr-check">
+                                    Compute HVSR
+                                </label>
+                                <input 
+                                    className="form-check-input" 
+                                    type="checkbox" 
+                                    checked={isComputeHVSRChecked} 
+                                    onChange={() => setIsComputeHVSRChecked(!isComputeHVSRChecked)} 
+                                    id="compute-hvsr-check"
+                                    disabled={!selectedFile}
+                                     />
+                                    
+                            </div>
+                            <div className="d-flex flex-row gap-2 align-items-center">
+                                <label htmlFor="vertical-component">Vertical component</label>
+                                <select value={selectedVerticalComponent} onChange={(e) => setSelectedVerticalComponent(e.target.value)} className="form-select form-select-sm" id="vertical-component" aria-label="select vertical component" style={{ width: "80px" }} disabled={!isComputeHVSRChecked}>
+                                    {
+                                        verticalComponentOptions.map(obj => (
+                                            <option key={obj} value={obj}>{ obj }</option>
+                                        ))
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div className="row justify-content-center align-items-center mt-2">
+                            <div className="col-auto text-center">
+                                <button className="btn btn-primary p-3" id="computeFourierButton" onClick={handleComputeFourier} disabled={!selectedFile}>Compute Fourier</button>
+                            </div>
+                        </div>
+                        { loading && <Spinner />}
+                    </div>
+                </div>
+                <div className="tab-pane fade" id="fourier-tab-pane" role="tabpanel" aria-labelledby="fourier-tab" tabIndex="1">
+                    {
+                        fourierHVSRData.length !== 0 && (
+                            <>
+                                {
+                                    Object.keys(fourierHVSRData["fourier"]).map((tr, ind) => (
+                                        <div key={tr}>
+                                            {
+                                                <LineGraph 
+                                                    xData={addNoiseWindow ? [fourierHVSRData["fourier"][tr]["signal"]["xdata"], fourierHVSRData["fourier"][tr]["noise"]["xdata"]] : [fourierHVSRData["fourier"][tr]["signal"]["xdata"]]} 
+                                                    yData={addNoiseWindow ? [fourierHVSRData["fourier"][tr]["signal"]["ydata"], fourierHVSRData["fourier"][tr]["noise"]["ydata"]] : [fourierHVSRData["fourier"][tr]["signal"]["ydata"]]} 
+                                                    scale="log"
+                                                    height="220px"
+                                                    legendTitle={[`Component: ${fourierHVSRData["fourier"][tr]["signal"]["channel"]} (signal)`, `Component: ${fourierHVSRData["fourier"][tr]["signal"]["channel"]} (noise)`]}
+                                                    showGraphTitle={ind === 0}
+                                                    graphTitle="Fourier Spectra"
+                                                />
+                                            }
+                                        </div>
+                                    ))
+                                }
+                            </>
+                        )
+                    }
+                </div>
+                <div className="tab-pane fade" id="hvsr-tab-pane" role="tabpanel" aria-labelledby="hvsr-tab" tabIndex="2">
+                {
+                        fourierHVSRData.length !== 0 && (
+                            <>
+                                <LineGraph 
+                                    xData={[fourierHVSRData["hvsr"]["xdata"]]} 
+                                    yData={[fourierHVSRData["hvsr"]["ydata"]]} 
+                                    scale="log"
+                                    height="400px"
+                                    legendTitle="HVSR"
+                                    graphTitle="Horizontal To Vertical Fourier Spectra"
+                                 />
+                            </>
+                        )
+                    }
+                </div>
+            </div>
+        </section>
+    )
 }
-
-// {% extends 'base-interactive-tools.html' %}
-
-// {% block tool_title_description %}
-// Compute the Fourier Spectra between a window on the waveform
-// {% endblock %}
-
-// {% block tool_user_guide %}
-// <p>
-//     Analyze the Fourier Spectra within a specified seismic record window. Begin by
-//     uploading a seismic data file. Then, utilize the <i>signal left side</i> slider and
-//     the <i>window length</i> slider to manipulate the position and length of the signal
-//     window (highlighted in red). This will allow you to precisely define the
-//     section for which you want to compute the Fourier Spectra. For added functionality,
-//     you can use the <kbd>add+</kbd> button to compute the Fourier Spectra for
-//     a noise window (indicated in blue). By adjusting the <i>Noise window right side</i>
-//     slider, you can align the right side of the noise window with the signal
-//     window. These two windows will share the same duration or length. To calculate the Fourier
-//     spectra for the entire time series, simply click the <kbd>apply</kbd> button,
-//     to make the length of the signal window cover all the time series.
-// </p>
-// <p>
-//     Once you're prepared, select the <kbd>Compute Fourier</kbd> button to initiate the computation of the Fourier
-//     Spectra at the bottom.
-//     Optionally, check the <i>Compute HVSR</i> checkbox to calculate the HVSR curve in addition to the
-//     Fourier Spectra. Make sure to select the vertical component of your records to appropriately compute the HVSR curve.
-//     The resulting Fourier Spectra and the HVSR curve will be accessible
-//     under the <i>Fourier</i> and the <i>HVSR</i> tab at the top, respectively. There, you can opt to
-//     download either the graphical representation or the data in ASCII format.
-// </p>
-// <p>
-//     According to the Fourier Spectra calculation you can check the script used <a target="_blank"
-//         href="{{ url_for('static', filename='static-files/fourier_spectra_calculation_script.txt') }}">here</a>
-// </p>
-// <p>
-//     According to the HVSR curve, when there are two horizontal components, it is determined by dividing the average
-//     horizontal Fourier Spectra by the Fourier
-//     Spectra from the vertical component. This average horizontal spectra is computed as the square root of half the sum
-//     of the squares of the two horizontal
-//     Fourier spectra, i.e., <code>sqrt((hor1^2 + hor2^2) / 2)</code>. When there's one horizontal component and one
-//     vertical component, the HVSR curve is simply the result
-//     of dividing the horizontal Fourier spectra by the vertical spectra.
-// </p>
-// {% endblock %}
-
-
-// {% block tool_body %}
-// <p class="text-center text-secondary d-block d-sm-none my-5">
-//     Sorry, but it seems like you're accessing our tool from a mobile device. Currently, our tool is optimized for
-//     desktop use to
-//     provide the best user experience. For the optimal experience, please switch to a desktop or laptop computer. We
-//     appreciate
-//     your understanding and apologize for any inconvenience.
-// </p>
-// <div class="d-none d-sm-block">
-//     <div class="text-bg-dark rounded p-5 mt-5">
-//         <div class="mb-4">
-//             <button class="btn btn-outline-info" id="upload-file-button">Upload file</button>
-//             <input type="file" id="upload-file-input" value="upload-file-input" name="upload-file-input"
-//                 style="display: none;">
-//         </div>
-//         <ul class="nav nav-tabs" id="myTab" role="tablist">
-//             <li class="nav-item" role="presentation">
-//                 <button class="nav-link active" id="time-series-tab" data-bs-toggle="tab"
-//                     data-bs-target="#time-series-tab-pane" type="button" role="tab" aria-controls="time-series-tab-pane"
-//                     aria-selected="true">Time Series</button>
-//             </li>
-//             <li class="nav-item" role="presentation">
-//                 <button class="nav-link" id="fourier-tab" data-bs-toggle="tab" data-bs-target="#fourier-tab-pane"
-//                     type="button" role="tab" aria-controls="fourier-tab-pane" aria-selected="false"
-//                     disabled>Fourier</button>
-//             </li>
-//             <li class="nav-item" role="presentation">
-//                 <button class="nav-link" id="hvsr-tab" data-bs-toggle="tab" data-bs-target="#hvsr-tab-pane"
-//                     type="button" role="tab" aria-controls="hvsr-tab-pane" aria-selected="false" disabled>HVSR</button>
-//             </li>
-//         </ul>
-//         <div class="tab-content" id="graphs-area-fourier">
-//             <div class="tab-pane fade show active" id="time-series-tab-pane" role="tabpanel"
-//                 aria-labelledby="time-series-tab" tabindex="0">
-//                 <div class="row justify-content-center align-items-center"
-//                     id="fourier-spectra-start-by-upload-container">
-//                     <div class="col text-center">
-//                         <p class="fs-3">Start by <button class="btn btn-outline-info"
-//                                 id="upload-another-file-button">uploading</button> a seismic data file</p>
-//                         <input type="file" id="upload-another-file-input" value="upload-another-file-input"
-//                             name="upload-another-file-input" style="display: none;">
-//                     </div>
-//                 </div>
-//                 <div id="time-series-graph">
-
-//                 </div>
-//                 <div id="options-menu" class="mt-2 fs-6">
-//                     <div class="row g-3 align-items-center justify-content-start">
-//                         <div class="col-auto">
-//                             <label for="signal-left-side-input" class="col-form-label">Signal window left side</label>
-//                         </div>
-//                         <div class="col-auto">
-//                             <input type="text" maxlength="7" id="signal-left-side-input"
-//                                 class="form-control form-control-sm" aria-describedby="signal-left-side-input"
-//                                 style="width: 60px">
-//                         </div>
-//                         <div class="col-auto">
-//                             <span>sec</span>
-//                         </div>
-//                     </div>
-//                     <input style="width: 100%" type="range" min="0" max="100" value="50" step="1"
-//                         id="signal-window-left-side-slider">
-//                     <div class="row g-3 align-items-center justify-content-start">
-//                         <div class="col-auto">
-//                             <label for="window-length-input" class="col-form-label">Window length</label>
-//                         </div>
-//                         <div class="col-auto">
-//                             <input type="text" maxlength="7" id="window-length-input"
-//                                 class="form-control form-control-sm" aria-describedby="window-length-input"
-//                                 style="width: 60px">
-//                         </div>
-//                         <div class="col-auto">
-//                             <span>sec</span>
-//                         </div>
-//                     </div>
-//                     <input style="width: 100%" type="range" min="0" max="100" value="50" step="1"
-//                         id="window-length-slider">
-
-//                     <div class="row justify-content-start align-items-center  mt-2">
-//                         <div class="col-5">
-//                             <p>Use the whole time series as the window</p>
-//                         </div>
-//                         <div class="col-5">
-//                             <button id="whole-signal-button" class="btn btn-success">apply</button>
-//                         </div>
-//                     </div>
-
-//                     <div class="row justify-content-start align-items-center mt-3">
-//                         <div class="col-5">
-//                             <p>Add a noise window</p>
-//                         </div>
-//                         <div class="col-5">
-//                             <button id="add-noise-button" class="btn btn-success">Add+</button>
-//                             <button id="remove-noise-button" class="btn btn-danger">Remove</button>
-//                         </div>
-//                     </div>
-
-//                     <div id="noise-slider-div">
-//                         <div class="row g-3 align-items-center justify-content-start">
-//                             <div class="col-auto">
-//                                 <label for="noise-right-side-input" class="col-form-label">Noise window right
-//                                     side</label>
-//                             </div>
-//                             <div class="col-auto">
-//                                 <input type="text" maxlength="7" id="noise-right-side-input"
-//                                     class="form-control form-control-sm" aria-describedby="noise-right-side-input"
-//                                     style="width: 60px">
-//                             </div>
-//                             <div class="col-auto">
-//                                 <span>sec</span>
-//                             </div>
-//                         </div>
-//                         <input style="width: 100%" type="range" min="0" max="100" value="50" step="1"
-//                             id="noise-window-right-side-slider">
-//                     </div>
-
-//                     <div class="row justify-content-center align-items-center mt-5">
-//                         <div class="col-auto text-center">
-//                             <button class="btn btn-primary p-3" id="computeFourierButton">Compute Fourier</button>
-//                         </div>
-//                     </div>
-//                     <div class="row justify-content-center align-items-center mt-3">
-//                         <div class="col-auto text-center">
-//                             <div class="form-check">
-//                                 <div>
-//                                     <input class="form-check-input" type="checkbox" value=""
-//                                         id="calculate-hvsr-checkbox" checked>
-//                                     <label class="form-check-label" for="calculate-hvsr-checkbox">
-//                                         Compute HVSR
-//                                     </label>
-//                                 </div>
-//                             </div>
-//                         </div>
-//                         <div class="col-auto text-center">
-//                             <span>Vertical component: </span>
-//                             <select name="vertical-component-select" id="vertical-component-select" style="width:80px">
-//                             </select>
-//                         </div>
-//                     </div>
-//                 </div>
-//             </div>
-//             <div class="tab-pane fade" id="fourier-tab-pane" role="tabpanel" aria-labelledby="fourier-tab" tabindex="1">
-//                 <div class="row justify-content-center align-items-center">
-//                     <div class="col-12 col-lg-8 text-center">
-//                         <div id="fourier-graph">
-
-//                         </div>
-//                     </div>
-//                     <div class="col-12 col-lg-4 text-center">
-//                         <p class="display-6">Download:</p>
-//                         <a href="{{ url_for('BP_fourier_spectra.download', what_output='graph-fourier') }}"
-//                             class="btn btn-lg btn-primary d-inline">Graph</a>
-//                         <a href="{{ url_for('BP_fourier_spectra.download', what_output='data-fourier') }}"
-//                             class="btn btn-lg btn-danger d-inline">Data</a>
-//                     </div>
-//                 </div>
-//             </div>
-//             <div class="tab-pane fade" id="hvsr-tab-pane" role="tabpanel" aria-labelledby="hvsr-tab" tabindex="2">
-//                 <div class="row justify-content-center align-items-center">
-//                     <div class="col-12 col-lg-8 text-center">
-//                         <div id="hvsr-graph">
-
-//                         </div>
-//                     </div>
-//                     <div class="col-12 col-lg-4 text-center">
-//                         <p class="display-6">Download:</p>
-//                         <a href="{{ url_for('BP_fourier_spectra.download', what_output='graph-hvsr') }}"
-//                             class="btn btn-lg btn-primary d-inline">Graph</a>
-//                         <a href="{{ url_for('BP_fourier_spectra.download', what_output='data-hvsr') }}"
-//                             class="btn btn-lg btn-danger d-inline">Data</a>
-//                     </div>
-//                 </div>
-//             </div>
-//         </div>
-//         <div class="text-center  bg-red text-red mt-3" id="spinner-div">
-//             <div class="spinner-border spinner-border-xl text-warning" role="status">
-//                 <span class="visually-hidden">Loading...</span>
-//             </div>
-//         </div>
-//     </div>
-// </div>
-// <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-// <script src="/static/js/fourier.js"></script>
-// {% endblock %}
