@@ -1,20 +1,9 @@
-from flask import session, jsonify, abort, current_app, make_response
+from flask import Response, jsonify, make_response
 from obspy.core import read
-import os
 import pandas as pd
 import string
 import secrets
 import random
-import json
-
-
-def get_topic(topic_info_name, topic_info_value):
-    with open(current_app.config["ALL_TOPICS_FILE"]) as fjson:
-        topics = json.load(fjson)["topics"]
-        for tp in topics:
-            if tp[topic_info_name] == topic_info_value:
-                topic = tp
-                return topic
 
 
 def generate_random_string():
@@ -98,7 +87,7 @@ def validate_seismic_file(
             return error_message
 
     # if everything ok return 'ok'
-    return "ok"
+    return None
 
 
 def get_record_name(mseed_path):

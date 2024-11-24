@@ -2,6 +2,7 @@ import Plot from 'react-plotly.js';
 
 
 export default function LineGraph({ 
+    onGraphClick=null,
     xData=[], 
     yData=[], 
     scale="linear", 
@@ -11,7 +12,8 @@ export default function LineGraph({
     showLegend=true,
     showGraphTitle=true,
     graphTitle="My Title",
-    shapes=[]
+    shapes=[],
+    annotations=[]
 }) {
     let defaultLayout = {
         title: {
@@ -39,7 +41,8 @@ export default function LineGraph({
         yaxis: {
             type: scale,
         },
-        shapes: shapes
+        shapes: shapes,
+        annotations: annotations
     }
     return (
         <Plot
@@ -56,6 +59,7 @@ export default function LineGraph({
             style={{ width: width, height: height }}
             useResizeHandler={true}
             config={{ scrollZoom: true }}
+            onClick={onGraphClick}
         />
     )
 }

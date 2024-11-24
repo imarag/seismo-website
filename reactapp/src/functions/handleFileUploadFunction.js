@@ -1,15 +1,46 @@
+export default async function handleFileUploadFunction({ 
+    endpoint = null, 
+    dataType = "json", 
+    requestBody = null, 
+    returnBlob = false, 
+    method = "GET", 
+    initialCallback = null,
+    successCallback = null, 
+    errorCallback = null, 
+    finallyCallback = null 
+}) {
 
-export default function handleFileUploadFunction(endpoint, options) {
-    async function fetchData() {
+    if (initialCallback) initialCallback();
+
+    const options = { method, credentials: 'include' };
+
+    if (dataType.toLowerCase() === "json" && requestBody) {
+        options.body = JSON.stringify(requestBody);
+        options.headers = { 'Content-Type': 'application/json' };
+
+    } else if (dataType.toLowerCase() === "file" && requestBody) {
+        const formData = new FormData();
+        formData.append('file', requestBody);
+        options.body = formData;
+    }
+    console.log(endpoint, options)
+    try {
+
         const res = await fetch(endpoint, options);
 
-        // Check if the response is successful
         if (!res.ok) {
-            const errorData = await res.json(); // Parse the response body to get the error message
+            const errorData = await res.json();
             throw new Error(errorData.error_message || 'Unknown error occurred');
         }
+        
+        const returnData = returnBlob ? await res.blob() : await res.json();
+        if (successCallback) successCallback(returnData);
 
-        return res.json();
+    } catch (err) {
+        console.error("Fetch error:", err.message);
+        if (errorCallback) errorCallback(err.message);
+
+    } finally {
+        if (finallyCallback) finallyCallback();
     }
-    return fetchData()
 }

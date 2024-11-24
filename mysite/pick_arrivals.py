@@ -1,18 +1,7 @@
-from flask import (
-    Blueprint,
-    current_app,
-    render_template,
-    abort,
-    request,
-    jsonify,
-    session,
-    send_file,
-)
+from flask import (Blueprint, current_app, request, session, send_file)
 import os
 import numpy as np
-from obspy.core import read, UTCDateTime
-from obspy.core.trace import Trace
-from obspy.core.stream import Stream
+from obspy.core import read
 from .functions import convert_mseed_to_json, raise_error, validate_seismic_file
 
 bp = Blueprint("BP_pick_arrivals", __name__, url_prefix="/pick-arrivals")
