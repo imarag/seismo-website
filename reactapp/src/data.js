@@ -17,3 +17,27 @@ export const filterOptions = [
 ];
 
 export const serverUrl = "http://127.0.0.1:8000"
+
+export const arrivalsStyles = {
+    line: {
+        color: "#d4003c",
+        width: 3,
+        style: "dot"
+    },
+    label: {
+        size: 30
+    }
+}
+
+export const fourierWindowStyles = {
+    signal: {
+        edgeColor: '#1c1d21',
+        width: 1,
+        fillColor: 'rgba(76, 88, 255, 0.4)'
+    },
+    noise: {
+        edgeColor: '#1c1d21',
+        width: 1,
+        fillColor: 'rgba(231, 54, 56, 0.4)'
+    }
+}

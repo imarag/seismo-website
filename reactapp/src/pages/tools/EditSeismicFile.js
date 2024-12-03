@@ -1,11 +1,11 @@
 import { useState } from "react";
+import { useOutletContext } from "react-router-dom";
 import LineGraph from "../../components/LineGraph"
 import Spinner from "../../components/Spinner";
 import ButtonWithIcon from "../../components/ButtonWithIcon";
 import { UploadIcon } from "../../SvgIcons";
-import { useOutletContext } from "react-router-dom";
-import handleFileUploadFunction from "../../functions/handleFileUploadFunction";
 import { serverUrl } from "../../data";
+import fetchRequest from "../../functions/fetchRequest";
 
 function StatsElement({ label, id, onChange, value, readonly=false,  type="text" }) {
     return (

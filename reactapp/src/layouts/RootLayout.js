@@ -26,7 +26,7 @@ export default function RootLayout() {
               </div>
             )
           }
-            <Outlet context={{ errorMessage, setErrorMessage, infoMessage, setInfoMessage }} />
+            <Outlet context={{ setErrorMessage, setInfoMessage }} />
         </main>
         <footer>
             <Footer />

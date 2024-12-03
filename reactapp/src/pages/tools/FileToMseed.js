@@ -1,9 +1,58 @@
-import React from 'react'
+import { useState } from "react"
+import ButtonWithIcon from "../../components/ButtonWithIcon"
+import { UploadIcon } from "../../SvgIcons"
+
+function FileContainer({ type, setSelectedFileType, icon }) {
+    return (
+        <div>
+            <h1 className="text-center">{ type }</h1>
+            <button className="btn btn-light" onClick={() => setSelectedFileType(type)}></button>
+        </div>
+    )
+}
+
+function FileBody({ title, active, children }) {
+    return (
+        <>
+            {
+                active && (
+                    <div>
+                        <h1 className="text-center fs-4 my-3">{ title }</h1>
+                        <input name="file" type="file"  id="upload-seismic-file-input" hidden />
+                        <div className="d-flex flex-row align-items-center gap-2">
+                            <ButtonWithIcon text="Upload file" ><UploadIcon /></ButtonWithIcon>
+                        </div>
+                        <div>
+                            { children }
+                        </div>
+                    </div>
+                )
+            }
+        </>
+    )
+}
 
 export default function FileToMSEED() {
-  return (
-    <div>FileToMSEED</div>
-  )
+    const [selectedFileType, setSelectedFileType] = useState("xlsx")
+    return (
+        <section>
+            <div className="d-flex flex-row justify-content-center">
+                <FileContainer type="xlsx" setSelectedFileType={setSelectedFileType} />
+                <FileContainer type="csv" setSelectedFileType={setSelectedFileType} />
+                <FileContainer type="txt" setSelectedFileType={setSelectedFileType} />
+            </div>
+            <div>
+                <FileBody title="Excel" active={selectedFileType === "xlsx"}>
+
+                </FileBody>
+                <FileBody title="CSV" active={selectedFileType === "csv"}>
+
+                </FileBody>
+                <FileBody title="TXT/Dat" active={selectedFileType === "txt"}>
+                </FileBody>
+            </div>
+        </section>
+    )
 }
 
 
@@ -176,7 +225,7 @@ export default function FileToMSEED() {
 //                                 <label for="txt-delimiter" class="form-label text-center text-md-start text-secondary">
 //                                     <button type="button" class="btn btn-warning ms-2 btn-sm text-dark"
 //                                         data-bs-toggle="tooltip" data-bs-placement="right"
-//                                         data-bs-custom-class="custom-tooltip" data-bs-title="Use this option to define the delimiter of the columns. Use the <space> option for a 
+//                                         data-bs-custom-class="custom-tooltip" data-bs-title="Use this option to define the delimiter of the columns. Use the <space> option for a
 //                                             single or multiple spaces (or blanks) between the columns">
 //                                         ?
 //                                     </button>
@@ -193,9 +242,9 @@ export default function FileToMSEED() {
 //                                 <label for="txt-skiprows" class="form-label text-center text-md-start text-secondary">
 //                                     <button type="button" class="btn btn-warning ms-2 btn-sm text-dark"
 //                                         data-bs-toggle="tooltip" data-bs-placement="right"
-//                                         data-bs-custom-class="custom-tooltip" data-bs-title="Skip a specified number of initial rows before reading the file. Useful when 
-//                                             there's unwanted information in the file's beginning. Default is zero and leaving it empty is 
-//                                             also treated as zero. Exceeding total file rows results in an error. The <skiprows> option is applied first, 
+//                                         data-bs-custom-class="custom-tooltip" data-bs-title="Skip a specified number of initial rows before reading the file. Useful when
+//                                             there's unwanted information in the file's beginning. Default is zero and leaving it empty is
+//                                             also treated as zero. Exceeding total file rows results in an error. The <skiprows> option is applied first,
 //                                             followed by the <has headers> option.">
 //                                         ?
 //                                     </button>
@@ -261,7 +310,7 @@ export default function FileToMSEED() {
 //                                     <label for="date" class="text-secondary form-label text-start">
 //                                         <button type="button" class="btn btn-warning ms-2 btn-sm text-dark "
 //                                             data-bs-toggle="tooltip" data-bs-placement="right"
-//                                             data-bs-custom-class="custom-tooltip" data-bs-title="Insert the recorded date of the seismic record. If you don't specify a value, the default value 
+//                                             data-bs-custom-class="custom-tooltip" data-bs-title="Insert the recorded date of the seismic record. If you don't specify a value, the default value
 //                                                 '1970-01-01' is going to be used.">
 //                                             ?
 //                                         </button>
@@ -272,7 +321,7 @@ export default function FileToMSEED() {
 //                                     <label for="time" class="text-secondary form-label text-start">
 //                                         <button type="button" class="btn btn-warning ms-2 btn-sm text-dark"
 //                                             data-bs-toggle="tooltip" data-bs-placement="right"
-//                                             data-bs-custom-class="custom-tooltip" data-bs-title="Insert the recorded time of the seismic record. If you don't specify a value, the default value 
+//                                             data-bs-custom-class="custom-tooltip" data-bs-title="Insert the recorded time of the seismic record. If you don't specify a value, the default value
 //                                                 '00:00:00' is going to be used.">
 //                                             ?
 //                                         </button>
@@ -354,7 +403,7 @@ export default function FileToMSEED() {
 //                             <label for="parameter-value" class="text-secondary mt-3">
 //                                 <button type="button" class="btn btn-warning ms-2 btn-sm text-dark"
 //                                     data-bs-toggle="tooltip" data-bs-placement="right"
-//                                     data-bs-custom-class="custom-tooltip" data-bs-title="Select one of the two parameters: sampling frequency fs (Hz) or sample distance dt (sec) and insert 
+//                                     data-bs-custom-class="custom-tooltip" data-bs-title="Select one of the two parameters: sampling frequency fs (Hz) or sample distance dt (sec) and insert
 //                                         a value for it. You cannot leave this empty!">
 //                                     ?
 //                                 </button>

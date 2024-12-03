@@ -14,3 +14,4 @@ build/
 *.egg-info/
 
 mysite/data_files/*
+node_modules

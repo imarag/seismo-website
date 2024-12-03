@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 import os
 from obspy.core.stream import Stream
 from obspy.core.trace import Trace
@@ -7,8 +8,11 @@ import pandas as pd
 import numpy as np
 
 def get_record_name(stream: Stream) -> str:
+    # get the traces of the stream
+    traces = stream.traces
+
     # get the first trace of the stream
-    first_trace = stream.traces[0]
+    first_trace = traces[0]
 
     # get the starttime and station
     starttime = first_trace.stats["starttime"]
@@ -18,12 +22,12 @@ def get_record_name(stream: Stream) -> str:
         station = "STATION"
 
     # create a record name and return it
-    rec_name = str(starttime.date) + "_" + str(starttime.time) + "_" + station
+    rec_name = starttime.date.isoformat() + "_" + starttime.time.isoformat() + "_" + station
     rec_name = rec_name.replace(":", "").replace("-", "")
 
     return rec_name
 
-def extract_mseed_data(stream: Stream) -> list:
+def convert_stream_to_traces(stream: Stream) -> list:
     """Extract the data from the mseed file into a list of traces (dictionaries)"""
     traces_data_list = []
     rec_name = get_record_name(stream)
@@ -34,6 +38,7 @@ def extract_mseed_data(stream: Stream) -> list:
         stats = dict(trace.stats)
         stats["date"] = stats["starttime"].date.isoformat()
         stats["time"] = stats["starttime"].time.isoformat()
+        stats["duration"] = stats["endtime"] - stats["starttime"]
         stats["starttime"] = stats["starttime"].isoformat()
         stats["endtime"] = stats["endtime"].isoformat()
         
@@ -50,7 +55,7 @@ def extract_mseed_data(stream: Stream) -> list:
         traces_data_list.append(trace_data)
     return traces_data_list
 
-def convert_data_to_stream(data: list) -> Stream:
+def convert_traces_to_stream(data: list) -> Stream:
     traces = []
     for tr in data:
         stats = tr["stats"]

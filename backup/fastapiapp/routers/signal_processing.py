@@ -1,16 +1,117 @@
-from fastapi import APIRouter, Depends, Query, HTTPException
-from typing import Annotated
-from pydantic import Field, BaseModel
-from ..dependencies import get_user_id
-from ..internals.config import Settings
-from obspy.core import read
-from ..functions import trim_trace, compute_fourier_spectra, convert_data_to_stream
-import numpy as np
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel, Field
+from ..functions import convert_stream_to_traces, convert_traces_to_stream, trim_trace, compute_fourier_spectra
+from typing import Literal
+import numpy as np 
+
 
 router = APIRouter(
-    prefix="/fourier",
-    tags=["fourier"],
+    prefix="/signal-processing",
+    tags=["signal processing"],
 )
+
+
+
+class TrimWaveformBody(BaseModel):
+    trim_left_side: float
+    trim_right_side: float
+    data: list
+
+@router.post("/trim-waveform")
+async def trim_waveform(trim_waveform_body: TrimWaveformBody):
+    seismic_data = trim_waveform_body.data 
+    trim_left_side = trim_waveform_body.trim_left_side
+    trim_right_side = trim_waveform_body.trim_right_side
+ 
+    stream = convert_traces_to_stream(seismic_data)
+    starttime = stream.traces[0].stats.starttime
+    stream.trim(starttime=starttime+trim_left_side, endtime=starttime+trim_left_side+trim_right_side)
+    output_dict_data = convert_stream_to_traces(stream)
+
+    return output_dict_data
+
+
+class TaperWaveformBody(BaseModel):
+    taper_type: str
+    taper_length: float
+    data: list
+    taper_side: Literal["left", "both", "right"] = "left"
+
+@router.post("/taper-waveform")
+async def taper_waveform(taper_waveform_body: TaperWaveformBody):
+    seismic_data = taper_waveform_body.data 
+    taper_type = taper_waveform_body.taper_type
+    taper_side = taper_waveform_body.taper_side
+    taper_length = taper_waveform_body.taper_length
+ 
+    stream = convert_traces_to_stream(seismic_data)
+    
+    stream.taper(taper_length, type=taper_type, side=taper_side)
+    output_dict_data = convert_stream_to_traces(stream)
+
+    return output_dict_data
+
+
+class DetrendWaveformBody(BaseModel):
+    detrend_type: str
+    detrend_order: int
+    data: list
+
+@router.post("/detrend-waveform")
+async def detrend_waveform(detrend_waveform_body: DetrendWaveformBody):
+    seismic_data = detrend_waveform_body.data 
+    detrend_type = detrend_waveform_body.detrend_type
+    detrend_order = detrend_waveform_body.detrend_order
+ 
+    stream = convert_traces_to_stream(seismic_data)
+ 
+    stream.detrend(type=detrend_type)
+    output_dict_data = convert_stream_to_traces(stream)
+
+    return output_dict_data
+
+
+
+class FilterParams(BaseModel):
+    seismic_data: list[dict]
+    freqmin: float | None = Field(default=None, gt=0.01, lt=100)
+    freqmax: float | None = Field(default=None, gt=0.01, lt=100)
+
+@router.post("/apply-filter")
+def apply_filter(filter_params: FilterParams) -> list:
+
+    seismic_data = filter_params.seismic_data
+    freqmin = filter_params.freqmin
+    freqmax = filter_params.freqmax
+
+    # convert the request seismic data into stream object
+    stream = convert_traces_to_stream(seismic_data)
+ 
+    if freqmin is not None and freqmax is not None and freqmax <= freqmin:
+        error_message = "The left filter value cannot be greater or equal to the right filter value!"
+        raise HTTPException(status_code=404, detail=error_message)
+
+    try:
+        # if freqmin exists and not freqmax
+        if freqmin is not None and freqmax is None:
+            stream.filter("highpass", freq=freqmin)
+
+        # elif freqmin does not exist but freqmax exists
+        elif freqmin is None and freqmax is not None:
+            stream.filter("lowpass", freq=freqmax)
+
+        # if both are defined (freqmin and freqmax)
+        elif freqmin is not None and freqmax is not None:
+            stream.filter("bandpass", freqmin=freqmin, freqmax=freqmax)
+    except Exception as e:
+        error_message = str(e)
+        raise HTTPException(status_code=404, detail=error_message)
+    
+    # convert stream into json data
+    json_data = convert_stream_to_traces(stream)
+
+    return json_data
+
 
 
 class ComputeFourierParams(BaseModel):
@@ -32,7 +133,7 @@ def compute_fourier(
     data_dict_output = {}
    
     # read it
-    mseed_data = convert_data_to_stream(seismic_data_dict["values"])
+    mseed_data = convert_traces_to_stream(seismic_data_dict["values"])
 
     # get the first trace
     first_trace = mseed_data.traces[0]
@@ -148,18 +249,4 @@ def compute_fourier(
     data_dict_output["hvsr"] = hvsr_data_dict
 
     return data_dict_output
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

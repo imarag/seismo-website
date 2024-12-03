@@ -1,21 +1,16 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 from pydantic import BaseModel, Field
-
-from ..internals.config import Settings
-from ..functions import extract_mseed_data
-from ..dependencies import get_user_id
-
-import datetime
+from obspy.core import read, UTCDateTime, Stream, Trace
+import datetime 
 import numpy as np
-
-from obspy.core import read, UTCDateTime
-from obspy.core.stream import Stream
-from obspy.core.trace import Trace
+from ..internals.config import Settings
+from ..functions import convert_stream_to_traces
 
 router = APIRouter(
-    prefix="/edit-seismic-file",
-    tags=["edit-seismic-file"],
+    prefix="/handle-seismic-traces",
+    tags=["handle seismic traces"],
 )
+
 
 class AddTraceParams(BaseModel):
     sampling_rate: float
@@ -27,7 +22,7 @@ class AddTraceParams(BaseModel):
 
 
 @router.post("/add-trace")
-def add_trace(add_trace_params: AddTraceParams, user_id: str = Depends(get_user_id)):
+def add_trace(add_trace_params: AddTraceParams):
 
     starttime = UTCDateTime(f"{add_trace_params.start_date} {add_trace_params.start_time}")
 
@@ -36,15 +31,15 @@ def add_trace(add_trace_params: AddTraceParams, user_id: str = Depends(get_user_
  
     new_trace = Trace(header=trace_header, data=np.array(trace_header["data"]))
     
-    mseed_file_path = Settings.TEMP_DATA_PATH.value / user_id / Settings.MSEED_FILE_NAME.value
+    mseed_file_path = Settings.TEMP_DATA_PATH.value / Settings.MSEED_FILE_NAME.value
     stream = read(mseed_file_path)
     old_traces = stream.traces 
     new_traces = old_traces + [new_trace]
     stream.traces = new_traces
 
-    stream.write(Settings.TEMP_DATA_PATH.value / user_id / Settings.MSEED_FILE_NAME.value)
+    stream.write(Settings.TEMP_DATA_PATH.value / Settings.MSEED_FILE_NAME.value)
 
-    json_data = extract_mseed_data(stream)
+    json_data = convert_stream_to_traces(stream)
     
     return json_data
 
@@ -59,7 +54,7 @@ class UpdateTraceParams(BaseModel):
 
 
 @router.post("/update-trace")
-def update_trace(update_trace_params: UpdateTraceParams, user_id: str = Depends(get_user_id)):
+def update_trace(update_trace_params: UpdateTraceParams):
 
     starttime = UTCDateTime(f"{update_trace_params.start_date} {update_trace_params.start_time}")
 
@@ -68,23 +63,23 @@ def update_trace(update_trace_params: UpdateTraceParams, user_id: str = Depends(
  
     new_trace = Trace(header=trace_header, data=np.array(trace_header["data"]))
     
-    mseed_file_path = Settings.TEMP_DATA_PATH.value / user_id / Settings.MSEED_FILE_NAME.value
+    mseed_file_path = Settings.TEMP_DATA_PATH.value / Settings.MSEED_FILE_NAME.value
     stream = read(mseed_file_path)
     old_traces = stream.traces 
     new_traces = old_traces + [new_trace]
     stream.traces = new_traces
 
-    stream.write(Settings.TEMP_DATA_PATH.value / user_id / Settings.MSEED_FILE_NAME.value)
+    stream.write(Settings.TEMP_DATA_PATH.value / Settings.MSEED_FILE_NAME.value)
 
-    json_data = extract_mseed_data(stream)
+    json_data = convert_stream_to_traces(stream)
     
     return json_data
 
 
 @router.get("/delete-trace/{trace_id}")
-def delete_seismic_trace(trace_id, user_id: str = Depends(get_user_id)):
+def delete_seismic_trace(trace_id):
 
-    mseed_file_path = Settings.TEMP_DATA_PATH.value / user_id / Settings.MSEED_FILE_NAME.value
+    mseed_file_path = Settings.TEMP_DATA_PATH.value / Settings.MSEED_FILE_NAME.value
     stream = read(mseed_file_path)
    
     traces = []
@@ -98,10 +93,10 @@ def delete_seismic_trace(trace_id, user_id: str = Depends(get_user_id)):
     if len(new_stream.traces) != 0:
         # write the uploaded file
         new_stream.write(
-            Settings.TEMP_DATA_PATH.value / user_id / Settings.MSEED_FILE_NAME.value
+            Settings.TEMP_DATA_PATH.value / Settings.MSEED_FILE_NAME.value
         )
         # convert the uploaded mseed file to json
-        json_data = extract_mseed_data(new_stream)
+        json_data = convert_stream_to_traces(new_stream)
     else:
         return []
 

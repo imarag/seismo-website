@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "azure-functions-core-tools": "^4.0.6610",
     "leaflet": "^1.9.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
