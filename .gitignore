@@ -15,3 +15,4 @@ build/
 
 mysite/data_files/*
 node_modules
+.vercel
