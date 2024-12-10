@@ -25,3 +25,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.post("/")
+def main_func():
+    return "heloo"
