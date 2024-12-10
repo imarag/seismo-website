@@ -1,13 +1,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .routers import signal_processing, handle_seismic_traces, utilities
+# from .routers import signal_processing, handle_seismic_traces, utilities
 
 app = FastAPI()
 
 # include the routers
-app.include_router(signal_processing.router)
-app.include_router(handle_seismic_traces.router)
-app.include_router(utilities.router)
+# app.include_router(signal_processing.router)
+# app.include_router(handle_seismic_traces.router)
+# app.include_router(utilities.router)
 
 
 # set the cors
