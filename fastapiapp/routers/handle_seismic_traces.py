@@ -3,8 +3,8 @@ from pydantic import BaseModel, Field
 from obspy.core import read, UTCDateTime, Stream, Trace
 import datetime 
 import numpy as np
-from ..internals.config import Settings
-from ..functions import convert_stream_to_traces
+from internals.config import Settings
+from functions import convert_stream_to_traces
 
 router = APIRouter(
     prefix="/handle-seismic-traces",

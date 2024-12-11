@@ -2,10 +2,10 @@ from fastapi import APIRouter, UploadFile, HTTPException, BackgroundTasks, Body,
 from typing import Annotated
 from fastapi.responses import FileResponse
 from obspy.core import read 
-from ..functions import convert_stream_to_traces
+from functions import convert_stream_to_traces
 import os 
-from ..functions import get_record_name, convert_traces_to_stream, delete_file, validate_seismic_file
-from ..internals.config import Settings
+from functions import get_record_name, convert_traces_to_stream, delete_file, validate_seismic_file
+from internals.config import Settings
 from obspy.geodetics import gps2dist_azimuth
 
 

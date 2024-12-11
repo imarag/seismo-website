@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
-from ..functions import convert_stream_to_traces, convert_traces_to_stream, trim_trace, compute_fourier_spectra
+from functions import convert_stream_to_traces, convert_traces_to_stream, trim_trace, compute_fourier_spectra
 from typing import Literal
 import numpy as np 
 
