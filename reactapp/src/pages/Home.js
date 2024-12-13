@@ -2,18 +2,30 @@ import { Link } from "react-router-dom";
 import "../styles/Home.css"
 import IntroToSeismologyImage from "../img/template-images/resized/arrival-pick-icon.png";
 import SiteEffectImage from "../img/template-images/resized/site-effect-icon.png";
-import ObspyScriptExample from "../img/obspy-script-example.gif";
+import ObspyScriptExample from "../img/template-images/resized/obspy-icon.png";
 
 import Title from "../components/Title";
 import Subtitle from "../components/Subtitle";
 import Card from "../components/Card"
 import Section from "../components/Section"
 import ToolsGallery from "../components/ToolsGallery"
-
+import Markdown from 'react-markdown'
 import { ArrowRightIcon } from "../SvgIcons";
 
 export default function Home() {
+    const markdown = `A paragraph with *emphasis* and **strong importance**.
 
+> A block quote with ~strikethrough~ and a URL: https://reactjs.org.
+
+* Lists
+* [ ] todo
+* [x] done
+
+A table:
+
+| a | b |
+| - | - |
+`
     return (
         <div>
             <div className="bg-hero-seismogram bg-no-repeat bg-contain bg-top">
@@ -40,20 +52,18 @@ export default function Home() {
             understanding of the mechanisms behind earthquakes and the advanced
             technologies used to analyze them."
                     />
-                    <div className="row align-items-center justify-content-center gap-5 mt-5">
-                        <div className="col-5">
+                    <div className="row align-items-stretch justify-content-center gap-5 mt-5">
+                        <div className="col-11 col-md-5 col-lg-5 col-xxl-4">
                             <Card
                                 title="Introduction to Seismology"
                                 description="Delve into the various seismological concepts about the creation
                 of the earthquakes, the various seismic waves generated, the mechanisms that 
                 trigger the seismic faults and the effects of the sesmic waves on the surface"
                                 imgURL={IntroToSeismologyImage}
-                                imgWidth={"w-28"}
-                                imgHeight={"h-24"}
                                 pageURL="/articles/introduction-to-seismology"
                             />
                         </div>
-                        <div className="col-5">
+                        <div className="col-11 col-md-5 col-lg-5 col-xxl-4">
                             <Card
                                 title="Seismic Site Effect"
                                 description="Learn about the influence of the underground Geology at the 
@@ -61,8 +71,6 @@ export default function Home() {
                 whether we can estimate it or not. Lastly, explore a research that took place in order
                 to understand it"
                                 imgURL={SiteEffectImage}
-                                imgWidth={"w-28"}
-                                imgHeight={"h-24"}
                                 pageURL="/articles/site-effect"
                             />
                         </div>
@@ -73,6 +81,9 @@ export default function Home() {
                     </p>
                 </Section>
                 <Section>
+                    <div className="text-center">
+                        <img src={ObspyScriptExample} className="img-fluid image-logo" />
+                    </div>
                     <Title text1="Learn about the" text2="Python Obspy" />
                     <Subtitle
                         text="Process seismic data using the various Obspy functions, manipulate date and time and plot earthquake recordings" />
@@ -80,11 +91,6 @@ export default function Home() {
                         <Link to="/articles/obspy" className="btn btn-success my-4">
                             Learn More
                         </Link>
-                    </div>
-                    <div className="row justify-content-center align-items-center">
-                        <div className="col-lg-7">
-                            <img src={ObspyScriptExample} className="img-fluid" />
-                        </div>
                     </div>
                 </Section>
                 <Section>
@@ -97,6 +103,7 @@ export default function Home() {
                     </div>
                     <ToolsGallery />
                 </Section>
+                <Markdown>{markdown}</Markdown>
             </div>
         </div>
     );

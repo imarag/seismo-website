@@ -1,16 +1,17 @@
 // Import your topic components
-import Obspy from './pages/articles/Obspy';
+import Obspy from './markdowns/obspy.md';
+import SiteEffect from './markdowns/site-effect.md';
+import SeismologyIntro from './markdowns/introduction-to-seismology.md';
+import FileManipulation from './markdowns/file-manipulation.md';
+import Matplotlib from './markdowns/matplotlib.md';
+import ComputeFourierOnWindow from './markdowns/compute-fourier-on-window.md';
+
 import Fourier from './pages/tools/Fourier';
 import PickArrivals from './pages/tools/PickArrivals';
 import FileToMseed from './pages/tools/FileToMseed';
 import SignalProcessing from './pages/tools/SignalProcessing';
-import SiteEffect from './pages/articles/SiteEffect';
-import SeismologyIntro from './pages/articles/SeismologyIntro';
 import DistanceBetweenPoints from './pages/tools/DistanceBetweenPoints';
-import FileManipulation from './pages/articles/FileManipulation';
-import Matplotlib from './pages/articles/Matplotlib';
 import EditSeismicFile from './pages/tools/EditSeismicFile';
-import ComputeFourierOnWindow from './pages/articles/ComputeFourierOnWindow';
 
 import ObspyImage from "./img/template-images/obspy-icon.png"
 import FourierImage from "./img/template-images/fourier-icon.png"
@@ -31,7 +32,7 @@ const allArticles = [
     "title": "Python Obspy",
     "description": "An open-source Python library designed for advanced analysis, processing, and manipulation of seismological data. ObsPy supports the reading and writing of seismic formats, waveform analysis, and metadata handling, making it an essential tool for seismologists. The library integrates well with other scientific Python libraries, enabling efficient data processing and visualization.",
     "image_name": ObspyImage,
-    "component": <Obspy />,
+    "markdown": Obspy,
     "type": "seismic-articles",
     "template_name": "obspy"
   },
@@ -41,7 +42,7 @@ const allArticles = [
     "title": "Seismic Site Effect",
     "description": "The phenomenon of the amplification of seismic ground motion due to subsurface geological conditions. Understanding site effects is crucial for seismic hazard assessment, as local soil and rock properties can significantly alter ground motion. This article explores different methods used to evaluate and mitigate these effects to enhance earthquake preparedness.",
     "image_name": SiteEffectImage,
-    "component": <SiteEffect />,
+    "markdown": SiteEffect,
     "type": "seismic-articles",
     "template_name": "site-effect"
   },
@@ -51,7 +52,7 @@ const allArticles = [
     "title": "Introduction to Seismology",
     "description": "An introduction to various seismological concepts, covering the basics of earthquake generation, wave propagation, and seismic recording. This foundational article is ideal for beginners, providing an overview of essential principles and methods used in the study of seismic events and earth structure.",
     "image_name": SeismologyIntroImage,
-    "component": <SeismologyIntro />,
+    "markdown": SeismologyIntro,
     "type": "seismic-articles",
     "template_name": "introduction-to-seismology"
   },
@@ -61,7 +62,7 @@ const allArticles = [
     "title": "Python File Manipulation",
     "description": "Utilization of various Python libraries to manipulate system files and paths, with examples using modules like `os` and `shutil` for handling directories, files, and metadata. This article is a valuable resource for those looking to automate data preparation or file management tasks in Python.",
     "image_name": FileManipulationImage,
-    "component": <FileManipulation />,
+    "markdown": FileManipulation,
     "type": "seismic-articles",
     "template_name": "file-manipulation"
   },
@@ -71,7 +72,7 @@ const allArticles = [
     "title": "Python Matplotlib Plotting",
     "description": "A basic tutorial to plot seismic data using various Matplotlib functions and methods. This guide covers plotting essentials, from waveform visualization to customizing figure aesthetics, making it easy for users to generate meaningful representations of seismic data.",
     "image_name": MatplotlibImage,
-    "component": <Matplotlib />,
+    "markdown": Matplotlib,
     "type": "seismic-articles",
     "template_name": "matplotlib"
   },
@@ -81,7 +82,7 @@ const allArticles = [
     "title": "Compute Fourier Spectra On A Window",
     "description": "An article that demonstrates how to compute the Fourier Spectra over a selected window of a seismic waveform. This approach is useful for analyzing specific events within a signal, such as noise or earthquake onset, providing insights into frequency distribution over time.",
     "image_name": ComputeFourierOnWindowImage,
-    "component": <ComputeFourierOnWindow />,
+    "markdown": ComputeFourierOnWindow,
     "type": "seismic-articles",
     "template_name": "compute-fourier-on-window"
   }
