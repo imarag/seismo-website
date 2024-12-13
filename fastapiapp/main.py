@@ -14,8 +14,8 @@ app.include_router(utilities.router)
 origins = [
     "https://seismo-website.onrender.com",
     "http://seismo-website.onrender.com",
-    "https://seismo-website.vercel.app/",
-    "http://seismo-website.vercel.app/"
+    "https://seismo-website.vercel.app",
+    "http://seismo-website.vercel.app"
 ]
 
 
