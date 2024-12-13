@@ -1,9 +1,9 @@
-import Windows from "../../img/windows.png"
-import FourierPlot from "../../img/fourier-plot.png"
-import Taper from "../../img/taper.png"
-import Trimmed from "../../img/trimmed.png"
-import Arrivals from "../../img/arrivals.png"
 import ObspyStreamFiltered from "../../img/obspy-stream-filtered.png"
+import Arrivals from "../../img/arrivals.png"
+import Windows from "../../img/windows.png"
+import Trimmed from "../../img/trimmed.png"
+import Taper from "../../img/taper.png"
+import FourierPlot from "../../img/fourier-plot.png"
 
 export default function ComputeFourierOnWindow() {
   return (
