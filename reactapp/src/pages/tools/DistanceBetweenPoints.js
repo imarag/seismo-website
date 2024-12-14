@@ -7,8 +7,12 @@ import "leaflet/dist/leaflet.css";
 import Map from "../../components/distance-between-points-map"
 import { fastapiEndpoints } from "../../static";
 import Spinner from "../../components/Spinner";
+import { useOutletContext } from "react-router-dom";
+import fetchRequest from "../../functions/fetchRequest";
 
 export default function DistanceBetweenPoints() {
+    // get the error and info states defined in the rootlayout to show errors and information
+    const { setErrorMessage, setInfoMessage } = useOutletContext();
     const [loading, setLoading] = useState(false);
     // set the state that holds the coordinates passed by the user
     const [coords, setCoords] = useState({
@@ -27,7 +31,7 @@ export default function DistanceBetweenPoints() {
         let endpoint = fastapiEndpoints["CALCULATE-DISTANCE"]
         let queryParams = `lat1=${coords["lat1"]}&lon1=${coords["lon1"]}&lat2=${coords["lat2"]}&lon2=${coords["lon2"]}`
         
-        fetchRequest(`${endpoint}?${queryParams}`, method="GET")
+        fetchRequest({endpoint: `${endpoint}?${queryParams}`, method: "GET"})
         .then(jsonData => {
             setDistance(jsonData["result"]);
             setInfoMessage("The distance has been succesfully calculated");

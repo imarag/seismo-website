@@ -1,6 +1,6 @@
-export default async function fetchRequest(URL, method = 'GET', data = null, returnBlob = false) {
+export default async function fetchRequest({ endpoint, method = 'GET', data = null, returnBlob = false }) {
     const options = { method: method, credentials: 'include' };
-    console.log(`calling endpoint ${URL}...`)
+    console.log(`calling endpoint ${endpoint}...`)
 
     if (method === "POST") {
         if (data instanceof FormData) {
@@ -17,7 +17,7 @@ export default async function fetchRequest(URL, method = 'GET', data = null, ret
         }
     }
 
-    const response = await fetch(URL, options);
+    const response = await fetch(endpoint, options);
   
     if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);

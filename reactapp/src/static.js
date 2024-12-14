@@ -5,7 +5,6 @@ export const fastapiEndpoints = {
     "UPLOAD-SEISMIC-FILE": `${serverUrl}/utilities/upload-seismic-file`,
     "SAVE-ARRIVALS": `${serverUrl}/utilities/save-arrivals`,
     "TRIM-WAVEFORM": `${serverUrl}/signal-processing/trim-waveform`,
-    "TRIM-WAVEFORM": `${serverUrl}/signal-processing/trim-waveform`,
     "DETREND-WAVEFORM": `${serverUrl}/signal-processing/detrend-waveform`,
     "APPLY-FILTER": `${serverUrl}/signal-processing/apply-filter`,
     "COMPUTE-FOURIER": `${serverUrl}/signal-processing/compute-fourier`,

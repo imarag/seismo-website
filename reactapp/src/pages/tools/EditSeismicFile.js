@@ -37,12 +37,8 @@ export default function EditSeismicFile() {
         
         let formData = new FormData();
         formData.append('file', e.target.files[0]);
-        
-        let endpoint = `${serverUrl}/upload-seismic-file`;
-        let options = {method: 'POST', body: formData, credentials: 'include'}
 
-        fetch(endpoint, options)
-        .then(res => res.json())
+        fetchRequest({endpoint: fastapiEndpoints["UPLOAD-SEISMIC-FILE"], method: "POST", data: formData})
         .then(jsonData => {
             // Update the state after the successful upload
             setTraces(jsonData);
@@ -51,15 +47,12 @@ export default function EditSeismicFile() {
             setTimeout(() => setInfoMessage(null), 5000);
         })
         .catch(error => {
-            // Handle any errors that occur during the async operation
-            console.error('Error occurred during file upload:', error);
             setErrorMessage(error.message || "Error uploading file. Please try again.");            
             setTimeout(() => setErrorMessage(null), 5000);
         })
         .finally(() => {
-            setLoading(false);
+            setLoading(false)
         })
-
     }
     
 
@@ -91,15 +84,11 @@ export default function EditSeismicFile() {
 
     async function handleDownloadFile() {
         setLoading(true)
-        let endpoint = `${serverUrl}/download-seismic-file`
-
         let jsonDataInput = {
             data: traces
         }
 
-        let options = {method: 'POST', body: JSON.stringify(jsonDataInput), credentials: 'include', headers: {'Content-Type': 'application/json'}}
-        fetch(endpoint, options)
-        .then(res => res.blob())
+        fetchRequest({endpoint: fastapiEndpoints["DOWNLOAD-SEISMIC-FILE"], method: "POST", data: jsonDataInput, returnBlob: true})
         .then(blobData => {
             const url = window.URL.createObjectURL(blobData);
             const a = document.createElement("a");
@@ -110,14 +99,13 @@ export default function EditSeismicFile() {
             a.remove();
         })
         .catch(error => {
-            // Handle any errors that occur during the async operation
-            console.error('Error occurred during file upload:', error);
             setErrorMessage(error.message || "Error uploading file. Please try again.");            
             setTimeout(() => setErrorMessage(null), 5000);
         })
         .finally(() => {
-            setLoading(false);
+            setLoading(false)
         })
+
     }
 
     

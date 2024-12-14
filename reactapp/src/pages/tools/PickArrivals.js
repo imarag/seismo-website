@@ -79,7 +79,7 @@ export default function PickArrivals() {
         const formData = new FormData();
         formData.append("file", e.target.files[0]);
         
-        fetchRequest(fastapiEndpoints["UPLOAD-SEISMIC-FILE"], method="POST", data=formData)
+        fetchRequest({endpoint: fastapiEndpoints["UPLOAD-SEISMIC-FILE"], method: "POST", data: formData})
         .then(jsonData => {
             setTraces(jsonData)
             setFilteredTraces(jsonData);
@@ -110,7 +110,7 @@ export default function PickArrivals() {
      
         const requestBody = {freqmin: freqmin, freqmax: freqmax, seismic_data: traces}
         
-        fetchRequest(fastapiEndpoints["APPLY-FILTER"], method="POST", data=requestBody)
+        fetchRequest({endpoint: fastapiEndpoints["APPLY-FILTER"], method: "POST", data: requestBody})
         .then(jsonData => {
             setFilteredTraces(jsonData);
             setInfoMessage("The filter has been succesfully applied");
@@ -166,7 +166,7 @@ export default function PickArrivals() {
         let endpoint = fastapiEndpoints["SAVE-ARRIVALS"]
         let queryParams = (PArr && `Parr=${PArr}&`) + (SArr && `Sarr=${SArr}&` + `record=${record}`)
 
-        fetchRequest(`${endpoint}?${queryParams}`, method="GET", returnBlob=true)
+        fetchRequest({endpoint: `${endpoint}?${queryParams}`, method: "GET", returnBlob: true})
         .then(blobData => {
             const downloadUrl = window.URL.createObjectURL(blobData);
             const link = document.createElement("a");

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { allArticles, allTools } from "../all-topics"
-import { navLinks } from "../data"
+import { navLinks } from "../static"
 import FooterItem from "../components/FooterItem"
 import SocialMedia from "../components/SocialMedia"
 import Logo from "../img/logo.png"

@@ -81,7 +81,7 @@ export default function Fourier() {
         const formData = new FormData();
         formData.append("file", e.target.files[0]);
         
-        fetchRequest(fastapiEndpoints["UPLOAD-SEISMIC-FILE"], method="POST", data=formData)
+        fetchRequest({endpoint: fastapiEndpoints["UPLOAD-SEISMIC-FILE"], method: "POST", data: formData})
         .then(jsonData => {
             // Update the state after the successful upload
             setTraces(jsonData);
@@ -132,7 +132,7 @@ export default function Fourier() {
             jsonDataInput["noise_window_right_side"] = noiseRightSide
         }
         
-        fetchRequest(fastapiEndpoints["COMPUTE-FOURIER"], method="POST", data=jsonDataInput)
+        fetchRequest({endpoint: fastapiEndpoints["COMPUTE-FOURIER"], method: "POST", data: jsonDataInput})
         .then(jsonData => {
             setFourierHVSRData(jsonData)
             setLoading(false)
@@ -146,7 +146,7 @@ export default function Fourier() {
         .finally(() => {
             setLoading(false)
         })
-
+    }
 
     // this will run when the user adds the noise window
     function handleAddNoiseWindow(e) {

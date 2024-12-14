@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import { navLinks } from "../data"
+import { navLinks } from "../static"
 import Logo from "../img/logo.png"
 import NavSearchInput from "./NavSearchInput"
 
