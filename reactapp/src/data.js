@@ -18,6 +18,10 @@ export const filterOptions = [
 
 export const serverUrl = "https://seismo-website.onrender.com"
 
+export const fastapiEndpoints = {
+    "distance-between-points": `${serverUrl}/utilities/calculate-distance`
+}
+
 export const arrivalsStyles = {
     line: {
         color: "#d4003c",

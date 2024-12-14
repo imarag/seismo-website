@@ -6,6 +6,7 @@ import ButtonWithIcon from "../../components/ButtonWithIcon";
 import "leaflet/dist/leaflet.css";
 import Map from "../../components/distance-between-points-map"
 import { serverUrl } from "../../data";
+import { fastapiEndpoints } from "../../data";
 
 export default function DistanceBetweenPoints() {
     // set the state that holds the coordinates passed by the user
@@ -22,9 +23,9 @@ export default function DistanceBetweenPoints() {
     // compute the distance
     function handleComputeButton() {
         async function calculateDistance() {
-            const queryParams = `lat1=${coords["lat1"]}&lon1=${coords["lon1"]}&lat2=${coords["lat2"]}&lon2=${coords["lon2"]}`;
+            const queryParams = `?lat1=${coords["lat1"]}&lon1=${coords["lon1"]}&lat2=${coords["lat2"]}&lon2=${coords["lon2"]}`;
             const res = await fetch(
-                `${serverUrl}/distance-between-points/calculate-distance?` + queryParams,
+                fastapiEndpoints["distance-between-points"] + queryParams,
                 {credentials: 'include'}
             );
             const jsonData = await res.json();
