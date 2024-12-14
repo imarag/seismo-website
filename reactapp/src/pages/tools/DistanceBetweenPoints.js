@@ -30,7 +30,7 @@ export default function DistanceBetweenPoints() {
      
         let endpoint = fastapiEndpoints["CALCULATE-DISTANCE"]
         let queryParams = `lat1=${coords["lat1"]}&lon1=${coords["lon1"]}&lat2=${coords["lat2"]}&lon2=${coords["lon2"]}`
-        
+        console.log(`${endpoint}?${queryParams}`)
         fetchRequest({endpoint: `${endpoint}?${queryParams}`, method: "GET"})
         .then(jsonData => {
             setDistance(jsonData["result"]);

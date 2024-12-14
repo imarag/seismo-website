@@ -15,7 +15,11 @@ origins = [
     "https://seismo-website.onrender.com",
     "http://seismo-website.onrender.com",
     "https://seismo-website.vercel.app",
-    "http://seismo-website.vercel.app"
+    "http://seismo-website.vercel.app",
+    "https://127.0.0.1:8000",
+    "http://127.0.0.1:8000",
+    "https://127.0.0.1:3000",
+    "http://127.0.0.1:3000"
 ]
 
 
