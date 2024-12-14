@@ -5,10 +5,11 @@ import CoordContainer from "../../components/CoordContainer";
 import ButtonWithIcon from "../../components/ButtonWithIcon";
 import "leaflet/dist/leaflet.css";
 import Map from "../../components/distance-between-points-map"
-import { serverUrl } from "../../data";
-import { fastapiEndpoints } from "../../data";
+import { fastapiEndpoints } from "../../static";
+import Spinner from "../../components/Spinner";
 
 export default function DistanceBetweenPoints() {
+    const [loading, setLoading] = useState(false);
     // set the state that holds the coordinates passed by the user
     const [coords, setCoords] = useState({
         lat1: 34,
@@ -20,18 +21,25 @@ export default function DistanceBetweenPoints() {
     // set the state of the distance that is showing
     const [distance, setDistance] = useState(null);
 
-    // compute the distance
-    function handleComputeButton() {
-        async function calculateDistance() {
-            const queryParams = `?lat1=${coords["lat1"]}&lon1=${coords["lon1"]}&lat2=${coords["lat2"]}&lon2=${coords["lon2"]}`;
-            const res = await fetch(
-                fastapiEndpoints["distance-between-points"] + queryParams,
-                {credentials: 'include'}
-            );
-            const jsonData = await res.json();
+    async function handleComputeButton() {
+        setLoading(true)
+     
+        let endpoint = fastapiEndpoints["CALCULATE-DISTANCE"]
+        let queryParams = `lat1=${coords["lat1"]}&lon1=${coords["lon1"]}&lat2=${coords["lat2"]}&lon2=${coords["lon2"]}`
+        
+        fetchRequest(`${endpoint}?${queryParams}`, method="GET")
+        .then(jsonData => {
             setDistance(jsonData["result"]);
-        }
-        calculateDistance();
+            setInfoMessage("The distance has been succesfully calculated");
+            setTimeout(() => setInfoMessage(null), 5000);
+        })
+        .catch(error => {
+            setErrorMessage(error.message || "Error uploading file. Please try again.");            
+            setTimeout(() => setErrorMessage(null), 5000);
+        })
+        .finally(() => {
+            setLoading(false)
+        })
     }
 
     return (
@@ -71,6 +79,7 @@ export default function DistanceBetweenPoints() {
                     <CalculatorIcon />
                 </ButtonWithIcon>
             </div>
+            { loading && <Spinner />}
             {distance && (
                 <p className="text-center my-5">
                     The distance between point 1 (lat: {coords["lat1"]}, lon: {coords["lon1"]}) and point 2 (lat: {coords["lat2"]}, lon: {coords["lon2"]}) is:{" "}

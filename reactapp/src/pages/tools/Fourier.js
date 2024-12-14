@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useOutletContext } from "react-router-dom";
 import { UploadIcon, SaveIcon } from "../../SvgIcons"
-import { serverUrl, fourierWindowStyles } from "../../data";
+import { fastapiEndpoints, fourierWindowStyles } from "../../static";
 import ButtonWithIcon from "../../components/ButtonWithIcon"
 import Spinner from "../../components/Spinner"
 import LineGraph from "../../components/LineGraph";
@@ -81,7 +81,7 @@ export default function Fourier() {
         const formData = new FormData();
         formData.append("file", e.target.files[0]);
         
-        fetchRequest(`${serverUrl}/upload-seismic-file`, "POST", formData)
+        fetchRequest(fastapiEndpoints["UPLOAD-SEISMIC-FILE"], method="POST", data=formData)
         .then(jsonData => {
             // Update the state after the successful upload
             setTraces(jsonData);
@@ -115,6 +115,8 @@ export default function Fourier() {
         document.querySelector("#upload-seismic-file-input").click()
     }
 
+    
+
     async function handleComputeFourier(e) {
         e.preventDefault();
         setLoading(true)
@@ -129,19 +131,8 @@ export default function Fourier() {
             jsonDataInput["vertical_component"] = selectedVerticalComponent
             jsonDataInput["noise_window_right_side"] = noiseRightSide
         }
-       
-        let endpoint = `${serverUrl}/fourier/compute-fourier`;
-        let options = {method: 'POST', body: JSON.stringify(jsonDataInput), credentials: 'include', headers: {'Content-Type': 'application/json'}};
         
-        fetch(endpoint, options)
-        .then(res => {
-            // Check if the response is successful
-            if (!res.ok) {
-                const errorData = res.json(); // Parse the response body to get the error message
-                throw new Error(errorData.error_message || 'Unknown error occurred');
-            }
-            return res.json();
-        })
+        fetchRequest(fastapiEndpoints["COMPUTE-FOURIER"], method="POST", data=jsonDataInput)
         .then(jsonData => {
             setFourierHVSRData(jsonData)
             setLoading(false)
@@ -149,16 +140,13 @@ export default function Fourier() {
             setTimeout(() => setInfoMessage(null), 5000);
         })
         .catch(error => {
-            // Handle any errors that occur during the async operation
-            console.error('Error occurred during file upload:', error);
-            setErrorMessage(error.message || "Error uploading file. Please try again.");
+            setErrorMessage(error.message || "Error uploading file. Please try again.");            
             setTimeout(() => setErrorMessage(null), 5000);
         })
         .finally(() => {
-            // Always execute this block after the try-catch, regardless of success or failure
-            setLoading(false);
+            setLoading(false)
         })
-    }
+
 
     // this will run when the user adds the noise window
     function handleAddNoiseWindow(e) {

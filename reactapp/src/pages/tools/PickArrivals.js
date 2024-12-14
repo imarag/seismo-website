@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useOutletContext } from "react-router-dom";
 import { SaveIcon, UploadIcon } from "../../SvgIcons"
-import { filterOptions, serverUrl, arrivalsStyles } from "../../data";
+import { filterOptions, fastapiEndpoints, arrivalsStyles } from "../../static";
 import ButtonWithIcon from "../../components/ButtonWithIcon"
 import LineGraph from "../../components/LineGraph"
 import Spinner from "../../components/Spinner"
@@ -73,12 +73,13 @@ export default function PickArrivals() {
     // this function will be called by the hidden input when using the .click() function in handleFileUpload below
     function handleFileSelection(e) {
         e.preventDefault();
+        
         setLoading(true)
 
         const formData = new FormData();
         formData.append("file", e.target.files[0]);
         
-        fetchRequest(`${serverUrl}/upload-seismic-file`, "POST", formData)
+        fetchRequest(fastapiEndpoints["UPLOAD-SEISMIC-FILE"], method="POST", data=formData)
         .then(jsonData => {
             setTraces(jsonData)
             setFilteredTraces(jsonData);
@@ -108,10 +109,9 @@ export default function PickArrivals() {
         setLoading(true)
      
         const requestBody = {freqmin: freqmin, freqmax: freqmax, seismic_data: traces}
-    
-        fetchRequest(`${serverUrl}/arrivals/apply-filter`, "POST", requestBody)
+        
+        fetchRequest(fastapiEndpoints["APPLY-FILTER"], method="POST", data=requestBody)
         .then(jsonData => {
-           
             setFilteredTraces(jsonData);
             setInfoMessage("The filter has been succesfully applied");
             setTimeout(() => setInfoMessage(null), 5000);
@@ -163,8 +163,10 @@ export default function PickArrivals() {
         let SArr = formattedArrivals["S"];
         let record = filteredTraces[0]["record-name"];
 
-        let endpoint = `${serverUrl}/arrivals/save-arrivals?` + (PArr && `Parr=${PArr}&`) + (SArr && `Sarr=${SArr}&` + `record=${record}`)
-        fetchRequest(endpoint, "GET", null, true)
+        let endpoint = fastapiEndpoints["SAVE-ARRIVALS"]
+        let queryParams = (PArr && `Parr=${PArr}&`) + (SArr && `Sarr=${SArr}&` + `record=${record}`)
+
+        fetchRequest(`${endpoint}?${queryParams}`, method="GET", returnBlob=true)
         .then(blobData => {
             const downloadUrl = window.URL.createObjectURL(blobData);
             const link = document.createElement("a");

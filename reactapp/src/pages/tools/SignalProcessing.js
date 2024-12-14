@@ -1,7 +1,7 @@
 import ButtonWithIcon from "../../components/ButtonWithIcon"
 import { useOutletContext } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { serverUrl } from "../../data";
+import { fastapiEndpoints } from "../../static";
 import { UploadIcon, DeleteIcon, Men } from "../../SvgIcons";
 import LineGraph from "../../components/LineGraph"
 import Spinner from "../../components/Spinner";
@@ -89,7 +89,7 @@ export default function SignalProcessing() {
         let formData = new FormData();
         formData.append('file', e.target.files[0]);
 
-        let endpoint = `${serverUrl}/upload-seismic-file`;
+        let endpoint = fastapiEndpoints["UPLOAD-SEISMIC-FILE"]
         let options = { method: 'POST', body: formData, credentials: 'include' }
 
         fetch(endpoint, options)
@@ -127,7 +127,7 @@ export default function SignalProcessing() {
 
     function handleTrim() {
         const filter = {
-            fetchURL: `${serverUrl}/trim-waveform`,
+            fetchURL: fastapiEndpoints["TRIM-WAVEFORM"],
             text: `trim-${signalProcessingOptions["trim-left-side"]}-${signalProcessingOptions["trim-right-side"]}`,
             processOptions: {
                 "trim_left_side": signalProcessingOptions["trim-left-side"],
@@ -142,7 +142,7 @@ export default function SignalProcessing() {
 
     function handleTaper() {
         const filter = {
-            fetchURL: `${serverUrl}/taper-waveform`,
+            fetchURL: fastapiEndpoints["TAPER-WAVEFORM"],
             text: `taper-${signalProcessingOptions["taper-type"]}-${signalProcessingOptions["taper-side"]}-${signalProcessingOptions["taper-length"]}`,
             processOptions: {
                 "taper_type": signalProcessingOptions["taper-type"],
@@ -158,7 +158,7 @@ export default function SignalProcessing() {
 
     function handleDetrend() {
         const filter = {
-            fetchURL: `${serverUrl}/detrend-waveform`,
+            fetchURL: fastapiEndpoints["DETREND-WAVEFORM"],
             text: `detrend-${signalProcessingOptions["detrend-type"]}-${signalProcessingOptions["detrend-order"]}`,
             processOptions: {
                 "detrend_type": signalProcessingOptions["detrend-type"],

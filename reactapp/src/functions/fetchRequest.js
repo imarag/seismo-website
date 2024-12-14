@@ -1,8 +1,8 @@
 export default async function fetchRequest(URL, method = 'GET', data = null, returnBlob = false) {
     const options = { method: method, credentials: 'include' };
-    console.log(options)
-    console.log(URL)
-    if (data !== null) {
+    console.log(`calling endpoint ${URL}...`)
+
+    if (method === "POST") {
         if (data instanceof FormData) {
             // Handle file input
             options.body = data;

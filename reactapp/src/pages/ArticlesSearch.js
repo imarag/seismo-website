@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ArticlePlaceholder from "../components/ArticlePlaceholder"
 import {allArticles} from "../all-topics";
 import Title from "../components/Title"

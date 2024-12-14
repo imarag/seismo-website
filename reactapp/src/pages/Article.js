@@ -1,8 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { allArticles } from '../all-topics';
 import { useState, useEffect } from 'react';
-import Title from '../components/Title';
-import ReactMarkdown from "react-markdown";
 import Markdown from 'react-markdown'
 import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter'
 import {dracula} from 'react-syntax-highlighter/dist/esm/styles/prism'

@@ -4,7 +4,7 @@ import LineGraph from "../../components/LineGraph"
 import Spinner from "../../components/Spinner";
 import ButtonWithIcon from "../../components/ButtonWithIcon";
 import { UploadIcon } from "../../SvgIcons";
-import { serverUrl } from "../../data";
+import { fastapiEndpoints } from "../../static";
 import fetchRequest from "../../functions/fetchRequest";
 
 function StatsElement({ label, id, onChange, value, readonly=false,  type="text" }) {

@@ -13,19 +13,7 @@ import Markdown from 'react-markdown'
 import { ArrowRightIcon } from "../SvgIcons";
 
 export default function Home() {
-    const markdown = `A paragraph with *emphasis* and **strong importance**.
-
-> A block quote with ~strikethrough~ and a URL: https://reactjs.org.
-
-* Lists
-* [ ] todo
-* [x] done
-
-A table:
-
-| a | b |
-| - | - |
-`
+   
     return (
         <div>
             <div className="bg-hero-seismogram bg-no-repeat bg-contain bg-top">
@@ -103,7 +91,6 @@ A table:
                     </div>
                     <ToolsGallery />
                 </Section>
-                <Markdown>{markdown}</Markdown>
             </div>
         </div>
     );

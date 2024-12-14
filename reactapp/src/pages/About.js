@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-import ReactMarkdown from "react-markdown";
 import aboutMarkdown from "../markdowns/About.md";
 import Markdown from 'react-markdown'
 import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter'

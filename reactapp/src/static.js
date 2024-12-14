@@ -1,3 +1,19 @@
+export const serverUrl = "https://seismo-website.onrender.com"
+
+export const fastapiEndpoints = {
+    "CALCULATE-DISTANCE": `${serverUrl}/utilities/calculate-distance`,
+    "UPLOAD-SEISMIC-FILE": `${serverUrl}/utilities/upload-seismic-file`,
+    "SAVE-ARRIVALS": `${serverUrl}/utilities/save-arrivals`,
+    "TRIM-WAVEFORM": `${serverUrl}/signal-processing/trim-waveform`,
+    "TRIM-WAVEFORM": `${serverUrl}/signal-processing/trim-waveform`,
+    "DETREND-WAVEFORM": `${serverUrl}/signal-processing/detrend-waveform`,
+    "APPLY-FILTER": `${serverUrl}/signal-processing/apply-filter`,
+    "COMPUTE-FOURIER": `${serverUrl}/signal-processing/compute-fourier`,
+    "ADD-TRACE": `${serverUrl}/handle-seismic-traces/add-trace`,
+    "UPDATE-TRACE": `${serverUrl}/handle-seismic-traces/update-trace`,
+    "DELETE-TRACE": `${serverUrl}/handle-seismic-traces/delete-trace`,   
+}
+
 export const navLinks = [
     {title: "Home", to: "/"},
     {title: "About", to: "/about"},
@@ -15,12 +31,6 @@ export const filterOptions = [
     { name: "1-10", value: "1-10" },
     { name: "0.1-10", value: "0.1-10" }
 ];
-
-export const serverUrl = "https://seismo-website.onrender.com"
-
-export const fastapiEndpoints = {
-    "distance-between-points": `${serverUrl}/utilities/calculate-distance`
-}
 
 export const arrivalsStyles = {
     line: {

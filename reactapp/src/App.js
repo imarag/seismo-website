@@ -1,11 +1,8 @@
-import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import {
   createBrowserRouter,
   RouterProvider,
-  Route,
-  Link,
 } from "react-router-dom";
 
 import RootLayout from './layouts/RootLayout.js';
@@ -81,7 +78,7 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <RouterProvider router={router}   future={{v7_startTransition: true,}}/>
+    <RouterProvider router={router}/>
   );
 }
 
