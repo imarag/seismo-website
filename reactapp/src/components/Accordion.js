@@ -1,20 +1,19 @@
 import { useState } from "react"
-import { ArrowUp } from "../SvgIcons"
-import { ArrowDown } from "../SvgIcons"
+import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 
-export default function Accordion({ label, description }) {
+export default function Accordion({ label, show=false, children }) {
 
-    const [accordionActive, setAccordionActive] = useState(false)
+    const [accordionActive, setAccordionActive] = useState(show)
     return (
-        <div className="my-5 border rounded hover:bg-gray-100">
+        <div className="my-3 border rounded">
             <div className="d-flex flex-row justify-content-between align-items-center py-2 px-5" onClick={() => setAccordionActive(!accordionActive)}>
                 <span>{label}</span>
-                {accordionActive ? <ArrowUp /> : <ArrowDown />}
+                {accordionActive ? <IoIosArrowUp /> : <IoIosArrowDown />}
             </div>
             {
                 accordionActive && (
-                    <div className="p-5">
-                        <p>{description}</p>
+                    <div className="p-4">
+                        { children }
                     </div>
                 )
             }

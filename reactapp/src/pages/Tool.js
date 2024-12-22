@@ -23,7 +23,9 @@ export default function Tool() {
             <section className="container-lg">
                 <div className="col-lg-8 mx-auto mt-5">
                     <p className="mt-25">{ComponentToRender.description}</p>
-                    <Accordion label="User guide" description={ComponentToRender["user-guide"]}/>
+                    <Accordion label="User guide" show={false}>
+                        <p>{ComponentToRender["user-guide"]}</p>
+                    </Accordion>
                 </div>
                 {ComponentToRender.component}
             </section>

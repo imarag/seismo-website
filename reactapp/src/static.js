@@ -1,9 +1,12 @@
-export const serverUrl = "https://seismo-website.onrender.com"
+export const serverUrl = "http://127.0.0.1:8000"
 
 export const fastapiEndpoints = {
     "CALCULATE-DISTANCE": `${serverUrl}/utilities/calculate-distance`,
     "UPLOAD-SEISMIC-FILE": `${serverUrl}/utilities/upload-seismic-file`,
+    "UPLOAD-DATA-FILE": `${serverUrl}/utilities/upload-data-file`,
+    "DOWNLOAD-SEISMIC-FILE": `${serverUrl}/utilities/download-seismic-file`,
     "SAVE-ARRIVALS": `${serverUrl}/utilities/save-arrivals`,
+    "CONVERT-TO-MSEED": `${serverUrl}/utilities/convert-to-mseed`,   
     "TRIM-WAVEFORM": `${serverUrl}/signal-processing/trim-waveform`,
     "DETREND-WAVEFORM": `${serverUrl}/signal-processing/detrend-waveform`,
     "APPLY-FILTER": `${serverUrl}/signal-processing/apply-filter`,

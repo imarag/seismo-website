@@ -9,8 +9,7 @@ import Subtitle from "../components/Subtitle";
 import Card from "../components/Card"
 import Section from "../components/Section"
 import ToolsGallery from "../components/ToolsGallery"
-import Markdown from 'react-markdown'
-import { ArrowRightIcon } from "../SvgIcons";
+import { IoIosArrowRoundForward } from "react-icons/io";
 
 export default function Home() {
    
@@ -65,7 +64,7 @@ export default function Home() {
                     </div>
                     <p className="text-center my-5 d-flex flex-row justify-content-center align-items-center gap-1">
                         <Link className="link-dark" to="/articles-search">Learn about the seismic articles</Link>
-                        <ArrowRightIcon />
+                        <IoIosArrowRoundForward />
                     </p>
                 </Section>
                 <Section>

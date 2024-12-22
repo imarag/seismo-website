@@ -9,8 +9,8 @@ import TrimGif from "../img/trim-gif.gif";
 import TaperGif from "../img/taper-gif.gif";
 
 import ToolsHoverButtons from "./ToolsHoverButtons";
-
-import { DashIcon, WindowIcon, XMarkIcon } from "../SvgIcons";
+import { BsDash, BsWindowStack  } from "react-icons/bs";
+import { HiMiniXMark } from "react-icons/hi2";
 
 export default function ToolsGallery() {
       
@@ -23,9 +23,9 @@ export default function ToolsGallery() {
             <ToolsHoverButtons gifURL={TaperGif} icon={SignalProcessIcon} title="Signal processing" />
         </div>
         <div className="bg-light d-flex flex-row justify-content-end gap-4 py-4 px-5 rounded">
-            <DashIcon />
-            <WindowIcon />
-            <XMarkIcon />
+            <BsDash />
+            <BsWindowStack />
+            <HiMiniXMark />
         </div>
         <div className="border">
             <img src={FourierGif} className="block mx-auto w-full display-image"/>

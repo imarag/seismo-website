@@ -1,11 +1,12 @@
 import { useState } from "react"
 import { useOutletContext } from "react-router-dom";
-import { UploadIcon, SaveIcon } from "../../SvgIcons"
+import { MdOutlineFileUpload } from "react-icons/md";
 import { fastapiEndpoints, fourierWindowStyles } from "../../static";
 import ButtonWithIcon from "../../components/ButtonWithIcon"
 import Spinner from "../../components/Spinner"
 import LineGraph from "../../components/LineGraph";
 import fetchRequest from "../../functions/fetchRequest";
+import { Checkbox, InputNumber, Slider, Dropdown } from "../../components/FormItems";
 
 export default function Fourier() {
     // get the error and info states defined in the rootlayout to show errors and information
@@ -85,7 +86,7 @@ export default function Fourier() {
         .then(jsonData => {
             // Update the state after the successful upload
             setTraces(jsonData);
-            setVerticalComponentOptions(jsonData.map(tr => tr.stats.channel))
+            setVerticalComponentOptions(jsonData.map(tr =>({label: tr.stats.channel, value: tr.stats.channel})))
             setSignalLeftSide(10)
             setWindowLength(10)
             setFourierHVSRData([])
@@ -125,6 +126,7 @@ export default function Fourier() {
             "signal_window_left_side": signalLeftSide,
             "window_length": windowLength,
             "values": traces,
+            "compute_hvsr": isComputeHVSRChecked
         } 
 
         if (noiseRightSide) {
@@ -168,7 +170,7 @@ export default function Fourier() {
                     <>
                         <p className="text-center my-3">Start by uploading a seismic file</p>
                         <div className="text-center">
-                            <ButtonWithIcon text="Upload file" onClick={handleFileUpload}><UploadIcon /></ButtonWithIcon>
+                            <ButtonWithIcon text="Upload file" onClick={handleFileUpload} icon={<MdOutlineFileUpload />} />
                         </div>
                         { loading && <Spinner />}
                     </>
@@ -178,7 +180,7 @@ export default function Fourier() {
                 traces.length !== 0 && (
                     <>
                         <div className="d-flex gap-3 my-4">
-                            <ButtonWithIcon text="Upload file" onClick={handleFileUpload}><UploadIcon /></ButtonWithIcon>
+                            <ButtonWithIcon text="Upload file" onClick={handleFileUpload} icon={<MdOutlineFileUpload />} />
                         </div>
                         { loading && <Spinner />}
                         <ul className="nav nav-tabs" id="calculate-fourier-tab" role="tablist">
@@ -220,70 +222,110 @@ export default function Fourier() {
                                     }
                                 </div>
                                 <div id="options-menu" className="mt-4 fs-6">
-                                    <div className="my-2 bg-info-subtle px-4 py-3 rounded">
-                                        <label htmlFor="signal-left-side-input" className="col-form-label fw-semibold">Set signal window left side (sec)</label>
-                                        <input type="number" id="signal-left-side-input"
-                                            className="form-control form-control-sm" aria-describedby="signal-left-side-input"
-                                            style={{ width: "90px" }} value={signalLeftSide} onChange={(e) => setSignalLeftSide(Number(e.target.value))} disabled={traces.length === 0} />
-                                        <input type="range" min="0" step="1" max={duration} id="signal-window-left-side-slider" className="d-block w-100"
-                                            value={signalLeftSide} onChange={(e) => setSignalLeftSide(Number(e.target.value))} disabled={traces.length === 0} />
+                                    <div className="my-2 bg-info-subtle px-4 py-3 rounded d-flex flex-column gap-1">
+                                        <h1 className="fs-6 fw-semibold">Set signal window left side (sec)</h1>
+                                        <InputNumber
+                                            label={null}
+                                            id="signal-left-side-input"
+                                            name="signal-left-side-input"
+                                            value={signalLeftSide}
+                                            onChange={(e) => setSignalLeftSide(Number(e.target.value))}
+                                            disabled={traces.length === 0}
+                                            style={{ width: "90px" }}
+                                            small={true}
+                                        />
+                                        <Slider
+                                            id="signal-window-left-side-slider"
+                                            name="signal-window-left-side-slider"
+                                            value={signalLeftSide}
+                                            min={0}
+                                            max={duration}
+                                            step={1}
+                                            onChange={(e) => setSignalLeftSide(Number(e.target.value))}
+                                            disabled={traces.length === 0}
+                                            className="d-block w-100"
+                                        />
                                     </div>
-                                    <div className="my-2 bg-info-subtle px-4 py-3 rounded">
-                                        <label htmlFor="window-length-input" className="col-form-label fw-semibold">Set window length (sec)</label>
-                                        <input type="number" id="window-length-input"
-                                            className="form-control form-control-sm" aria-describedby="window-length-input"
-                                            style={{ width: "90px" }} value={windowLength} onChange={(e) => setWindowLength(Number(e.target.value))} disabled={traces.length === 0} />
-                                        <input type="range" min="0" step="1" max={duration} className="d-block w-100"
-                                            id="window-length-slider" value={windowLength} onChange={(e) => setWindowLength(Number(e.target.value))} disabled={traces.length === 0} />
-                                        <button className="btn btn-primary btn-sm mt-2" onClick={handleSetWholeTimeSeries} disabled={addNoiseWindow | traces.length === 0}>Select whole time series</button>
+                                    <div className="my-2 bg-info-subtle px-4 py-3 rounded d-flex flex-column gap-1">
+                                        <h1 className="fs-6 fw-semibold">Set window length (sec)</h1>
+                                        <InputNumber
+                                            label={null}
+                                            id="window-length-input"
+                                            name="window-length-input"
+                                            value={windowLength}
+                                            onChange={(e) => setWindowLength(Number(e.target.value))} 
+                                            disabled={traces.length === 0}
+                                            style={{ width: "90px" }}
+                                            small={true}
+                                        />
+                                        <Slider
+                                            id="window-length-slider"
+                                            name="window-length-slider"
+                                            value={windowLength}
+                                            min={0}
+                                            max={duration}
+                                            step={1}
+                                            onChange={(e) => setWindowLength(Number(e.target.value))}
+                                            disabled={traces.length === 0}
+                                            className="d-block w-100"
+                                        />
                                     </div>
-                                    <div className="my-2 bg-info-subtle px-4 py-3 rounded">
+                                    <div className="my-2 bg-info-subtle px-4 py-3 rounded d-flex flex-column gap-1">
                                         <h1 className="fs-6 fw-semibold">Add noise window</h1>
                                         {
                                             addNoiseWindow ? (
-                                                <button className="btn btn-sm btn-danger" onClick={() => setAddNoiseWindow(false)} disabled={traces.length === 0}>Remove noise window</button>
+                                                <button className="btn btn-sm btn-danger align-self-start" onClick={() => setAddNoiseWindow(false)} disabled={traces.length === 0}>Remove noise window</button>
                                             ) : (
-                                                <button className="btn btn-sm btn-primary" onClick={handleAddNoiseWindow} disabled={traces.length === 0}>Add noise window</button>
+                                                <button className="btn btn-sm btn-primary align-self-start" onClick={handleAddNoiseWindow} disabled={traces.length === 0}>Add noise window</button>
                                             )
                                         }
                                         {
                                             addNoiseWindow && (
-                                                <div className="my-2 ps-3">
-                                                    <label htmlFor="noise-right-side-input" className="col-form-label fw-semibold">Set noise window left side (sec)</label>
-                                                    <input type="number" id="noise-right-side-input"
-                                                        className="form-control form-control-sm" aria-describedby="noise-right-side-input"
-                                                        style={{ width: "90px" }} value={noiseRightSide} onChange={(e) => setNoiseRightSide(Number(e.target.value))} />
-                                                    <input type="range" min="0" max={duration} step="1" id="signal-window-left-side-slider" className="d-block w-100"
-                                                        value={noiseRightSide} onChange={(e) => setNoiseRightSide(Number(e.target.value))} />
-                                                </div>
+                                                <>
+                                                    <h1 className="fs-6 fw-semibold">Set noise window left side (sec)</h1>
+                                                    <InputNumber
+                                                        label={null}
+                                                        id="noise-right-side-input"
+                                                        name="noise-right-side-input"
+                                                        value={noiseRightSide}
+                                                        onChange={(e) => setNoiseRightSide(Number(e.target.value))}
+                                                        style={{ width: "90px" }}
+                                                        small={true}
+                                                    />
+                                                    <Slider
+                                                        id="noise-right-side-input"
+                                                        name="noise-right-side-input"
+                                                        value={noiseRightSide}
+                                                        min={0}
+                                                        max={duration}
+                                                        step={1}
+                                                        onChange={(e) => setNoiseRightSide(Number(e.target.value))}
+                                                        className="d-block w-100"
+                                                    />
+                                                </>
                                             )
                                         }
                                     </div>
                                     <div className="d-flex flex-row gap-4 align-items-center justify-content-center mt-4 mb-3">
-                                        <div className="d-flex flex-row gap-2 align-items-center">
-                                            <label className="form-check-label" htmlFor="compute-hvsr-check">
-                                                Compute HVSR
-                                            </label>
-                                            <input 
-                                                className="form-check-input" 
-                                                type="checkbox" 
-                                                checked={isComputeHVSRChecked} 
-                                                onChange={() => setIsComputeHVSRChecked(!isComputeHVSRChecked)} 
-                                                id="compute-hvsr-check"
-                                                disabled={traces.length === 0}
-                                                />
-                                                
-                                        </div>
-                                        <div className="d-flex flex-row gap-2 align-items-center">
-                                            <label htmlFor="vertical-component">Vertical component</label>
-                                            <select value={selectedVerticalComponent} onChange={(e) => setSelectedVerticalComponent(e.target.value)} className="form-select form-select-sm" id="vertical-component" aria-label="select vertical component" style={{ width: "80px" }} disabled={!isComputeHVSRChecked}>
-                                                {
-                                                    verticalComponentOptions.map(obj => (
-                                                        <option key={obj} value={obj}>{ obj }</option>
-                                                    ))
-                                                }
-                                            </select>
-                                        </div>
+                                        <Checkbox 
+                                            label="Compute HVSR"
+                                            id="compute-hvsr-check"
+                                            name="compute-hvsr-check"
+                                            checked={isComputeHVSRChecked}
+                                            onChange={() => setIsComputeHVSRChecked(!isComputeHVSRChecked)} 
+                                            disabled={traces.length === 0}
+                                        />
+                                        <Dropdown 
+                                            id="vertical-component"
+                                            name="vertical-component"
+                                            value={selectedVerticalComponent}
+                                            onChange={(e) => setSelectedVerticalComponent(e.target.value)}
+                                            codeOptions={verticalComponentOptions}
+                                            disabled={!isComputeHVSRChecked}
+                                            style={{ width: "80px" }}
+                                            small={true}
+                                        />
+                                        <label htmlFor="vertical-component">Select vertical component</label>
                                     </div>
                                     <div className="row justify-content-center align-items-center mt-2">
                                         <div className="col-auto text-center">

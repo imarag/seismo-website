@@ -1,10 +1,10 @@
-import { LocationIcon } from "../SvgIcons"
+import { IoLocationOutline } from "react-icons/io5";
 
 export default function CoordContainer({ children, label }) {
     return (
         <div>
             <h1 className="fs-4 text-start d-flex flex-row align-items-center gap-2 mb-1">
-                <LocationIcon />
+                <IoLocationOutline />
                 <span>{ label }</span>
             </h1>
             <hr className="border-1"/>

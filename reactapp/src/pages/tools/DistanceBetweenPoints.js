@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { CalculatorIcon } from "../../SvgIcons"
+import { LuCalculator } from "react-icons/lu";
 import CoordItem from "../../components/CoordItem";
 import CoordContainer from "../../components/CoordContainer";
 import ButtonWithIcon from "../../components/ButtonWithIcon";
@@ -79,9 +79,7 @@ export default function DistanceBetweenPoints() {
                 </CoordContainer>
             </div>
             <div className="d-flex flex-row justify-content-center gap-2 my-5">
-                <ButtonWithIcon text="Compute" onClick={handleComputeButton} disabled={!coords["lat1"] || !coords["lon1"] || !coords["lat2"] || !coords["lon2"]}>
-                    <CalculatorIcon />
-                </ButtonWithIcon>
+                <ButtonWithIcon text="Compute" onClick={handleComputeButton} disabled={!coords["lat1"] || !coords["lon1"] || !coords["lat2"] || !coords["lon2"]} icon={<LuCalculator />} />
             </div>
             { loading && <Spinner />}
             {distance && (

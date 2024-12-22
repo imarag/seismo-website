@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { SearchIcon } from "../SvgIcons"
+import { CiSearch } from "react-icons/ci";
 
 export default function NavSearchInput() {
 
@@ -24,7 +24,7 @@ export default function NavSearchInput() {
                 </svg>
             </button> */}
             <button type="submit" className="border-0 pe-3 bg-transparent position-absolute top-50 end-0 translate-middle-y">
-                <SearchIcon />
+                <CiSearch />
             </button>
         </form>
     </div>

@@ -1,11 +1,13 @@
 import { useState } from "react"
 import { useOutletContext } from "react-router-dom";
-import { SaveIcon, UploadIcon } from "../../SvgIcons"
+import { FiUpload } from "react-icons/fi";
+import { CiSaveDown2 } from "react-icons/ci";
 import { filterOptions, fastapiEndpoints, arrivalsStyles } from "../../static";
 import ButtonWithIcon from "../../components/ButtonWithIcon"
 import LineGraph from "../../components/LineGraph"
 import Spinner from "../../components/Spinner"
 import fetchRequest from "../../functions/fetchRequest";
+import { InputDate, Dropdown, Radio } from "../../components/FormItems";
 
 
 export default function PickArrivals() {
@@ -208,9 +210,8 @@ export default function PickArrivals() {
                 filteredTraces.length === 0 && (
                     <>
                         <p className="text-center my-3">Start by uploading a seismic file</p>
-                        <div className="text-center">
-                            <ButtonWithIcon text="Upload file" onClick={handleFileUpload}><UploadIcon /></ButtonWithIcon>
-                        </div>
+                        <ButtonWithIcon text="Upload file" onClick={handleFileUpload} icon={<FiUpload />} />
+                       
                         { loading && <Spinner />}
                     </>
                 )
@@ -218,9 +219,9 @@ export default function PickArrivals() {
             {
                 filteredTraces.length !== 0 && (
                     <>
-                        <div className="d-flex gap-3">
-                            <ButtonWithIcon text="Upload file" onClick={handleFileUpload}><UploadIcon /></ButtonWithIcon>
-                            <ButtonWithIcon text="Get arrivals" onClick={handleSaveArrivals} disabled={filteredTraces.length===0 || (!formattedArrivals["P"] && !formattedArrivals["S"])}><SaveIcon /></ButtonWithIcon>
+                        <div className="d-flex flex-row justify-content-start align-items-center gap-3 border-bottom">
+                            <ButtonWithIcon align="left" text="Upload file" onClick={handleFileUpload} icon={<FiUpload />} />
+                            <ButtonWithIcon align="left" text="Get arrivals" onClick={handleSaveArrivals} disabled={filteredTraces.length===0 || (!formattedArrivals["P"] && !formattedArrivals["S"])} icon={<CiSaveDown2 />} />
                         </div>
                         { loading && <Spinner />}
                         <div className="d-flex flex-row justify-content-around mt-4 py-4">

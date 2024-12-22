@@ -2,11 +2,12 @@ import ButtonWithIcon from "../../components/ButtonWithIcon"
 import { useOutletContext } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { fastapiEndpoints } from "../../static";
-import { UploadIcon, DeleteIcon, Men } from "../../SvgIcons";
 import LineGraph from "../../components/LineGraph"
 import Spinner from "../../components/Spinner";
-import { CutIcon, AlignStartIcon, SoundWaveIcon } from "../../SvgIcons";
-
+import { MdOutlineFileUpload, MdDeleteOutline } from "react-icons/md";
+import { BsSoundwave } from "react-icons/bs";
+import { IoCut } from "react-icons/io5";
+import { CiAlignCenterV } from "react-icons/ci";
 
 function getRandomNumber(num = 6) {
     let randomId = "";
@@ -185,34 +186,32 @@ export default function SignalProcessing() {
         <section>
             <input name="file" type="file" onChange={handleFileSelection} id="upload-seismic-file-input" hidden />
             <div className="d-flex flex-row align-items-center gap-2">
-                <ButtonWithIcon text="Upload file" onClick={handleFileUpload}><UploadIcon /></ButtonWithIcon>
+                <ButtonWithIcon text="Upload file" onClick={handleFileUpload} icon={<MdOutlineFileUpload />} />
             </div>
             <hr />
-
-
             <ul className="nav nav-tabs bg-light" id="myTab" role="tablist">
                 <li className="nav-item" role="presentation">
                     <button className="nav-link d-flex flex-row align-items-center gap-2 link-dark active" id="trim-tab" data-bs-toggle="tab" data-bs-target="#trim-tab-pane" type="button" role="tab" aria-controls="trim-tab-pane" aria-selected="true">
                         <span>Trim</span>
-                        <CutIcon />
+                        <MdDeleteOutline />
                     </button>
                 </li>
                 <li className="nav-item" role="presentation">
                     <button className="nav-link d-flex flex-row align-items-center gap-2 link-dark" id="taper-tab" data-bs-toggle="tab" data-bs-target="#taper-tab-pane" type="button" role="tab" aria-controls="taper-tab-pane" aria-selected="false">
                         <span>Taper</span>
-                        <AlignStartIcon />
+                        <CiAlignCenterV />
                     </button>
                 </li>
                 <li className="nav-item" role="presentation">
                     <button className="nav-link d-flex flex-row align-items-center gap-2 link-dark" id="detrend-tab" data-bs-toggle="tab" data-bs-target="#detrend-tab-pane" type="button" role="tab" aria-controls="detrend-tab-pane" aria-selected="false">
                         <span>Detrend</span>
-                        <SoundWaveIcon />
+                        <BsSoundwave />
                     </button>
                 </li>
             </ul>
             <div className="tab-content" id="myTabContent">
                 <div className="tab-pane fade show active" id="trim-tab-pane" role="tabpanel" aria-labelledby="trim-tab" tabIndex="0">
-                    <MenuOptions icon={<CutIcon />} title="Trim" onClick={handleTrim}>
+                    <MenuOptions icon={<IoCut />} title="Trim" onClick={handleTrim}>
                         <div>
                             <label htmlFor="trim-left-side" className="form-label">left side</label>
                             <input type="number" id="trim-left-side" className="form-control form-control-sm" min="0" max="100" step="1" value={signalProcessingOptions["trim-left-side"]} onChange={(e) => handleSignalProcessingOptionsChange("trim-left-side", e, "number")} />
@@ -224,7 +223,7 @@ export default function SignalProcessing() {
                     </MenuOptions>
                 </div>
                 <div className="tab-pane fade" id="taper-tab-pane" role="tabpanel" aria-labelledby="taper-tab" tabIndex="0">
-                    <MenuOptions icon={<SoundWaveIcon />} title="Taper" onClick={handleTaper}>
+                    <MenuOptions icon={<BsSoundwave />} title="Taper" onClick={handleTaper}>
                         <div>
                             <label htmlFor="taper-type" className="form-label">type</label>
                             <select className="form-select form-select-sm" id="taper-type" value={signalProcessingOptions["taper-type"]} onChange={(e) => handleSignalProcessingOptionsChange("taper-type", e)}>
@@ -263,7 +262,7 @@ export default function SignalProcessing() {
                     </MenuOptions>
                 </div>
                 <div className="tab-pane fade" id="detrend-tab-pane" role="tabpanel" aria-labelledby="detrend-tab" tabIndex="0">
-                    <MenuOptions icon={<AlignStartIcon />} title="Detrend" onClick={handleDetrend}>
+                    <MenuOptions icon={<CiAlignCenterV />} title="Detrend" onClick={handleDetrend}>
                         <div>
                             <label htmlFor="detrend-type" className="form-label">type</label>
                             <select className="form-select form-select-sm" id="detrend-type" value={signalProcessingOptions["detrend-type"]} onChange={(e) => handleSignalProcessingOptionsChange("detrend-type", e)}>
@@ -292,7 +291,7 @@ export default function SignalProcessing() {
                             disabled={loading}
                         >
                             {filt["text"]}
-                            <DeleteIcon />
+                            <MdDeleteOutline />
                         </button>
                     ))
                 }
