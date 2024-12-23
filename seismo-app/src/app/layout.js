@@ -6,10 +6,12 @@ import Footer from "@/components/Footer"
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" data-theme="winter">
+    <html lang="en">
       <body >
-        <header className="container mx-auto">
-          <NavBar />
+        <header className="bg-white py-2">
+          <div className="container mx-auto  ">
+            <NavBar />
+          </div>
         </header>
         <main className="text-lg">
           {children}

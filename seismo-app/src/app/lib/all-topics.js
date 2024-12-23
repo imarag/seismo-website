@@ -1,16 +1,16 @@
-import Obspy from '@/app/lib/markdowns/obspy.md';
-import SiteEffect from '@/app/lib/markdowns/site-effect.md';
-import SeismologyIntro from '@/app/lib/markdowns/introduction-to-seismology.md';
-import FileManipulation from '@/app/lib/markdowns/file-manipulation.md';
-import Matplotlib from '@/app/lib/markdowns/matplotlib.md';
-import ComputeFourierOnWindow from '@/app/lib/markdowns/compute-fourier-on-window.md';
+// import Obspy from '@/markdowns/obspy.md';
+// import SiteEffect from '@/markdowns/site-effect.md';
+// import SeismologyIntro from '@/markdowns/introduction-to-seismology.md';
+// import FileManipulation from '@/markdowns/file-manipulation.md';
+// import Matplotlib from '@/markdowns/matplotlib.md';
+// import ComputeFourierOnWindow from '@/markdowns/compute-fourier-on-window.md';
 
-import Fourier from '@/app/ui/tools/Fourier';
-import PickArrivals from '@/app/ui/tools/PickArrivals';
-import FileToMseed from '@/app/ui/tools/FileToMseed';
-import SignalProcessing from '@/app/ui/tools/SignalProcessing';
-import DistanceBetweenPoints from '@/app/ui/tools/DistanceBetweenPoints';
-import EditSeismicFile from '@/app/ui/tools/EditSeismicFile';
+import Fourier from '@/components/tools/Fourier';
+import PickArrivals from '@/components/tools/PickArrivals';
+import FileToMseed from '@/components/tools/FileToMseed';
+import SignalProcessing from '@/components/tools/SignalProcessing';
+import DistanceBetweenPoints from '@/components/tools/DistanceBetweenPoints';
+import EditSeismicFile from '@/components/tools/EditSeismicFile';
 
 const allArticles = [
   {
@@ -18,7 +18,7 @@ const allArticles = [
     "title": "Mastering Python for Seismology with ObsPy",
     "description": "Dive deep into ObsPy, a powerful Python library tailored for analyzing and processing seismic data. Learn how to read, write, and visualize seismic waveforms and metadata for advanced seismological research.",
     "iconPath": "/img/template-images/obspy-icon.png",
-    "markdownFileName": Obspy,
+    // "markdownFileName": Obspy,
     "type": "article",
     "pathLabel": "obspy"
   },
@@ -27,7 +27,7 @@ const allArticles = [
     "title": "Understanding Seismic Site Effects",
     "description": "Explore how geological and soil conditions amplify seismic ground motion. This article discusses evaluation methods and mitigation strategies to improve earthquake risk assessments.",
     "iconPath": "/img/template-images/site-effect-icon.png",
-    "markdownFileName": SiteEffect,
+    // "markdownFileName": SiteEffect,
     "type": "article",
     "pathLabel": "site-effect"
   },
@@ -36,7 +36,7 @@ const allArticles = [
     "title": "Introduction to Seismology: The Basics",
     "description": "A beginner-friendly guide to earthquake science, covering key concepts like seismic waves, earthquake mechanics, and seismic data collection techniques.",
     "iconPath": "/img/template-images/introduction-to-seismology-icon.png",
-    "markdownFileName": SeismologyIntro,
+    // "markdownFileName": SeismologyIntro,
     "type": "article",
     "pathLabel": "introduction-to-seismology"
   },
@@ -45,7 +45,7 @@ const allArticles = [
     "title": "Effective File Management with Python",
     "description": "Learn how to handle files and directories effortlessly using Python libraries like `os` and `shutil`. Automate data preparation and streamline your workflow.",
     "iconPath": "/img/template-images/file-manipulation-icon.png",
-    "markdownFileName": FileManipulation,
+    // "markdownFileName": FileManipulation,
     "type": "article",
     "pathLabel": "file-manipulation"
   },
@@ -54,7 +54,7 @@ const allArticles = [
     "title": "Visualizing Seismic Data with Matplotlib",
     "description": "Discover how to use Matplotlib for seismic data visualization. Learn techniques for plotting waveforms and customizing visualizations to interpret seismic events effectively.",
     "iconPath": "/img/template-images/matplotlib-icon.png",
-    "markdownFileName": Matplotlib,
+    // "markdownFileName": Matplotlib,
     "type": "article",
     "pathLabel": "matplotlib"
   },
@@ -63,7 +63,7 @@ const allArticles = [
     "title": "Fourier Analysis of Seismic Data",
     "description": "Step-by-step guidance on performing Fourier analysis over selected seismic data windows. Gain insights into frequency content and its implications for seismic interpretation.",
     "iconPath": "/img/template-images/edit-seismic-file-icon.png",
-    "markdownFileName": ComputeFourierOnWindow,
+    // "markdownFileName": ComputeFourierOnWindow,
     "type": "article",
     "pathLabel": "compute-fourier-on-window"
   }

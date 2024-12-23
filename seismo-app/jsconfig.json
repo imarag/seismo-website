@@ -6,6 +6,7 @@
       "@/components/*": ["app/ui/*"],
       "@/utils/*": ["app/lib/*"],
       "@/images/*": ["app/img/*"],
+      "@/markdowns/*": ["app/markdowns/*"],
     }
   }
 }

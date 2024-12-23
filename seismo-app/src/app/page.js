@@ -3,8 +3,9 @@ import Section from "@/components/Section";
 import Title from "@/components/Title";
 import SubTitle from "@/components/SubTitle";
 import Card from "@/components/Card";
-import Link from 'next/link';
 import ToolsGallery from "@/components/ToolsGallery";
+import CTAButton from "./ui/CTAButton";
+import Link from 'next/link';
 import { IoIosArrowRoundForward } from "react-icons/io";
 import SiteEffectIcon from "@/images/template-images/resized/site-effect-icon.png"
 import ArrivalPickIcon from "@/images/template-images/resized/arrival-pick-icon.png"
@@ -13,32 +14,30 @@ import ObspyScriptExample from "@/images/obspy-script-example.gif";
 
 export default function Home() {
     return (
-        <div>
+        <>
             <div className="bg-hero-seismogram bg-no-repeat bg-contain bg-top">
-                <Section className="h-screen flex flex-row items-center justify-center">
-                    <div>
-                        <h1 className="text-4xl md:text-8xl font-semibold mb-8 text-center">
-                            A JOURNEY INTO
-                            <br />
-                            <span className="text-green-500">SEISMOLOGY</span>
-                        </h1>
-                        <h2 className="text-lg md:text-3xl mx-auto text-center max-w-4xl">
-                            Discover different seismic articles, interact with tools, and deepen
-                            your understanding.
-                        </h2>
-                        <div className="text-center mt-14">
-                            <Link href="/articles" className="btn bg-green-500 text-white text-lg py-2 px-6 rounded-lg hover:bg-green-600">
-                                Learn More
-                            </Link>
+                <div className="hero min-h-screen">
+                    <div className="hero-content text-center">
+                        <div className="max-w-xxl">
+                            <h1 className="text-4xl md:text-8xl font-bold">
+                                A JOURNEY INTO
+                                <br />
+                                <span className="text-green-500">SEISMOLOGY</span>
+                            </h1>
+                            <p className="py-6 font-normal text-lg md:text-3xl">
+                                Discover different seismic articles, interact with tools, and deepen
+                                your understanding.
+                            </p>
+                            <CTAButton href="/articles" label="Learn More" />
                         </div>
                     </div>
-                </Section>
+                </div>
                 <Section className="mt-52">
                     <Title text1="Discover the" text2="seismic articles" />
                     <SubTitle
                         text="Explore a range of seismic articles designed to deepen your understanding of the mechanisms behind earthquakes and the advanced technologies used to analyze them."
                     />
-                    <div className="grid grid-cols-1 lg:grid-cols-2 justify-center gap-y-14 gap-x-8">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 justify-center ">
                         <Card
                             title="Introduction to Seismology"
                             description="Delve into the various seismological concepts about the creation of the earthquakes, the various seismic waves generated, the mechanisms that trigger the seismic faults and the effects of the seismic waves on the surface."
@@ -68,11 +67,7 @@ export default function Home() {
                 <SubTitle
                     text="Process seismic data using the various Obspy functions, manipulate date and time, and plot earthquake recordings."
                 />
-                <div className="text-center mb-12">
-                    <Link href="/articles/obspy" className="btn btn-primary">
-                        Learn More
-                    </Link>
-                </div>
+                <CTAButton href="/articles/obspy" label="Learn More" />
                 <Image src={ObspyScriptExample} alt="python script example" className="block mx-auto mb-4" />
             </Section>
             <Section>
@@ -80,14 +75,10 @@ export default function Home() {
                 <SubTitle
                     text="Explore a range of seismic articles designed to deepen your understanding of the mechanisms behind earthquakes and the advanced technologies used to analyze them."
                 />
-                <div className="text-center mt-8">
-                    <Link href="/articles/obspy" className="btn btn-primary">
-                        Learn More
-                    </Link>
-                </div>
+                <CTAButton href="/tools" label="Learn More" />
                 <ToolsGallery />
             </Section>
-        </div>
+        </>
     );
 }
 

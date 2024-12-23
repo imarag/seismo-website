@@ -1,13 +1,10 @@
 'use client';
 import Image from "next/image";
 export default function ToolsHoverButtons({ onMouseEnter, icon, title }) {
-
   return (
-    <div className="d-flex flex-column align-items-center justify-content-center" onMouseEnter={onMouseEnter}>
-        <button className="rounded p-3">
-            <Image src={icon} alt="button icon" />
-        </button>
-        <p className="text-center fw-semibold">{ title }</p>
+    <div className="flex flex-col items-center justify-center p-3 rounded bg-base-100" onMouseEnter={onMouseEnter}>
+        <Image src={icon} alt="button icon" />
+        <p className="text-center font-semibold">{ title }</p>
     </div>
   )
 }

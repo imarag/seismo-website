@@ -1,7 +1,5 @@
 'use client';
 import ToolsHoverButtons from "@/components/ToolsHoverButtons";
-import { BsDash, BsWindowStack  } from "react-icons/bs";
-import { HiMiniXMark } from "react-icons/hi2";
 import FourierGraphIcon from "@/images/fourier-graph-icon.png";
 import AsciiToMseed from "@/images/ascii-to-mseed-icon.png";
 import PickingIcon from "@/images/picking-icon.png";
@@ -24,13 +22,10 @@ export default function ToolsGallery() {
           <ToolsHoverButtons onMouseEnter={() => setGifURLSelected(TrimGif)} icon={AsciiToMseed} title="ASCII to MSEED" />
           <ToolsHoverButtons onMouseEnter={() => setGifURLSelected(TaperGif)} icon={SignalProcessIcon} title="Signal processing" />
         </div>
-        <div className="flex flex-row items-center justify-end gap-4 py-4 px-5 bg-gray-100">
-            <BsDash />
-            <BsWindowStack />
-            <HiMiniXMark />
-        </div>
-        <div className="border">
-          <Image src={gifURLSelected} alt="a gif about seismological processing" className="block mx-auto w-full display-image" unoptimized />
+        <div className="mockup-window bg-base-300 border">
+            <div className="bg-base-200 flex justify-center px-8 py-16">
+              <Image src={gifURLSelected} alt="a gif about seismological processing" className="block mx-auto w-full display-image" unoptimized />
+            </div>
         </div>
     </>
   )

@@ -5,24 +5,43 @@ import Logo from "@/components/Logo"
 
 export default function Footer() {
   return (
-    <div className="container-lg py-4">
-        <div className="text-center">
+    <div className="footer bg-base-200 text-base-content p-10">
+        <aside className="flex flex-col items-center justify-center gap-3">
             <Logo />
-        </div>
-        <h1 className="text-center fs-4 my-3">A Journey Into Seismology</h1>
-        <div className="text-center">
-            <Link href="/donation" className="btn btn-warning">Donate</Link>
-        </div>
-        <SocialMedia />
-        <div className="d-flex flex-row justify-content-center align-items-center gap-2">
+            <p className="text-center text-xl font-semibold">
+                Introduction To Seismology
+            </p>
+            <SocialMedia />
+        </aside>
+        <nav>
+            <h6 className="footer-title">Services</h6>
+            <a className="link link-hover">Branding</a>
+            <a className="link link-hover">Design</a>
+            <a className="link link-hover">Marketing</a>
+            <a className="link link-hover">Advertisement</a>
+        </nav>
+        <nav>
+            <h6 className="footer-title">Sitemap</h6>
             {
                 navLinks.map(item => (
-                    <Link key={item.label} className="link-dark" href={item.href}>
-                        {item.label}
-                    </Link>
+                    <a key={item.label} href={item.href} className="link link-hover">{item.label}</a>
                 ))
             }
-        </div>
+        </nav>
+        <nav>
+            <h6 className="footer-title">Articles</h6>
+            <a className="link link-hover">Introduction To Seismology</a>
+            <a className="link link-hover">Python Obspy</a>
+            <a className="link link-hover">Site Effect</a>
+            <a className="link link-hover">All articles</a>
+        </nav>
+        <nav>
+            <h6 className="footer-title">Tools</h6>
+            <a className="link link-hover">Arrival Time Selection</a>
+            <a className="link link-hover">Fourier Spectra Calculation</a>
+            <a className="link link-hover">Signal Processing</a>
+            <a className="link link-hover">All tools</a>
+        </nav>
     </div>
   )
 }

@@ -1,5 +1,5 @@
 
-import { allArticles } from "../lib/all-topics"
+import { allArticles } from "@/utils/all-topics"
 
 export default async function Articles() {
     return (

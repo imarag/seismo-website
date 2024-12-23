@@ -2,7 +2,7 @@
 
 The main structure of the Obspy library consists of the `Trace` and the `Stream` objects. The `Trace` represents a single time series record of seismic data recorded at a single station or sensor. It's essentially a single waveform with associated metadata (e.g., station code, sampling frequency, starting time of the recording etc.). The `Stream` is a container of one or more `Trace` objects. Typically, a `Stream` contains three recordings or traces: two with horizontal components (e.g., North-South and East-West) and one with a vertical component. Each `Trace` offers several attributes that provide information about the recording and methods that apply a calculation on the respective recording. 
 
-![The structure of the obspy library](obspy-structure.png)
+![The structure of the obspy library](/img/obspy-structure.png)
 *The structure of the obspy library. A Stream object consists of one or more Trace objects. Each Trace represents a single waveform or recording and has different methods (.taper(), .filter(), etc.) and attributes (.data, .stats, etc.)*
 
  For instance, the `.data` attribute of a `Trace` provides its time series data samples and the `.stats` returns an object that holds metadata or seismic parameters associated with the trace, such as the sampling frequency, start time, end time, network, station, and other relevant information. In addition, the `filter()` method, filters the time series data within a specific frequency range and the `trim()` method cuts the time series between a specific start and end times.
@@ -159,12 +159,12 @@ In order to check the traces visually, get the sample data and the time informat
     plt.tight_layout()
 ```
 
-![Recordings of the MiniSEED file plotted using the matplotlib library](ch03_mseed_plot.png)
+![Recordings of the MiniSEED file plotted using the matplotlib library](/img/ch03_mseed_plot.png)
 *Recordings of the MiniSEED file plotted using the matplotlib library*
 
 We could achieve a similar result by just using the `st.plot()` method of the `Stream` object (st): 
 
-![Recordings of the MiniSEED file plotted using the plot method of the stream object](ch03_mseed_plot_method.png)
+![Recordings of the MiniSEED file plotted using the plot method of the stream object](/img/ch03_mseed_plot_method.png)
 *Recordings of the MiniSEED file plotted using the .plot() method of the stream object*
 
 This method can get some parameters to control the styling of the plots such as the color of the waveforms, the size of the plot, the rotation and size of the x axis labels and more.
@@ -177,7 +177,7 @@ In addition, the `Trace` object includes several methods that apply a specific c
     st.plot()
 ```
 
-![bandpass filter application at the recording](obspy-filter-mseed.png)
+![bandpass filter application at the recording](/img/obspy-filter-mseed.png)
 *Apply a bandpass filter between 1 and 3 Hz at the recording using the Obspy filter() method*
 
 These computations can be applied on the `Stream` object at once, or at each `Trace` of the `Stream`, individually. For instance, trim each recording to get the signal part of the recordings: 
@@ -193,7 +193,7 @@ These computations can be applied on the `Stream` object at once, or at each `Tr
     st.plot()
 ```
 
-![application of the obspy core trim method at the recordings](obspy-trimmed-trace.png)
+![application of the obspy core trim method at the recordings](/img/obspy-trimmed-trace.png)
 *Trim the time series to get the signal part*
 
  These computations happen inplace on the `Stream` object. Create a copy of it using the `.copy()` method to create a new object if you don't want to change it.
@@ -211,7 +211,7 @@ Lastly, save the trimmed `Stream` object on your local hard drive using the `Str
 
 Below is presented a seismic recording from the *ZAK2* station, containing data for three channels (E, N, Z). This data file includes metadata information positioned at the file's header, followed by data for each component. Our goal is to read this file and assemble a `Stream` object comprising three individual traces. 
 
-![Acceleration data in raw ASCII format](record-txt-file.png)
+![Acceleration data in raw ASCII format](/img/record-txt-file.png)
 *Acceleration data in raw ASCII format. The first lines contain the record metadata and the rest of the lines the acceleration data of the three components*
 
 Start by reading the file and collecting the file header information in order to build a dictionary of the seismic parameters. Don't forget to convert the number of points (npts) into a Python int datatype, the sampling frequency (fs) into a float datatype and the start time of the record (starttime) into a `UTCDateTime` object. Also it is important for the keys of the dictionary, to be one of the options provided in the `obspy.core.trace.Stats` object: 

@@ -1,7 +1,7 @@
 'use client';
 import ButtonWithIcon from "@/components/ButtonWithIcon"
 import { useEffect, useState } from "react";
-import { fastapiEndpoints } from "@/app/lib/static";
+import { fastapiEndpoints } from "@/utils/static";
 import LineGraph from "@/components/LineGraph"
 import Spinner from "@/components/Spinner";
 import { MdOutlineFileUpload, MdDeleteOutline } from "react-icons/md";

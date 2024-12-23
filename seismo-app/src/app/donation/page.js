@@ -1,5 +1,5 @@
-import Title from "@/app/ui/Title"
-import SubTitle from "@/app/ui/SubTitle"
+import Title from "@/components/Title"
+import SubTitle from "@/components/SubTitle"
 import Image from 'next/image'
 import SeismologicalStationImage from './seismological-station.jpg'
 
