@@ -1,5 +1,5 @@
 
-export default function ArticleLayout({ children }) {
+export default function ArticlesLayout({ children }) {
     return (
         <div>
             {children}

@@ -23,7 +23,7 @@ Initialize a `Figure` container with a single `Axes` graph inside it:
 
 If you don't define any parameters in the subplots function, it is assumed one row and one column in the grid, that means one `Axes` object (`nrows=1` and `ncols=1`): 
 
-![A Matplotlib Figure container with a single Axes plot](matplotlib_empty_figure.png)
+![A Matplotlib Figure container with a single Axes plot](/img/matplotlib_empty_figure.png)
 *A Matplotlib Figure container with a single Axes plot*
 
 In case you need to plot multiple plots in a grid, manipulate the nrows and ncols parameters of the subplots function. Let's build a `Figure` container with a grid, of two rows and three columns, that is in total six subplots: 
@@ -34,7 +34,7 @@ In case you need to plot multiple plots in a grid, manipulate the nrows and ncol
     fig, ax = plt.subplots(nrows=2, ncols=3) 
 ```
 
-![Matplotlib Figure container with a grid of 2 rows and 3 columns](matplotlib_figure_grid.png)
+![Matplotlib Figure container with a grid of 2 rows and 3 columns](/img/matplotlib_figure_grid.png)
 *A Matplotlib Figure container with a grid of 2 rows and 3 columns*
 
 Apparently, the plots are overlapping between each other. There are various ways to solve this problem. One of them includes the use of the `plt.tight_layout()` function to automatically adjust subplot parameters. This ensures that the specified subplots fit within the figure area without overlapping. Another way is to just set `layout="constrained"` in the subplots function: 
@@ -44,7 +44,7 @@ Apparently, the plots are overlapping between each other. There are various ways
     fig, ax = plt.subplots(nrows=2, ncols=3, layout="constrained")  
 ```
 
-![Matplotlib Figure container with a grid of 2 rows and 3 columns with adjusted layout](matplotlib_figure_grid_tight_layout.png)
+![Matplotlib Figure container with a grid of 2 rows and 3 columns with adjusted layout](/img/matplotlib_figure_grid_tight_layout.png)
 *A Matplotlib Figure container with a grid of 2 rows and 3 columns with adjusted layout*
 
 The return value of the subplots function that we used earlier, is a tuple of a `Figure` instance as the first element and a single `Axes` (in case of `nrows=1, ncols=1`) or an array of `Axes` objects as the second element of the tuple. In case of multiple `Axes` objects, use the Python list indexing (subscripting) operator to refer to a specific subplot. For instance, in case of 1D array of subplots (e.g., `nrows=1, ncols=5 or nrows=4, ncols=1`) use the `ax[n]` operator to get the nth subplot in the array. If you have a 2D array of subplots (e.g., `nrows=2, ncols=5`) use the indexing operator two times to specify first the row and second the column of the subplot that you want to get (e.g., `ax[0,2]`). Remember, in Python everything starts from 0. The naming of the subplots return value does not matter. You can use "axes" instead of "ax" if it seems more straightforward (e.g., `fig, axes = plt.subplots()`).
@@ -64,7 +64,7 @@ Start by reading a file containing the Fourier Spectra of a record using Python 
     print(df)
 ```
 
-![Fourier Spectra data imported at a Pandas dataframe object](pandas_fourier_dataframe.png)
+![Fourier Spectra data imported at a Pandas dataframe object](/img/pandas_fourier_dataframe.png)
 *Fourier Spectra data imported at a Pandas dataframe object*
 
 Plot the Fourier Spectra of the E component of the record:
@@ -77,7 +77,7 @@ Plot the Fourier Spectra of the E component of the record:
     ax.plot(df['freq'], df['E-signal'])
 ```
 
-![Fourier Spectra of the record](fourier_data_plot.png)
+![Fourier Spectra of the record](/img/fourier_data_plot.png)
 *Fourier Spectra of the record*
 
 ## Style Graph And Axis Titles
@@ -95,7 +95,7 @@ Start by inserting a title for the graph and labels for the graph axis:
     fig
 ```
 
-![Edit title and axis labels](fourier_data_plot_labels.png)
+![Edit title and axis labels](/img/fourier_data_plot_labels.png)
 *Edit title and axis labels*
 
 Utilize various parameters to control the style of the labels such as color for the color, size for the size of the corresponding label, pad for the distance of the label from the graph and more. There are more text properties at the documentation. 
@@ -118,7 +118,7 @@ At this point we are going to configure the x and y axis ticks, which are the nu
     fig
 ```
 
-![Edit axis ticks and grid style](fourier_data_plot_grid_ticks.png)
+![Edit axis ticks and grid style](/img/fourier_data_plot_grid_ticks.png)
 *Edit axis ticks and grid style*
 
 Since the Fourier Spectra data is usually plotted with "log" scale we use the Matplotlib `set_xscale` and `set_yscale` functions to set the scale of the x and y axis respectively. Then, we utilize the tick_params function to configure the tick lines and labels. There are various other parameters that you can control, presented at the documentation. Activate the grid using the Matplotlib grid function and configure its color, width and opacity (alpha).
@@ -153,7 +153,7 @@ The last styling to apply is on the legend of the graph. Legend is one of the mo
     ax.legend(title="2014-07-14 14:08:05 CHN1", loc="upper right", framealpha=0.1, shadow=True)
 ```
 
-![style the legend of the graph](fourier_data_plot_legend.png)
+![style the legend of the graph](/img/fourier_data_plot_legend.png)
 *Add and style the legend of the graph*
 
 There are many ways to add a legend in a graph. However, the recommend way is to add the label parameter at the plot function. That way, matplotlib knows which item on the graph to refer to. There are a number of parameters to control the appearance of the legend. For instance, use the `loc` parameter to position the legend, the framealpha parameter to control the opacity of the legend, title to add a title to the legend etc. 
@@ -227,7 +227,7 @@ This `Stream` object contains 3 traces or single time series with different comp
     ax[0].set_title("20150724_095834_KRL1", size=12, pad=15)
 ```
 
-![Time series of the recording happened on 24 of July, 2015 at the KRL1 station](matplotlib_mseed_plot.png)
+![Time series of the recording happened on 24 of July, 2015 at the KRL1 station](/img/matplotlib_mseed_plot.png)
 *Time series of the recording happened on 24 of July, 2015 at the KRL1 station*
 
 There is more functionality at the Python Obspy library, to process seismic data. Check the Obspy tutorial. In addition, we could apply more styling to the seismograms, however i leave it up to you to explore the Matplotlib library. Bear in mind that you need to keep it simple and not to add a lot of information at the graph. 
@@ -238,17 +238,17 @@ Matplotlib contains a variety of different kind of plots and functions to try. S
 
 For instance the Matplotlib `axhline` and `axvline` are used to draw a horizontal and vertical line across the axes respectively. You can style this line just like you style the plotted line we saw at the previous chapters. 
 
-![matplotlib ax h and ax v line function](arrivals.png)
+![matplotlib ax h and ax v line function](/img/arrivals.png)
 *Matplotlib vertical lines depicting the arrivals of the P and the S waves*
 
 In addition, Matplotlib functions `fill_between` and `fill_betweenx` are used to fill the area between two horizontal or vertical curves respectively. It is often used to highlight regions of interest in a plot or to visually emphasize the difference between two datasets. 
 
-![matplotlib fill between x function](windows.png)
+![matplotlib fill between x function](/img/windows.png)
 *Matplotlib use of fill_betweenx function to create 2 windows with different colors on the waveforms*
 
 To continue, Matplotlib `subplot_mosaic` is a function to create a complex grid of `Axes` objects with different sizes that extend to more than one row or columns. 
 
-![matplotlib subplot mosaic function](subplot_mosaic.png)
+![matplotlib subplot mosaic function](/img/subplot_mosaic.png)
 *Matplotlib complex grid Axes with different sizes*
 
 Lastly, other useful functions that may come handy are the Matplotlib `ax.set_xlim()` and `ax.set_ylim()` that set the axis x and y limits, the `ax.text()` function that generates a text at a specific position at the graph, the `ax.annotate()` function that creates a box with a text and optionally an arrow that points to a specific location on the graph, `ax.scatter()` that creates a scatter plot and more. 

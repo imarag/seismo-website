@@ -2,28 +2,28 @@
 
 The input motion that arrives at the surface of the Earth is affected by the nature of the seismic source, the medium or the Earth's material that it is traveling through and the underground geology. Site effect is the influence of the underground geological structure at the seismic motion while it approaches the Earth's surface. That alters greatly the characteristics of the seismic ground motion such as the amplitude of the waveform, the frequency distribution, and the duration of the shaking. Site effect can greatly amplify the magnitude of the seismic motion often by nearly two orders of magnitude. Hence, it demands diligent consideration.
 
-![Site effect: Amplification of the ground motion due to the underground Geology](site-effect.png)
+![Site effect: Amplification of the ground motion due to the underground Geology](/img/site-effect.png)
 *Site effect: Amplification of the ground motion due to the underground Geology*
 
 # Local Site Conditions Effect
 
 Input motion can be influenced by various geological conditions beneath a site. These conditions include a range of physical processes, including multiple reflections and diffractions of trapped ground motion due to the geometry of underlying structure, deep sedimentary basins below the site, topographic irregularities, the softness of the soil etc. The following effects can greatly influence the strong ground motion at a site.
 
-![Elastic properties of the underground medium below the surface](softness.png)
+![Elastic properties of the underground medium below the surface](/img/softness.png)
 *Elastic properties of the underground medium below the surface. The input motion travels towards surface layers with lower velocity and density that results in higher amplitudes at the surface due to the conservation of energy*
 
 ## Softness of the Underground Material
 
 The elastic properties of the Earth's materials ranges from hard rock materials to soft sediments. Seismic waves travel faster through hard rocks than through softer rocks and sediments. As the waves pass from deep, hard rocks to shallow and soft sediments they slow down and get bigger in amplitude due to the conservation of energy and as a result amplify the ground motion. Just like tsunamis get bigger while they approach the coast (decrease of depth). The softer the rock or soil under a site is, the larger the wave. 
 
-![Underground basin geometry affects the ground motion characteristics](basin.png)
+![Underground basin geometry affects the ground motion characteristics](/img/basin.png)
 *Underground basin geometry affects the ground motion characteristics. Multiple reflections can greatly increase the amplitude of the motion at the surface due to the conversion of body waves to surface waves*
 
 ## Geological Basins
 
 The curvature of a basin in which softer alluvial soils have been deposited can trap body waves and cause some incident body waves to propagate through the alluvium as surface waves. These waves can produce stronger shaking and longer durations. 
 
-![Topographic effects caused by simple irregularities can amplify the ground motion](topography.png)
+![Topographic effects caused by simple irregularities can amplify the ground motion](/img/topography.png)
 *Topographic effects caused by simple irregularities can amplify the ground motion. For example a triangular infinite wedge subjected to vertically propagating S-waves with φ, the angle of the wedge (S. L. Kramer, Geotechnical Earthquake Engineering)*
 
 ## Topographic Irregularities
@@ -55,7 +55,7 @@ An alternative empirical approach involves the direct extraction of site amplifi
 A straightforward yet effective strategy involves computing spectral ratios between two adjacent records obtained from locations with different soil conditions. Ideally, this involves a comparison between a free-field site (no amplification) situated on unaltered hard rock outcrops and a site resting on soft sedimentary layers.
 site effect motions in surface and in the bedrock
 
-[Seismic records at different locations at a site](bedrock-surface-outcrop-motion.png)
+[Seismic records at different locations at a site](/img/bedrock-surface-outcrop-motion.png)
 *Seismic records at different locations at a site. We can observe the bedrock motion that has no amplification, the surface site motion with increased record amplitude, the outcrop motion with little amplification and the borehole recording with some amplification.*
 
 However, in practice, it's often challenging to identify a completely site-effect-free reference location due to topographical irregularities around the site or the presence of weathered layers beneath it, both of which can introduce substantial site effects. Moreover, a reference site that is entirely unaffected by site amplifications may be geographically distant from the target site. To overcome these limitations, the installation of borehole stations directly beneath surface stations allows for the observation of wave propagation phenomena between these points. It's worth noting, though, that the seismic data acquired from a borehole, even within bedrock, differs from the motion observed at a surface outcrop. Borehole stations capture both incident waves propagating upwards from below and reflected waves traveling back from the surface. Additionally, it's important to acknowledge that borehole measurements can be considerably more expensive to implement compared to surface-based monitoring approaches.
@@ -77,23 +77,23 @@ HSAF = eHVSR x VACF
 
 This method simplifies the calculation of the horizontal site amplification factor (HSAF) by multiplying two key components: the horizontal to vertical spectra ratio of earthquake recordings (eHVSR) and the vertical amplification correction function (VACF). Eri Ito (2020) and their colleagues applied this method, in their research paper published in the Bulletin of the Seismological Society of America. Their study aimed to estimate horizontal site amplification factors based on seismic recordings in Japan. Similarly, Maragkakis (2021) and their research team employed the same methodology to compute horizontal amplification factors using recorded data from the Greek region as shown in the ray paths map below.
 
-![Ray paths of the Greek data (earthquakes and stations) used for the analysis](bedrock-surface-outcrop-motion.png)
+![Ray paths of the Greek data (earthquakes and stations) used for the analysis](/img/bedrock-surface-outcrop-motion.png)
 *Ray paths of the Greek data (earthquakes and stations) used for the analysis with hypocentral distances less that 300 km. The stations are depicted in the map as the blue triangles shown and the earthquakes by the red dots. There were 368 earthquakes recorded by 152 stations and resulted a total of 8428 recordings.*
 
 The resulting amplification curves are visually represented in the figures below. The first figure illustrates a comparison between the average VACF curves for Japanese (blue) and Greek (black) data, along with their respective standard deviations. Meanwhile, the second figure displays various VACF curves for the Greek region, categorized based on the fundamental frequency (f0) and the peak HVSR curve amplitude of each station.
 
-![Mean VACF curves of the Japanese (blue curve) and the Greek (black curve) data and their respective standard deviations](raypaths_300.png)
+![Mean VACF curves of the Japanese (blue curve) and the Greek (black curve) data and their respective standard deviations](/img/raypaths_300.png)
 *Mean VACF curves of the Japanese (blue curve) and the Greek (black curve) data and their respective standard deviations*
 
-![VACF curves for the Greek area categorized by the station HVSR peak amplitude and the fundamental frequency](categorized_vacfs_mine.png)
+![VACF curves for the Greek area categorized by the station HVSR peak amplitude and the fundamental frequency](/img/categorized_vacfs_mine.png)
 *VACF curves for the Greek area categorized by the station HVSR peak amplitude and the fundamental frequency, f0. The numbers inside the brackets are the total stations used for each category.*
 
 The final section of this study is focused on validating the outcomes, particularly examining the feasibility of simulating horizontal spectral amplification in locations where the average spectral ratio eHVSR has been derived solely from earthquake records. Subsequently, these calculated values are compared with the horizontal spectral amplification factor determined using an independent method, such as the classical SSR spectral ratio. This comparison serves as a critical assessment to verify the reliability of the study's results. An illustrative example of this comparative analysis is conducted on the STC and STE stations located in Greece, and the outcomes of this comparison are presented in the figures below.
 
-![Comparison of the corrected amplification curve (blue curve) with the SSR (black curve) using the average VACF curve (figure A) and the respective categorized VACF curve (figure B) at STC station](vacf_ssr_hvsr_stc.png)
+![Comparison of the corrected amplification curve (blue curve) with the SSR (black curve) using the average VACF curve (figure A) and the respective categorized VACF curve (figure B) at STC station](/img/vacf_ssr_hvsr_stc.png)
 *Comparison of the corrected amplification curve (blue curve) with the SSR (black curve) using the average VACF curve (figure A) and the respective categorized VACF curve (figure B) at STC station. The red curve shows the Horizontal to Vertical Fourier Spectra ratio eHVSR. In the figure C, is depicted the ratio of the SSR parameter and the corrected curve that occurs from the average VACF (red points) and the categorized VACF curve (blue points) versus frequency.*
 
-![Comparison of the corrected amplification curve (blue curve) with the SSR (black curve) using the average VACF curve (figure A) and the respective categorized VACF curve (figure B) at STE station](vacf_ssr_hvsr_ste.png)
+![Comparison of the corrected amplification curve (blue curve) with the SSR (black curve) using the average VACF curve (figure A) and the respective categorized VACF curve (figure B) at STE station](/img/vacf_ssr_hvsr_ste.png)
 *Comparison of the corrected amplification curve (blue curve) with the SSR (black curve) using the average VACF curve (figure A) and the respective categorized VACF curve (figure B) at STE station. The red curve shows the Horizontal to Vertical Fourier Spectra ratio eHVSR. In the figure C, is depicted the ratio of the SSR parameter and the corrected curve that occurs from the average VACF (red points) and the categorized VACF curve (blue points) versus frequency.*
 
 When we compare the blue and black lines at these stations, it becomes evident that both corrected curves using the average and the categorized VACF, can simulate the amplification at an extend. However, it is obvious that the application of the categorized correction curve leads to a notably improved estimation across the entire frequency spectrum.

@@ -22,7 +22,7 @@ export default function Home() {
                             <h1 className="text-4xl md:text-8xl font-bold">
                                 A JOURNEY INTO
                                 <br />
-                                <span className="text-green-500">SEISMOLOGY</span>
+                                <span className="text-primary">SEISMOLOGY</span>
                             </h1>
                             <p className="py-6 font-normal text-lg md:text-3xl">
                                 Discover different seismic articles, interact with tools, and deepen

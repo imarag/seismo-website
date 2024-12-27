@@ -13,7 +13,7 @@ export default function RootLayout({ children }) {
             <NavBar />
           </div>
         </header>
-        <main className="text-lg">
+        <main className="text-lg pt-10 mb-20">
           {children}
         </main>
         <footer>

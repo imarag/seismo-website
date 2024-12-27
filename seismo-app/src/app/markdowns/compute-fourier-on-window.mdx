@@ -46,7 +46,7 @@ Initiate the process by applying a bandpass filter to the records within the fre
     st.plot()
 ```
 
-![Recordings after applying a bandpass filter of 1-5 Hz](obspy-stream-filtered.png)
+![Recordings after applying a bandpass filter of 1-5 Hz](/img/obspy-stream-filtered.png)
 *Recordings after applying a bandpass filter of 1-5 Hz*
 
 ## Select The P And S Wave Arrivals
@@ -95,7 +95,7 @@ To plot the P-wave and S-wave arrivals on the waveforms, we use Matplotlib to ma
     plt.tight_layout()
 ```
 
-![Arrivals of the P and the S waves](arrivals.png)
+![Arrivals of the P and the S waves](/img/arrivals.png)
 *Arrivals of the P (red dashed line) and the S (black dashed line) waves*
 
 ## Define The Signal And Noise Windows
@@ -136,7 +136,7 @@ At this stage we define two windows to calculate the Fourier Spectra, one for th
     plt.tight_layout()
 ```
 
-![generation of signal and noise windows to calculate the fourier spectra](windows.png)
+![generation of signal and noise windows to calculate the fourier spectra](/img/windows.png)
 *Define the signal and the noise window to calculate the Fourier Spectra. Both will have the same duration of 10 seconds. The signal window starts at the S wave arrival and ends 10 seconds later. Similarly, the noise window initiates 10 seconds prior the P wave arrival and ends at the P wave arrival.*
 
 ## Trim The Waveforms Between The Windows
@@ -193,7 +193,7 @@ Then plot the trimmed waveforms using the Matplotlib library:
     plt.tight_layout()
 ```
 
-![Trimmed waveforms at the noise and the signal windows for all the components](trimmed.png)
+![Trimmed waveforms at the noise and the signal windows for all the components](/img/trimmed.png)
 *Trimmed waveforms at the noise and the signal windows for all the components*
 
 ## Smooth the waveforms
@@ -240,7 +240,7 @@ Lastly, plot the results using Matplotlib:
     plt.tight_layout()
 ```
 
-![Trimmed and tappered waveforms at the noise and the signal window for all the components](taper.png)
+![Trimmed and tappered waveforms at the noise and the signal window for all the components](/img/taper.png)
 *Trimmed (blue) and tappered (orange) waveforms at the noise and the signal window for all the components*
 
 
@@ -336,7 +336,7 @@ And we present the results:
     plt.tight_layout()
 ```
 
-![Fourier Spectra of the signal (bold curve) and the noise (muted curve) window for each component of the tappered Stream object](fourier-plot.png)
+![Fourier Spectra of the signal (bold curve) and the noise (muted curve) window for each component of the tappered Stream object](/img/fourier-plot.png)
 *Fourier Spectra of the signal (bold curve) and the noise (muted curve) window for each component of the tappered Stream object*
 
 
