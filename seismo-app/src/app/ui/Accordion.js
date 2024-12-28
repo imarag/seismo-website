@@ -1,22 +1,15 @@
-import { useState } from "react"
-import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 
-export default function Accordion({ label, show=false, children }) {
+export default function Accordion({ label, children }) {
 
-    const [accordionActive, setAccordionActive] = useState(show)
     return (
-        <div className="my-3 border rounded">
-            <div className="d-flex flex-row justify-content-between align-items-center py-2 px-5" onClick={() => setAccordionActive(!accordionActive)}>
-                <span>{label}</span>
-                {accordionActive ? <IoIosArrowUp /> : <IoIosArrowDown />}
+        <div className="collapse bg-base-200 mt-8 mb-14 text-lg">
+            <input type="checkbox" />
+            <div className="collapse-title text-xl font-medium">
+                { label }
             </div>
-            {
-                accordionActive && (
-                    <div className="p-4">
-                        { children }
-                    </div>
-                )
-            }
+            <div className="collapse-content font-light">
+                { children }
+            </div>
         </div>
     )
 }

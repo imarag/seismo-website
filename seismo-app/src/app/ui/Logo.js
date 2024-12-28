@@ -6,7 +6,7 @@ export default function Logo() {
         <Image 
             src={LogoImage} 
             alt="logo of the website" 
-            className="block mx-auto w-24"
+            className="w-24"
         />
     )
 }

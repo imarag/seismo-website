@@ -7,8 +7,7 @@ import ButtonWithIcon from "@/components/ButtonWithIcon"
 import LineGraph from "@/components/LineGraph"
 import Spinner from "@/components/Spinner"
 import fetchRequest from "@/utils/functions/fetchRequest";
-import { InputDate, Dropdown, Radio } from "@/components/FormItems";
-
+import { RadioButtonElement, SelectElement, NumberInputElement } from "@/components/UIElements";
 
 export default function PickArrivals() {
 
@@ -218,61 +217,46 @@ export default function PickArrivals() {
             {
                 filteredTraces.length !== 0 && (
                     <>
-                        <div className="d-flex flex-row justify-content-start align-items-center gap-3 border-bottom">
+                        <div className="flex flex-row justify-start align-center gap-3">
                             <ButtonWithIcon align="left" text="Upload file" onClick={handleFileUpload} icon={<FiUpload />} />
                             <ButtonWithIcon align="left" text="Get arrivals" onClick={handleSaveArrivals} disabled={filteredTraces.length===0 || (!formattedArrivals["P"] && !formattedArrivals["S"])} icon={<CiSaveDown2 />} />
                         </div>
+                        <hr />
                         { loading && <Spinner />}
-                        <div className="d-flex flex-row justify-content-around mt-4 py-4">
-                            <div className="d-flex flex-row">
-                                <div className="form-check">
-                                    <label htmlFor="p-wave-radio" className="form-check-label">P</label>
-                                    <input
-                                        type="radio"
-                                        id="p-wave-radio"
-                                        name="ps-wave-radio"
-                                        value="P"
-                                        checked={selectedWave === "P"}
-                                        onChange={() => setSelectedWave("P")}
-                                        disabled={filteredTraces.length===0 || formattedArrivals["P"]}
-                                        className="form-check-input"
-                                    />
-                                </div>
-                                <div className="form-check ms-2">
-                                    <label htmlFor="s-wave-radio" className="form-check-label">S</label>
-                                    <input
-                                        type="radio"
-                                        id="s-wave-radio"
-                                        name="ps-wave-radio"
-                                        value="S"
-                                        checked={selectedWave === "S"}
-                                        onChange={() => setSelectedWave("S")}
-                                        disabled={filteredTraces.length===0 || formattedArrivals["S"]}
-                                        className="form-check-input"
-                                    />
-                                </div>
-                                <div className="d-flex gap-2 ms-4">
-                                    <button onClick={(e) => handleDeleteWave("P")} className="btn btn-sm btn-danger" hidden={!formattedArrivals["P"]}>Del. P</button>
-                                    <button onClick={(e) => handleDeleteWave("S")} className="btn btn-sm btn-danger" hidden={!formattedArrivals["S"]}>Del. S</button>
+                        <div className="flex flex-row items-center justify-around mt-4 py-4">
+                            <div className="flex flex-row items-center">
+                                <RadioButtonElement 
+                                    label="P"
+                                    id="p-wave-radio"
+                                    name="ps-wave-radio"
+                                    value="P"
+                                    checked={selectedWave === "P"}
+                                    onChange={() => setSelectedWave("P")}
+                                    disabled={filteredTraces.length===0 || formattedArrivals["P"]}
+                                />
+                                <RadioButtonElement 
+                                    label="S"
+                                    id="s-wave-radio"
+                                    name="ps-wave-radio"
+                                    value="S"
+                                    checked={selectedWave === "S"}
+                                    onChange={() => setSelectedWave("S")}
+                                    disabled={filteredTraces.length===0 || formattedArrivals["S"]}
+                                />
+                                <div className="flex gap-2 ms-4">
+                                    <button onClick={(e) => handleDeleteWave("P")} className="btn btn-sm btn-error" disabled={!formattedArrivals["P"]}>Del. P</button>
+                                    <button onClick={(e) => handleDeleteWave("S")} className="btn btn-sm btn-error" disabled={!formattedArrivals["S"]}>Del. S</button>
                                 </div>
                             </div>
-                            <select
-                                className="form-select"
-                                aria-label="dropdown"
+                            <SelectElement 
                                 id="filters-dropdown"
+                                name="filters-dropdown"
                                 value={selectedFilter}
                                 onChange={handleDropdownFilterChange}
-                                style={{width: "12rem"}}
                                 disabled={filteredTraces.length===0}
-                            >
-                                {
-                                    filterOptions.map(el => (
-                                        <option key={el.name} value={el.value}>{el.name}</option>
-                                    ))
-                                }
-                            </select>
+                                optionsList = {filterOptions}
+                            />
                         </div>
-                        
                         <div className="my-8">
                             {
                             filteredTraces.map((tr, ind) => (
@@ -295,27 +279,27 @@ export default function PickArrivals() {
                                 
                             }
                         </div>
-                        <div className="d-flex justify-content-end align-items-center gap-3 mt-4">
+                        <div className="flex justify-end align-center gap-3 mt-4">
                             <div className="mb-3">
-                                <input onKeyDown={handleEnterKey} value={manualFilter["left"]} 
-                                    onChange={(e) => setManualFilter({...manualFilter, left: e.target.value})} 
-                                    type="number" 
-                                    className="form-control form-control-sm" 
+                                <NumberInputElement 
                                     id="left-filter" 
-                                    placeholder="e.g 0.1"
-                                    disabled={filteredTraces.length===0} 
+                                    name="left-filter" 
+                                    value={manualFilter["left"]} 
+                                    onKeyDown={handleEnterKey} 
+                                    onChange={(e) => setManualFilter({...manualFilter, left: e.target.value})} 
+                                    placeholder="e.g 5"
+                                    disabled={filteredTraces.length===0}
                                 />
                             </div>
                             <div className="mb-3">
-                                <input 
-                                    onKeyDown={handleEnterKey} 
-                                    value={manualFilter["right"]} 
-                                    onChange={(e) => setManualFilter({...manualFilter, right: e.target.value})} 
-                                    type="number" 
-                                    className="form-control form-control-sm" 
+                                <NumberInputElement 
                                     id="right-filter" 
+                                    name="right-filter" 
+                                    value={manualFilter["right"]} 
+                                    onKeyDown={handleEnterKey} 
+                                    onChange={(e) => setManualFilter({...manualFilter, right: e.target.value})} 
                                     placeholder="e.g 5"
-                                    disabled={filteredTraces.length===0} 
+                                    disabled={filteredTraces.length===0}
                                 />
                             </div>
                         </div>

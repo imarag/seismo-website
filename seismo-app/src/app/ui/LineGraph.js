@@ -1,4 +1,4 @@
-// import Plot from 'react-plotly.js';
+import Plot from 'react-plotly.js';
 
 
 export default function LineGraph({ 
@@ -45,22 +45,21 @@ export default function LineGraph({
         annotations: annotations
     }
     return (
-        <p></p>
-        // <Plot
-        //     data={xData.map((el, ind) => (
-        //         {
-        //             x: xData[ind],
-        //             y: yData[ind],
-        //             type: 'line',
-        //             showlegend: showLegend,
-        //             name: legendTitle[ind],
-        //         }
-        //     ))}
-        //     layout={defaultLayout}
-        //     style={{ width: width, height: height }}
-        //     useResizeHandler={true}
-        //     config={{ scrollZoom: true }}
-        //     onClick={onGraphClick}
-        // />
+        <Plot
+            data={xData.map((el, ind) => (
+                {
+                    x: xData[ind],
+                    y: yData[ind],
+                    type: 'line',
+                    showlegend: showLegend,
+                    name: legendTitle[ind],
+                }
+            ))}
+            layout={defaultLayout}
+            style={{ width: width, height: height }}
+            useResizeHandler={true}
+            config={{ scrollZoom: true }}
+            onClick={onGraphClick}
+        />
     )
 }

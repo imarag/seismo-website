@@ -1,5 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 import daisyui from 'daisyui'
+
+
 export default {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -10,7 +12,8 @@ export default {
   theme: {
     extend: {
       backgroundImage: {
-        'hero-seismogram': "url('/img/seismogram-large-cropped.svg')"
+        'hero-seismogram': "url('/img/seismogram-large-cropped.svg')",
+        'donation-seismogram': "url('/img/seismological-station.jpg')",
       },
       // colors: {
       //   background: "var(--background)",

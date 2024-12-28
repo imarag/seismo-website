@@ -1,6 +1,8 @@
 import { navLinks } from "@/utils/static"
 import Link from 'next/link'
 import Logo from "@/components/Logo"
+import NavSearchBar from "@/components/NavSearchBar"
+
 
 export default function NavBar() {
   return (
@@ -28,13 +30,13 @@ export default function NavBar() {
                     {
                         navLinks.map(item => (
                             <li key={item.label}>
-                                <Link href={item.href} className="text-xl">{item.label}</Link>
+                                <Link href={item.href}>{item.label}</Link>
                             </li>
                         ))
                     }
                 </ul>
             </div>
-            <a className="btn btn-ghost text-xl">
+            <a className="btn btn-ghost">
                 <Logo />
             </a>
         </div>
@@ -43,14 +45,14 @@ export default function NavBar() {
                 {
                     navLinks.map(item => (
                         <li key={item.label}>
-                            <Link href={item.href} className="text-xl">{item.label}</Link>
+                            <Link href={item.href} className="text-lg">{item.label}</Link>
                         </li>
                     ))
                 }
             </ul>
         </div>
         <div className="navbar-end hidden lg:flex">
-            <input type="text" placeholder="Search" className="input input-bordered input-md w-24 md:w-auto" />
+            <NavSearchBar />
         </div>
     </div>
   )

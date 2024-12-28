@@ -48,7 +48,7 @@ export default function DistanceBetweenPoints() {
 
     return (
         <div>
-            <div className="d-flex flex-row flex-wrap justify-content-center gap-4">
+            <div className="flex flex-row flex-wrap justify-center items-center gap-4">
                 <CoordContainer label="Point 1">
                     <CoordItem
                         coordLabel="Latitude"
@@ -78,7 +78,7 @@ export default function DistanceBetweenPoints() {
                     />
                 </CoordContainer>
             </div>
-            <div className="d-flex flex-row justify-content-center gap-2 my-5">
+            <div className="flex flex-row justify-center gap-2 my-5">
                 <ButtonWithIcon text="Compute" onClick={handleComputeButton} disabled={!coords["lat1"] || !coords["lon1"] || !coords["lat2"] || !coords["lon2"]} icon={<LuCalculator />} />
             </div>
             { loading && <Spinner />}

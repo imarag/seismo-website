@@ -3,7 +3,7 @@ import Image from "next/image"
 
 export default function ToolsList({ tools }) {
     return (
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-14">
             {
                 tools.map(tool => (
                     <section key={tool.id} className="bg-base-200 rounded-lg p-12">

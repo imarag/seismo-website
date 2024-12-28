@@ -69,59 +69,72 @@ export const allArticles = [
   }
 ];
 
+
 export const allTools = [
   {
     "id": 1,
     "title": "Fourier Spectra Calculator",
+    "subtitle": "Analyze seismic data with Fourier spectra and HVSR.",
     "description": "Easily calculate Fourier spectra for seismic signal and noise windows. Optionally compute Horizontal to Vertical Spectral Ratio (HVSR) and download your results in various formats.",
-    "icon": FourierIcon ,
+    "icon": FourierIcon,
     "iconAlt": "Fourier Spectra Calculator Icon",
     "type": "tool",
-    "slug": "fourier"
+    "slug": "fourier",
+    "userGuide": "This tool helps you calculate Fourier spectra for seismic signals and noise windows. Start by uploading your seismic data, and define the time windows you want to analyze. You can also compute Horizontal to Vertical Spectral Ratios (HVSR) for further insights. Once processed, results can be downloaded in various formats for deeper analysis."
   },
   {
     "id": 2,
     "title": "Interactive Seismic File Editor",
+    "subtitle": "Edit seismic file headers with ease.",
     "description": "Inspect and edit seismic file headers and metadata. Download updated data for further analysis and streamline seismic data management.",
-    "icon": EditSeismicFileIcon ,
+    "icon": EditSeismicFileIcon,
     "iconAlt": "Interactive Seismic File Editor Icon",
     "type": "tool",
-    "slug": "edit-seismic-file"
+    "slug": "edit-seismic-file",
+    "userGuide": "This editor allows you to inspect and update seismic file headers and metadata. Load your seismic file to view detailed information, including station, channel, and timing data. Use the editing interface to correct errors, fill missing fields, or update values as required. After editing, save and download the updated file for integration into your workflows."
   },
   {
     "id": 3,
     "title": "Geodesic Distance Calculator",
+    "subtitle": "Calculate distances between geographic points.",
     "description": "Compute precise distances between two geographical points using the WGS84 ellipsoid. Visualize your points on an interactive map for added clarity.",
-    "icon": DistanceBetweenPointsIcon ,
+    "icon": DistanceBetweenPointsIcon,
     "iconAlt": "Geodesic Distance Calculator Icon",
     "type": "tool",
-    "slug": "distance-between-points"
+    "slug": "distance-between-points",
+    "userGuide": "Calculate accurate distances between two points on Earth using geodesic algorithms. Input the latitude and longitude for each point, and the tool will compute the distance based on the WGS84 ellipsoid. Use the interactive map to verify and adjust the points visually. This tool is ideal for geophysical applications requiring precise location measurements."
   },
   {
     "id": 4,
     "title": "P & S Wave Arrival Picker",
+    "subtitle": "Identify P and S wave arrival times.",
     "description": "Pinpoint P and S wave arrival times with advanced filters. Enhance your seismic data analysis by visually isolating and selecting wave arrivals.",
     "icon": PickArrivalsIcon,
     "iconAlt": "P & S Wave Arrival Picker Icon",
     "type": "tool",
-    "slug": "pick-arrivals"
+    "slug": "pick-arrivals",
+    "userGuide": "This tool is designed to help you identify P and S wave arrivals on seismic waveforms. Upload your data, and use the interactive waveform display to zoom into areas of interest. Apply filters to remove noise and highlight critical wave patterns. Manually mark arrival times for P and S waves, and export your selections for further analysis."
   },
   {
     "id": 5,
     "title": "Convert Data Files to MiniSEED",
+    "subtitle": "Transform seismic files into MiniSEED format.",
     "description": "Upload your data file, set conversion parameters, and generate seismic MiniSEED files. Simplify seismic data standardization and enhance compatibility with tools.",
-    "icon": FileToMseedIcon ,
+    "icon": FileToMseedIcon,
     "iconAlt": "Convert Data Files to MiniSEED Icon",
     "type": "tool",
-    "slug": "file-to-mseed"
+    "slug": "file-to-mseed",
+    "userGuide": "This tool simplifies the process of converting various seismic file formats into MiniSEED. Upload your file and specify conversion settings, such as station codes and sample rates. The tool validates input data to ensure compatibility and generates standardized MiniSEED files. Download the converted files for seamless integration with analysis software."
   },
   {
     "id": 6,
     "title": "Signal Processing Toolkit",
+    "subtitle": "Process seismic waveforms efficiently.",
     "description": "Cut, filter, and smooth seismic waveforms using advanced processing techniques. Remove trends and optimize waveforms for analysis.",
-    "icon": SignalProcessingIcon ,
+    "icon": SignalProcessingIcon,
     "iconAlt": "Signal Processing Toolkit Icon",
     "type": "tool",
-    "slug": "signal-processing"
+    "slug": "signal-processing",
+    "userGuide": "This toolkit provides advanced signal processing capabilities for seismic waveforms. Load your data, and use tools to cut waveforms, apply filters, or smooth noisy signals. Additional features allow you to remove trends and perform baseline corrections. Export processed data for detailed seismic analysis or visualization."
   }
 ];
