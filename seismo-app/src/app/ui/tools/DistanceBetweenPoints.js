@@ -9,10 +9,12 @@ import Map from "@/components/distance-between-points-map"
 import { fastapiEndpoints } from "@/utils/static";
 import Spinner from "@/components/Spinner";
 import fetchRequest from "@/utils/functions/fetchRequest";
+import ErrorMessage from "@/components/ErrorMessage";
 
 
 export default function DistanceBetweenPoints() {
 
+    const [error, setError] = useState(null)
     const [loading, setLoading] = useState(false);
     // set the state that holds the coordinates passed by the user
     const [coords, setCoords] = useState({
@@ -47,7 +49,10 @@ export default function DistanceBetweenPoints() {
     }
 
     return (
-        <div>
+        <section>
+            {
+                error && <ErrorMessage error={error} />
+            }
             <div className="flex flex-row flex-wrap justify-center items-center gap-4">
                 <CoordContainer label="Point 1">
                     <CoordItem
@@ -89,6 +94,14 @@ export default function DistanceBetweenPoints() {
                 </p>
             )}
             <Map coords={coords} />
-        </div>
+            <p className="mt-12 mb-5">The tool uses the <code>obspy.geodetics.base.gps2dist_azimuth</code> function to do the calculation:</p>
+            <div className="mockup-code">
+                <pre>
+                    <code>
+                        gps2dist_azimuth(lat1, lon1, lat2, lon2, a=6378137.0, f=0.0033528106647474805)
+                    </code>
+                </pre>
+            </div>
+        </section>
     );
 }

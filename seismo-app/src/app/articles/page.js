@@ -13,9 +13,14 @@ export default function ToolsPage() {
     ))
     return (
         <section className="container mx-auto">
-            <Title text1="Explore the various articles" />
-            <SubTitle text="Search through the available articles" />
-            <ArticleSearchInput setSearchInputValue={setSearchInputValue} />
+            <Title text1="Seismic Articles" />
+            <SubTitle text="Search through the available articles to delve into seismological concepts" />
+            <div className="max-w-3xl mx-auto">
+                <ArticleSearchInput setSearchInputValue={setSearchInputValue} />
+            </div>
+            <p className="mt-20 mb-2">
+                {filteredArticle.length !== 0 ? filteredArticle.length : "No"} articles found
+            </p>
             <ListArticles articles={filteredArticle} />
         </section>
     );

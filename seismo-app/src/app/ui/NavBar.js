@@ -1,59 +1,74 @@
+"use client";
 import { navLinks } from "@/utils/static"
 import Link from 'next/link'
 import Logo from "@/components/Logo"
 import NavSearchBar from "@/components/NavSearchBar"
-
-
+import { AiOutlineMenu } from "react-icons/ai";
+import { IoMdClose } from "react-icons/io";
+import { useState } from "react";
+import { usePathname } from 'next/navigation'
+ 
 export default function NavBar() {
-  return (
-    <div className="navbar">
-        <div className="navbar-start">
-            <div className="dropdown">
-                <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M4 6h16M4 12h8m-8 6h16" 
-                        />
-                    </svg>
+    const [showNavBar, setShowNavbar] = useState(false)
+    const pathname = usePathname()
+
+    return (
+        <nav>
+            <div className="navbar flex flex-row relative">
+                <Link href="/">
+                    <Logo />
+                </Link>
+                <div className="navbar-center hidden lg:flex ms-4">
+                    <ul className="menu menu-horizontal px-1">
+                        {
+                            navLinks.map(item => (
+                                <li key={item.label}>
+                                    <Link 
+                                        href={item.href} 
+                                        className={`text-lg`} 
+                                        onClick={() => setShowNavbar(false)}
+                                    >
+                                        {item.label}
+                                    </Link>
+                                </li>
+                            ))
+                        }
+                    </ul>
                 </div>
-                <ul
-                    tabIndex={0}
-                    className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-                    {
-                        navLinks.map(item => (
-                            <li key={item.label}>
-                                <Link href={item.href}>{item.label}</Link>
-                            </li>
-                        ))
-                    }
-                </ul>
-            </div>
-            <a className="btn btn-ghost">
-                <Logo />
-            </a>
-        </div>
-        <div className="navbar-center hidden lg:flex">
-            <ul className="menu menu-horizontal px-1">
+                <button className="ms-auto btn text-xl btn-ghost lg:hidden" onClick={() => setShowNavbar(true)}>
+                    <AiOutlineMenu />
+                </button>
+
+                <div className="ms-auto hidden lg:flex">
+                    <NavSearchBar setShowNavbar={setShowNavbar} />    
+                </div>
                 {
-                    navLinks.map(item => (
-                        <li key={item.label}>
-                            <Link href={item.href} className="text-lg">{item.label}</Link>
-                        </li>
-                    ))
+                    showNavBar && (
+                        <div className="fixed end-0 top-0 bottom-0 w-full sm:w-96 glass lg:hidden z-50">
+                            <button className="btn btn-ghost absolute top-4 start-4 " onClick={() => setShowNavbar(false)}>
+                                <IoMdClose className="text-xl" />
+                            </button>
+                            <div className="absolute top-20 start-1/2 -translate-x-1/2">
+                                <NavSearchBar setShowNavbar={setShowNavbar} />
+                            </div>
+                            <div className="flex flex-col items-center justify-center h-full w-full gap-1">
+                                {
+                                    navLinks.map(item => (
+                                        <Link 
+                                            key={item.label} 
+                                            href={item.href} 
+                                            onClick={() => setShowNavbar(false)} 
+                                            className="btn btn-ghost text-lg"
+                                        >
+                                            {item.label}
+                                        </Link>
+                                    ))
+                                }
+                            </div>
+                        </div>
+                    )
                 }
-            </ul>
-        </div>
-        <div className="navbar-end hidden lg:flex">
-            <NavSearchBar />
-        </div>
-    </div>
-  )
+            </div>
+        </nav>
+    )
 }

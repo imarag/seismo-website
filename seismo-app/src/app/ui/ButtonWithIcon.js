@@ -1,13 +1,13 @@
 
-export default function ButtonWithIcon({ text, onClick, disabled, icon, align="center" }) {
+export default function ButtonWithIcon(props) {
   return (
     <button 
-      onClick={onClick} 
-      className={"btn btn-primary flex flex-row justify-center align-center gap-2 my-3 " + (align === "center" ? "mx-auto" : "")}  
-      disabled={disabled}
+      disabled={props.disabled ? true : false}
+      onClick={props.onClick}
+      className={`btn flex flex-row justify-center align-center gap-2 ${props.className ? props.className : ""}`}  
     >
-        <span>{ icon }</span>
-        <span>{ text }</span>
+        <span>{ props.icon }</span>
+        <span>{ props.text }</span>
     </button>
   )
 }

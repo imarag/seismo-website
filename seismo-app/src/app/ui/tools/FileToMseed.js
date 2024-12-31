@@ -2,12 +2,12 @@
 import { useState } from "react";
 import LineGraph from "@/components/LineGraph"
 import Spinner from "@/components/Spinner";
-import { FiUpload } from "react-icons/fi";
-import ButtonWithIcon from "@/components/ButtonWithIcon";
 import { fastapiEndpoints } from "@/utils/static";
 import fetchRequest from "@/utils/functions/fetchRequest";
 import Accordion from "@/components/Accordion";
 import { InputDate, InputTime, InputText, InputNumber } from "@/components/FormItems";
+import ErrorMessage from "@/components/ErrorMessage";
+
 
 function UploadButton() {
     return (
@@ -18,7 +18,7 @@ function UploadButton() {
 }
 
 export default function EditSeismicFile() {
-
+    const [error, setError] = useState(null)
     const [fileData, setFileData] = useState([])
     const [loading, setLoading] = useState(false)
     const [seismicParameters, setSeismicParameters] = useState({
@@ -102,14 +102,11 @@ export default function EditSeismicFile() {
     
     return (
         <section>
+            {
+                error && <ErrorMessage error={error} />
+            }
             <input name="file" type="file" onChange={handleFileSelection} id="upload-seismic-file-input" hidden />
-            <div>
-                <h1 className="text-center display-6 my-5">Upload the data file</h1>
-                <div className="d-flex flex-row justify-content-center mb-5">
-                    <ButtonWithIcon text="Upload file" onClick={handleFileUpload} icon={<FiUpload />} />
-                </div>
-                { loading && <Spinner />}
-            </div>
+            {traces.length === 0 && <StartUploadButton handleFileUpload={handleFileUpload} />}
             {
                 fileData.length !== 0 && (
                     <>

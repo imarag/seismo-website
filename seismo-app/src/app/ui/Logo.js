@@ -7,6 +7,7 @@ export default function Logo() {
             src={LogoImage} 
             alt="logo of the website" 
             className="w-24"
+            href="/"
         />
     )
 }

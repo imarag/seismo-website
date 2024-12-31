@@ -28,7 +28,7 @@ export default function Home() {
                                 Discover different seismic articles, interact with tools, and deepen
                                 your understanding.
                             </p>
-                            <CTAButton href="/articles" label="Learn More" />
+                            <CTAButton href="/articles" label="Get started" />
                         </div>
                     </div>
                 </div>
@@ -37,13 +37,14 @@ export default function Home() {
                     <SubTitle
                         text="Explore a range of seismic articles designed to deepen your understanding of the mechanisms behind earthquakes and the advanced technologies used to analyze them."
                     />
-                    <div className="grid grid-cols-1 lg:grid-cols-2 justify-center ">
+                    <div className="flex flex-col md:flex-row items-center justify-center gap-8">
                         <Card
                             title="Introduction to Seismology"
                             description="Delve into the various seismological concepts about the creation of the earthquakes, the various seismic waves generated, the mechanisms that trigger the seismic faults and the effects of the seismic waves on the surface."
                             imgURL={ArrivalPickIcon}
                             imgAlt="seismological concepts about the creation of the earthquakes, the various seismic waves generated"
                             pageURL="/articles/introduction-to-seismology"
+                            className="w-full md:w-1/2 xl:w-5/12"
                         />
                         <Card
                             title="Seismic Site Effect"
@@ -51,6 +52,7 @@ export default function Home() {
                             imgURL={SiteEffectIcon}
                             imgAlt="influence of the underground geology on the incoming ground motion"
                             pageURL="/articles/site-effect"
+                            className="w-full md:w-1/2 xl:w-5/12"
                         />
                     </div>
                     <p className="text-center mt-14 flex flex-row justify-center items-center gap-2">
@@ -68,7 +70,7 @@ export default function Home() {
                     text="Process seismic data using the various Obspy functions, manipulate date and time, and plot earthquake recordings."
                 />
                 <CTAButton href="/articles/obspy" label="Learn More" />
-                <Image src={ObspyScriptExample} alt="python script example" className="block mx-auto mb-4" />
+                <Image src={ObspyScriptExample} alt="python script example" className="block mx-auto w-full max-w-3xl mb-4" />
             </Section>
             <Section>
                 <Title text1="Utilize the" text2="interactive tools" />
@@ -76,7 +78,7 @@ export default function Home() {
                     text="Explore a range of seismic articles designed to deepen your understanding of the mechanisms behind earthquakes and the advanced technologies used to analyze them."
                 />
                 <CTAButton href="/tools" label="Learn More" />
-                <ToolsGallery />
+                <ToolsGallery className="mx-auto w-full max-w-4xl" />
             </Section>
         </>
     );

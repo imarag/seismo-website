@@ -1,0 +1,226 @@
+import CH03MSEEDPlot from "@/images/ch03_mseed_plot.png"
+import ObspyStructure from "@/images/obspy-structure.png"
+import CH03MSEEDPlotMethod from "@/images/ch03_mseed_plot_method.png"
+import ObspyTrimmedTrace from "@/images/obspy-trimmed-trace.png"
+import ObspyFilterMSEED from "@/images/obspy-filter-mseed.png"
+import RecordTXTFile from "@/images/record-txt-file.png"
+
+
+
+export default function Obspy() {
+  return (
+    <>
+        <h1>Basic structure</h1>
+        
+        <p>
+            The main structure of the Obspy library consists of the <code>Trace</code> and the <code>Stream</code> objects. The
+            <code>Trace</code> represents
+            a single time series record of seismic data recorded at a single station or sensor. It's essentially a single
+            waveform with associated metadata
+            (e.g., station code, sampling frequency, starting time of the recording etc.).
+            The <code>Stream</code> is a container of one or more <code>Trace</code> objects. Typically, a <code>Stream</code>
+            contains three recordings or traces: two with horizontal
+            components (e.g., North-South and East-West) and one with a vertical component. Each <code>Trace</code> offers
+            several attributes that provide information about the recording and
+            methods that apply a calculation on the respective recording.
+        </p>
+        <figure>
+            <img src={ObspyStructure} />
+            <figcaption>The structure of the obspy library. A <code>Stream</code> object consists of one or more
+                <code>Trace</code> objects. Each <code>Trace</code> represents a single waveform or recording and has
+                different methods (<code>.taper()</code>, <code>.filter()</code>, etc.) and attributes (<code>.data</code>, <code>.stats</code>, etc.)</figcaption>
+        </figure>
+        <p>
+            For instance, the <code>.data</code> attribute of a <code>Trace</code> provides its time series data samples and the
+            <code>.stats</code> returns an object that holds metadata or seismic parameters associated with the trace, such as
+            the sampling frequency, start time, end time, network, station, and other relevant information.
+            In addition, the <code>filter()</code> method, filters the time series data within a specific frequency range and
+            the <code>trim()</code> method
+            cuts the time series between a specific start and end times.
+        </p>
+        <p>
+            Obspy supports several <a target="_blank" 
+                href="https://docs.obspy.org/packages/autogen/obspy.core.stream.read.html">file formats</a> to read data.
+            One of the most used seimic file format is the MiniSEED format. It is a binary file used to store time series data
+            in a compact and
+            efficient format that includes information about the station, location, timing, and the actual waveform data.
+            MiniSEED files are widely
+            used in seismology and are the standard format for sharing and archiving seismic data.
+        </p>
+        <p>
+            Before we continue, start by initializing the functions that we will use throughout the rest of the tutorial:
+        </p>
+        <script src="https://gist.github.com/imarag/71ebe8e74a737bdaec527ed955bdf4b7.js"></script>
+
+        <h1>Obspy Date and Time Manipulation</h1>
+        <p>
+            Obspy offers extensive support for date and time manipulation. It includes the <code>UTCDateTime</code> object to
+            represent date and time.
+            For instance the start date and the end date of a recording, which are saved as <code>starttime</code> and
+            <code>endtime</code> in the metadata information
+            of a <code>Trace</code> object (in the <code>.stats</code> attribute), are both a <code>UTCDateTime</code> data
+            type.
+        </p>
+        <p>
+            One way to create a <code>UTCDateTime</code> object is by using a Python string:
+        </p>
+        <script src="https://gist.github.com/imarag/c44b83682d43a63c8a3fdef9acd59301.js"></script>
+        <p>
+            You can perform addition, subtraction and extract multiple attributes from this object using the dot notation:
+        </p>
+        <script src="https://gist.github.com/imarag/1c7cc6560801d1997a3778d43a6afe3b.js"></script>
+
+        <p>Last but not least, one can subtract <code>UTCDateTime</code> objects and get the difference of them in seconds:</p>
+        <script src="https://gist.github.com/imarag/d02d9c3c8c936bea6292c4112873311b.js"></script>
+        <p>
+            The <code>starttime</code> and <code>endtime</code> keys in the header information of the recordings need to be in a
+            <code>UTCDateTime</code> data type.
+            Therefore, if you intend to modify these keys within
+            the <code>trace.stats</code> dictionary-like header, convert your datetime string into the
+            <code>UTCDateTime</code> format.
+        </p>
+
+        <h1>Attributes and Methods</h1>
+        <p>
+            Within ObsPy, you'll find an array of attributes and methods
+            associated with the <code>Trace</code> class for accessing
+            recording information, seismic file handling, and applying
+            waveform processing techniques. To begin with, utilize the Obspy
+            <code>read()</code> function to read a file of a recording took
+            place on <code>04 April, 2014</code>
+            at <code>20:08:20</code> and recorded by <i>CH03</i> station:
+        </p>
+        <script src="https://gist.github.com/imarag/cef71d4af3fa102e54e6fe888ff774a6.js"></script>
+
+        <p>
+            The file is a MiniSEED file that contains 3 traces or records
+            each with a different component (E, N, Z). We can see the start
+            and the end time of the record, the sampling frequency in Hz
+            and the total samples. Let's get this information for the first
+            trace of the <code>Stream</code> object:
+        </p>
+        <script src="https://gist.github.com/imarag/13ce0156258101d85cfacc4930d42e04.js"></script>
+        <p>
+            We can observe multiple key-value pairs that contain the seismic parameters, such as the station code or name which
+            is <i>CH03</i>, the component of the record which is East-West (E) and the the sampling frequency or sampling rate
+            of 100 Hz. Several other parameters are also apparent like the starting and the ending date of the record
+            (starttime, endtime), the sample distance in seconds (dt), the total number of sample
+            points (npts) and more. The output is a <code>obspy.core.trace.Stats</code> object which is a <code>dict-like</code>
+            object that you can get and set the values.
+        </p>
+        <p>
+            In order to check the traces visually, get the sample data and the time information of the recordings using the
+            <code>.data</code> attribute and the <code>.times()</code> method respectively, and plot them using the Matplotlib
+            Python library.
+        </p>
+        <script src="https://gist.github.com/imarag/cfb72283ff0b9cc284c56f141a55a850.js"></script>
+        <figure>
+            <img src={CH03MSEEDPlot} />
+            <figcaption>Recordings of the MiniSEED file plotted using the matplotlib library</figcaption>
+        </figure>
+        <p>
+            We could achieve a similar result by just using the <code>st.plot()</code> method of the <code>Stream</code> object
+            (st):
+        </p>
+        <figure>
+            <img src={CH03MSEEDPlotMethod} />
+            <figcaption>Recordings of the MiniSEED file plotted using the <code>.plot()</code> method of the
+                <code>stream</code> object</figcaption>
+        </figure>
+        <p>
+            This method can get some <a  target="_blank"
+                href="https://docs.obspy.org/packages/autogen/obspy.core.stream.Stream.plot.html">parameters</a> to control the
+            styling of the plots such as the color of the waveforms, the size of the plot, the rotation and size of the
+            x axis labels and more.
+        </p>
+        <p>
+            In addition, the <code>Trace</code> object includes several methods that apply a specific calculation on the time
+            series of the recording.
+            For example, apply a bandpass at the previous recording between 1 and 3 Hz using the Obspy <a target="_blank"
+                
+                href="https://docs.obspy.org/packages/autogen/obspy.core.trace.Trace.filter.html">obspy.core.trace.Trace.filter</a>
+            method.
+        </p>
+        <script src="https://gist.github.com/imarag/14848d53828c53eb1706b7a827ea7831.js"></script>
+        <figure>
+            <img src={ObspyFilterMSEED} />
+            <figcaption>Apply a bandpass filter between 1 and 3 Hz at the recording using the Obspy <code>filter()</code>
+                method</figcaption>
+        </figure>
+        <p>
+            These computations can be applied on the <code>Stream</code> object at once, or at each <code>Trace</code> of the
+            <code>Stream</code>, individually. For instance,
+            trim each recording to get the signal part of the recordings:
+        </p>
+        <script src="https://gist.github.com/imarag/3f86114b356f449edf1d1a1ec8fdc069.js"></script>
+        <figure>
+            <img src={ObspyTrimmedTrace} />
+            <figcaption>Trim the time series to get the signal part</figcaption>
+        </figure>
+        <p>
+            These computations happen inplace on the <code>Stream</code> object. Create a copy of it using the
+            <code>.copy()</code> method to create a new object if you don't want to change it.
+        </p>
+        <p>
+            Lastly, save the trimmed <code>Stream</code> object on your local hard drive using the <code>Stream</code>
+            <code>.write()</code> method:
+        </p>
+        <script src="https://gist.github.com/imarag/584c5b5ac81527032203a3b5be750df1.js"></script>
+        <h1>Generating Trace and Stream objects from data</h1>
+        <p>
+            In addition to reading seismological file formats, you have the flexibility to create your own <code>Trace</code>
+            and <code>Stream</code> objects using ObsPy's
+            <code>obspy.core.trace.Trace</code> and <code>obspy.core.stream.Stream</code> classes. To create a
+            <code>Trace</code> object, begin by
+            supplying the data values of the recording (e.g., acceleration) as a NumPy <code>ndarray</code> to the
+            <code>data</code> parameter within
+            <code>obspy.core.trace.Trace</code>, and include the recording's metadata in a Python dictionary provided to the
+            <code>header</code> parameter.
+            Do this for each trace you want to create. Then, gather all the generated <code>Trace</code> objects into a Python
+            list and pass it into the
+            <code>traces</code> parameter in the <code>obspy.core.stream.Stream</code> class to construct a <code>Stream</code>
+            object.
+        </p>
+        <p>
+            Below is presented a seismic recording from the <i>ZAK2</i> station, containing data for three channels (E, N, Z).
+            This data file includes metadata
+            information positioned at the file's header, followed by data for each component. Our goal is to read this file and
+            assemble a <code>Stream</code>
+            object comprising three individual traces.
+        </p>
+        <figure>
+            <img src={RecordTXTFile} />
+            <figcaption>Acceleration data in raw ASCII format. The first lines contain the record metadata and the rest of
+                the lines the acceleration data of the three components</figcaption>
+        </figure>
+        <p>
+            Start by reading the file and collecting the file header information in order to build a dictionary of the seismic
+            parameters. Don't forget to convert
+            the number of points (npts) into a Python <code>int</code> datatype, the sampling frequency (fs) into a
+            <code>float</code> datatype and the start time of the record (<code>starttime</code>) into a
+            <code>UTCDateTime</code> object.
+            Also it is important for the keys of the dictionary, to be one of the options provided in the
+            <a target="_blank" 
+                href="https://docs.obspy.org/packages/autogen/obspy.core.trace.Stats.html"><code>obspy.core.trace.Stats</code>
+            </a> object:
+        </p>
+        <script src="https://gist.github.com/imarag/aa31087909ed1dd16eafd7dcf73a8961.js"></script>
+        <p>
+            Then we use the python Pandas library to read the acceleration values of the traces:
+        </p>
+        <script src="https://gist.github.com/imarag/50688fc36befeaf57f2e7dd1076a833a.js"></script>
+        <p>
+            At this time we have the metadata and the data of the traces. Using these two parameters, we can create the
+            <code>Trace</code> objects. To do this, loop trough the components, create a header dictionary file for each
+            <code>Trace</code> and add its data
+        </p>
+        <script src="https://gist.github.com/imarag/165bea0905ccd37d5f1f9497b3a1460a.js"></script>
+        <p>Finally, create the <code>Stream</code> object, from the list of the traces:</p>
+        <script src="https://gist.github.com/imarag/ee7d33d5071c7199fc13a19c0452fd25.js"></script>
+        <p>
+            If you require additional information about the ObsPy library, please refer to the <a target="_blank"
+                 href="https://docs.obspy.org/tutorial/index.html"><code>documentation</code></a>.
+        </p>
+    </>
+  )
+}

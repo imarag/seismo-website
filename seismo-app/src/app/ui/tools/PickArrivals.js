@@ -1,16 +1,18 @@
 'use client';
-import { useState } from "react"
-import { FiUpload } from "react-icons/fi";
+import { useEffect, useState } from "react"
 import { CiSaveDown2 } from "react-icons/ci";
 import { filterOptions, fastapiEndpoints, arrivalsStyles } from "@/utils/static";
 import ButtonWithIcon from "@/components/ButtonWithIcon"
+import fetchRequest from "@/utils/functions/fetchRequest";
 import LineGraph from "@/components/LineGraph"
 import Spinner from "@/components/Spinner"
-import fetchRequest from "@/utils/functions/fetchRequest";
-import { RadioButtonElement, SelectElement, NumberInputElement } from "@/components/UIElements";
+import { RadioButtonElement, SelectElement, NumberInputElement, LabelElement } from "@/components/UIElements";
+import UploadFileButton from "@/components/UploadFileButton";
+import StartingUploadFile from "@/components/StartingUploadFile";
+import ErrorMessage from "@/components/ErrorMessage";
 
 export default function PickArrivals() {
-
+    const [error, setError] = useState(null)
     // save here the selected wave when the user clicks the P or S radiobuttons
     const [selectedWave, setSelectedWave] = useState("P");
     // save a list of picks in the form: ([{wave: "P", arrival: 45.4}]
@@ -68,41 +70,14 @@ export default function PickArrivals() {
         }
     ))
 
+    useEffect(() => {
+        setFilteredTraces(traces);
+        setArrivals([]);
+        setSelectedWave("P");
+        setSelectedFilter("initial");
+        setManualFilter({"left": "", "right": ""});
+    }, [traces])
     
-    
-    // this function will be called by the hidden input when using the .click() function in handleFileUpload below
-    function handleFileSelection(e) {
-        e.preventDefault();
-        
-        setLoading(true)
-
-        const formData = new FormData();
-        formData.append("file", e.target.files[0]);
-        
-        fetchRequest({endpoint: fastapiEndpoints["UPLOAD-SEISMIC-FILE"], method: "POST", data: formData})
-        .then(jsonData => {
-            setTraces(jsonData)
-            setFilteredTraces(jsonData);
-            setArrivals([]);
-            setSelectedWave("P");
-            setSelectedFilter("initial");
-            setManualFilter({"left": "", "right": ""});
-            // setInfoMessage("Seismic file upload completed successfully");
-            // setTimeout(() => setInfoMessage(null), 5000);
-        })
-        .catch(error => {
-            // setErrorMessage(error.message || "Error uploading file. Please try again.");            
-            // setTimeout(() => setErrorMessage(null), 5000);
-        })
-        .finally(() => {
-            setLoading(false)
-        })
-    }
-        
-    // this function will be called by the upload file button
-    function handleFileUpload() {
-        document.querySelector("#upload-seismic-file-input").click()
-    }
 
     // this function will be called by the filters dropdown and also by the manual filters handleEnterKey below
     async function handleFilterChange(freqmin=null, freqmax=null) {
@@ -113,12 +88,10 @@ export default function PickArrivals() {
         fetchRequest({endpoint: fastapiEndpoints["APPLY-FILTER"], method: "POST", data: requestBody})
         .then(jsonData => {
             setFilteredTraces(jsonData);
-            // setInfoMessage("The filter has been succesfully applied");
-            // setTimeout(() => setInfoMessage(null), 5000);
         })
         .catch(error => {
-            // setErrorMessage(error.message || "Error uploading file. Please try again.");            
-            // setTimeout(() => setErrorMessage(null), 5000);
+            setError(error.message)
+            setTimeout(() => setError(null), 5000);
         })
         .finally(() => {
             setLoading(false)
@@ -178,8 +151,8 @@ export default function PickArrivals() {
             // setTimeout(() => setInfoMessage(null), 5000);
         })
         .catch(error => {
-            // setErrorMessage(error.message || "Error uploading file. Please try again.");            
-            // setTimeout(() => setErrorMessage(null), 5000);
+            setError(error.message)
+            setTimeout(() => setError(null), 5000);
         })
         .finally(() => {
             setLoading(false)
@@ -203,46 +176,60 @@ export default function PickArrivals() {
 
     return (
         <section>
-            <input name="file" type="file" onChange={handleFileSelection} id="upload-seismic-file-input" hidden />
             {
-                filteredTraces.length === 0 && (
-                    <>
-                        <p className="text-center my-3">Start by uploading a seismic file</p>
-                        <ButtonWithIcon text="Upload file" onClick={handleFileUpload} icon={<FiUpload />} />
-                       
-                        { loading && <Spinner />}
-                    </>
-                )
+                error && <ErrorMessage error={error} />
             }
+            {traces.length === 0 && (
+                <StartingUploadFile setTraces={setTraces} setError={setError} setLoading={setLoading} />
+            )}
             {
-                filteredTraces.length !== 0 && (
-                    <>
-                        <div className="flex flex-row justify-start align-center gap-3">
-                            <ButtonWithIcon align="left" text="Upload file" onClick={handleFileUpload} icon={<FiUpload />} />
-                            <ButtonWithIcon align="left" text="Get arrivals" onClick={handleSaveArrivals} disabled={filteredTraces.length===0 || (!formattedArrivals["P"] && !formattedArrivals["S"])} icon={<CiSaveDown2 />} />
+                traces.length !== 0 && (
+                <>
+                    <div className="flex flex-row items-center justify-start gap-1">
+                        <UploadFileButton 
+                            setTraces={setTraces} 
+                            setLoading={setLoading} 
+                            buttonClass="btn-ghost btn-sm" 
+                            setError={setError}
+                        />
+                        <ButtonWithIcon 
+                            text="Get arrivals" 
+                            onClick={handleSaveArrivals} 
+                            disabled={filteredTraces.length===0 || (!formattedArrivals["P"] && !formattedArrivals["S"])} 
+                            icon={<CiSaveDown2 />} 
+                            className={"btn-ghost btn-sm"}
+                        />
                         </div>
-                        <hr />
+                        <hr className="mt-2 mb-8" />
                         { loading && <Spinner />}
                         <div className="flex flex-row items-center justify-around mt-4 py-4">
                             <div className="flex flex-row items-center">
-                                <RadioButtonElement 
-                                    label="P"
-                                    id="p-wave-radio"
-                                    name="ps-wave-radio"
-                                    value="P"
-                                    checked={selectedWave === "P"}
-                                    onChange={() => setSelectedWave("P")}
-                                    disabled={filteredTraces.length===0 || formattedArrivals["P"]}
-                                />
-                                <RadioButtonElement 
-                                    label="S"
-                                    id="s-wave-radio"
-                                    name="ps-wave-radio"
-                                    value="S"
-                                    checked={selectedWave === "S"}
-                                    onChange={() => setSelectedWave("S")}
-                                    disabled={filteredTraces.length===0 || formattedArrivals["S"]}
-                                />
+                                <div className="flex flex-row items-center">
+                                    <LabelElement label="P" className="mx-1 text-lg" />
+                                    <RadioButtonElement 
+                                        label="P"
+                                        id="p-wave-radio"
+                                        name="ps-wave-radio"
+                                        value="P"
+                                        checked={selectedWave === "P"}
+                                        onChange={() => setSelectedWave("P")}
+                                        disabled={filteredTraces.length===0 || formattedArrivals["P"]}
+                                        className="radio-sm"
+                                    />
+                                </div>
+                                <div className="flex flex-row items-center mx-5">
+                                    <LabelElement label="S" className="mx-1 text-lg" />
+                                    <RadioButtonElement 
+                                        label="S"
+                                        id="s-wave-radio"
+                                        name="ps-wave-radio"
+                                        value="S"
+                                        checked={selectedWave === "S"}
+                                        onChange={() => setSelectedWave("S")}
+                                        disabled={filteredTraces.length===0 || formattedArrivals["S"]}
+                                        className="radio-sm"
+                                    />
+                                </div>
                                 <div className="flex gap-2 ms-4">
                                     <button onClick={(e) => handleDeleteWave("P")} className="btn btn-sm btn-error" disabled={!formattedArrivals["P"]}>Del. P</button>
                                     <button onClick={(e) => handleDeleteWave("S")} className="btn btn-sm btn-error" disabled={!formattedArrivals["S"]}>Del. S</button>
@@ -254,7 +241,8 @@ export default function PickArrivals() {
                                 value={selectedFilter}
                                 onChange={handleDropdownFilterChange}
                                 disabled={filteredTraces.length===0}
-                                optionsList = {filterOptions}
+                                optionsList={filterOptions}
+                                className="select-sm"
                             />
                         </div>
                         <div className="my-8">
@@ -268,7 +256,7 @@ export default function PickArrivals() {
                                             height="220px"
                                             legendTitle={[`Component: ${tr["stats"]["channel"]}`]}
                                             showGraphTitle={ind === 0}
-                                            graphTitle={tr["record-name"]}
+                                            graphTitle={""}
                                             shapes={shapes}
                                             annotations={annotations}
                                             onGraphClick={onGraphClick}
@@ -287,8 +275,9 @@ export default function PickArrivals() {
                                     value={manualFilter["left"]} 
                                     onKeyDown={handleEnterKey} 
                                     onChange={(e) => setManualFilter({...manualFilter, left: e.target.value})} 
-                                    placeholder="e.g 5"
+                                    placeholder="e.g. 0.1"
                                     disabled={filteredTraces.length===0}
+                                    className="input-sm"
                                 />
                             </div>
                             <div className="mb-3">
@@ -298,8 +287,9 @@ export default function PickArrivals() {
                                     value={manualFilter["right"]} 
                                     onKeyDown={handleEnterKey} 
                                     onChange={(e) => setManualFilter({...manualFilter, right: e.target.value})} 
-                                    placeholder="e.g 5"
+                                    placeholder="e.g. 3"
                                     disabled={filteredTraces.length===0}
+                                    className="input-sm"
                                 />
                             </div>
                         </div>

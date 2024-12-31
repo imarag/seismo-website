@@ -1,7 +1,7 @@
 import Image from "next/image"
 import Title from "@/components/Title"
 import SubTitle from "@/components/SubTitle"
-import SeismologicalStationImage from './seismological-station.jpg'
+import SeismologicalStationImage from '@/images/seismological-station.jpg'
 
 export default function Donation() {
     return (

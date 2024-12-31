@@ -1,13 +1,13 @@
 'use client';
-import ButtonWithIcon from "@/components/ButtonWithIcon"
 import { useEffect, useState } from "react";
-import { fastapiEndpoints } from "@/utils/static";
 import LineGraph from "@/components/LineGraph"
 import Spinner from "@/components/Spinner";
-import { MdOutlineFileUpload, MdDeleteOutline } from "react-icons/md";
-import { BsSoundwave } from "react-icons/bs";
-import { IoCut } from "react-icons/io5";
-import { CiAlignCenterV } from "react-icons/ci";
+import { IoMdClose } from "react-icons/io";
+import { NumberInputElement, TextInputElement, LabelElement, SelectElement, SliderElement } from "@/components/UIElements";
+import UploadFileButton from "@/components/UploadFileButton";
+import { fastapiEndpoints, fourierWindowStyles, taperTypes, taperSides, detrendTypes } from "@/utils/static";
+import StartingUploadFile from "@/components/StartingUploadFile";
+import ErrorMessage from "@/components/ErrorMessage";
 
 function getRandomNumber(num = 6) {
     let randomId = "";
@@ -18,27 +18,37 @@ function getRandomNumber(num = 6) {
     return randomId
 }
 
-function MenuOptions({ icon, title, onClick, children }) {
+function MenuButton({ onClick }) {
     return (
-        <div className="px-5 py-3 rounded fs-6 bg-light">
-            <div className="position-relative pt-3">
-                <div className="d-flex flex-row flex-wrap gap-3">
-                    {children}
-                </div>
-                <div className="mt-4">
-                    <button onClick={onClick} className="btn btn-sm btn-dark">apply</button>
-                </div>
-            </div>
+        <div className="flex flex-row justify-start mt-8">
+            <button className="btn btn-sm btn-secondary" onClick={onClick}>apply</button>
         </div>
     )
 }
 
-
 export default function SignalProcessing() {
 
     const [traces, setTraces] = useState([]);
+    const [error, setError] = useState(null)
     const [filteredTraces, setFilteredTraces] = useState([]);
-
+    const [shapes, setShapes] = useState([
+        {
+            type: 'rect',
+            xref: 'x',
+            yref: 'paper',
+            x0: 0,
+            y0: 0,
+            x1: 0,
+            y1: 1,
+            line: {
+                color: fourierWindowStyles.signal.edgeColor,
+                width: fourierWindowStyles.signal.width
+            },
+            fillcolor: fourierWindowStyles.signal.fillColor
+        }
+    ])
+    const [loading, setLoading] = useState(false)
+    const [appliedFilters, setAppliedFilters] = useState([])
     const [signalProcessingOptions, setSignalProcessingOptions] = useState({
         "detrend-type": "simple",
         "detrend-order": 1,
@@ -46,11 +56,13 @@ export default function SignalProcessing() {
         "taper-side": "both",
         "taper-length": 20,
         "trim-left-side": 0,
-        "trim-right-side": 0,
+        "trim-right-side": 10,
     })
-    const [loading, setLoading] = useState(false)
-    const [appliedFilters, setAppliedFilters] = useState([])
     
+
+    // get the duration of the seismic record
+    let duration = filteredTraces.length !== 0 ? filteredTraces[0]["stats"]["duration"] : 0
+
     useEffect(() => {
         const applyFilters = async () => {
             setLoading(true);
@@ -73,7 +85,6 @@ export default function SignalProcessing() {
                 newJSONData = jsonData;
             }
             setLoading(false)
-
             setFilteredTraces(newJSONData);
         };
         
@@ -81,57 +92,23 @@ export default function SignalProcessing() {
         
     }, [traces, appliedFilters]);
 
-    // this function will be called by the hidden input when using the .click() function in handleFileUpload below
-    async function handleFileSelection(e) {
-        e.preventDefault();
-        setLoading(true);
+    useEffect(() => {
+        setFilteredTraces(traces);
+    }, [traces])
 
-        let formData = new FormData();
-        formData.append('file', e.target.files[0]);
-
-        let endpoint = fastapiEndpoints["UPLOAD-SEISMIC-FILE"]
-        let options = { method: 'POST', body: formData, credentials: 'include' }
-
-        fetch(endpoint, options)
-            .then(res => res.json())
-            .then(jsonData => {
-                // Update the state after the successful upload
-                setTraces(jsonData);
-                setFilteredTraces(jsonData);
-                // setInfoMessage("Seismic file upload completed successfully");
-                // setTimeout(() => setInfoMessage(null), 5000);
-            })
-            .catch(error => {
-                // Handle any errors that occur during the async operation
-                console.error('Error occurred during file upload:', error);
-                // setErrorMessage(error.message || "Error uploading file. Please try again.");
-                // setTimeout(() => setErrorMessage(null), 5000);
-            })
-            .finally(() => {
-                setLoading(false);
-            })
-    }
-
-
-    // this function will be called by the upload file button
-    function handleFileUpload(e) {
-        e.preventDefault();
-        document.querySelector("#upload-seismic-file-input").click()
-    }
-
-    function handleSignalProcessingOptionsChange(processingOption, e, type = "text") {
-        const userSelectedValue = type === "text" ? e.target.value : Number(e.target.value)
+    function handleSignalProcessingOptionsChange(processingOption, value, type = "text") {
+        const userSelectedValue = type === "text" ? value : Number(value)
         const newProcessingOptions = { ...signalProcessingOptions, [processingOption]: userSelectedValue }
         setSignalProcessingOptions(newProcessingOptions)
     }
 
-    function handleTrim() {
+    function handleTrimApply() {
         const filter = {
             fetchURL: fastapiEndpoints["TRIM-WAVEFORM"],
-            text: `trim-${signalProcessingOptions["trim-left-side"]}-${signalProcessingOptions["trim-right-side"]}`,
+            text: `trim-${shapes[0]["x0"]}-${shapes[0]["x1"]}`,
             processOptions: {
-                "trim_left_side": signalProcessingOptions["trim-left-side"],
-                "trim_right_side": signalProcessingOptions["trim-right-side"],
+                "trim_left_side": shapes[0]["x0"],
+                "trim_right_side": shapes[0]["x1"],
             },
             id: getRandomNumber()
         }
@@ -140,7 +117,7 @@ export default function SignalProcessing() {
         setAppliedFilters(newFiltersApplied)
     }
 
-    function handleTaper() {
+    function handleTaperApply() {
         const filter = {
             fetchURL: fastapiEndpoints["TAPER-WAVEFORM"],
             text: `taper-${signalProcessingOptions["taper-type"]}-${signalProcessingOptions["taper-side"]}-${signalProcessingOptions["taper-length"]}`,
@@ -151,12 +128,11 @@ export default function SignalProcessing() {
             },
             id: getRandomNumber()
         }
-
         const newFiltersApplied = [...appliedFilters, filter]
         setAppliedFilters(newFiltersApplied)
     }
 
-    function handleDetrend() {
+    function handleDetrendApply() {
         const filter = {
             fetchURL: fastapiEndpoints["DETREND-WAVEFORM"],
             text: `detrend-${signalProcessingOptions["detrend-type"]}-${signalProcessingOptions["detrend-order"]}`,
@@ -183,137 +159,174 @@ export default function SignalProcessing() {
 
     return (
         <section>
-            <input name="file" type="file" onChange={handleFileSelection} id="upload-seismic-file-input" hidden />
-            <div className="d-flex flex-row align-items-center gap-2">
-                <ButtonWithIcon text="Upload file" onClick={handleFileUpload} icon={<MdOutlineFileUpload />} />
-            </div>
-            <hr />
-            <ul className="nav nav-tabs bg-light" id="myTab" role="tablist">
-                <li className="nav-item" role="presentation">
-                    <button className="nav-link d-flex flex-row align-items-center gap-2 link-dark active" id="trim-tab" data-bs-toggle="tab" data-bs-target="#trim-tab-pane" type="button" role="tab" aria-controls="trim-tab-pane" aria-selected="true">
-                        <span>Trim</span>
-                        <MdDeleteOutline />
-                    </button>
-                </li>
-                <li className="nav-item" role="presentation">
-                    <button className="nav-link d-flex flex-row align-items-center gap-2 link-dark" id="taper-tab" data-bs-toggle="tab" data-bs-target="#taper-tab-pane" type="button" role="tab" aria-controls="taper-tab-pane" aria-selected="false">
-                        <span>Taper</span>
-                        <CiAlignCenterV />
-                    </button>
-                </li>
-                <li className="nav-item" role="presentation">
-                    <button className="nav-link d-flex flex-row align-items-center gap-2 link-dark" id="detrend-tab" data-bs-toggle="tab" data-bs-target="#detrend-tab-pane" type="button" role="tab" aria-controls="detrend-tab-pane" aria-selected="false">
-                        <span>Detrend</span>
-                        <BsSoundwave />
-                    </button>
-                </li>
-            </ul>
-            <div className="tab-content" id="myTabContent">
-                <div className="tab-pane fade show active" id="trim-tab-pane" role="tabpanel" aria-labelledby="trim-tab" tabIndex="0">
-                    <MenuOptions icon={<IoCut />} title="Trim" onClick={handleTrim}>
-                        <div>
-                            <label htmlFor="trim-left-side" className="form-label">left side</label>
-                            <input type="number" id="trim-left-side" className="form-control form-control-sm" min="0" max="100" step="1" value={signalProcessingOptions["trim-left-side"]} onChange={(e) => handleSignalProcessingOptionsChange("trim-left-side", e, "number")} />
+            {
+                error && <ErrorMessage error={error} />
+            }
+            {traces.length === 0 && (
+                <StartingUploadFile setTraces={setTraces} setError={setError} setLoading={setLoading} />
+            )}
+            {
+                traces.length !== 0 && (
+                    <>
+                        <div className="flex flex-row items-center justify-start gap-1">
+                            <UploadFileButton 
+                                setTraces={setTraces} 
+                                setLoading={setLoading} 
+                                buttonClass="btn-ghost" 
+                                setError={setError}
+                            />
                         </div>
-                        <div>
-                            <label htmlFor="trim-right-side" className="form-label">right side</label>
-                            <input type="number" id="trim-right-side" className="form-control form-control-sm" min="0" max="100" step="1" value={signalProcessingOptions["trim-right-side"]} onChange={(e) => handleSignalProcessingOptionsChange("trim-right-side", e, "number")} />
+                        <hr className="mt-2 mb-8" />
+                        <div role="tablist" className="tabs tabs-lifted">
+                            <input type="radio" name="my_tabs_1" role="tab" className="tab" aria-label="Taper" onClick={(e) => setShapes([{...shapes[0], x0: 0, x1: 0}])} defaultChecked />
+                            <div role="tabpanel" className="tab-content bg-base-100 border-base-300 rounded-box p-6">
+                                <p className="font-light text-lg mb-4">Apply a tapering algorithm to the waveforms. Select the type of the taper, the side to be tapered as well as the length of the tapering at one end, in seconds</p>
+                                <div className="flex flex-row gap-3">
+                                    <div>
+                                        <LabelElement label="Type" id="taper-type" />
+                                        <SelectElement 
+                                            id="taper-type"
+                                            name="taper-type"
+                                            optionsList={taperTypes}
+                                            value={signalProcessingOptions["taper-type"]} 
+                                            className="select-sm"
+                                            onChange={(e) => handleSignalProcessingOptionsChange("taper-type", e.target.value)}
+                                        />
+                                    </div>
+                                    <div>
+                                        <LabelElement label="Side" id="taper-side" />
+                                        <SelectElement 
+                                            id="taper-side"
+                                            name="taper-side"
+                                            optionsList={taperSides}
+                                            value={signalProcessingOptions["taper-side"]} 
+                                            className="select-sm"
+                                            onChange={(e) => handleSignalProcessingOptionsChange("taper-side", e.target.value)}
+                                        />
+                                    </div>
+                                    <div>
+                                        <LabelElement label="Length" id="taper-length" />
+                                        <NumberInputElement 
+                                            id="taper-length"
+                                            name="taper-length"
+                                            min={0}
+                                            max={100} 
+                                            step={0.1}
+                                            className="input-sm w-32"
+                                            value={signalProcessingOptions["taper-length"]} 
+                                            onChange={(e) => handleSignalProcessingOptionsChange("taper-length", e.target.value, "number")}
+                                        />
+                                    </div>
+                                </div>
+                                <MenuButton onClick={handleTaperApply} />
+                            </div>
+                            <input type="radio" name="my_tabs_1" role="tab" className="tab" aria-label="Trim" />
+                            <div role="tabpanel" className="tab-content bg-base-100 border-base-300 rounded-box p-6">
+                                <p className="font-light text-lg mb-4">Trim the waveforms utilizing the left and the right window side, sliders</p>
+                                <div  className="flex flex-col gap-3 mb-4">
+                                    <LabelElement label="Trim left side" id="trim-left-side" />
+                                    <NumberInputElement 
+                                        id="trim-left-side"
+                                        name="trim-left-side"
+                                        min={0}
+                                        max={duration} 
+                                        step={0.1}
+                                        className="input-sm w-24"
+                                        value={shapes.length !== 0 ? shapes[0]["x0"] : 0} 
+                                        onChange={(e) => setShapes([{...shapes[0], x0: Number(e.target.value)}])}
+                                    />
+                                    <SliderElement 
+                                        id="trim-left-side"
+                                        name="trim-left-side"
+                                        min={0}
+                                        max={duration} 
+                                        step={0.1}
+                                        className="range-xs w-full"
+                                        value={shapes.length !== 0 ? shapes[0]["x0"] : 0} 
+                                        onChange={(e) => setShapes([{...shapes[0], x0: Number(e.target.value)}])}
+                                    />
+                                </div>
+                                <div  className="flex flex-col gap-3">
+                                    <LabelElement label="Trim right side" id="trim-right-side" />
+                                    <NumberInputElement 
+                                        id="trim-right-side"
+                                        name="trim-right-side"
+                                        min={0}
+                                        max={duration} 
+                                        step={0.1}
+                                        className="input-sm w-24"
+                                        value={shapes.length !== 0 ? shapes[0]["x1"] : 0} 
+                                        onChange={(e) => setShapes([{...shapes[0], x1: Number(e.target.value)}])}
+                                    />
+                                    <SliderElement 
+                                        id="trim-right-side"
+                                        name="trim-right-side"
+                                        min={0}
+                                        max={duration} 
+                                        step={0.1}
+                                        className="range-xs w-full"
+                                        value={shapes.length !== 0 ? shapes[0]["x1"] : 0} 
+                                        onChange={(e) => setShapes([{...shapes[0], x1: Number(e.target.value)}])}
+                                    />
+                                </div>
+                                <MenuButton onClick={handleTrimApply} />
+                            </div>
+                            <input type="radio" name="my_tabs_1" role="tab" className="tab" aria-label="Detrend"  onClick={() => setShapes([{...shapes[0], x0: 0, x1: 0}])} />
+                            <div role="tabpanel" className="tab-content bg-base-100 border-base-300 rounded-box p-6">
+                                <p className="font-light text-lg mb-4">Remove a trend from the traces. Utilize the "type" dropdown to select the method to use for detrending </p>
+                                <div className="flex flex-row gap-3">
+                                    <div>
+                                        <LabelElement label="Type" id="detrend-type" />
+                                        <SelectElement 
+                                            id="detrend-type"
+                                            name="detrend-type"
+                                            optionsList={detrendTypes}
+                                            className="select-sm"
+                                            value={signalProcessingOptions["detrend-type"]} 
+                                            onChange={(e) => handleSignalProcessingOptionsChange("detrend-type", e.target.value)}
+                                        />
+                                    </div>
+                                </div>
+                                <MenuButton onClick={handleDetrendApply} />
+                            </div>
                         </div>
-                    </MenuOptions>
-                </div>
-                <div className="tab-pane fade" id="taper-tab-pane" role="tabpanel" aria-labelledby="taper-tab" tabIndex="0">
-                    <MenuOptions icon={<BsSoundwave />} title="Taper" onClick={handleTaper}>
-                        <div>
-                            <label htmlFor="taper-type" className="form-label">type</label>
-                            <select className="form-select form-select-sm" id="taper-type" value={signalProcessingOptions["taper-type"]} onChange={(e) => handleSignalProcessingOptionsChange("taper-type", e)}>
-                                <option value="cosine">Cosine taper</option>
-                                <option value="barthann">Bartlett-Hann</option>
-                                <option value="bartlett">Bartlett</option>
-                                <option value="blackman">Blackman</option>
-                                <option value="blackmanharris">Blackman-Harris</option>
-                                <option value="bohman">Bohman</option>
-                                <option value="boxcar">Boxcar</option>
-                                <option value="chebwin">Dolph-Chebyshev</option>
-                                <option value="flattop">Flat top</option>
-                                <option value="gaussian">Gaussian std</option>
-                                <option value="general_gaussian">Gen. Gaussian</option>
-                                <option value="hamming">Hamming</option>
-                                <option value="hann">Hann</option>
-                                <option value="kaiser">Kaiser</option>
-                                <option value="nuttall">Nuttall</option>
-                                <option value="parzen">Parzen</option>
-                                <option value="slepian">Slepian</option>
-                                <option value="triang">Triangular</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label htmlFor="taper-side" className="form-label">side</label>
-                            <select className="form-select form-select-sm" id="taper-side" value={signalProcessingOptions["taper-side"]} onChange={(e) => handleSignalProcessingOptionsChange("taper-side", e)}>
-                                <option value="left">left</option>
-                                <option value="both">both</option>
-                                <option value="right">right</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label htmlFor="taper-length" className="form-label">length (%)</label>
-                            <input type="number" id="taper-length" className="form-control form-control-sm" min="0" max="100" step="1" value={signalProcessingOptions["taper-length"]} onChange={(e) => handleSignalProcessingOptionsChange("taper-length", e, "number")} />
-                        </div>
-                    </MenuOptions>
-                </div>
-                <div className="tab-pane fade" id="detrend-tab-pane" role="tabpanel" aria-labelledby="detrend-tab" tabIndex="0">
-                    <MenuOptions icon={<CiAlignCenterV />} title="Detrend" onClick={handleDetrend}>
-                        <div>
-                            <label htmlFor="detrend-type" className="form-label">type</label>
-                            <select className="form-select form-select-sm" id="detrend-type" value={signalProcessingOptions["detrend-type"]} onChange={(e) => handleSignalProcessingOptionsChange("detrend-type", e)}>
-                                <option value="simple">simple</option>
-                                <option value="linear">linear</option>
-                                <option value="constant">constant</option>
-                                <option value="polynomial">polynomial</option>
-                                <option value="spline">spline</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label htmlFor="detrend-order" className="form-label">order</label>
-                            <input type="number" id="detrend-order" className="form-control form-control-sm" min="0" max="5" step="1" value={signalProcessingOptions["detrend-order"]} onChange={(e) => handleSignalProcessingOptionsChange("detrend-order", e, "number")} />
-                        </div>
-                    </MenuOptions>
-                </div>
-            </div>
-
-            <div className="d-flex flex-row flex-wrap gap-2">
-                {
-                    appliedFilters.map(filt => (
-                        <button
-                            key={filt.id}
-                            className="btn btn-warning btn-sm rounded-pill d-flex flex-row align-items-center"
-                            onClick={() => handleDeleteFilter(filt)}
-                            disabled={loading}
-                        >
-                            {filt["text"]}
-                            <MdDeleteOutline />
-                        </button>
-                    ))
-                }
-            </div>
-            {loading && <Spinner />}
-            <div>
-                {
-                    filteredTraces.map((tr, ind) => (
-                        <div key={tr.stats.channel}>
+                        <div className="flex flex-row flex-wrap gap-2 my-6">
                             {
-                                <LineGraph
-                                    xData={traces.length !== 0 ? [tr["xdata"]] : []}
-                                    yData={traces.length !== 0 ? [tr["ydata"]] : []}
-                                    graphTitle=""
-                                    showLegend={false}
-                                    height="220px"
-                                />
+                                appliedFilters.map(filt => (
+                                    <button
+                                        key={filt.id}
+                                        className="btn btn-error btn-xs rounded-pill flex flex-row items-center"
+                                        onClick={() => handleDeleteFilter(filt)}
+                                        disabled={loading}
+                                    >
+                                        {filt["text"]}
+                                        <IoMdClose />
+                                    </button>
+                                ))
                             }
                         </div>
-                    ))
-                }
-            </div>
-
+                        {loading && <Spinner />}
+                        <div>
+                            {
+                                filteredTraces.map((tr, ind) => (
+                                    <div key={tr.stats.channel}>
+                                        {
+                                            <LineGraph
+                                                xData={traces.length !== 0 ? [tr["xdata"]] : []}
+                                                yData={traces.length !== 0 ? [tr["ydata"]] : []}
+                                                graphTitle=""
+                                                showLegend={false}
+                                                height="220px"
+                                                shapes={shapes}
+                                            />
+                                        }
+                                    </div>
+                                ))
+                            }
+                        </div>
+                    </>
+                )
+            }
         </section>
     )
 }

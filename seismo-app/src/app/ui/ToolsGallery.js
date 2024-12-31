@@ -12,11 +12,11 @@ import TaperGif from "@/images/taper-gif.gif";
 import Image from "next/image";
 import { useState } from "react";
 
-export default function ToolsGallery() {
+export default function ToolsGallery({ className }) {
   const [gifURLSelected, setGifURLSelected] = useState(FourierGif)
   return (
-    <>
-        <div className="flex flex-row flex-wrap justify-center items-center gap-8 mt-14 mb-10">
+    <section className={className}>
+        <div className="flex flex-row flex-wrap justify-center items-center gap-2 mt-14 mb-10">
           <ToolsHoverButtons onMouseEnter={() => setGifURLSelected(FourierGif)} icon={FourierGraphIcon} title="Fourier" />
           <ToolsHoverButtons onMouseEnter={() => setGifURLSelected(PickGif)} icon={PickingIcon} title="Arrival Picking" />
           <ToolsHoverButtons onMouseEnter={() => setGifURLSelected(TrimGif)} icon={AsciiToMseed} title="ASCII to MSEED" />
@@ -27,6 +27,6 @@ export default function ToolsGallery() {
               <Image src={gifURLSelected} alt="a gif about seismological processing" className="block mx-auto w-full display-image" unoptimized />
             </div>
         </div>
-    </>
+    </section>
   )
 }

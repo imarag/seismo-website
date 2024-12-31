@@ -20,7 +20,9 @@ export default async function fetchRequest({ endpoint, method = 'GET', data = nu
     const response = await fetch(endpoint, options);
   
     if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+        const error = await response.json();
+        const errorJSON = error["detail"]
+        throw new Error(errorJSON);
     }
     
     return returnBlob ? await response.blob() : await response.json();

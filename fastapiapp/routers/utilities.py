@@ -31,7 +31,7 @@ async def upload_seismic_file(file: UploadFile):
     try:
         stream = read(seismic_file)
     except Exception as e:
-        raise HTTPException(status_code=404, detail="Cannot read the seismic file: " + str(e))
+        raise HTTPException(status_code=404, detail="Cannot read the seismic file. Please verify that the file has a valid extension and try again.")
 
     # validate the seismic uploaded file
     stream_validation_message = validate_seismic_file(stream)

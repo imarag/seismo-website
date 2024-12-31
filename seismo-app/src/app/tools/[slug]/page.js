@@ -9,6 +9,7 @@ export default async function ToolSlugPage({ params }) {
     const { default: Tool } = await import(`@/components/tools/${capitalizedSlug}.js`)
 
     const selectedTool = allTools.find(tl => tl.slug === slug);
+   
     return (
         <section className="container mx-auto">
             
@@ -19,10 +20,12 @@ export default async function ToolSlugPage({ params }) {
             <h2 className="text-center font-light text-2xl mb-20">
                 {selectedTool.subtitle}
             </h2>
-            <p className="font-light text-start text-xl">{selectedTool.description}</p>
-            <Accordion label="User guide">
-                <p>{ selectedTool.userGuide }</p>
-            </Accordion>
+            <div className="max-w-6xl mx-auto">
+                <p className="font-light text-start text-xl">{selectedTool.description}</p>
+                <Accordion label="User guide">
+                    <p>{ selectedTool.userGuide }</p>
+                </Accordion>
+            </div>
             <Tool />
         </section>
     )

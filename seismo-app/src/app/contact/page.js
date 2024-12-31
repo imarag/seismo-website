@@ -8,15 +8,21 @@ import SubTitle from "@/components/SubTitle"
 export default function Contact() {
     return (
         <section className="container mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 align-center justify-center">
-                <div className="p-5">
-                    <Title text1="Contact Us" />
-                    <SubTitle text="Connect with us and share your suggestions and improvements" />
-                    <SocialMedia />
-                    <ContactForm />
+            <div className="flex flex-col lg:flex-row gap-10">
+                <div className="basis-0 grow bg-base-200">
+                    <div className="p-5">
+                        <Title text1="Contact Us" />
+                        <SubTitle text="Connect with us and share your suggestions and improvements" />
+                        <SocialMedia />
+                        <ContactForm />
+                    </div>
                 </div>
-                <div className="p-5 flex flex-row align-center">
-                    <Image src={OldSeismogram} className="object-cover max-h-full" alt="an old seismogram at a seismological station" />
+                <div className="basis-0 grow bg-slate-800">
+                <Image 
+                    src={OldSeismogram} 
+                    className="h-full max-w-full object-cover" 
+                    alt="an old seismogram at a seismological station" 
+                />
                 </div>
             </div>
         </section>

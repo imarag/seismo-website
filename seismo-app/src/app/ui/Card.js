@@ -1,23 +1,19 @@
 import Link from 'next/link'
 import Image from 'next/image'
 
-export default function Card({ title, description, imgURL, imgAlt, pageURL}) {
+export default function Card({ title, description, imgURL, imgAlt, pageURL, className}) {
   return (
-    <div className="card bg-base-200 w-96 mx-auto p-5">
-      <figure>
+    <div className={`flex flex-col items-center p-5 ${className ? className : ""}`}>
+      <figure className="mb-5">
         <Image
           src={imgURL}
           alt={imgAlt} 
-          width={150}
+          className="w-32"
         />
       </figure>
-      <div className="card-body">
-        <h2 className="card-title">{ title }</h2>
-        <p className="font-light">{ description }</p>
-        <div className="card-actions justify-start">
-          <Link href={pageURL} className="btn btn-primary">Go to page</Link>
-        </div>
-      </div>
+      <h2 className="text-center font-semibold mb-3">{ title }</h2>
+      <p className="font-light text-center text-lg">{ description }</p>
+      <Link href={pageURL} className="btn btn-primary btn-outline mt-8">Go to page</Link>
     </div>
   )
 }

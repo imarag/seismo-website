@@ -1,9 +1,15 @@
-import Link from "next/link"
-import { navLinks } from "@/utils/static"
+import { IoIosArrowRoundForward } from "react-icons/io";
 import SocialMedia from "@/components/SocialMedia"
 import Logo from "@/components/Logo"
+import { navLinks } from "@/utils/static"
+import { allTools, allArticles } from "@/utils/all-topics";
+import Link from "next/link";
+
 
 export default function Footer() {
+    const completedTools = allTools.filter(el => el.completed)
+    const completedArticles = allArticles.filter(el => el.completed)
+    
   return (
     <div className="footer bg-base-200 text-base-content p-10">
         <aside className="flex flex-col items-center justify-center gap-3">
@@ -14,13 +20,6 @@ export default function Footer() {
             <SocialMedia />
         </aside>
         <nav>
-            <h6 className="footer-title">Services</h6>
-            <a className="link link-hover">Branding</a>
-            <a className="link link-hover">Design</a>
-            <a className="link link-hover">Marketing</a>
-            <a className="link link-hover">Advertisement</a>
-        </nav>
-        <nav>
             <h6 className="footer-title">Sitemap</h6>
             {
                 navLinks.map(item => (
@@ -30,17 +29,27 @@ export default function Footer() {
         </nav>
         <nav>
             <h6 className="footer-title">Articles</h6>
-            <a className="link link-hover">Introduction To Seismology</a>
-            <a className="link link-hover">Python Obspy</a>
-            <a className="link link-hover">Site Effect</a>
-            <a className="link link-hover">All articles</a>
+            {
+                completedArticles.map(el => (
+                    <Link key={el.title} href={`/articles/${el.slug}`} className="link link-hover">{el.title}</Link>
+                ))
+            }
+            <Link href="/articles" className="link link-hover flex flex-row items-center gap-2 underline mt-3">
+                All articles
+                <IoIosArrowRoundForward />
+            </Link>
         </nav>
         <nav>
             <h6 className="footer-title">Tools</h6>
-            <a className="link link-hover">Arrival Time Selection</a>
-            <a className="link link-hover">Fourier Spectra Calculation</a>
-            <a className="link link-hover">Signal Processing</a>
-            <a className="link link-hover">All tools</a>
+            {
+                completedTools.map(el => (
+                    <Link key={el.title} href={`/tools/${el.slug}`} className="link link-hover">{el.title}</Link>
+                ))
+            }
+            <Link href="/tools" className="link link-hover flex flex-row items-center gap-2 underline mt-3">
+                All tools
+                <IoIosArrowRoundForward />
+            </Link>
         </nav>
     </div>
   )

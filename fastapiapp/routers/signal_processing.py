@@ -126,7 +126,7 @@ class ComputeFourierParams(BaseModel):
 def compute_fourier(
     fourier_params: ComputeFourierParams
     ) -> dict[str, dict]:
-    return {"ena":{"duo": 3}}
+
     seismic_data_dict = fourier_params.model_dump()
 
     # initialize the output data dict

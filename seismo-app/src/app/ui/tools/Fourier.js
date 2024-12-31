@@ -1,15 +1,19 @@
 'use client';
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { MdOutlineFileUpload } from "react-icons/md";
 import { fastapiEndpoints, fourierWindowStyles } from "@/utils/static";
 import ButtonWithIcon from "@/components/ButtonWithIcon"
 import Spinner from "@/components/Spinner"
 import LineGraph from "@/components/LineGraph";
 import fetchRequest from "@/utils/functions/fetchRequest";
-import { Checkbox, InputNumber, Slider, Dropdown } from "@/components/FormItems";
+import { CheckboxElement, NumberInputElement, SliderElement, SelectElement, LabelElement } from "@/components/UIElements";
+import UploadFileButton from "@/components/UploadFileButton";
+import StartingUploadFile from "@/components/StartingUploadFile";
+import ErrorMessage from "@/components/ErrorMessage";
 
 export default function Fourier() {
 
+    const [error, setError] = useState(null)
     // initialize the traces that will be used to create the plots
     const [traces, setTraces] = useState([]);
     // set the data that will hold the fourier and hvsr data
@@ -72,50 +76,16 @@ export default function Fourier() {
         )
     }
 
+    useEffect(() => {
+        setVerticalComponentOptions(traces.map(tr =>({label: tr.stats.channel, value: tr.stats.channel})))
+        setSignalLeftSide(10)
+        setWindowLength(10)
+        setFourierHVSRData([])
+        setNoiseRightSide(10)
+        setAddNoiseWindow(false)
+        setIsComputeHVSRChecked(false)
+    }, [traces])
 
-    // this function will be called by the hidden input when using the .click() function in handleFileUpload below
-    function handleFileSelection(e) {
-        e.preventDefault();
-        setLoading(true)
-
-        const formData = new FormData();
-        formData.append("file", e.target.files[0]);
-        
-        fetchRequest({endpoint: fastapiEndpoints["UPLOAD-SEISMIC-FILE"], method: "POST", data: formData})
-        .then(jsonData => {
-            // Update the state after the successful upload
-            setTraces(jsonData);
-            setVerticalComponentOptions(jsonData.map(tr =>({label: tr.stats.channel, value: tr.stats.channel})))
-            setSignalLeftSide(10)
-            setWindowLength(10)
-            setFourierHVSRData([])
-            setNoiseRightSide(10)
-            setAddNoiseWindow(false)
-            setIsComputeHVSRChecked(false)
-            // setInfoMessage("Seismic file upload completed successfully");
-            // setTimeout(() => setInfoMessage(null), 5000);
-
-            // click the time series tab when the user uploads a new file
-            document.querySelector("#time-series-tab").click()
-        })
-        .catch(error => {
-            // setErrorMessage(error.message || "Error uploading file. Please try again.");            
-            // setTimeout(() => setErrorMessage(null), 5000);
-        })
-        .finally(() => {
-            setLoading(false)
-        })
-    }
-
-
-
-    // this function will be called by the upload file button
-    function handleFileUpload(e) {
-        e.preventDefault();
-        document.querySelector("#upload-seismic-file-input").click()
-    }
-
-    
 
     async function handleComputeFourier(e) {
         e.preventDefault();
@@ -132,9 +102,10 @@ export default function Fourier() {
             jsonDataInput["vertical_component"] = selectedVerticalComponent
             jsonDataInput["noise_window_right_side"] = noiseRightSide
         }
-        
+   
         fetchRequest({endpoint: fastapiEndpoints["COMPUTE-FOURIER"], method: "POST", data: jsonDataInput})
         .then(jsonData => {
+        
             setFourierHVSRData(jsonData)
             setLoading(false)
             // setInfoMessage("The Fourier Spectra has been successfully caclulated. Click on the Fourier and the HVSR tabs to observe the spectra");
@@ -163,48 +134,31 @@ export default function Fourier() {
 
     return (
         <section>
-            <input name="file" type="file" onChange={handleFileSelection} id="upload-seismic-file-input" hidden />
             {
-                traces.length === 0 && (
-                    <>
-                        <p className="text-center my-3">Start by uploading a seismic file</p>
-                        <div className="text-center">
-                            <ButtonWithIcon text="Upload file" onClick={handleFileUpload} icon={<MdOutlineFileUpload />} />
-                        </div>
-                        { loading && <Spinner />}
-                    </>
-                )
+                error && <ErrorMessage error={error} />
             }
+            {traces.length === 0 && (
+                <StartingUploadFile setTraces={setTraces} setError={setError} setLoading={setLoading} />
+            )}
             {
                 traces.length !== 0 && (
-                    <>
-                        <div className="d-flex gap-3 my-4">
-                            <ButtonWithIcon text="Upload file" onClick={handleFileUpload} icon={<MdOutlineFileUpload />} />
-                        </div>
-                        { loading && <Spinner />}
-                        <ul className="nav nav-tabs" id="calculate-fourier-tab" role="tablist">
-                            <li className="nav-item" role="presentation">
-                                <button className="nav-link active" id="time-series-tab" data-bs-toggle="tab"
-                                    data-bs-target="#time-series-tab-pane" type="button" role="tab" aria-controls="time-series-tab-pane"
-                                    aria-selected="true">Time Series</button>
-                            </li>
-                            <li className="nav-item" role="presentation">
-                                <button className="nav-link" id="fourier-tab" data-bs-toggle="tab" data-bs-target="#fourier-tab-pane"
-                                    type="button" role="tab" aria-controls="fourier-tab-pane" aria-selected="false"
-                                    disabled={fourierHVSRData.length===0}>Fourier</button>
-                            </li>
-                            <li className="nav-item" role="presentation">
-                                <button className="nav-link" id="hvsr-tab" data-bs-toggle="tab" data-bs-target="#hvsr-tab-pane"
-                                    type="button" role="tab" aria-controls="hvsr-tab-pane" aria-selected="false" disabled={!isComputeHVSRChecked | fourierHVSRData.length===0}>HVSR</button>
-                            </li>
-                        </ul>
-                        <div className="tab-content" id="graphs-area-fourier">
-                            <div className="tab-pane fade show active" id="time-series-tab-pane" role="tabpanel"
-                                aria-labelledby="time-series-tab" tabIndex="0">
+                <>
+                    <div className="flex flex-row items-center justify-start gap-1">
+                        <UploadFileButton 
+                            setTraces={setTraces} 
+                            setLoading={setLoading} 
+                            setError={setError}
+                            buttonClass="btn-ghost" 
+                        />
+                    </div>
+                    <hr className="mt-2 mb-8" />
+                        <div role="tablist" className="tabs tabs-lifted">
+                            <input type="radio" name="fourier-spectra-tab" role="tab" className="tab" aria-label="Time_Series" defaultChecked />
+                            <div role="tabpanel" className="tab-content bg-base-100 border-base-300 rounded-box p-6">
                                 <div className="my-8">
                                     {
                                         traces.map((tr, ind) => (
-                                            <div key={tr.stats.id}>
+                                            <div key={tr.id}>
                                                 {
                                                     <LineGraph 
                                                         xData={[tr["xdata"]]} 
@@ -212,7 +166,7 @@ export default function Fourier() {
                                                         height="220px"
                                                         legendTitle={`Component: ${tr["stats"]["channel"]}`}
                                                         showGraphTitle={ind === 0}
-                                                        graphTitle={tr["record-name"]}
+                                                        graphTitle={""}
                                                         shapes={shapes}
                                                     />
                                                 }
@@ -221,19 +175,18 @@ export default function Fourier() {
                                     }
                                 </div>
                                 <div id="options-menu" className="mt-4 fs-6">
-                                    <div className="my-2 bg-info-subtle px-4 py-3 rounded d-flex flex-column gap-1">
-                                        <h1 className="fs-6 fw-semibold">Set signal window left side (sec)</h1>
-                                        <InputNumber
+                                    <div className="my-2 bg-base-200 px-4 py-3 rounded flex flex-col gap-3">
+                                        <h1 className="text-lg font-semibold">Set signal window left side (sec)</h1>
+                                        <NumberInputElement
                                             label={null}
                                             id="signal-left-side-input"
                                             name="signal-left-side-input"
                                             value={signalLeftSide}
                                             onChange={(e) => setSignalLeftSide(Number(e.target.value))}
                                             disabled={traces.length === 0}
-                                            style={{ width: "90px" }}
-                                            small={true}
+                                            className="w-24 input-sm"
                                         />
-                                        <Slider
+                                        <SliderElement
                                             id="signal-window-left-side-slider"
                                             name="signal-window-left-side-slider"
                                             value={signalLeftSide}
@@ -242,22 +195,21 @@ export default function Fourier() {
                                             step={1}
                                             onChange={(e) => setSignalLeftSide(Number(e.target.value))}
                                             disabled={traces.length === 0}
-                                            className="d-block w-100"
+                                            className="range-sm"
                                         />
                                     </div>
-                                    <div className="my-2 bg-info-subtle px-4 py-3 rounded d-flex flex-column gap-1">
-                                        <h1 className="fs-6 fw-semibold">Set window length (sec)</h1>
-                                        <InputNumber
+                                    <div className="my-2 bg-base-200 px-4 py-3 rounded flex flex-col gap-3">
+                                        <h1 className="text-lg font-semibold">Set window length (sec)</h1>
+                                        <NumberInputElement
                                             label={null}
                                             id="window-length-input"
                                             name="window-length-input"
                                             value={windowLength}
                                             onChange={(e) => setWindowLength(Number(e.target.value))} 
                                             disabled={traces.length === 0}
-                                            style={{ width: "90px" }}
-                                            small={true}
+                                            className="w-24 input-sm"
                                         />
-                                        <Slider
+                                        <SliderElement
                                             id="window-length-slider"
                                             name="window-length-slider"
                                             value={windowLength}
@@ -266,32 +218,31 @@ export default function Fourier() {
                                             step={1}
                                             onChange={(e) => setWindowLength(Number(e.target.value))}
                                             disabled={traces.length === 0}
-                                            className="d-block w-100"
+                                            className="range-sm"
                                         />
                                     </div>
-                                    <div className="my-2 bg-info-subtle px-4 py-3 rounded d-flex flex-column gap-1">
-                                        <h1 className="fs-6 fw-semibold">Add noise window</h1>
+                                    <div className="my-2 bg-base-200 px-4 py-3 rounded flex flex-col gap-3">
+                                        <h1 className="text-lg font-semibold">Noise window</h1>
                                         {
                                             addNoiseWindow ? (
-                                                <button className="btn btn-sm btn-danger align-self-start" onClick={() => setAddNoiseWindow(false)} disabled={traces.length === 0}>Remove noise window</button>
+                                                <button className="btn btn-sm btn-error self-start" onClick={() => setAddNoiseWindow(false)} disabled={traces.length === 0}>Remove noise window</button>
                                             ) : (
-                                                <button className="btn btn-sm btn-primary align-self-start" onClick={handleAddNoiseWindow} disabled={traces.length === 0}>Add noise window</button>
+                                                <button className="btn btn-sm btn-primary self-start" onClick={handleAddNoiseWindow} disabled={traces.length === 0}>Add noise window</button>
                                             )
                                         }
                                         {
                                             addNoiseWindow && (
                                                 <>
-                                                    <h1 className="fs-6 fw-semibold">Set noise window left side (sec)</h1>
-                                                    <InputNumber
+                                                    <h1 className="text-lg font-semibold">Set noise window right side (sec)</h1>
+                                                    <NumberInputElement
                                                         label={null}
                                                         id="noise-right-side-input"
                                                         name="noise-right-side-input"
                                                         value={noiseRightSide}
                                                         onChange={(e) => setNoiseRightSide(Number(e.target.value))}
-                                                        style={{ width: "90px" }}
-                                                        small={true}
+                                                        className="w-24 input-sm"
                                                     />
-                                                    <Slider
+                                                    <SliderElement
                                                         id="noise-right-side-input"
                                                         name="noise-right-side-input"
                                                         value={noiseRightSide}
@@ -299,14 +250,14 @@ export default function Fourier() {
                                                         max={duration}
                                                         step={1}
                                                         onChange={(e) => setNoiseRightSide(Number(e.target.value))}
-                                                        className="d-block w-100"
+                                                        className="range-sm"
                                                     />
                                                 </>
                                             )
                                         }
                                     </div>
-                                    <div className="d-flex flex-row gap-4 align-items-center justify-content-center mt-4 mb-3">
-                                        <Checkbox 
+                                    <div className="flex flex-row gap-4 items-center justify-center mt-4 mb-3">
+                                        <CheckboxElement 
                                             label="Compute HVSR"
                                             id="compute-hvsr-check"
                                             name="compute-hvsr-check"
@@ -314,33 +265,36 @@ export default function Fourier() {
                                             onChange={() => setIsComputeHVSRChecked(!isComputeHVSRChecked)} 
                                             disabled={traces.length === 0}
                                         />
-                                        <Dropdown 
+                                        <LabelElement label="compute HVSR" id="compute-hvsr-check" />
+                                        <SelectElement 
                                             id="vertical-component"
                                             name="vertical-component"
                                             value={selectedVerticalComponent}
                                             onChange={(e) => setSelectedVerticalComponent(e.target.value)}
-                                            codeOptions={verticalComponentOptions}
+                                            optionsList={verticalComponentOptions}
                                             disabled={!isComputeHVSRChecked}
-                                            style={{ width: "80px" }}
-                                            small={true}
                                         />
-                                        <label htmlFor="vertical-component">Select vertical component</label>
+                                        <LabelElement label="Select vertical component" id="vertical-component" />
                                     </div>
-                                    <div className="row justify-content-center align-items-center mt-2">
-                                        <div className="col-auto text-center">
-                                            <button className="btn btn-primary p-3" id="computeFourierButton" onClick={handleComputeFourier} disabled={traces.length === 0}>Compute Fourier</button>
-                                        </div>
-                                    </div>
+                                    <button 
+                                        className="btn btn-lg btn-wide btn-primary p-3 block mx-auto my-10" 
+                                        id="computeFourierButton" 
+                                        onClick={handleComputeFourier} 
+                                        disabled={traces.length === 0}
+                                    >
+                                        Compute Fourier
+                                    </button>
                                     { loading && <Spinner />}
                                 </div>
                             </div>
-                            <div className="tab-pane fade" id="fourier-tab-pane" role="tabpanel" aria-labelledby="fourier-tab" tabIndex="1">
+                            <input type="radio" name="fourier-spectra-tab" role="tab" className="tab" aria-label="Fourier_Spectra" disabled={fourierHVSRData.length===0} />
+                            <div role="tabpanel" className="tab-content bg-base-100 border-base-300 rounded-box p-6">
                                 {
                                     fourierHVSRData.length !== 0 && (
                                         <>
                                             {
                                                 Object.keys(fourierHVSRData["fourier"]).map((tr, ind) => (
-                                                    <div key={tr}>
+                                                    <div key={tr.id}>
                                                         {
                                                             <LineGraph 
                                                                 xData={addNoiseWindow ? [fourierHVSRData["fourier"][tr]["signal"]["xdata"], fourierHVSRData["fourier"][tr]["noise"]["xdata"]] : [fourierHVSRData["fourier"][tr]["signal"]["xdata"]]} 
@@ -359,8 +313,9 @@ export default function Fourier() {
                                     )
                                 }
                             </div>
-                            <div className="tab-pane fade" id="hvsr-tab-pane" role="tabpanel" aria-labelledby="hvsr-tab" tabIndex="2">
-                            {
+                            <input type="radio" name="fourier-spectra-tab" role="tab" className="tab" aria-label="HVSR" disabled={!isComputeHVSRChecked | fourierHVSRData.length===0} />
+                            <div role="tabpanel" className="tab-content bg-base-100 border-base-300 rounded-box p-6">
+                                {
                                     fourierHVSRData.length !== 0 && (
                                         <>
                                             <LineGraph 
@@ -381,3 +336,5 @@ export default function Fourier() {
         </section>
     )
 }
+
+
