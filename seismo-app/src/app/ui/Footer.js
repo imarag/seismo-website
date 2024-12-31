@@ -1,9 +1,9 @@
-import { IoIosArrowRoundForward } from "react-icons/io";
+import Link from "next/link";
 import SocialMedia from "@/components/SocialMedia"
 import Logo from "@/components/Logo"
 import { navLinks } from "@/utils/static"
 import { allTools, allArticles } from "@/utils/all-topics";
-import Link from "next/link";
+import { IoIosArrowRoundForward } from "react-icons/io";
 
 
 export default function Footer() {
