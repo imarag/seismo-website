@@ -16,7 +16,7 @@ export default function StartingUploadFile({ setTraces, setError, setLoading }) 
             <AlertInfo>
                 <p>
                     There are a number of seismic file formats supported which are defined in the
-                    Python Obspy <a href="https://docs.obspy.org/master/packages/autogen/obspy.core.stream.read.html" target="_blank" className="link link-primary"><code>read()</code></a> function
+                    Python ObsPy <a href="https://docs.obspy.org/master/packages/autogen/obspy.core.stream.read.html" target="_blank" className="link link-primary"><code>read()</code></a> function
                 </p>
             </AlertInfo>
         </>

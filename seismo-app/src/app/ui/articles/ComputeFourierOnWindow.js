@@ -3,7 +3,7 @@ import FourierPlot from "@/images/fourier-plot.png"
 import Taper from "@/images/taper.png"
 import Trimmed from "@/images/trimmed.png"
 import Arrivals from "@/images/arrivals.png"
-import ObspyStreamFiltered from "@/images/obspy-stream-filtered.png"
+import ObsPyStreamFiltered from "@/images/obspy-stream-filtered.png"
 
 import { H1, H2, ListItem, ListContainer, Code } from "../articleElements"
 
@@ -54,7 +54,7 @@ export default function ComputeFourierOnWindow() {
         </ListContainer>
         <H1>Reading the Input Data</H1>
         <Paragraph>
-            In this article we will make use of the Obspy Python library to apply the seismological computations and the Python
+            In this article we will make use of the ObsPy Python library to apply the seismological computations and the Python
             Matplotlib library to plot the
             waveform time series. For this reason, we will start by initializing the libraries that we will use throughout the
             rest of the article:
@@ -83,7 +83,7 @@ export default function ComputeFourierOnWindow() {
         <Paragraph>
             Initiate the process by applying a bandpass filter to the records within the frequency range of 1 to 5 Hz. This step
             aims to eliminate surrounding
-            noise and facilitate the arrival selection. Utilize the Obspy
+            noise and facilitate the arrival selection. Utilize the ObsPy
             <a href="https://docs.obspy.org/packages/autogen/obspy.core.stream.Stream.filter.html" 
                 target="_blank"><code>filter()</code></a> function
             for this purpose:
@@ -97,14 +97,14 @@ export default function ComputeFourierOnWindow() {
         </Code>
         <script src="https://gist.github.com/imarag/d54cb68d57ebf3759dbc963474a48a6c.js"></script>
         <figure>
-            <Img src={ObspyStreamFiltered} />
+            <Img src={ObsPyStreamFiltered} />
             <figcaption>Recordings after applying a bandpass filter of 1-5 Hz</figcaption>
         </figure>
         <H2>Select The P And S Wave Arrivals</H2>
         <Paragraph>
             It's clear from the filtered waveforms, that the P wave arrivals occurs roughly at <code>20:08:36</code> and the S
             wave arrivals at <code>20:08:58</code>.
-            Convert these into Obspy <code>UTCDateTime</code> objects and convert the arrival values as total seconds from the
+            Convert these into ObsPy <code>UTCDateTime</code> objects and convert the arrival values as total seconds from the
             starting date:
         </Paragraph>
         <script src="https://gist.github.com/imarag/f5af9772fadcaeedb9dbeafd243f2235.js"></script>
@@ -137,7 +137,7 @@ export default function ComputeFourierOnWindow() {
         </figure>
         <H2>Trim The Waveforms Between The Windows</H2>
         <Paragraph>
-            To continue, trim the waveforms at the two windows using the Obspy
+            To continue, trim the waveforms at the two windows using the ObsPy
             <a href="https://docs.obspy.org/packages/autogen/obspy.core.stream.Stream.trim.html" 
                 target="_blank"><code>trim()</code></a> function.
             Because the trimming happens inplace, create copies of the orginal <code>Stream</code> object using the

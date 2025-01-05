@@ -1,13 +1,13 @@
 # Basic structure
 
-The main structure of the Obspy library consists of the `Trace` and the `Stream` objects. The `Trace` represents a single time series record of seismic data recorded at a single station or sensor. It's essentially a single waveform with associated metadata (e.g., station code, sampling frequency, starting time of the recording etc.). The `Stream` is a container of one or more `Trace` objects. Typically, a `Stream` contains three recordings or traces: two with horizontal components (e.g., North-South and East-West) and one with a vertical component. Each `Trace` offers several attributes that provide information about the recording and methods that apply a calculation on the respective recording. 
+The main structure of the ObsPy library consists of the `Trace` and the `Stream` objects. The `Trace` represents a single time series record of seismic data recorded at a single station or sensor. It's essentially a single waveform with associated metadata (e.g., station code, sampling frequency, starting time of the recording etc.). The `Stream` is a container of one or more `Trace` objects. Typically, a `Stream` contains three recordings or traces: two with horizontal components (e.g., North-South and East-West) and one with a vertical component. Each `Trace` offers several attributes that provide information about the recording and methods that apply a calculation on the respective recording. 
 
 ![The structure of the obspy library](obspy-structure.png)
 *The structure of the obspy library. A Stream object consists of one or more Trace objects. Each Trace represents a single waveform or recording and has different methods (.taper(), .filter(), etc.) and attributes (.data, .stats, etc.)*
 
  For instance, the `.data` attribute of a `Trace` provides its time series data samples and the `.stats` returns an object that holds metadata or seismic parameters associated with the trace, such as the sampling frequency, start time, end time, network, station, and other relevant information. In addition, the `filter()` method, filters the time series data within a specific frequency range and the `trim()` method cuts the time series between a specific start and end times.
 
-Obspy supports several file formats to read data. One of the most used seimic file format is the MiniSEED format. It is a binary file used to store time series data in a compact and efficient format that includes information about the station, location, timing, and the actual waveform data. MiniSEED files are widely used in seismology and are the standard format for sharing and archiving seismic data.
+ObsPy supports several file formats to read data. One of the most used seimic file format is the MiniSEED format. It is a binary file used to store time series data in a compact and efficient format that includes information about the station, location, timing, and the actual waveform data. MiniSEED files are widely used in seismology and are the standard format for sharing and archiving seismic data.
 
 Before we continue, start by initializing the functions that we will use throughout the rest of the tutorial: 
 
@@ -20,14 +20,14 @@ Before we continue, start by initializing the functions that we will use through
     import pandas as pd
 ```
 
-# Obspy Date and Time Manipulation
+# ObsPy Date and Time Manipulation
 
-Obspy offers extensive support for date and time manipulation. It includes the `UTCDateTime` object to represent date and time. For instance the start date and the end date of a recording, which are saved as starttime and endtime in the metadata information of a `Trace` object (in the .stats attribute), are both a `UTCDateTime` data type. 
+ObsPy offers extensive support for date and time manipulation. It includes the `UTCDateTime` object to represent date and time. For instance the start date and the end date of a recording, which are saved as starttime and endtime in the metadata information of a `Trace` object (in the .stats attribute), are both a `UTCDateTime` data type. 
 
 One way to create a `UTCDateTime` object is by using a Python string: 
 
 ```py
-    # create an Obspy UTCDateTime object from a Python string
+    # create an ObsPy UTCDateTime object from a Python string
     dt = UTCDateTime("2012-09-07T12:15:00")
     print(dt, type(dt))
 
@@ -93,7 +93,7 @@ The starttime and endtime keys in the header information of the recordings need 
 
 # Attributes and Methods
 
-Within ObsPy, you'll find an array of attributes and methods associated with the `Trace` class for accessing recording information, seismic file handling, and applying waveform processing techniques. To begin with, utilize the Obspy `read()` function to read a file of a recording took place on *04 April, 2014* at *20:08:20* and recorded by *CH03* station: 
+Within ObsPy, you'll find an array of attributes and methods associated with the `Trace` class for accessing recording information, seismic file handling, and applying waveform processing techniques. To begin with, utilize the ObsPy `read()` function to read a file of a recording took place on *04 April, 2014* at *20:08:20* and recorded by *CH03* station: 
 
 ```py
     st = read("20140404_200820_CH03.mseed")
@@ -169,7 +169,7 @@ We could achieve a similar result by just using the `st.plot()` method of the `S
 
 This method can get some parameters to control the styling of the plots such as the color of the waveforms, the size of the plot, the rotation and size of the x axis labels and more.
 
-In addition, the `Trace` object includes several methods that apply a specific calculation on the time series of the recording. For example, apply a bandpass at the previous recording between 1 and 3 Hz using the Obspy `filter()` method. 
+In addition, the `Trace` object includes several methods that apply a specific calculation on the time series of the recording. For example, apply a bandpass at the previous recording between 1 and 3 Hz using the ObsPy `filter()` method. 
 
 ```py
     st.filter('bandpass', fremin=1, fremax=3)
@@ -178,7 +178,7 @@ In addition, the `Trace` object includes several methods that apply a specific c
 ```
 
 ![bandpass filter application at the recording](obspy-filter-mseed.png)
-*Apply a bandpass filter between 1 and 3 Hz at the recording using the Obspy filter() method*
+*Apply a bandpass filter between 1 and 3 Hz at the recording using the ObsPy filter() method*
 
 These computations can be applied on the `Stream` object at once, or at each `Trace` of the `Stream`, individually. For instance, trim each recording to get the signal part of the recordings: 
 

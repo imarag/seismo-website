@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import "../styles/Home.css"
 import IntroToSeismologyImage from "../img/template-images/resized/arrival-pick-icon.png";
 import SiteEffectImage from "../img/template-images/resized/site-effect-icon.png";
-import ObspyScriptExample from "../img/template-images/resized/obspy-icon.png";
+import ObsPyScriptExample from "../img/template-images/resized/obspy-icon.png";
 
 import Title from "../components/Title";
 import Subtitle from "../components/Subtitle";
@@ -69,11 +69,11 @@ export default function Home() {
                 </Section>
                 <Section>
                     <div className="text-center">
-                        <img src={ObspyScriptExample} className="img-fluid image-logo" />
+                        <img src={ObsPyScriptExample} className="img-fluid image-logo" />
                     </div>
-                    <Title text1="Learn about the" text2="Python Obspy" />
+                    <Title text1="Learn about the" text2="Python ObsPy" />
                     <Subtitle
-                        text="Process seismic data using the various Obspy functions, manipulate date and time and plot earthquake recordings" />
+                        text="Process seismic data using the various ObsPy functions, manipulate date and time and plot earthquake recordings" />
                     <div className="text-center my-8">
                         <Link to="/articles/obspy" className="btn btn-success my-4">
                             Learn More

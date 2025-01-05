@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+
 import daisyui from 'daisyui'
 
 
@@ -11,14 +12,7 @@ export default {
   ],
   theme: {
     extend: {
-      backgroundImage: {
-        'hero-seismogram': "url('/img/seismogram-large-cropped.svg')",
-        'donation-seismogram': "url('/img/seismological-station.jpg')",
-      },
-      // colors: {
-      //   background: "var(--background)",
-      //   foreground: "var(--foreground)",
-      // },
+      
     },
     container: {
       padding: {

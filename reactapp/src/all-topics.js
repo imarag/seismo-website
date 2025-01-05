@@ -1,5 +1,5 @@
 // Import your topic components
-import Obspy from './markdowns/obspy.md';
+import ObsPy from './markdowns/obspy.md';
 import SiteEffect from './markdowns/site-effect.md';
 import SeismologyIntro from './markdowns/introduction-to-seismology.md';
 import FileManipulation from './markdowns/file-manipulation.md';
@@ -13,7 +13,7 @@ import SignalProcessing from './pages/tools/SignalProcessing';
 import DistanceBetweenPoints from './pages/tools/DistanceBetweenPoints';
 import EditSeismicFile from './pages/tools/EditSeismicFile';
 
-import ObspyImage from "./img/template-images/obspy-icon.png"
+import ObsPyImage from "./img/template-images/obspy-icon.png"
 import FourierImage from "./img/template-images/fourier-icon.png"
 import PickArrivalsImage from "./img/template-images/arrival-pick-icon.png"
 import FileToMseedImage from "./img/template-images/file-to-mseed-icon.png"
@@ -29,10 +29,10 @@ import ComputeFourierOnWindowImage from "./img/template-images/edit-seismic-file
 const allArticles = [
   {
     "id": 1,
-    "title": "Python Obspy",
+    "title": "Python ObsPy",
     "description": "An open-source Python library designed for advanced analysis, processing, and manipulation of seismological data. ObsPy supports the reading and writing of seismic formats, waveform analysis, and metadata handling, making it an essential tool for seismologists. The library integrates well with other scientific Python libraries, enabling efficient data processing and visualization.",
-    "image_name": ObspyImage,
-    "markdown": Obspy,
+    "image_name": ObsPyImage,
+    "markdown": ObsPy,
     "type": "seismic-articles",
     "template_name": "obspy"
   },

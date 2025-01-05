@@ -1,19 +1,19 @@
 import CH03MSEEDPlot from "@/images/ch03_mseed_plot.png"
-import ObspyStructure from "@/images/obspy-structure.png"
+import ObsPyStructure from "@/images/obspy-structure.png"
 import CH03MSEEDPlotMethod from "@/images/ch03_mseed_plot_method.png"
-import ObspyTrimmedTrace from "@/images/obspy-trimmed-trace.png"
-import ObspyFilterMSEED from "@/images/obspy-filter-mseed.png"
+import ObsPyTrimmedTrace from "@/images/obspy-trimmed-trace.png"
+import ObsPyFilterMSEED from "@/images/obspy-filter-mseed.png"
 import RecordTXTFile from "@/images/record-txt-file.png"
 
 
 
-export default function Obspy() {
+export default function ObsPy() {
   return (
     <>
         <h1>Basic structure</h1>
         
         <p>
-            The main structure of the Obspy library consists of the <code>Trace</code> and the <code>Stream</code> objects. The
+            The main structure of the ObsPy library consists of the <code>Trace</code> and the <code>Stream</code> objects. The
             <code>Trace</code> represents
             a single time series record of seismic data recorded at a single station or sensor. It's essentially a single
             waveform with associated metadata
@@ -25,7 +25,7 @@ export default function Obspy() {
             methods that apply a calculation on the respective recording.
         </p>
         <figure>
-            <img src={ObspyStructure} />
+            <img src={ObsPyStructure} />
             <figcaption>The structure of the obspy library. A <code>Stream</code> object consists of one or more
                 <code>Trace</code> objects. Each <code>Trace</code> represents a single waveform or recording and has
                 different methods (<code>.taper()</code>, <code>.filter()</code>, etc.) and attributes (<code>.data</code>, <code>.stats</code>, etc.)</figcaption>
@@ -39,7 +39,7 @@ export default function Obspy() {
             cuts the time series between a specific start and end times.
         </p>
         <p>
-            Obspy supports several <a target="_blank" 
+            ObsPy supports several <a target="_blank" 
                 href="https://docs.obspy.org/packages/autogen/obspy.core.stream.read.html">file formats</a> to read data.
             One of the most used seimic file format is the MiniSEED format. It is a binary file used to store time series data
             in a compact and
@@ -52,9 +52,9 @@ export default function Obspy() {
         </p>
         <script src="https://gist.github.com/imarag/71ebe8e74a737bdaec527ed955bdf4b7.js"></script>
 
-        <h1>Obspy Date and Time Manipulation</h1>
+        <h1>ObsPy Date and Time Manipulation</h1>
         <p>
-            Obspy offers extensive support for date and time manipulation. It includes the <code>UTCDateTime</code> object to
+            ObsPy offers extensive support for date and time manipulation. It includes the <code>UTCDateTime</code> object to
             represent date and time.
             For instance the start date and the end date of a recording, which are saved as <code>starttime</code> and
             <code>endtime</code> in the metadata information
@@ -85,7 +85,7 @@ export default function Obspy() {
             Within ObsPy, you'll find an array of attributes and methods
             associated with the <code>Trace</code> class for accessing
             recording information, seismic file handling, and applying
-            waveform processing techniques. To begin with, utilize the Obspy
+            waveform processing techniques. To begin with, utilize the ObsPy
             <code>read()</code> function to read a file of a recording took
             place on <code>04 April, 2014</code>
             at <code>20:08:20</code> and recorded by <i>CH03</i> station:
@@ -136,15 +136,15 @@ export default function Obspy() {
         <p>
             In addition, the <code>Trace</code> object includes several methods that apply a specific calculation on the time
             series of the recording.
-            For example, apply a bandpass at the previous recording between 1 and 3 Hz using the Obspy <a target="_blank"
+            For example, apply a bandpass at the previous recording between 1 and 3 Hz using the ObsPy <a target="_blank"
                 
                 href="https://docs.obspy.org/packages/autogen/obspy.core.trace.Trace.filter.html">obspy.core.trace.Trace.filter</a>
             method.
         </p>
         <script src="https://gist.github.com/imarag/14848d53828c53eb1706b7a827ea7831.js"></script>
         <figure>
-            <img src={ObspyFilterMSEED} />
-            <figcaption>Apply a bandpass filter between 1 and 3 Hz at the recording using the Obspy <code>filter()</code>
+            <img src={ObsPyFilterMSEED} />
+            <figcaption>Apply a bandpass filter between 1 and 3 Hz at the recording using the ObsPy <code>filter()</code>
                 method</figcaption>
         </figure>
         <p>
@@ -154,7 +154,7 @@ export default function Obspy() {
         </p>
         <script src="https://gist.github.com/imarag/3f86114b356f449edf1d1a1ec8fdc069.js"></script>
         <figure>
-            <img src={ObspyTrimmedTrace} />
+            <img src={ObsPyTrimmedTrace} />
             <figcaption>Trim the time series to get the signal part</figcaption>
         </figure>
         <p>

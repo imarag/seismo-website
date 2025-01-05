@@ -1,39 +1,44 @@
 import Image from "next/image";
+
 import Section from "@/components/Section";
 import Title from "@/components/Title";
 import SubTitle from "@/components/SubTitle";
 import Card from "@/components/Card";
 import ToolsGallery from "@/components/ToolsGallery";
-import CTAButton from "./ui/CTAButton";
-import Link from 'next/link';
+import CTAButton from "@/components/CTAButton";
+
 import { IoIosArrowRoundForward } from "react-icons/io";
+
 import SiteEffectIcon from "@/images/template-images/resized/site-effect-icon.png"
 import ArrivalPickIcon from "@/images/template-images/resized/arrival-pick-icon.png"
-import ObspyIcon from "@/images/template-images/resized/obspy-icon.png"
-import ObspyScriptExample from "@/images/obspy-script-example.gif";
+import ObsPyIcon from "@/images/template-images/resized/obspy-icon.png"
+import ObsPyScriptExample from "@/images/obspy-script-example.gif";
+import SeismogramLargeCropped from "@/images/seismogram-large-cropped.svg";
+
 
 export default function Home() {
     return (
         <>
-            <div className="bg-hero-seismogram bg-no-repeat bg-contain bg-top">
-                <div className="hero min-h-screen">
-                    <div className="hero-content text-center">
-                        <div className="max-w-xxl">
-                            <h1 className="text-4xl md:text-8xl font-bold">
-                                A JOURNEY INTO
-                                <br />
-                                <span className="text-primary">SEISMOLOGY</span>
-                            </h1>
-                            <p className="py-6 font-normal text-lg md:text-3xl">
-                                Discover different seismic articles, interact with tools, and deepen
-                                your understanding.
-                            </p>
-                            <CTAButton href="/articles" label="Get started" />
-                        </div>
+            <div 
+                style={{ backgroundImage: `url('${SeismogramLargeCropped.src}')` }} 
+                className={`bg-no-repeat bg-contain bg-top`}
+            >
+                <div className="min-h-screen flex flex-row items-center justify-center">
+                    <div>
+                        <h1 className="text-primary text-center text-4xl md:text-8xl font-bold">
+                            A JOURNEY INTO
+                            <br />
+                            <span className="text-secondary">SEISMOLOGY</span>
+                        </h1>
+                        <p className="text-primary text-center py-6 font-normal text-lg md:text-3xl">
+                            Discover different seismic articles, interact with tools, and deepen
+                            your understanding.
+                        </p>
+                        <CTAButton href="/articles" label="Get started" />
                     </div>
                 </div>
                 <Section className="mt-52">
-                    <Title text1="Discover the" text2="seismic articles" />
+                    <Title text="Discover the" styledText="seismic articles" />
                     <SubTitle
                         text="Explore a range of seismic articles designed to deepen your understanding of the mechanisms behind earthquakes and the advanced technologies used to analyze them."
                     />
@@ -55,31 +60,26 @@ export default function Home() {
                             className="w-full md:w-1/2 xl:w-5/12"
                         />
                     </div>
-                    <p className="text-center mt-14 flex flex-row justify-center items-center gap-2">
-                        <Link href="/articles" className="link link-hover text-gray-800 hover:text-gray-600">
-                            Learn about the seismic articles
-                        </Link>
-                        <IoIosArrowRoundForward />
-                    </p>
+                    <CTAButton href="/articles" label="Learn about the seismic articles" link={true} linkIcon={<IoIosArrowRoundForward/>} />
+                </Section>
+                <Section>
+                    <Image src={ObsPyIcon} className="w-20 block mx-auto"  alt="ObsPy Logo" />
+                    <Title text="Learn about the" styledText="Python ObsPy" />
+                    <SubTitle
+                        text="Process seismic data using the various ObsPy functions, manipulate date and time, and plot earthquake recordings."
+                    />
+                    <CTAButton href="/articles/obspy" label="Learn More" />
+                    <Image src={ObsPyScriptExample} alt="python script example" className="block mx-auto max-w-3xl" unoptimized />
+                </Section>
+                <Section>
+                    <Title text="Utilize the" styledText="interactive tools" />
+                    <SubTitle
+                        text="Explore a range of seismic articles designed to deepen your understanding of the mechanisms behind earthquakes and the advanced technologies used to analyze them."
+                    />
+                    <CTAButton href="/tools" label="Learn More" />
+                    <ToolsGallery />
                 </Section>
             </div>
-            <Section>
-                <Image src={ObspyIcon} className="w-20 block mx-auto"  alt="Obspy Logo" />
-                <Title text1="Learn about the" text2="Python Obspy" />
-                <SubTitle
-                    text="Process seismic data using the various Obspy functions, manipulate date and time, and plot earthquake recordings."
-                />
-                <CTAButton href="/articles/obspy" label="Learn More" />
-                <Image src={ObspyScriptExample} alt="python script example" className="block mx-auto w-full max-w-3xl mb-4" />
-            </Section>
-            <Section>
-                <Title text1="Utilize the" text2="interactive tools" />
-                <SubTitle
-                    text="Explore a range of seismic articles designed to deepen your understanding of the mechanisms behind earthquakes and the advanced technologies used to analyze them."
-                />
-                <CTAButton href="/tools" label="Learn More" />
-                <ToolsGallery className="mx-auto w-full max-w-4xl" />
-            </Section>
         </>
     );
 }

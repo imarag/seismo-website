@@ -5,22 +5,19 @@ import Footer from "@/components/Footer"
 
 
 export default function RootLayout({ children }) {
-  
-  return (
-    <html lang="en">
-      <body >
-        <header className="bg-white py-2">
-          <div className="container mx-auto  ">
-            <NavBar />
-          </div>
-        </header>
-        <main className="text-xl pt-10 mb-20">
-          {children}
-        </main>
-        <footer>
-          <Footer />
-        </footer>
-      </body>
-    </html>
-  );
+    return (
+        <html lang="en">
+            <body>
+                <header>
+                    <NavBar />
+                </header>
+                <main>
+                    {children}
+                </main>
+                <footer>
+                    <Footer />
+                </footer>
+            </body>
+        </html>
+    );
 }

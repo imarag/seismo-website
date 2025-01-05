@@ -1,11 +1,11 @@
-import ObspyIcon from '@/images/template-images/resized/obspy-icon.png';
+import ObsPyIcon from '@/images/template-images/resized/obspy-icon.png';
 import SiteEffectIcon from '@/images/template-images/resized/site-effect-icon.png';
 import SeismologyIntroIcon from '@/images/template-images/resized/introduction-to-seismology-icon.png';
 import MatplotlibIcon from '@/images/template-images/resized/matplotlib-icon.png';
 import ComputeFourierOnWindowIcon from '@/images/template-images/resized/fourier-on-window-icon.png';
 import FileManipulationIcon from '@/images/template-images/resized/file-manipulation-icon.png';
 
-import ObspyMarkdown from '@/markdowns/obspy.mdx';
+import ObsPyMarkdown from '@/markdowns/obspy.mdx';
 import SiteEffectMarkdown from '@/markdowns/site-effect.mdx';
 import SeismologyIntroMarkdown from '@/markdowns/introduction-to-seismology.mdx';
 import MatplotlibMarkdown from '@/markdowns/matplotlib.mdx';
@@ -24,11 +24,11 @@ export const allArticles = [
     id: 1,
     title: "Mastering Python for Seismology with ObsPy",
     description: "Dive deep into ObsPy, a powerful Python library tailored for analyzing and processing seismic data. Learn how to read, write, and visualize seismic waveforms, extract metadata, and perform advanced analyses critical for seismological research.",
-    icon: ObspyIcon,
+    icon: ObsPyIcon,
     iconAlt: "ObsPy logo - A Python library for seismic data",
     type: "article",
     slug: "obspy",
-    markdown: ObspyMarkdown,
+    markdown: ObsPyMarkdown,
     completed: true,
   },
   {

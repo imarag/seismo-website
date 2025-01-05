@@ -174,7 +174,7 @@ There are many other parameters that control the appearance of the line at the d
 
 # Plot Seismic Records
 
- At this point, we will plot real seismological data. We will start by reading data from a MiniSEED file. A MiniSEED file is a binary file used to store time series data in a compact and efficient format that includes information about the station, location, timing, and the actual waveform data. We will use Python Obspy read function to read the file into an Obspy `Stream` object. The `Stream` object in ObsPy is essentially a collection of multiple `Trace` objects. Each `Trace` object represents a single continuous time series of seismic data, and a `Stream` can contain multiple traces that are related, such as different components of the same seismic station or data from different stations. Check the Obspy tutorial for more information.
+ At this point, we will plot real seismological data. We will start by reading data from a MiniSEED file. A MiniSEED file is a binary file used to store time series data in a compact and efficient format that includes information about the station, location, timing, and the actual waveform data. We will use Python ObsPy read function to read the file into an ObsPy `Stream` object. The `Stream` object in ObsPy is essentially a collection of multiple `Trace` objects. Each `Trace` object represents a single continuous time series of seismic data, and a `Stream` can contain multiple traces that are related, such as different components of the same seismic station or data from different stations. Check the ObsPy tutorial for more information.
 
 Read a seismic record that took place in 24 of July, 2015 at the *KRL1* station, into a `Stream` object:
 
@@ -230,7 +230,7 @@ This `Stream` object contains 3 traces or single time series with different comp
 ![Time series of the recording happened on 24 of July, 2015 at the KRL1 station](/img/matplotlib_mseed_plot.png)
 *Time series of the recording happened on 24 of July, 2015 at the KRL1 station*
 
-There is more functionality at the Python Obspy library, to process seismic data. Check the Obspy tutorial. In addition, we could apply more styling to the seismograms, however i leave it up to you to explore the Matplotlib library. Bear in mind that you need to keep it simple and not to add a lot of information at the graph. 
+There is more functionality at the Python ObsPy library, to process seismic data. Check the ObsPy tutorial. In addition, we could apply more styling to the seismograms, however i leave it up to you to explore the Matplotlib library. Bear in mind that you need to keep it simple and not to add a lot of information at the graph. 
 
 # Miscellaneous Functions
 

@@ -1,7 +1,13 @@
+import Image from 'next/image';
+
+import Accordion from '@/components/Accordion';
+
 import {capitalizeWords} from '@/utils/functions'
 import { allTools } from '@/utils/all-topics';
-import Image from 'next/image';
-import Accordion from '@/components/Accordion';
+import { fastapiEndpoints } from '@/utils/static';
+
+import Section from "@/components/Section"
+
 
 export default async function ToolSlugPage({ params }) {
     const slug = (await params).slug
@@ -11,7 +17,7 @@ export default async function ToolSlugPage({ params }) {
     const selectedTool = allTools.find(tl => tl.slug === slug);
    
     return (
-        <section className="container mx-auto">
+        <Section>
             
             <Image src={selectedTool.icon} alt={selectedTool.iconAlt} className="block w-20 mx-auto" />
             <h1 className="text-center font-semibodl text-5xl mt-4 mb-3">
@@ -26,8 +32,13 @@ export default async function ToolSlugPage({ params }) {
                     <p>{ selectedTool.userGuide }</p>
                 </Accordion>
             </div>
+            <p className="text-center my-4 text-sm font-light">
+                Don't have a seismic data file ? 
+                Click <a className="link link-primary" href={fastapiEndpoints['DOWNLOAD-TEST-FILE']}>here</a> to download one to experiment 
+                with the tool. 
+            </p>
             <Tool />
-        </section>
+        </Section>
     )
 }
 

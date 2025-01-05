@@ -105,6 +105,18 @@ async def upload_data_file(file: UploadFile):
     return [list(df[c]) for c in df.columns]
    
 
+@router.get("/download-test-file")
+async def download_test_file():
+    file_name = "20150724_095834_KRL1.mseed"
+    test_file_path = os.path.join(Settings.RESOURCES_PATH.value, file_name)
+    return FileResponse(
+        test_file_path,
+        filename=file_name,
+        media_type='application/octet-stream',
+        headers={"Content-Disposition": f'attachment; filename="{file_name}"'}
+    )
+    
+
 class InputDataParams(BaseModel):
     data: list
 

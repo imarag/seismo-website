@@ -2,7 +2,7 @@
   "topics": [
     {
       "id": 1,
-      "title": "Python Obspy",
+      "title": "Python ObsPy",
       "description": "An open-source Python library designed for advanced analysis, processing, and manipulation of seismological data",
       "image_name": "obspy-icon.png",
       "type": "static",

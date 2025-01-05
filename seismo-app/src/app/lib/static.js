@@ -5,6 +5,7 @@ export const fastapiEndpoints = {
     "UPLOAD-SEISMIC-FILE": `${serverUrl}/utilities/upload-seismic-file`,
     "UPLOAD-DATA-FILE": `${serverUrl}/utilities/upload-data-file`,
     "DOWNLOAD-SEISMIC-FILE": `${serverUrl}/utilities/download-seismic-file`,
+    "DOWNLOAD-TEST-FILE": `${serverUrl}/utilities/download-test-file`,
     "SAVE-ARRIVALS": `${serverUrl}/utilities/save-arrivals`,
     "CONVERT-TO-MSEED": `${serverUrl}/utilities/convert-to-mseed`,   
     "TRIM-WAVEFORM": `${serverUrl}/signal-processing/trim-waveform`,

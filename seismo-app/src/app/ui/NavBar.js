@@ -6,14 +6,12 @@ import NavSearchBar from "@/components/NavSearchBar"
 import { AiOutlineMenu } from "react-icons/ai";
 import { IoMdClose } from "react-icons/io";
 import { useState } from "react";
-import { usePathname } from 'next/navigation'
  
 export default function NavBar() {
     const [showNavBar, setShowNavbar] = useState(false)
-    const pathname = usePathname()
 
     return (
-        <nav>
+        <nav className="container mx-auto">
             <div className="navbar flex flex-row relative">
                 <Link href="/">
                     <Logo />
@@ -44,7 +42,7 @@ export default function NavBar() {
                 </div>
                 {
                     showNavBar && (
-                        <div className="fixed end-0 top-0 bottom-0 w-full sm:w-96 glass lg:hidden z-50">
+                        <div className="fixed end-0 top-0 bottom-0 w-full sm:w-96  lg:hidden z-50">
                             <button className="btn btn-ghost absolute top-4 start-4 " onClick={() => setShowNavbar(false)}>
                                 <IoMdClose className="text-xl" />
                             </button>

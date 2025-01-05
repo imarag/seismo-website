@@ -1,12 +1,15 @@
 import Image from "next/image"
+
 import Title from "@/components/Title"
 import SubTitle from "@/components/SubTitle"
+import Section from "@/components/Section"
+
 import SeismologicalStationImage from '@/images/seismological-station.jpg'
 
 export default function Donation() {
     return (
-        <section>
-            <Title text1="Donation" />
+        <Section>
+            <Title text="Donation" />
             <SubTitle text="Contribute to our cause and help us make a positive impact with your donation" />
             <div className="flex flex-row justify-center mb-14">
                 <form action="https://www.paypal.com/donate" method="post" target="_top">
@@ -15,9 +18,9 @@ export default function Donation() {
                     <img alt="" border="0" src="https://www.paypal.com/en_GR/i/scr/pixel.gif" width="1" height="1" />
                 </form>
             </div>
-            <div className="relative border">
+            <div>
                 <Image src={SeismologicalStationImage} className="w-full" alt="an old seismological station" />
             </div>
-        </section>
+        </Section>
     )
 }

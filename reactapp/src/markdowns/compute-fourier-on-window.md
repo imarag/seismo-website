@@ -10,7 +10,7 @@ In this tutorial, our aim is to compute the Fourier spectra within a specific wi
 
 # Reading the Input Data
 
-In this article we will make use of the Obspy Python library to apply the seismological computations and the Python Matplotlib library to plot the waveform time series. For this reason, we will start by initializing the libraries that we will use throughout the rest of the article:
+In this article we will make use of the ObsPy Python library to apply the seismological computations and the Python Matplotlib library to plot the waveform time series. For this reason, we will start by initializing the libraries that we will use throughout the rest of the article:
 
 ```py
     import matplotlib.pyplot as plt
@@ -36,7 +36,7 @@ To proceed, read a MiniSEED file containing a record from April 4, 2014, at 20:0
 
 ## Apply A Bandpass Filter
 
-Initiate the process by applying a bandpass filter to the records within the frequency range of 1 to 5 Hz. This step aims to eliminate surrounding noise and facilitate the arrival selection. Utilize the Obspy filter() function for this purpose:
+Initiate the process by applying a bandpass filter to the records within the frequency range of 1 to 5 Hz. This step aims to eliminate surrounding noise and facilitate the arrival selection. Utilize the ObsPy filter() function for this purpose:
 
 ```py
     # apply an inplace bandpass filter of 1-5 Hz
@@ -51,7 +51,7 @@ Initiate the process by applying a bandpass filter to the records within the fre
 
 ## Select The P And S Wave Arrivals
 
-It's clear from the filtered waveforms, that the P wave arrivals occurs roughly at 20:08:36 and the S wave arrivals at 20:08:58. Convert these into Obspy UTCDateTime objects and convert the arrival values as total seconds from the starting date:
+It's clear from the filtered waveforms, that the P wave arrivals occurs roughly at 20:08:36 and the S wave arrivals at 20:08:58. Convert these into ObsPy UTCDateTime objects and convert the arrival values as total seconds from the starting date:
 
 ```py
     # Define the P and S wave arrivals as UTCDateTime objects
@@ -141,7 +141,7 @@ At this stage we define two windows to calculate the Fourier Spectra, one for th
 
 ## Trim The Waveforms Between The Windows
 
-To continue, trim the waveforms at the two windows using the Obspy trim() function. Because the trimming happens inplace, create copies of the orginal Stream object using the copy() method:
+To continue, trim the waveforms at the two windows using the ObsPy trim() function. Because the trimming happens inplace, create copies of the orginal Stream object using the copy() method:
 
 ```py
     # noise window: from Parr-window_length to Parr

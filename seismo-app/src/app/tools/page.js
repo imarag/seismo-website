@@ -1,14 +1,16 @@
-'use client';
 import Link from "next/link"
 import Image from "next/image"
+
 import Title from "@/components/Title";
 import SubTitle from "@/components/SubTitle";
+import Section from "@/components/Section";
+
 import { allTools } from "@/utils/all-topics";
 
 export default function Tools() {
     return (
-        <section className="container mx-auto">
-            <Title text1="Seismic Tools" />
+        <Section>
+            <Title text="Seismic Tools" />
             <SubTitle text="Discover the interactive tools built to facilitate seismological processing" />
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-14">
                 {
@@ -30,6 +32,6 @@ export default function Tools() {
                     ))
                 }
             </div>
-        </section>
+        </Section>
     );
 }

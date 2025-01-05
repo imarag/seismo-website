@@ -10,10 +10,10 @@ export default function ToolsSearch() {
     return (
       <section className="container-lg">
         <Title text1="Seismic Tools" />
-        <Subtitle text="Explore various interactive tools built using Python Obspy for seismic data processing" />
+        <Subtitle text="Explore various interactive tools built using Python ObsPy for seismic data processing" />
         <p>
           Discover the different tools built for seismological processing. These tools make use of the  
-          <a href="https://docs.obspy.org/" target="_blank" className="underline decoration-solid decoration-blue-500 text-blue-500"> Python Obspy framework</a> related to seismological data 
+          <a href="https://docs.obspy.org/" target="_blank" className="underline decoration-solid decoration-blue-500 text-blue-500"> Python ObsPy framework</a> related to seismological data 
           processing. It offers functionality to interact with various seismological file formats such as MiniSEED, SAC, 
           and others, fetch seismic data from web services, apply various digital filters (low-pass, high-pass, band-pass) to seismic data, 
           visualize seismic waveforms etc.

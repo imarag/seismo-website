@@ -1,17 +1,20 @@
-import OldSeismogram from "@/images/seismometer2.jpg"
 import Image from "next/image"
+
 import SocialMedia from "@/components/SocialMedia"
 import ContactForm from "@/components/ContactForm"
 import Title from "@/components/Title"
 import SubTitle from "@/components/SubTitle"
 
+import OldSeismogram from "@/images/seismometer2.jpg"
+import Section from "@/components/Section"
+
 export default function Contact() {
     return (
-        <section className="container mx-auto">
+        <Section>
             <div className="flex flex-col lg:flex-row gap-10">
                 <div className="basis-0 grow bg-base-200">
                     <div className="p-5">
-                        <Title text1="Contact Us" />
+                        <Title text="Contact Us" />
                         <SubTitle text="Connect with us and share your suggestions and improvements" />
                         <SocialMedia />
                         <ContactForm />
@@ -25,6 +28,6 @@ export default function Contact() {
                 />
                 </div>
             </div>
-        </section>
+        </Section>
     )
 }

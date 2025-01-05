@@ -1,10 +1,10 @@
 
-export default function Title({ text1, text2=null }) {
+export default function Title({ text, styledText=null }) {
     return (
-      <h1 className="text-5xl md:text-6xl text-center font-normal mt-4 mb-4">       
-        {text1}
+      <h1 className="text-5xl md:text-6xl text-center font-normal my-4">       
+        {text}
         <br />
-        {text2 && <span className="text-primary">{text2}</span>}
+        {styledText && <span className="text-primary">{styledText}</span>}
       </h1>
     );
   }
