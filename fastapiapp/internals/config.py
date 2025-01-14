@@ -1,5 +1,8 @@
 from enum import Enum
 from pathlib import Path
+import logging
+
+logger = logging.getLogger('uvicorn.error')
 
 class Settings(Enum):
     TEMP_DATA_NAME = "temp_data"

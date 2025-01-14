@@ -27,10 +27,10 @@ One way to create a `UTCDateTime` object is by using a Python string:
     # create an ObsPy UTCDateTime object from a Python string
     dt = UTCDateTime("2012-09-07T12:15:00")
     print(dt, type(dt))
+```
 
-    # Output: 
-
-    # 2012-09-07T12:15:00.000000Z <class 'obspy.core.utcdatetime.UTCDateTime'>
+```text 
+    2012-09-07T12:15:00.000000Z <class 'obspy.core.utcdatetime.UTCDateTime'>
 ```
 
 You can perform addition, subtraction and extract multiple attributes from this object using the dot notation: 
@@ -53,20 +53,20 @@ You can perform addition, subtraction and extract multiple attributes from this 
     print("dt.second -> ", dt.second)             
     print("dt.timestamp -> ", dt.timestamp)
     print("dt.weekday -> ", dt.weekday)
+```
 
-    # Output:
-
-    # 2012-09-07T12:15:20.000000Z
-    # dt.date ->  2012-09-07
-    # dt.time ->  12:15:20
-    # dt.year ->  2012
-    # dt.month ->  9
-    # dt.day ->  7
-    # dt.hour ->  12
-    # dt.minute ->  15
-    # dt.second ->  20
-    # dt.timestamp ->  1347020120.0
-    # dt.weekday ->  4
+```text 
+    2012-09-07T12:15:20.000000Z
+    dt.date ->  2012-09-07
+    dt.time ->  12:15:20
+    dt.year ->  2012
+    dt.month ->  9
+    dt.day ->  7
+    dt.hour ->  12
+    dt.minute ->  15
+    dt.second ->  20
+    dt.timestamp ->  1347020120.0
+    dt.weekday ->  4
 ```
 
 Last but not least, one can subtract `UTCDateTime` objects and get the difference of them in seconds:
@@ -80,10 +80,10 @@ Last but not least, one can subtract `UTCDateTime` objects and get the differenc
     # calculate the difference of the two UTCDateTime objects           
     diff = dt2 - dt
     print(diff)
+```
 
-    # Output:
-                
-    # 300.0
+```text 
+    300.0
 ```
 
 The *starttime* and *endtime* keys in the header information of the recordings need to be in a `UTCDateTime` data type. Therefore, if you intend to modify these keys within the `trace.stats` dictionary-like header, convert your datetime string into the `UTCDateTime` format. 
@@ -95,13 +95,13 @@ Within ObsPy, you'll find an array of attributes and methods associated with the
 ```py
     st = read("20140404_200820_CH03.mseed")
     print(st)
+```
 
-    # Output:
-
-    # 3 Trace(s) in Stream:
-    # .CH03..E | 2014-04-04T20:08:20.000000Z - 2014-04-04T20:11:10.000000Z | 100.0 Hz, 17001 samples
-    # .CH03..N | 2014-04-04T20:08:20.000000Z - 2014-04-04T20:11:10.000000Z | 100.0 Hz, 17001 samples
-    # .CH03..Z | 2014-04-04T20:08:20.000000Z - 2014-04-04T20:11:10.000000Z | 100.0 Hz, 17001 samples
+```text 
+    3 Trace(s) in Stream:
+    .CH03..E | 2014-04-04T20:08:20.000000Z - 2014-04-04T20:11:10.000000Z | 100.0 Hz, 17001 samples
+    .CH03..N | 2014-04-04T20:08:20.000000Z - 2014-04-04T20:11:10.000000Z | 100.0 Hz, 17001 samples
+    .CH03..Z | 2014-04-04T20:08:20.000000Z - 2014-04-04T20:11:10.000000Z | 100.0 Hz, 17001 samples
 ```
 
 The file is a MiniSEED file that contains 3 traces or records each with a different component (E, N, Z). We can see the start and the end time of the record, the sampling frequency in Hz and the total samples. Let's get this information for the first trace of the `Stream` object: 
@@ -112,21 +112,21 @@ The file is a MiniSEED file that contains 3 traces or records each with a differ
 
     # output the header information of that trace object
     print(first_trace.stats)
+```
 
-    # Output:
-
-    # network:
-    # station: CH03
-    # location:
-    # channel: E
-    # starttime: 2014-04-04T20:08:20.000000Z
-    # endtime: 2014-04-04T20:11:10.000000Z
-    # sampling_rate: 100.0
-    # delta: 0.01
-    # npts: 17001
-    # calib: 1.0
-    # _format: MSEED
-    # mseed: AttribDict({'dataquality': 'D', 'number_of_records': 34, 'encoding': 'FLOAT64', 'byteorder': '>', 'record_length': 4096, 'filesize': 417792})
+```text 
+    network:
+    station: CH03
+    location:
+    channel: E
+    starttime: 2014-04-04T20:08:20.000000Z
+    endtime: 2014-04-04T20:11:10.000000Z
+    sampling_rate: 100.0
+    delta: 0.01
+    npts: 17001
+    calib: 1.0
+    _format: MSEED
+    mseed: AttribDict({'dataquality': 'D', 'number_of_records': 34, 'encoding': 'FLOAT64', 'byteorder': '>', 'record_length': 4096, 'filesize': 417792})
 ```
 
  We can observe multiple key-value pairs that contain the seismic parameters, such as the station code or name which is *CH03*, the component of the record which is East-West (E) and the the sampling frequency or sampling rate of 100 Hz. Several other parameters are also apparent like the starting and the ending date of the record (starttime, endtime), the sample distance in seconds (dt), the total number of sample points (npts) and more. The output is a `obspy.core.trace.Stats` object which is a dict-like object that you can get and set the values.
@@ -252,10 +252,10 @@ Start by reading the file and collect the file header information in order to bu
     }
 
     print(dict_header)
-        
-    # Output:
+```
 
-    # {'station': 'ZAK2', 'npts': 21100, 'sampling_rate': 100.0, 'starttime': UTCDateTime(2013, 8, 9, 4, 19, 40)}
+```text 
+    {'station': 'ZAK2', 'npts': 21100, 'sampling_rate': 100.0, 'starttime': UTCDateTime(2013, 8, 9, 4, 19, 40)}
 ```
 
 Then we use the python Pandas library to read the acceleration values of the traces: 
@@ -293,13 +293,13 @@ Finally, create the `Stream` object, from the list of the traces:
     st = Stream(lt_traces)
 
     print(st)
+```
 
-    # Output:
-
-    # 3 Trace(s) in Stream:
-    # .ZAK2..E | 2013-08-09T04:19:40.000000Z - 2013-08-09T04:23:10.990000Z | 100.0 Hz, 21100 samples
-    # .ZAK2..N | 2013-08-09T04:19:40.000000Z - 2013-08-09T04:23:10.990000Z | 100.0 Hz, 21100 samples
-    # .ZAK2..Z | 2013-08-09T04:19:40.000000Z - 2013-08-09T04:23:10.990000Z | 100.0 Hz, 21100 samples
+```text 
+    3 Trace(s) in Stream:
+    .ZAK2..E | 2013-08-09T04:19:40.000000Z - 2013-08-09T04:23:10.990000Z | 100.0 Hz, 21100 samples
+    .ZAK2..N | 2013-08-09T04:19:40.000000Z - 2013-08-09T04:23:10.990000Z | 100.0 Hz, 21100 samples
+    .ZAK2..Z | 2013-08-09T04:19:40.000000Z - 2013-08-09T04:23:10.990000Z | 100.0 Hz, 21100 samples
 ```
 
 If you require additional information about the ObsPy library, please refer to the documentation. 

@@ -82,12 +82,27 @@ export default function PickArrivals() {
     // this function will be called by the filters dropdown and also by the manual filters handleEnterKey below
     async function handleFilterChange(freqmin=null, freqmax=null) {
         setLoading(true)
-     
-        const requestBody = {freqmin: freqmin, freqmax: freqmax, seismic_data: traces}
         
+        const seismicData = traces.map(tr => (
+            {
+                values: tr.ydata,
+                sampling_rate: tr.stats.sampling_rate,
+                left_filter: freqmin,
+                right_filter: freqmax
+            }
+        ))
+
+        const requestBody = {
+            seismic_data: seismicData
+        }
+
         fetchRequest({endpoint: fastapiEndpoints["APPLY-FILTER"], method: "POST", data: requestBody})
         .then(jsonData => {
-            setFilteredTraces(jsonData);
+            const newTraces = traces.map((tr, ind) => ({
+                ...tr, ydata: jsonData[ind]
+            }))
+
+            setFilteredTraces(newTraces);
         })
         .catch(error => {
             setError(error.message)
@@ -134,10 +149,9 @@ export default function PickArrivals() {
 
         let PArr = formattedArrivals["P"];
         let SArr = formattedArrivals["S"];
-        let record = filteredTraces[0]["record-name"];
 
         let endpoint = fastapiEndpoints["SAVE-ARRIVALS"]
-        let queryParams = (PArr && `Parr=${PArr}&`) + (SArr && `Sarr=${SArr}&` + `record=${record}`)
+        let queryParams = (PArr && `Parr=${PArr}&`) + (SArr && `Sarr=${SArr}`)
 
         fetchRequest({endpoint: `${endpoint}?${queryParams}`, method: "GET", returnBlob: true})
         .then(blobData => {

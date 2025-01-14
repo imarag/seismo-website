@@ -18,6 +18,7 @@ export default function UploadFileButton({setTraces, setError, setLoading, butto
         
         fetchRequest({endpoint: fastapiEndpoints["UPLOAD-SEISMIC-FILE"], method: "POST", data: formData})
         .then(jsonData => {
+            console.log(jsonData)
             setTraces(jsonData);
         })
         .catch(error => {

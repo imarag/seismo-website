@@ -26,7 +26,7 @@ export function NumberInputElement({ className, ...props }) {
             {...props}
             type="number" 
             className={`input input-bordered  ${className ? className: ""}`}
-            readOnly={props.readonly ? true : false}
+            readOnly={props.readOnly ? true : false}
         />
     );
 }
@@ -57,7 +57,7 @@ export function TextInputElement({ className, ...props }) {
             {...props}
             type="text" 
             className={`input input-bordered  ${className ? className: ""}`}
-            readOnly={props.readonly ? true : false}
+            readOnly={props.readOnly ? true : false}
         />
     );
 }
@@ -68,7 +68,7 @@ export function EmailInputElement({ className, ...props }) {
             {...props}
             type="email" 
             className={`input input-bordered  ${className ? className: ""}`}
-            readOnly={props.readonly ? true : false}
+            readOnly={props.readOnly ? true : false}
         />
     );
 }
@@ -79,7 +79,7 @@ export function TextAreaElement({ className, ...props }) {
             {...props}
             type="email" 
             className={`textarea textarea-bordered  ${className ? className: ""}`}
-            readOnly={props.readonly ? true : false}
+            readOnly={props.readOnly ? true : false}
         ></textarea>
     );
 }

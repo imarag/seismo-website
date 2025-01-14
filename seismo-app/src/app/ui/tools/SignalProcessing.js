@@ -51,7 +51,6 @@ export default function SignalProcessing() {
     const [appliedFilters, setAppliedFilters] = useState([])
     const [signalProcessingOptions, setSignalProcessingOptions] = useState({
         "detrend-type": "simple",
-        "detrend-order": 1,
         "taper-type": "parzen",
         "taper-side": "both",
         "taper-length": 20,
@@ -66,16 +65,11 @@ export default function SignalProcessing() {
     useEffect(() => {
         const applyFilters = async () => {
             setLoading(true);
-            let newJSONData = traces;
 
             for (const filt of appliedFilters) {
-                const requestBodyJson = {
-                    data: newJSONData,
-                    ...filt.processOptions
-                };
                 const options = {
                     method: 'POST',
-                    body: JSON.stringify(requestBodyJson),
+                    body: filt.fetchBody,
                     credentials: 'include',
                     headers: { 'Content-Type': 'application/json' },
                 };
@@ -106,9 +100,15 @@ export default function SignalProcessing() {
         const filter = {
             fetchURL: fastapiEndpoints["TRIM-WAVEFORM"],
             text: `trim-${shapes[0]["x0"]}-${shapes[0]["x1"]}`,
-            processOptions: {
-                "trim_left_side": shapes[0]["x0"],
-                "trim_right_side": shapes[0]["x1"],
+            fetchBody: {
+                seismic_data: traces.map(tr => (
+                    {
+                        values: tr.ydata,
+                        sampling_rate: tr.stats.sampling_rate,
+                        left_trim: shapes[0]["x0"],
+                        right_trim: shapes[0]["x1"],
+                    }
+                ))
             },
             id: getRandomNumber()
         }
@@ -121,10 +121,16 @@ export default function SignalProcessing() {
         const filter = {
             fetchURL: fastapiEndpoints["TAPER-WAVEFORM"],
             text: `taper-${signalProcessingOptions["taper-type"]}-${signalProcessingOptions["taper-side"]}-${signalProcessingOptions["taper-length"]}`,
-            processOptions: {
-                "taper_type": signalProcessingOptions["taper-type"],
-                "taper_side": signalProcessingOptions["taper-side"],
-                "taper_length": signalProcessingOptions["taper-length"],
+            fetchBody: {
+                seismic_data: traces.map(tr => (
+                    {
+                        values: tr.ydata,
+                        sampling_rate: tr.stats.sampling_rate,
+                        taper_type: signalProcessingOptions["taper-type"],
+                        taper_side: signalProcessingOptions["taper-side"],
+                        taper_length: signalProcessingOptions["taper-length"],
+                    }
+                ))
             },
             id: getRandomNumber()
         }
@@ -135,10 +141,15 @@ export default function SignalProcessing() {
     function handleDetrendApply() {
         const filter = {
             fetchURL: fastapiEndpoints["DETREND-WAVEFORM"],
-            text: `detrend-${signalProcessingOptions["detrend-type"]}-${signalProcessingOptions["detrend-order"]}`,
-            processOptions: {
-                "detrend_type": signalProcessingOptions["detrend-type"],
-                "detrend_order": signalProcessingOptions["detrend-order"],
+            text: `detrend-${signalProcessingOptions["detrend-type"]}`,
+            fetchBody: {
+                seismic_data: traces.map(tr => (
+                    {
+                        values: tr.ydata,
+                        sampling_rate: tr.stats.sampling_rate,
+                        detrend_type: signalProcessingOptions["detrend-type"]
+                    }
+                ))
             },
             id: getRandomNumber()
         }

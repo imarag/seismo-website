@@ -94,7 +94,7 @@ export default function Fourier() {
         const jsonDataInput = {
             "signal_window_left_side": signalLeftSide,
             "window_length": windowLength,
-            "values": traces,
+            "traces": traces,
             "compute_hvsr": isComputeHVSRChecked
         } 
 

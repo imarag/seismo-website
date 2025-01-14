@@ -32,7 +32,7 @@ export default function EditSeismicFile() {
         setLoading(true)
 
         let jsonDataInput = {
-            data: traces
+            traces: traces
         }
         
         fetchRequest({endpoint: fastapiEndpoints["DOWNLOAD-SEISMIC-FILE"], method: "POST", data: jsonDataInput, returnBlob: true})
@@ -161,7 +161,7 @@ export default function EditSeismicFile() {
                                                     id={"station"}
                                                     name={"station"}
                                                     value={tr.stats.station}
-                                                    onChange={() => handleInputChange(tr.id, "station", e.target.value)}
+                                                    onChange={(e) => handleInputChange(tr.id, "station", e.target.value)}
                                                     placeholder={"e.g. SEIS"}
                                                     className={"input-sm"}
                                                 />
@@ -172,7 +172,7 @@ export default function EditSeismicFile() {
                                                     id={"date"}
                                                     name={"date"}
                                                     value={tr.stats.date}
-                                                    onChange={() => handleInputChange(tr.id, "date", e.target.value)}
+                                                    onChange={(e) => handleInputChange(tr.id, "date", e.target.value)}
                                                     className={"input-sm"}
                                                 />
                                             </div>
@@ -182,7 +182,7 @@ export default function EditSeismicFile() {
                                                     id={"time"}
                                                     name={"time"}
                                                     value={tr.stats.time}
-                                                    onChange={() => handleInputChange(tr.id, "time", e.target.value)}
+                                                    onChange={(e) => handleInputChange(tr.id, "time", e.target.value)}
                                                     className={"input-sm"}
                                                 />
                                             </div>
@@ -192,9 +192,9 @@ export default function EditSeismicFile() {
                                                     id={"fs"}
                                                     name={"fs"}
                                                     value={tr.stats.sampling_rate}
-                                                    onChange={() => handleInputChange(tr.id, "sampling_rate", e.target.value)}
+                                                    onChange={(e) => handleInputChange(tr.id, "sampling_rate", e.target.value)}
                                                     className={"input-sm"}
-                                                    readonly={true}
+                                                    readOnly={true}
                                                 />
                                             </div>
                                             <div>
@@ -205,7 +205,7 @@ export default function EditSeismicFile() {
                                                     value={tr.stats.npts}
                                                     onChange={(e) => handleInputChange(tr.id, "npts", e.target.value)}
                                                     className={"input-sm"}
-                                                    readonly={true}
+                                                    readOnly={true}
                                                 />
                                             </div>
                                             <div>
@@ -214,12 +214,12 @@ export default function EditSeismicFile() {
                                                     id={"channel"}
                                                     name={"channel"}
                                                     value={tr.stats.channel}
-                                                    onChange={() => handleInputChange(tr.id, "channel", e.target.value)}
+                                                    onChange={(e) => handleInputChange(tr.id, "channel", e.target.value)}
                                                     placeholder={"e.g. E"}
                                                     className={"input-sm"}
                                                 />
                                             </div>
-                                            <p className="text-sm text-center my-1">Elements with "*" are readonly</p>
+                                            <p className="text-sm text-center my-1">Elements with "*" are readOnly</p>
                                             <button className="btn btn-secondary btn-sm btn-block mt-2" onClick={() => setActivatedMenuIndex(null)}>Close Menu</button>
                                         </div>
                                     )
