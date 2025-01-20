@@ -42,7 +42,7 @@ export default function NavBar() {
                 </div>
                 {
                     showNavBar && (
-                        <div className="fixed end-0 top-0 bottom-0 w-full sm:w-96  lg:hidden z-50">
+                        <div className="fixed end-0 top-0 bottom-0 w-full sm:w-96 bg-base-200 shadow-lg lg:hidden z-50">
                             <button className="btn btn-ghost absolute top-4 start-4 " onClick={() => setShowNavbar(false)}>
                                 <IoMdClose className="text-xl" />
                             </button>

@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import signal_processing, handle_seismic_traces, utilities
+from routers import signal_processing, handle_seismic_traces, utilities, static_data
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
@@ -11,6 +11,7 @@ app = FastAPI()
 app.include_router(signal_processing.router)
 app.include_router(handle_seismic_traces.router)
 app.include_router(utilities.router)
+app.include_router(static_data.router)
 
 # this is for raising httpexception erros
 @app.exception_handler(StarletteHTTPException)
@@ -30,7 +31,12 @@ async def validation_exception_handler(request, exc):
             content={"error_message": ", ".join([err["msg"] for err in errors])}
         )
 
-
+@app.get("/test")
+async def test():
+    import numpy as np
+    myarray = np.array([1, 4, 6, np.nan])
+    return myarray.tolist()
+      
 # set the cors
 origins = [
     "https://seismo-website.onrender.com",

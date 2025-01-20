@@ -89,21 +89,9 @@ export const allArticles = [
 ];
 
 export const allTools = [
+
   {
     id: 1,
-    title: "Fourier Spectra Calculator",
-    subtitle: "Analyze seismic data with Fourier spectra and HVSR.",
-    description: "Easily calculate Fourier spectra for seismic signal and noise windows. Optionally compute Horizontal to Vertical Spectral Ratio (HVSR) to evaluate site effects and download results in multiple formats for further processing.",
-    smallDescription: "Calculate Fourier spectra and HVSR for seismic data.",
-    icon: FourierIcon,
-    iconAlt: "Fourier Spectra Calculator Icon",
-    type: "tool",
-    slug: "fourier",
-    completed: true,
-    userGuide: "This tool helps you calculate Fourier spectra for seismic signals and noise windows. Start by uploading your seismic data, and define the time windows you want to analyze. You can also compute Horizontal to Vertical Spectral Ratios (HVSR) for further insights. Once processed, results can be downloaded in various formats for deeper analysis."
-  },
-  {
-    id: 2,
     title: "Interactive Seismic File Editor",
     subtitle: "Edit seismic file headers with ease.",
     description: "Inspect and edit seismic file headers and metadata with a user-friendly interface. Ensure data accuracy by updating station codes, timing, and other attributes. Export the modified file for seamless integration into seismic analysis workflows.",
@@ -116,7 +104,7 @@ export const allTools = [
     userGuide: "This editor allows you to inspect and update seismic file headers and metadata. Load your seismic file to view detailed information, including station, channel, and timing data. Use the editing interface to correct errors, fill missing fields, or update values as required. After editing, save and download the updated file for integration into your workflows."
   },
   {
-    id: 3,
+    id: 2,
     title: "Geodesic Distance Calculator",
     subtitle: "Calculate distances between geographic points.",
     description: "Compute precise distances between two geographical points using advanced geodesic algorithms. Visualize points on an interactive map for improved accuracy and usability.",
@@ -129,7 +117,7 @@ export const allTools = [
     userGuide: "Calculate accurate distances between two points on Earth using geodesic algorithms. Input the latitude and longitude for each point, and the tool will compute the distance based on the WGS84 ellipsoid. Use the interactive map to verify and adjust the points visually. This tool is ideal for geophysical applications requiring precise location measurements."
   },
   {
-    id: 4,
+    id: 3,
     title: "P & S Wave Arrival Picker",
     subtitle: "Identify P and S wave arrival times.",
     description: "Visually pinpoint the arrival times of P and S waves on seismic waveforms. Enhance your analysis with advanced filters and export results for detailed review.",
@@ -142,7 +130,7 @@ export const allTools = [
     userGuide: "This tool is designed to help you identify P and S wave arrivals on seismic waveforms. Upload your data, and use the interactive waveform display to zoom into areas of interest. Apply filters to remove noise and highlight critical wave patterns. Manually mark arrival times for P and S waves, and export your selections for further analysis."
   },
   {
-    id: 5,
+    id: 4,
     title: "Convert Data Files to MiniSEED",
     subtitle: "Transform seismic files into MiniSEED format.",
     description: "Convert seismic data into the standardized MiniSEED format. Simplify data compatibility and improve workflow efficiency with customizable conversion parameters.",
@@ -155,7 +143,7 @@ export const allTools = [
     userGuide: "This tool simplifies the process of converting various seismic file formats into MiniSEED. Upload your file and specify conversion settings, such as station codes and sample rates. The tool validates input data to ensure compatibility and generates standardized MiniSEED files. Download the converted files for seamless integration with analysis software."
   },
   {
-    id: 6,
+    id: 5,
     title: "Signal Processing Toolkit",
     subtitle: "Process seismic waveforms efficiently.",
     description: "Perform advanced processing of seismic waveforms, including filtering, smoothing, and trend removal. Optimize data quality for analysis and visualization.",

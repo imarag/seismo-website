@@ -1,28 +1,48 @@
 'use client';
+
 import { useEffect, useState } from "react"
-import { CiSaveDown2 } from "react-icons/ci";
-import { filterOptions, fastapiEndpoints, arrivalsStyles } from "@/utils/static";
-import ButtonWithIcon from "@/components/ButtonWithIcon"
-import fetchRequest from "@/utils/functions/fetchRequest";
-import LineGraph from "@/components/LineGraph"
-import Spinner from "@/components/Spinner"
-import { RadioButtonElement, SelectElement, NumberInputElement, LabelElement } from "@/components/UIElements";
+
 import UploadFileButton from "@/components/UploadFileButton";
 import StartingUploadFile from "@/components/StartingUploadFile";
-import ErrorMessage from "@/components/ErrorMessage";
+import Message from "@/components/Message";
+import Section from "@/components/Section";
+import ButtonWithIcon from "@/components/ButtonWithIcon"
+import { RadioButtonElement, SelectElement, NumberInputElement, LabelElement } from "@/components/UIElements";
+import LineGraph from "@/components/LineGraph"
+import Spinner from "@/components/Spinner"
+
+import { fastapiEndpoints, arrivalsStyles } from "@/utils/static";
+import fetchRequest from "@/utils/functions/fetchRequest";
+import { downloadURI } from "@/utils/functions";
+
+import { MdOutlineFileDownload } from "react-icons/md";
 
 export default function PickArrivals() {
     const [error, setError] = useState(null)
-    // save here the selected wave when the user clicks the P or S radiobuttons
-    const [selectedWave, setSelectedWave] = useState("P");
-    // save a list of picks in the form: ([{wave: "P", arrival: 45.4}]
-    const [arrivals, setArrivals] = useState([]);
-    // save here the state of the left and right manual filter
-    const [manualFilter, setManualFilter] = useState({left: 0.1, right: 3})
-    // save a state to trigger it when we want the spinner to be active
+    const [success, setSuccess] = useState(null)
     const [loading, setLoading] = useState(false);
-    // save here the selected filter in the select dropdown
+    const [selectedWave, setSelectedWave] = useState("P");
+    const [arrivals, setArrivals] = useState([]);
+    const [manualFilter, setManualFilter] = useState({freqMin: 0.1, freqMax: 3})
     const [selectedFilter, setSelectedFilter] = useState("initial")
+    const [filterOptions, setFilterOptions] = useState([])
+
+    useEffect(() => {
+        const fetchFilterOptions = async () => {
+
+            const jsonData = await fetchRequest({
+                endpoint: fastapiEndpoints["FILTER-OPTIONS"],
+                setError: setError,
+                setSuccess: setSuccess,
+                setLoading: setLoading,
+                method: "GET",
+            });
+
+            setFilterOptions(jsonData); 
+        };
+    
+        fetchFilterOptions();
+      }, []); 
 
     // transform the arrivals list into an object to get easier the arrival values
     // of the P & S waves
@@ -33,8 +53,8 @@ export default function PickArrivals() {
     ))
 
     // initialize the data that will be used to create the plots
+    const [backupTraces, setBackupTraces] = useState([]);
     const [traces, setTraces] = useState([]);
-    const [filteredTraces, setFilteredTraces] = useState([]);
 
     // define the shapes to pass into the layout, when a user adds an arrival vertcal line
     let shapes = arrivals.map(arr => (
@@ -58,7 +78,7 @@ export default function PickArrivals() {
     //  set the arrival text (P or S) next to the vertical arrival line
     let annotations =  arrivals.map(arr => (
         {
-            x: traces.length !== 0 ? arr["arrival"] - (traces[0]["stats"]["duration"] / 40) : 0,
+            x: backupTraces.length !== 0 ? arr["arrival"] - (backupTraces[0]["stats"]["duration"] / 40) : 0,
             y: 0.8,
             xref: "x", 
             yref: "paper", 
@@ -71,46 +91,43 @@ export default function PickArrivals() {
     ))
 
     useEffect(() => {
-        setFilteredTraces(traces);
+        setTraces(backupTraces);
         setArrivals([]);
         setSelectedWave("P");
         setSelectedFilter("initial");
-        setManualFilter({"left": "", "right": ""});
-    }, [traces])
+        setManualFilter({"freqMin": "", "freqMax": ""});
+    }, [backupTraces])
     
 
-    // this function will be called by the filters dropdown and also by the manual filters handleEnterKey below
-    async function handleFilterChange(freqmin=null, freqmax=null) {
-        setLoading(true)
-        
-        const seismicData = traces.map(tr => (
-            {
-                values: tr.ydata,
-                sampling_rate: tr.stats.sampling_rate,
-                left_filter: freqmin,
-                right_filter: freqmax
-            }
-        ))
+    async function handleFilterChange(freqMin=null, freqMax=null) {
 
-        const requestBody = {
-            seismic_data: seismicData
+        const requestBody =  {
+            data: backupTraces.map(tr => ({
+                trace_id: tr.trace_id,
+                values: tr.ydata
+            })),
+            options: {
+                freq_min: freqMin,
+                freq_max: freqMax,
+                sampling_rate: backupTraces[0].stats.sampling_rate
+            }
         }
 
-        fetchRequest({endpoint: fastapiEndpoints["APPLY-FILTER"], method: "POST", data: requestBody})
-        .then(jsonData => {
-            const newTraces = traces.map((tr, ind) => ({
-                ...tr, ydata: jsonData[ind]
-            }))
-
-            setFilteredTraces(newTraces);
-        })
-        .catch(error => {
-            setError(error.message)
-            setTimeout(() => setError(null), 5000);
-        })
-        .finally(() => {
-            setLoading(false)
-        })
+        const jsonData = await fetchRequest({
+            endpoint: fastapiEndpoints["FILTER-WAVEFORM"],
+            setError: setError,
+            setSuccess: setSuccess,
+            setLoading: setLoading,
+            method: "POST",
+            data: requestBody,
+        });
+        
+        setTraces(
+            backupTraces.map(tr => {
+                const updatedTrace = jsonData.find(el => el.trace_id === tr.trace_id);
+                return {...tr, ydata: updatedTrace.values}
+            })
+        )
     }
 
     // this function will be called from the dropdown filter
@@ -119,7 +136,7 @@ export default function PickArrivals() {
         const dropdownFilterValue = e.target.value;
         
         if (dropdownFilterValue === "initial") {
-            handleFilterChange(null, null)
+            setTraces(backupTraces)
         }
         else {
             const parts = dropdownFilterValue.split("-")
@@ -131,8 +148,8 @@ export default function PickArrivals() {
     function handleEnterKey(e) {
         if (e.key === 'Enter') {
             handleFilterChange(
-                manualFilter["left"] ? manualFilter["left"] : null, 
-                manualFilter["right"] ? manualFilter["right"] : null, 
+                manualFilter["freqMin"] ? manualFilter["freqMin"] : null, 
+                manualFilter["freqMax"] ? manualFilter["freqMax"] : null, 
             )
         }
     }
@@ -145,32 +162,23 @@ export default function PickArrivals() {
 
     // this function will be called by the save arrivals button
     async function handleSaveArrivals() {
-        setLoading(true)
 
         let PArr = formattedArrivals["P"];
         let SArr = formattedArrivals["S"];
 
-        let endpoint = fastapiEndpoints["SAVE-ARRIVALS"]
         let queryParams = (PArr && `Parr=${PArr}&`) + (SArr && `Sarr=${SArr}`)
 
-        fetchRequest({endpoint: `${endpoint}?${queryParams}`, method: "GET", returnBlob: true})
-        .then(blobData => {
-            const downloadUrl = window.URL.createObjectURL(blobData);
-            const link = document.createElement("a");
-            link.href = downloadUrl;
-            link.download = "arrivals.txt";
-            document.body.appendChild(link);
-            link.click();
-            // setInfoMessage("The filter has been succesfully applied");
-            // setTimeout(() => setInfoMessage(null), 5000);
-        })
-        .catch(error => {
-            setError(error.message)
-            setTimeout(() => setError(null), 5000);
-        })
-        .finally(() => {
-            setLoading(false)
-        })
+        const blobData = await fetchRequest({
+            endpoint: fastapiEndpoints["SAVE-ARRIVALS"] + "?" + queryParams,
+            setError: setError,
+            setSuccess: setSuccess,
+            setLoading: setLoading,
+            method: "GET",
+            returnType: "blob"
+        });
+
+        const downloadUrl = window.URL.createObjectURL(blobData);
+        downloadURI(downloadUrl, "arrivals.txt") 
     }
 
     function onGraphClick(e) {    
@@ -189,34 +197,44 @@ export default function PickArrivals() {
     }
 
     return (
-        <section>
+        <Section>
             {
-                error && <ErrorMessage error={error} />
+                error && <Message type="error" text={error} />
             }
-            {traces.length === 0 && (
-                <StartingUploadFile setTraces={setTraces} setError={setError} setLoading={setLoading} />
+            {
+                success && <Message type="success" text={success} />
+            }
+            {backupTraces.length === 0 && (
+                <StartingUploadFile 
+                    setTraces={setTraces} 
+                    setSuccess={setSuccess} 
+                    setBackupTraces={setBackupTraces} 
+                    setError={setError} 
+                    setLoading={setLoading} 
+                />
             )}
             {
-                traces.length !== 0 && (
+                backupTraces.length !== 0 && (
                 <>
                     <div className="flex flex-row items-center justify-start gap-1">
                         <UploadFileButton 
-                            setTraces={setTraces} 
+                            setTraces={setTraces}
+                            setBackupTraces={setBackupTraces} 
+                            setError={setError}
+                            setSuccess={setSuccess}
                             setLoading={setLoading} 
                             buttonClass="btn-ghost btn-sm" 
-                            setError={setError}
                         />
                         <ButtonWithIcon 
-                            text="Get arrivals" 
+                            text="Download arrivals" 
                             onClick={handleSaveArrivals} 
-                            disabled={filteredTraces.length===0 || (!formattedArrivals["P"] && !formattedArrivals["S"])} 
-                            icon={<CiSaveDown2 />} 
+                            disabled={traces.length===0 || (!formattedArrivals["P"] && !formattedArrivals["S"])} 
+                            icon={<MdOutlineFileDownload />} 
                             className={"btn-ghost btn-sm"}
                         />
                         </div>
                         <hr className="mt-2 mb-8" />
-                        { loading && <Spinner />}
-                        <div className="flex flex-row items-center justify-around mt-4 py-4">
+                        <div className="flex flex-row items-center justify-around mt-3 py-3">
                             <div className="flex flex-row items-center">
                                 <div className="flex flex-row items-center">
                                     <LabelElement label="P" className="mx-1 text-lg" />
@@ -227,7 +245,7 @@ export default function PickArrivals() {
                                         value="P"
                                         checked={selectedWave === "P"}
                                         onChange={() => setSelectedWave("P")}
-                                        disabled={filteredTraces.length===0 || formattedArrivals["P"]}
+                                        disabled={traces.length===0 || formattedArrivals["P"]}
                                         className="radio-sm"
                                     />
                                 </div>
@@ -240,7 +258,7 @@ export default function PickArrivals() {
                                         value="S"
                                         checked={selectedWave === "S"}
                                         onChange={() => setSelectedWave("S")}
-                                        disabled={filteredTraces.length===0 || formattedArrivals["S"]}
+                                        disabled={traces.length===0 || formattedArrivals["S"]}
                                         className="radio-sm"
                                     />
                                 </div>
@@ -254,64 +272,65 @@ export default function PickArrivals() {
                                 name="filters-dropdown"
                                 value={selectedFilter}
                                 onChange={handleDropdownFilterChange}
-                                disabled={filteredTraces.length===0}
+                                disabled={traces.length===0}
                                 optionsList={filterOptions}
                                 className="select-sm"
                             />
                         </div>
-                        <div className="my-8">
+                        <Spinner visible={loading} />
+                        <div className="my-3">
                             {
-                            filteredTraces.map((tr, ind) => (
-                                <div key={tr.id}>
-                                    {
-                                        <LineGraph 
-                                            xData={[tr["xdata"]]} 
-                                            yData={[tr["ydata"]]} 
-                                            height="220px"
-                                            legendTitle={[`Component: ${tr["stats"]["channel"]}`]}
-                                            showGraphTitle={ind === 0}
-                                            graphTitle={""}
-                                            shapes={shapes}
-                                            annotations={annotations}
-                                            onGraphClick={onGraphClick}
-                                        />
-                                    }
-                                </div>
-                            ))
-                                
+                                traces.map((tr, ind) => (
+                                    <div key={tr.trace_id}>
+                                        {
+                                            <LineGraph 
+                                                xData={[tr["xdata"]]} 
+                                                yData={[tr["ydata"]]} 
+                                                height="220px"
+                                                legendTitle={[`Component: ${tr["stats"]["channel"]}`]}
+                                                showGraphTitle={ind === 0}
+                                                graphTitle={""}
+                                                shapes={shapes}
+                                                annotations={annotations}
+                                                onGraphClick={onGraphClick}
+                                            />
+                                        }
+                                    </div>
+                                ))
                             }
                         </div>
                         <div className="flex justify-end align-center gap-3 mt-4">
                             <div className="mb-3">
                                 <NumberInputElement 
-                                    id="left-filter" 
-                                    name="left-filter" 
-                                    value={manualFilter["left"]} 
+                                    id="freq_min" 
+                                    name="freq_min" 
+                                    value={manualFilter["freqMin"]} 
                                     onKeyDown={handleEnterKey} 
-                                    onChange={(e) => setManualFilter({...manualFilter, left: e.target.value})} 
+                                    onChange={(e) => setManualFilter({...manualFilter, freqMin: e.target.value})} 
                                     placeholder="e.g. 0.1"
-                                    disabled={filteredTraces.length===0}
+                                    disabled={traces.length===0}
                                     className="input-sm"
                                 />
                             </div>
                             <div className="mb-3">
                                 <NumberInputElement 
-                                    id="right-filter" 
-                                    name="right-filter" 
-                                    value={manualFilter["right"]} 
+                                    id="freq_max" 
+                                    name="freq_max" 
+                                    value={manualFilter["freqMax"]} 
                                     onKeyDown={handleEnterKey} 
-                                    onChange={(e) => setManualFilter({...manualFilter, right: e.target.value})} 
+                                    onChange={(e) => setManualFilter({...manualFilter, freqMax: e.target.value})} 
                                     placeholder="e.g. 3"
-                                    disabled={filteredTraces.length===0}
+                                    disabled={traces.length===0}
                                     className="input-sm"
                                 />
                             </div>
                         </div>
+                        <Spinner visible={loading} />
                     </>
                     
                 )
             }
             
-        </section>
+        </Section>
     )
 }

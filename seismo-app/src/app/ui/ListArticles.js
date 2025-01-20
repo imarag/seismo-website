@@ -23,7 +23,7 @@ export default function ListArticles({ query }) {
                                 <h1 className="font-semibold text-start mb-2">{article.title}</h1>
                                 <p className="font-light text-start">{article.description}</p>
                                 <p className="mt-2">
-                                    <Link href={`/articles/${article.slug}`} className="link link-primary btn-primary">Go to page</Link>
+                                    <Link href={`/articles/${article.slug}`} className="link link-info">Go to page</Link>
                                 </p>
                             </div>
                         </section>

@@ -25,12 +25,12 @@ export default function Home() {
             >
                 <div className="min-h-screen flex flex-row items-center justify-center">
                     <div>
-                        <h1 className="text-primary text-center text-4xl md:text-8xl font-bold">
+                        <h1 className="text-center text-4xl md:text-8xl font-bold">
                             A JOURNEY INTO
                             <br />
                             <span className="text-secondary">SEISMOLOGY</span>
                         </h1>
-                        <p className="text-primary text-center py-6 font-normal text-lg md:text-3xl">
+                        <p className="text-center py-6 font-normal text-lg md:text-3xl">
                             Discover different seismic articles, interact with tools, and deepen
                             your understanding.
                         </p>

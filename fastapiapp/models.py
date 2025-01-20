@@ -3,53 +3,27 @@ from typing import Literal
 from typing_extensions import Self
 import datetime 
 
-class TraceStats(BaseModel):
-    starttime: datetime.datetime
-    endtime: datetime.datetime
-    npts: int 
-    sampling_rate: float 
-    station: str 
-    channel: str
-    start_date: datetime.date
-    start_time: datetime.time
-    duration: float
 
-class TraceData(BaseModel):
-    record_name: str 
-    ydata: list 
-    xdata: list 
-    id: str
-    stats: TraceStats
-
-class StreamData(BaseModel):
-    traces: list[TraceData]
-
-
-class TrimParamsObject(BaseModel):
+class SeismicDataKeys(BaseModel):
+    trace_id: str 
     values: list[float]
+
+class TrimOptions(BaseModel):
     sampling_rate: float = Field(gt=0)
-    left_trim: float = Field(ge=0)
-    right_trim: float = Field(ge=0)
+    trim_start: float = Field(ge=0)
+    trim_end: float = Field(ge=0)
 
     @model_validator(mode="after")
     def verify_trim_limits(self) -> Self:
-        if self.left_trim >= self.right_trim:
+        if self.trim_start >= self.trim_end:
             raise ValueError("The left trim value cannot be greater or equal to the right trim value")
-        
-        total_duration = len(self.values) / self.sampling_rate 
-
-        if self.right_trim > total_duration:
-            raise ValueError("The right trim value cannot be greater than the total waveform duration")
-        
         return self
 
 class TrimParams(BaseModel):
-    seismic_data: TrimParamsObject | list[TrimParamsObject]
+    data: list[SeismicDataKeys]
+    options: TrimOptions
 
-
-
-class TaperParamsObject(BaseModel):
-    values: list[float]
+class TaperOptions(BaseModel):
     sampling_rate: float = Field(gt=0)
     taper_type: Literal[
         "cosine",
@@ -72,38 +46,51 @@ class TaperParamsObject(BaseModel):
         "triang"
     ] = "parzen"
     taper_side: Literal["left", "both", "right"] = "both"
-    taper_length: float = 1
+    taper_length: float
 
 class TaperParams(BaseModel):
-    seismic_data: TaperParamsObject | list[TaperParamsObject]
+    data: list[SeismicDataKeys]
+    options: TaperOptions
 
-    
-
-class DetrendParamsObject(BaseModel):
-    values: list[float]
+class DetrendOptions(BaseModel):
     sampling_rate: float = Field(gt=0)
     detrend_type: Literal["simple", "linear", "constant"]
 
 class DetrendParams(BaseModel):
-    seismic_data: DetrendParamsObject | list[DetrendParamsObject]
-
-
-
-class FilterParamsObject(BaseModel):
-    values: list[float]
-    sampling_rate: float
-    left_filter: float | None
-    right_filter: float | None
+    data: list[SeismicDataKeys]
+    options: DetrendOptions
+    
+class FilterOptions(BaseModel):
+    sampling_rate: float = Field(gt=0)
+    freq_min: float | None = None
+    freq_max: float | None = None
 
     @model_validator(mode="after")
     def verify_filter_limits(self) -> Self:
-        if self.left_filter is None and self.right_filter is None:
-            raise ValueError("You must provide at least one of the left or right filter values to apply the filtering.")        
-        
-        elif self.left_filter is not None and self.right_filter is not None and self.left_filter >= self.right_filter:
-            raise ValueError("The left filter value cannot be greater or equal to the right filter value")
+
+        if self.freq_min is not None and self.freq_max is not None and self.freq_min >= self.freq_max:
+            raise ValueError("The min frequency value cannot be greater or equal to the max frequency value!")
         return self
 
 class FilterParams(BaseModel):
-    seismic_data: FilterParamsObject | list[FilterParamsObject]
+    data: list[SeismicDataKeys]
+    options: FilterOptions
+
+
+
+class FourierData(BaseModel):
+    trace_id: str
+    component: str
+    values: list[float]
+
+class FourierParams(BaseModel):
+    traces_data: list[FourierData]
+    sampling_rate: float = Field(gt=0)
+
+class HVSRData(BaseModel):
+    component: Literal["horizontal", "vertical"]
+    values: list[float]
+
+class HVSRParams(BaseModel):
+    fourier_data: list[HVSRData]
 

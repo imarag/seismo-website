@@ -2,7 +2,7 @@
 export default function Accordion({ label, children }) {
 
     return (
-        <div className="collapse collapse-arrow bg-white border border-gray-200 mt-8 mb-14 text-lg">
+        <div className="collapse collapse-arrow bg-white border border-gray-200 text-lg">
             <input type="checkbox" />
             <div className="collapse-title text-xl font-medium">
                 { label }

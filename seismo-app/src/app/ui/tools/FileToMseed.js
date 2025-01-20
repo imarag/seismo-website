@@ -4,10 +4,10 @@ import LineGraph from "@/components/LineGraph"
 import Spinner from "@/components/Spinner";
 import { fastapiEndpoints } from "@/utils/static";
 import fetchRequest from "@/utils/functions/fetchRequest";
-import Accordion from "@/components/Accordion";
+import Collapse from "@/components/Collapse";
 import { InputDate, InputTime, InputText, InputNumber } from "@/components/FormItems";
-import ErrorMessage from "@/components/ErrorMessage";
-
+import Message from "@/components/Message";
+import Section from "@/components/Section";
 
 function UploadButton() {
     return (
@@ -19,6 +19,7 @@ function UploadButton() {
 
 export default function EditSeismicFile() {
     const [error, setError] = useState(null)
+    const [success, setSuccess] = useState(null)
     const [fileData, setFileData] = useState([])
     const [loading, setLoading] = useState(false)
     const [seismicParameters, setSeismicParameters] = useState({
@@ -101,9 +102,12 @@ export default function EditSeismicFile() {
     }
     
     return (
-        <section>
+        <Section>
             {
-                error && <ErrorMessage error={error} />
+                error && <Message type="error" text={error} />
+            }
+            {
+                success && <Message type="success" text={success} />
             }
             <input name="file" type="file" onChange={handleFileSelection} id="upload-seismic-file-input" hidden />
             {traces.length === 0 && <StartUploadButton handleFileUpload={handleFileUpload} />}
@@ -251,6 +255,6 @@ export default function EditSeismicFile() {
                 )
             }
             
-        </section>
+        </Section>
     )
 }

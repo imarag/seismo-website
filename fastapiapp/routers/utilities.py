@@ -3,13 +3,15 @@ from pydantic import BaseModel, model_validator
 from pydantic_extra_types.coordinate import Latitude, Longitude
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import FileResponse
-from typing import Annotated
+from typing import Annotated, Any
 from obspy.core import read 
 from functions import convert_stream_to_traces
 from functions import get_record_name, convert_traces_to_stream, delete_file, validate_seismic_file
 from internals.config import Settings, logger
 from obspy.geodetics import gps2dist_azimuth
 from typing_extensions import Self
+import os
+import json
 
 router = APIRouter(
     prefix="/utilities",
@@ -35,9 +37,7 @@ async def upload_seismic_file(file: UploadFile):
 
     logger.info("converting stream object to a list of traces")
 
-    output_traces = convert_stream_to_traces(stream)
-
-    return output_traces.traces
+    return convert_stream_to_traces(stream)
 
 
 @router.get("/calculate-distance")
@@ -95,5 +95,68 @@ def save_arrivals(background_tasks: BackgroundTasks, arrivals_query: Annotated[A
     )
 
 
+@router.get("/download-test-file")
+async def download_test_file():
+    file_name = "20150724_095834_KRL1.mseed"
+    test_file_path = os.path.join(Settings.RESOURCES_PATH.value, file_name)
+    return FileResponse(
+        test_file_path,
+        filename=file_name,
+        media_type='application/octet-stream',
+        headers={"Content-Disposition": f'attachment; filename="{file_name}"'}
+    )
+
+@router.post("/download-mseed-file")
+async def download_mseed(
+    background_tasks: BackgroundTasks, 
+    data: Annotated[list[dict], Body()], 
+    filename: Annotated[str, Body()] = "downloaded-stream"):
+
+    stream = convert_traces_to_stream(data)
+    temp_stream_path = os.path.join(Settings.RESOURCES_PATH.value, filename)
+    stream.write(temp_stream_path)
+
+    background_tasks.add_task(delete_file, temp_stream_path)
+  
+    return FileResponse(
+        temp_stream_path,
+        filename=f"{filename}.mseed",
+        headers={"Content-Disposition": f'attachment; filename="{filename}.mseed"'}
+    )
+
+
+@router.post("/download-file")
+async def download_file(
+    background_tasks: BackgroundTasks, 
+    data: Annotated[list, Body()], 
+    file_type: Annotated[str, Body()]
+    ):
+
+    temp_file_name = "temp-file" + "." + file_type
+    temp_file_path = os.path.join(Settings.RESOURCES_PATH.value, temp_file_name)
+    
+    if file_type.lower().strip() == "mseed":
+        try:
+            stream = convert_traces_to_stream(data)
+            stream.write(temp_file_path)
+        except Exception as e:
+            error_message = f"Cannot download the file!"
+            raise HTTPException(status_code=500, detail=error_message)
+    
+    elif file_type.lower().strip() == "json":
+        with open(temp_file_path, "w") as fw:
+            json.dump(data, fw)
+    else:
+        error_message = f"The provided file type is not supported!"
+        raise HTTPException(status_code=500, detail=error_message)
+    
+    background_tasks.add_task(delete_file, temp_file_path)
+  
+    return FileResponse(
+        temp_file_path,
+        filename=temp_file_name,
+        headers={"Content-Disposition": f'attachment; filename="test.txt"'}
+    )
+    
 
 

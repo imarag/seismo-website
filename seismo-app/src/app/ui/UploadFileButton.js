@@ -1,33 +1,31 @@
 import fetchRequest from "@/utils/functions/fetchRequest";
 import { fastapiEndpoints } from "@/utils/static";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import ButtonWithIcon from "@/components/ButtonWithIcon";
 import { MdOutlineFileUpload } from "react-icons/md";
 
 
-export default function UploadFileButton({setTraces, setError, setLoading, buttonClass}) {
+export default function UploadFileButton({setTraces, setBackupTraces, setError, setSuccess, setLoading, buttonClass}) {
 
     const inputRef = useRef();
-
-    function handleFileSelection(e) {
+    async function handleFileSelection(e) {
         e.preventDefault();
-        setLoading(true)
 
         const formData = new FormData();
         formData.append("file", e.target.files[0]);
-        
-        fetchRequest({endpoint: fastapiEndpoints["UPLOAD-SEISMIC-FILE"], method: "POST", data: formData})
-        .then(jsonData => {
-            console.log(jsonData)
-            setTraces(jsonData);
-        })
-        .catch(error => {
-            setError(error.message)
-            setTimeout(() => setError(null), 5000);
-        })
-        .finally(() => {
-            setLoading(false)
-        })
+
+        const traces = await fetchRequest({
+            endpoint: fastapiEndpoints["UPLOAD-SEISMIC-FILE"],
+            setError: setError,
+            setSuccess: setSuccess,
+            setLoading: setLoading,
+            method: "POST",
+            data: formData,
+            successMessage: "The file has been succesfully uploaded!"
+        });
+
+        setTraces(traces);
+        setBackupTraces(traces)
     }
 
     function handleFileUpload(e) {
@@ -41,7 +39,7 @@ export default function UploadFileButton({setTraces, setError, setLoading, butto
             <ButtonWithIcon 
                 text="Upload file" 
                 onClick={handleFileUpload} 
-                icon={<MdOutlineFileUpload />} 
+                icon={<MdOutlineFileUpload className="size-4" />} 
                 className={`btn-primary ${buttonClass ? buttonClass : ""}`}
             />
         </>

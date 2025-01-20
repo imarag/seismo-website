@@ -1,7 +1,11 @@
 'use client';
-import { CiSearch } from "react-icons/ci";
+
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
-import { allArticles } from "@/utils/all-topics";
+
+import { SearchInputElement } from "@/components/UIElements";
+
+import { CiSearch } from "react-icons/ci";
+
 
 export default function ArticleSearchInput() {
     const searchParams = useSearchParams();
@@ -21,17 +25,17 @@ export default function ArticleSearchInput() {
     }
 
     return (
-        <div className="my-10 max-w-3xl mx-auto">
-            <label className="input input-bordered flex items-center gap-2">
-                <input 
+        <div className="mb-10 ">
+            <div className="flex flex-row gap-3 items-center max-w-4xl mx-auto">
+                <SearchInputElement 
+                    id="search"
+                    name="search"
+                    className="select-md block w-full text-neutral border-neutral"
+                    placeholder="Search"
                     onChange={(e) => handleSeachInputValue(e.target.value)} 
-                    defaultValue={searchParams.get("query")?.toString()}
-                    type="text" 
-                    className="grow" 
-                    placeholder="Search" 
                 />
-                <CiSearch />
-            </label>
+                <label htmlFor="search"><CiSearch className="size-9 text-neutral border-neutral" /></label>
+            </div>
         </div>
     )
 }

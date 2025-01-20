@@ -26,6 +26,20 @@ export default {
   },
   plugins: [daisyui],
   daisyui: {
-    themes: ["winter"],
+    themes: [
+      {
+        mytheme: {
+          "primary": "#4CAF50",      
+          "secondary": "#81C784",
+          "accent": "#388E3C",
+          "neutral": "#37474F",
+          "base-100": "#FFFFFF",
+          "info": "#0288D1",
+          "success": "#43A047",
+          "warning": "#F9A825",
+          "error": "#D32F2F",
+          },
+        },
+      ],
   },
 };

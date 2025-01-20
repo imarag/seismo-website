@@ -1,59 +1,90 @@
 'use client';
-import { useState, useEffect } from "react";
-import { LuCalculator } from "react-icons/lu";
-import CoordItem from "@/components/CoordItem";
-import CoordContainer from "@/components/CoordContainer";
+
+import { useState } from "react";
+
 import ButtonWithIcon from "@/components/ButtonWithIcon";
+import Message from "@/components/Message";
+import Spinner from "@/components/Spinner";
+import { NumberInputElement } from "@/components/UIElements"
+import Section from "@/components/Section";
+
+import { fastapiEndpoints } from "@/utils/static";
+import fetchRequest from "@/utils/functions/fetchRequest";
+
 import "leaflet/dist/leaflet.css";
 import Map from "@/components/distance-between-points-map"
-import { fastapiEndpoints } from "@/utils/static";
-import Spinner from "@/components/Spinner";
-import fetchRequest from "@/utils/functions/fetchRequest";
-import ErrorMessage from "@/components/ErrorMessage";
+
+import { LuCalculator } from "react-icons/lu";
+import { IoLocationOutline } from "react-icons/io5";
+
+
+function CoordContainer({ children, label }) {
+    return (
+        <div>
+            <h1 className="text-start flex flex-row align-center justify-center md:justify-start gap-2 mb-1">
+                <IoLocationOutline />
+                <span>{ label }</span>
+            </h1>
+            <hr className="border-1"/>
+            <div className="flex flex-row flex-wrap md:flex-nowrap justify-center gap-2 mt-4">
+                { children }
+            </div>
+        </div>
+    )
+}
+
+
+function CoordItem({ coordLabel, coordValue, coords, setCoords }) {
+    return (
+        <div className="flex flex-col items-stretch justify-center">
+            <label htmlFor={coordValue} className="text-start font-light mb-1">
+                { coordLabel }
+            </label>
+            <NumberInputElement 
+                id={coordValue} 
+                name={coordValue} 
+                value={coords[coordValue]} 
+                onChange={(e) => setCoords({...coords, [coordValue]: e.target.value})}
+                className="input-sm"
+            />
+        </div>
+    )
+}
 
 
 export default function DistanceBetweenPoints() {
 
     const [error, setError] = useState(null)
+    const [success, setSuccess] = useState(null)
     const [loading, setLoading] = useState(false);
-    // set the state that holds the coordinates passed by the user
-    const [coords, setCoords] = useState({
-        lat1: 34,
-        lon1: 22,
-        lat2: 32,
-        lon2: 24,
-    });
-
-    // set the state of the distance that is showing
+    const [coords, setCoords] = useState({lat1: 34, lon1: 22, lat2: 32, lon2: 24});
     const [distance, setDistance] = useState(null);
 
     async function handleComputeButton() {
-        setLoading(true)
      
-        let endpoint = fastapiEndpoints["CALCULATE-DISTANCE"]
-        let queryParams = `lat1=${coords["lat1"]}&lon1=${coords["lon1"]}&lat2=${coords["lat2"]}&lon2=${coords["lon2"]}`
-        console.log(`${endpoint}?${queryParams}`)
-        fetchRequest({endpoint: `${endpoint}?${queryParams}`, method: "GET"})
-        .then(jsonData => {
-            setDistance(jsonData["result"]);
-            // setInfoMessage("The distance has been succesfully calculated");
-            // setTimeout(() => setInfoMessage(null), 5000);
-        })
-        .catch(error => {
-            // setErrorMessage(error.message || "Error uploading file. Please try again.");            
-            // setTimeout(() => setErrorMessage(null), 5000);
-        })
-        .finally(() => {
-            setLoading(false)
-        })
+        let queryParams = `?lat1=${coords["lat1"]}&lon1=${coords["lon1"]}&lat2=${coords["lat2"]}&lon2=${coords["lon2"]}`
+
+        const data = await fetchRequest({
+            endpoint: fastapiEndpoints["CALCULATE-DISTANCE"] + queryParams,
+            setError: setError,
+            setSuccess: setSuccess,
+            setLoading: setLoading,
+            method: "GET",
+            successMessage: "The distance has been succesfully calculated"
+        });
+
+        setDistance(data["result"])
     }
 
     return (
-        <section>
+        <Section>
             {
-                error && <ErrorMessage error={error} />
+                error && <Message type="error" text={error} />
             }
-            <div className="flex flex-row flex-wrap justify-center items-center gap-4">
+            {
+                success && <Message type="success" text={success} />
+            }
+            <div className="flex flex-row flex-wrap justify-center items-center gap-8">
                 <CoordContainer label="Point 1">
                     <CoordItem
                         coordLabel="Latitude"
@@ -83,18 +114,28 @@ export default function DistanceBetweenPoints() {
                     />
                 </CoordContainer>
             </div>
-            <div className="flex flex-row justify-center gap-2 my-5">
-                <ButtonWithIcon text="Compute" onClick={handleComputeButton} disabled={!coords["lat1"] || !coords["lon1"] || !coords["lat2"] || !coords["lon2"]} icon={<LuCalculator />} />
+            <div className="flex flex-row justify-center gap-2">
+                <ButtonWithIcon 
+                    text="Compute" 
+                    onClick={handleComputeButton} 
+                    disabled={!coords["lat1"] || !coords["lon1"] || !coords["lat2"] || !coords["lon2"]} 
+                    icon={<LuCalculator />} 
+                    className="btn-md btn-primary"
+                />
             </div>
-            { loading && <Spinner />}
+            <Spinner visible={loading} />
             {distance && (
-                <p className="text-center my-5">
+                <p className="text-center">
                     The distance between point 1 (lat: {coords["lat1"]}, lon: {coords["lon1"]}) and point 2 (lat: {coords["lat2"]}, lon: {coords["lon2"]}) is:{" "}
-                    <span className="fw-bold">{distance} km</span>
+                    <span className="font-bold">{distance} km</span>
                 </p>
             )}
-            <Map coords={coords} />
-            <p className="mt-12 mb-5">The tool uses the <code>obspy.geodetics.base.gps2dist_azimuth</code> function to do the calculation:</p>
+            <div>
+                <Map coords={coords} />
+            </div>
+            <p>
+                The tool uses the ObsPy <a className="link-info" target="_blank" href="https://docs.obspy.org/packages/autogen/obspy.geodetics.base.gps2dist_azimuth.html"><code>gps2dist_azimuth</code> </a> function to do the calculation:
+            </p>
             <div className="mockup-code">
                 <pre>
                     <code>
@@ -102,6 +143,6 @@ export default function DistanceBetweenPoints() {
                     </code>
                 </pre>
             </div>
-        </section>
+        </Section>
     );
 }

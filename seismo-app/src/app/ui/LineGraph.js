@@ -37,6 +37,7 @@ export default function LineGraph({
         responsive: true,
         xaxis: {
             type: scale,
+            range: scale === "log" ? [Math.log10(Math.min(...xData[0])), Math.log10(Math.max(...xData[0]))] : "autoscale"
         },
         yaxis: {
             type: scale,
