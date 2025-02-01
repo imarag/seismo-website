@@ -1,12 +1,14 @@
 import Image from 'next/image';
 
 import Collapse from '@/components/Collapse';
+import { Title, SubTitle, Paragraph } from "@/components/Typography"
+import AlignVertical from '@/components/AlignVertical';
+import Container from "@/components/Container"
+import Section from "@/components/Section"
 
 import {capitalizeWords} from '@/utils/functions'
 import { allTools } from '@/utils/all-topics';
-import { fastapiEndpoints } from '@/utils/static';
 
-import Section from "@/components/Section"
 
 
 export default async function ToolSlugPage({ params }) {
@@ -18,18 +20,20 @@ export default async function ToolSlugPage({ params }) {
    
     return (
         <Section>
-            <Image src={selectedTool.icon} alt={selectedTool.iconAlt} className="block w-20 mx-auto" />
-            <h1 className="text-center font-semibodl text-5xl">
-                <span>{selectedTool.title}</span>
-            </h1>
-            <h2 className="text-center font-light text-2xl mb-20">
-                {selectedTool.subtitle}
-            </h2>
-            <p className="font-light text-start text-xl">{selectedTool.description}</p>
-            <Collapse label="User guide">
-                <p>{ selectedTool.userGuide }</p>
-            </Collapse>
-            <Tool />
+            <Container>
+                {/* <Image src={selectedTool.icon} alt={selectedTool.iconAlt} className="block w-20 mx-auto" /> */}
+                {/* <Title text={selectedTool.title} />
+                <SubTitle text={selectedTool.subtitle} />
+                <div className="max-w-5xl mx-auto">
+                    <AlignVertical>
+                        <Paragraph text={selectedTool.description} className="mt-20"/>
+                        <Collapse label="User guide">
+                            <p>{ selectedTool.userGuide }</p>
+                        </Collapse>
+                    </AlignVertical>
+                </div> */}
+                {/* <Tool /> */}
+            </Container>
         </Section>
     )
 }

@@ -11,6 +11,7 @@ from internals.config import Settings, logger
 from obspy.geodetics import gps2dist_azimuth
 from typing_extensions import Self
 import os
+import pandas as pd
 import json
 
 router = APIRouter(
@@ -38,6 +39,43 @@ async def upload_seismic_file(file: UploadFile):
     logger.info("converting stream object to a list of traces")
 
     return convert_stream_to_traces(stream)
+
+
+@router.post("/upload-data-file")
+async def upload_data_file(file: UploadFile, skiprows: Annotated[int, Body()], delimiter: Annotated[str|None, Body()] = None):
+
+    logger.info("Reading the input data file")
+    data_file = file.file 
+    file_name = file.filename
+
+    if file_name is not None:
+        file_extension = file_name.split(".")[1].lower()
+    else:
+        raise HTTPException(status_code=500, detail="Cannot read the file!")
+  
+    if delimiter is None or delimiter == "whitespace":
+        sep = r"\s+"
+    else:
+        sep = delimiter
+
+    logger.info("reading the file as a Python Pandas DataFrame")
+    try:
+        if file_extension in ["txt", "dat"]:
+            df = pd.read_csv(data_file, header=None, skiprows=skiprows, sep=sep)
+        elif file_extension == "csv":
+            df = pd.read_csv(data_file, header=None, skiprows=skiprows)
+        elif file_extension in ["xlsx", "xls"]:
+            df = pd.read_excel(data_file, header=None, skiprows=skiprows)
+        else:
+            error_message = "Unsupported file format"
+            logger.error(error_message)
+            raise HTTPException(status_code=404, detail=error_message)
+    except Exception as e:
+            error_message = "Cannot read the file."
+            logger.error(error_message)
+            raise HTTPException(status_code=404, detail=error_message)
+    
+    return df.to_dict(orient="records")
 
 
 @router.get("/calculate-distance")

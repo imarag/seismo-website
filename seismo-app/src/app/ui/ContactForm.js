@@ -1,10 +1,12 @@
 'use client';
 
+import React, { useRef, useState } from 'react';
+
 import { TextInputElement, EmailInputElement, TextAreaElement, LabelElement } from "@/components/UIElements"
-import { useState } from "react"
-import React, { useRef } from 'react';
+import AlignVertical from "@/components/AlignVertical";
+import Button from "@/components/Button";
+
 import emailjs from '@emailjs/browser';
-import Spinner from "@/components/Spinner";
 
 export default function ContactForm() {
     const form = useRef();
@@ -19,10 +21,7 @@ export default function ContactForm() {
     function handleSubmitForm(e) {
         e.preventDefault();
         
-        // Create a FormData object from the form
         const formData = new FormData(e.target);
-
-        // Get the values by their "name" attribute
         const name = formData.get("user_name");
         const email = formData.get("user_email");
         const message = formData.get("message");
@@ -48,6 +47,7 @@ export default function ContactForm() {
             "messageError": null
         })
         setLoading(true)
+        
         emailjs
         .sendForm('service_ak5azqh', 'template_e9aalni', form.current, {
             publicKey: 'ux8hQOzLCp6f8Utvu',
@@ -71,9 +71,9 @@ export default function ContactForm() {
                 error && <p className="text-error my-2 text-sm">{error}</p>
             }
             <form ref={form} onSubmit={handleSubmitForm}>
-                <div className="flex flex-col gap-5">
+                <AlignVertical align="stretch">
                     <div>
-                        <LabelElement label="Name" id="user_name" className="text-lg" />
+                        <LabelElement label="Name" id="user_name" />
                         <TextInputElement
                             id="user_name"
                             name="user_name"
@@ -88,7 +88,7 @@ export default function ContactForm() {
                         }
                     </div>
                     <div>
-                        <LabelElement label="Email" id="user_email" className="text-lg" />
+                        <LabelElement label="Email" id="user_email" />
                         <EmailInputElement
                             id="user_email"
                             name="user_email"
@@ -103,7 +103,7 @@ export default function ContactForm() {
                         }
                     </div>
                     <div>
-                        <LabelElement label="Feedback" id="message" className="text-lg" />
+                        <LabelElement label="Feedback" id="message" />
                         <TextAreaElement
                             id="message"
                             name="message"
@@ -117,17 +117,10 @@ export default function ContactForm() {
                             )
                         }
                     </div>
-                </div>
-                <button 
-                    type="submit" 
-                    disabled={loading ? true : false}
-                    className="btn btn-primary btn-block block mx-auto mt-8 mb-3" 
-                >
-                    Submit
-                </button>
-                {
-                    loading && <Spinner />
-                }
+                    <Button type="submit" disabled={loading ? true : false} loading={loading ? true : false}>
+                        submit
+                    </Button>
+                </AlignVertical>
             </form>
         </section>
     )

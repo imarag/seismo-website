@@ -1,5 +1,5 @@
 'use client';
-import ToolsHoverButtons from "@/components/ToolsHoverButtons";
+
 import FourierGraphIcon from "@/images/fourier-graph-icon.png";
 import AsciiToMseed from "@/images/ascii-to-mseed-icon.png";
 import PickingIcon from "@/images/picking-icon.png";
@@ -12,11 +12,23 @@ import TaperGif from "@/images/taper-gif.gif";
 import Image from "next/image";
 import { useState } from "react";
 
+function ToolsHoverButtons({ onMouseEnter, icon, title }) {
+  return (
+    <div 
+      className="w-36 flex flex-col gap-3 items-center justify-center p-2 rounded-lg  hover:shadow-lg bg-base-100" 
+      onMouseEnter={onMouseEnter}
+    >
+        <Image src={icon} alt="button icon" />
+        <p className="text-center font-semibold text-sm">{ title }</p>
+    </div>
+  )
+}
+
 export default function ToolsGallery() {
   const [gifURLSelected, setGifURLSelected] = useState(FourierGif)
   return (
     <section className="mx-auto w-full max-w-4xl">
-        <div className="flex flex-row flex-wrap justify-center items-center gap-2 mt-14 mb-10">
+        <div className="flex flex-row flex-wrap justify-center items-center gap-2 mb-8">
           <ToolsHoverButtons onMouseEnter={() => setGifURLSelected(FourierGif)} icon={FourierGraphIcon} title="Fourier" />
           <ToolsHoverButtons onMouseEnter={() => setGifURLSelected(PickGif)} icon={PickingIcon} title="Arrival Picking" />
           <ToolsHoverButtons onMouseEnter={() => setGifURLSelected(TrimGif)} icon={AsciiToMseed} title="ASCII to MSEED" />

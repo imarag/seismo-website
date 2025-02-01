@@ -12,3 +12,7 @@ class Settings(Enum):
     TEMP_DATA_PATH = APP_DIR / TEMP_DATA_NAME
     ARRIVALS_FILE_NAME = "arrivals.txt"
     MSEED_FILE_NAME = "seismic-record.mseed"
+    ARTICLES_PATH = APP_DIR / "articles.json"
+    TOOLS_PATH = APP_DIR / "tools.json"
+    MARKDOWNS_PATH = APP_DIR / "markdowns"
+    STATIC_FOLDER_NAME = "static"

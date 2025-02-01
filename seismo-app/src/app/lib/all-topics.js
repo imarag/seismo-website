@@ -12,7 +12,6 @@ import MatplotlibMarkdown from '@/markdowns/matplotlib.mdx';
 import ComputeFourierOnWindowMarkdown from '@/markdowns/compute-fourier-on-window.mdx';
 import FileManipulationMarkdown from '@/markdowns/file-manipulation.mdx';
 
-import FourierIcon from '@/images/template-images/resized/fourier-icon.png';
 import PickArrivalsIcon from '@/images/template-images/resized/arrival-pick-icon.png';
 import FileToMseedIcon from '@/images/template-images/resized/file-to-mseed-icon.png';
 import SignalProcessingIcon from '@/images/template-images/resized/signal-processing-icon.png';
@@ -139,7 +138,7 @@ export const allTools = [
     iconAlt: "Convert Data Files to MiniSEED Icon",
     type: "tool",
     slug: "file-to-mseed",
-    completed: false,
+    completed: true,
     userGuide: "This tool simplifies the process of converting various seismic file formats into MiniSEED. Upload your file and specify conversion settings, such as station codes and sample rates. The tool validates input data to ensure compatibility and generates standardized MiniSEED files. Download the converted files for seamless integration with analysis software."
   },
   {

@@ -1,9 +1,13 @@
 'use client';
+
+import { useState } from "react";
+
 import { SearchInputElement } from "@/components/UIElements"
+import LinkTag from "@/components/LinkTag";
+
 import { allArticles } from "@/utils/all-topics";
 import { allTools } from "@/utils/all-topics";
-import { useState } from "react";
-import Link from "next/link";
+
 import { IoIosLink } from "react-icons/io";
 import { IoMdClose } from "react-icons/io";
 
@@ -24,6 +28,11 @@ export default function NavSearchBar({ setShowNavbar }) {
         ) : (
             setFilteredTopics([])
         )
+    }
+
+    function handleLinkClick() {
+        setShowNavbar(false);
+        setFilteredTopics([]);
     }
 
     return (
@@ -51,18 +60,13 @@ export default function NavSearchBar({ setShowNavbar }) {
                                     <p>
                                         {`/${tp.type === "article" ? "articles" : "tools"}/${tp.slug}`}
                                     </p>                 
-                                    <Link 
+                                    <LinkTag 
                                         href={`/${tp.type === "article" ? "articles" : "tools"}/${tp.slug}`} 
-                                        className="link link-primary flex flex-row items-center gap-2"
-                                        onClick={() => {
-                                            setShowNavbar(false);
-                                            setFilteredTopics([]);
-                                        }
-                                    }
+                                        onClick={handleLinkClick}
                                     >
                                         <IoIosLink />
                                         <span>go to page</span>
-                                    </Link>
+                                    </LinkTag>
                                     <hr className="my-4" />
                                 </div>
                             ))

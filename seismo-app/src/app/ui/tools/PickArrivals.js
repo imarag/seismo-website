@@ -6,7 +6,7 @@ import UploadFileButton from "@/components/UploadFileButton";
 import StartingUploadFile from "@/components/StartingUploadFile";
 import Message from "@/components/Message";
 import Section from "@/components/Section";
-import ButtonWithIcon from "@/components/ButtonWithIcon"
+import Button from "@/components/Button"
 import { RadioButtonElement, SelectElement, NumberInputElement, LabelElement } from "@/components/UIElements";
 import LineGraph from "@/components/LineGraph"
 import Spinner from "@/components/Spinner"
@@ -215,122 +215,123 @@ export default function PickArrivals() {
             )}
             {
                 backupTraces.length !== 0 && (
-                <>
-                    <div className="flex flex-row items-center justify-start gap-1">
-                        <UploadFileButton 
-                            setTraces={setTraces}
-                            setBackupTraces={setBackupTraces} 
-                            setError={setError}
-                            setSuccess={setSuccess}
-                            setLoading={setLoading} 
-                            buttonClass="btn-ghost btn-sm" 
-                        />
-                        <ButtonWithIcon 
-                            text="Download arrivals" 
-                            onClick={handleSaveArrivals} 
-                            disabled={traces.length===0 || (!formattedArrivals["P"] && !formattedArrivals["S"])} 
-                            icon={<MdOutlineFileDownload />} 
-                            className={"btn-ghost btn-sm"}
-                        />
-                        </div>
-                        <hr className="mt-2 mb-8" />
-                        <div className="flex flex-row items-center justify-around mt-3 py-3">
-                            <div className="flex flex-row items-center">
+                    <>
+                        <div>
+                            <div className="flex flex-row items-center justify-start gap-1">
+                                <UploadFileButton 
+                                    setTraces={setTraces}
+                                    setBackupTraces={setBackupTraces} 
+                                    setError={setError}
+                                    setSuccess={setSuccess}
+                                    setLoading={setLoading} 
+                                    buttonClass="btn-ghost btn-sm" 
+                                />
+                                <Button 
+                                    onClick={handleSaveArrivals} 
+                                    disabled={traces.length===0 || (!formattedArrivals["P"] && !formattedArrivals["S"])} 
+                                    variant="ghost"
+                                >
+                                    <MdOutlineFileDownload />
+                                    Download arrivals
+                                </Button>
+                            </div>
+                            <hr className="mt-2 mb-8" />
+                            <div className="flex flex-row items-center justify-around mt-3 py-3">
                                 <div className="flex flex-row items-center">
-                                    <LabelElement label="P" className="mx-1 text-lg" />
-                                    <RadioButtonElement 
-                                        label="P"
-                                        id="p-wave-radio"
-                                        name="ps-wave-radio"
-                                        value="P"
-                                        checked={selectedWave === "P"}
-                                        onChange={() => setSelectedWave("P")}
-                                        disabled={traces.length===0 || formattedArrivals["P"]}
-                                        className="radio-sm"
-                                    />
-                                </div>
-                                <div className="flex flex-row items-center mx-5">
-                                    <LabelElement label="S" className="mx-1 text-lg" />
-                                    <RadioButtonElement 
-                                        label="S"
-                                        id="s-wave-radio"
-                                        name="ps-wave-radio"
-                                        value="S"
-                                        checked={selectedWave === "S"}
-                                        onChange={() => setSelectedWave("S")}
-                                        disabled={traces.length===0 || formattedArrivals["S"]}
-                                        className="radio-sm"
-                                    />
-                                </div>
-                                <div className="flex gap-2 ms-4">
-                                    <button onClick={(e) => handleDeleteWave("P")} className="btn btn-sm btn-error" disabled={!formattedArrivals["P"]}>Del. P</button>
-                                    <button onClick={(e) => handleDeleteWave("S")} className="btn btn-sm btn-error" disabled={!formattedArrivals["S"]}>Del. S</button>
-                                </div>
-                            </div>
-                            <SelectElement 
-                                id="filters-dropdown"
-                                name="filters-dropdown"
-                                value={selectedFilter}
-                                onChange={handleDropdownFilterChange}
-                                disabled={traces.length===0}
-                                optionsList={filterOptions}
-                                className="select-sm"
-                            />
-                        </div>
-                        <Spinner visible={loading} />
-                        <div className="my-3">
-                            {
-                                traces.map((tr, ind) => (
-                                    <div key={tr.trace_id}>
-                                        {
-                                            <LineGraph 
-                                                xData={[tr["xdata"]]} 
-                                                yData={[tr["ydata"]]} 
-                                                height="220px"
-                                                legendTitle={[`Component: ${tr["stats"]["channel"]}`]}
-                                                showGraphTitle={ind === 0}
-                                                graphTitle={""}
-                                                shapes={shapes}
-                                                annotations={annotations}
-                                                onGraphClick={onGraphClick}
-                                            />
-                                        }
+                                    <div className="flex flex-row items-center">
+                                        <LabelElement label="P" className="mx-1 text-lg" />
+                                        <RadioButtonElement 
+                                            label="P"
+                                            id="p-wave-radio"
+                                            name="ps-wave-radio"
+                                            value="P"
+                                            checked={selectedWave === "P"}
+                                            onChange={() => setSelectedWave("P")}
+                                            disabled={traces.length===0 || formattedArrivals["P"]}
+                                            className="radio-sm"
+                                        />
                                     </div>
-                                ))
-                            }
-                        </div>
-                        <div className="flex justify-end align-center gap-3 mt-4">
-                            <div className="mb-3">
-                                <NumberInputElement 
-                                    id="freq_min" 
-                                    name="freq_min" 
-                                    value={manualFilter["freqMin"]} 
-                                    onKeyDown={handleEnterKey} 
-                                    onChange={(e) => setManualFilter({...manualFilter, freqMin: e.target.value})} 
-                                    placeholder="e.g. 0.1"
+                                    <div className="flex flex-row items-center mx-5">
+                                        <LabelElement label="S" className="mx-1 text-lg" />
+                                        <RadioButtonElement 
+                                            label="S"
+                                            id="s-wave-radio"
+                                            name="ps-wave-radio"
+                                            value="S"
+                                            checked={selectedWave === "S"}
+                                            onChange={() => setSelectedWave("S")}
+                                            disabled={traces.length===0 || formattedArrivals["S"]}
+                                            className="radio-sm"
+                                        />
+                                    </div>
+                                    <div className="flex gap-2 ms-4">
+                                        <button onClick={(e) => handleDeleteWave("P")} className="btn btn-sm btn-error" disabled={!formattedArrivals["P"]}>Del. P</button>
+                                        <button onClick={(e) => handleDeleteWave("S")} className="btn btn-sm btn-error" disabled={!formattedArrivals["S"]}>Del. S</button>
+                                    </div>
+                                </div>
+                                <SelectElement 
+                                    id="filters-dropdown"
+                                    name="filters-dropdown"
+                                    value={selectedFilter}
+                                    onChange={handleDropdownFilterChange}
                                     disabled={traces.length===0}
-                                    className="input-sm"
+                                    optionsList={filterOptions}
+                                    className="select-sm"
                                 />
                             </div>
-                            <div className="mb-3">
-                                <NumberInputElement 
-                                    id="freq_max" 
-                                    name="freq_max" 
-                                    value={manualFilter["freqMax"]} 
-                                    onKeyDown={handleEnterKey} 
-                                    onChange={(e) => setManualFilter({...manualFilter, freqMax: e.target.value})} 
-                                    placeholder="e.g. 3"
-                                    disabled={traces.length===0}
-                                    className="input-sm"
-                                />
+                            <Spinner visible={loading} />
+                            <div className="my-3">
+                                {
+                                    traces.map((tr, ind) => (
+                                        <div key={tr.trace_id}>
+                                            {
+                                                <LineGraph 
+                                                    xData={[tr["xdata"]]} 
+                                                    yData={[tr["ydata"]]} 
+                                                    height="220px"
+                                                    legendTitle={[`Component: ${tr["stats"]["channel"]}`]}
+                                                    showGraphTitle={ind === 0}
+                                                    graphTitle={""}
+                                                    shapes={shapes}
+                                                    annotations={annotations}
+                                                    onGraphClick={onGraphClick}
+                                                />
+                                            }
+                                        </div>
+                                    ))
+                                }
                             </div>
+                            <div className="flex justify-end align-center gap-3 mt-4">
+                                <div className="mb-3">
+                                    <NumberInputElement 
+                                        id="freq_min" 
+                                        name="freq_min" 
+                                        value={manualFilter["freqMin"]} 
+                                        onKeyDown={handleEnterKey} 
+                                        onChange={(e) => setManualFilter({...manualFilter, freqMin: e.target.value})} 
+                                        placeholder="e.g. 0.1"
+                                        disabled={traces.length===0}
+                                        className="input-sm"
+                                    />
+                                </div>
+                                <div className="mb-3">
+                                    <NumberInputElement 
+                                        id="freq_max" 
+                                        name="freq_max" 
+                                        value={manualFilter["freqMax"]} 
+                                        onKeyDown={handleEnterKey} 
+                                        onChange={(e) => setManualFilter({...manualFilter, freqMax: e.target.value})} 
+                                        placeholder="e.g. 3"
+                                        disabled={traces.length===0}
+                                        className="input-sm"
+                                    />
+                                </div>
+                            </div>
+                            <Spinner visible={loading} />
                         </div>
-                        <Spinner visible={loading} />
                     </>
-                    
                 )
             }
-            
         </Section>
     )
 }

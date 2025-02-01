@@ -54,7 +54,7 @@ export default function SignalProcessing() {
     const [success, setSuccess] = useState(null)
     const [loading, setLoading] = useState(false)
     const [appliedProcesses, setAppliedProcesses] = useState([])
-    const [verticalComponent, setVerticalComponent] = useState(null)
+    const [verticalComponent, setVerticalComponent] = useState("")
     const [signalProcessingOptions, setSignalProcessingOptions] = useState({
         "detrend-type": "simple",
         "taper-type": "parzen",
@@ -404,254 +404,254 @@ export default function SignalProcessing() {
             {
                 backupTraces.length !== 0 && (
                     <>
-                        <div>
-                            <div className="flex flex-row items-center justify-start gap-1">
-                                <UploadFileButton 
-                                    setTraces={setTraces} 
-                                    setBackupTraces={setBackupTraces}
-                                    setLoading={setLoading} 
-                                    buttonClass="btn-ghost" 
-                                    setError={setError}
-                                    setSuccess={setSuccess}
-                                />
+                            <div>
+                                <div className="flex flex-row items-center justify-start gap-1">
+                                    <UploadFileButton 
+                                        setTraces={setTraces} 
+                                        setBackupTraces={setBackupTraces}
+                                        setLoading={setLoading} 
+                                        buttonClass="btn-ghost" 
+                                        setError={setError}
+                                        setSuccess={setSuccess}
+                                    />
+                                </div>
+                                <hr />
                             </div>
-                            <hr />
-                        </div>
-                        <div className="flex flex-row flex-wrap items-center justify-start">
-                            <DropDownButton label="Taper" icon={<BsSoundwave />}>
-                                <div className="flex flex-col items-stretch gap-3">
-                                    <div>
-                                        <LabelElement label="Type" id="taper-type" />
-                                        <SelectElement 
-                                            id="taper-type"
-                                            name="taper-type"
-                                            optionsList={taperTypeOptions}
-                                            value={signalProcessingOptions["taper-type"]} 
-                                            className="select-sm block w-full"
-                                            onChange={(e) => handleSignalProcessingOptionsChange("taper-type", e.target.value)}
-                                        />
+                            <div className="flex flex-row flex-wrap items-center justify-start">
+                                <DropDownButton label="Taper" icon={<BsSoundwave />}>
+                                    <div className="flex flex-col items-stretch gap-3">
+                                        <div>
+                                            <LabelElement label="Type" id="taper-type" />
+                                            <SelectElement 
+                                                id="taper-type"
+                                                name="taper-type"
+                                                optionsList={taperTypeOptions}
+                                                value={signalProcessingOptions["taper-type"]} 
+                                                className="select-sm block w-full"
+                                                onChange={(e) => handleSignalProcessingOptionsChange("taper-type", e.target.value)}
+                                            />
+                                        </div>
+                                        <div>
+                                            <LabelElement label="Side" id="taper-side" />
+                                            <SelectElement 
+                                                id="taper-side"
+                                                name="taper-side"
+                                                optionsList={taperSideOptions}
+                                                value={signalProcessingOptions["taper-side"]} 
+                                                className="select-sm block w-full"
+                                                onChange={(e) => handleSignalProcessingOptionsChange("taper-side", e.target.value)}
+                                            />
+                                        </div>
+                                        <div>
+                                            <LabelElement label="Length" id="taper-length" />
+                                            <NumberInputElement 
+                                                id="taper-length"
+                                                name="taper-length"
+                                                min={0}
+                                                max={100} 
+                                                step={0.1}
+                                                className="input-sm block w-full"
+                                                value={signalProcessingOptions["taper-length"]} 
+                                                onChange={(e) => handleSignalProcessingOptionsChange("taper-length", e.target.value, "number")}
+                                            />
+                                        </div>
+                                        <MenuButton onClick={handleTaperApply} />
                                     </div>
-                                    <div>
-                                        <LabelElement label="Side" id="taper-side" />
-                                        <SelectElement 
-                                            id="taper-side"
-                                            name="taper-side"
-                                            optionsList={taperSideOptions}
-                                            value={signalProcessingOptions["taper-side"]} 
-                                            className="select-sm block w-full"
-                                            onChange={(e) => handleSignalProcessingOptionsChange("taper-side", e.target.value)}
-                                        />
-                                    </div>
-                                    <div>
-                                        <LabelElement label="Length" id="taper-length" />
-                                        <NumberInputElement 
-                                            id="taper-length"
-                                            name="taper-length"
-                                            min={0}
-                                            max={100} 
-                                            step={0.1}
-                                            className="input-sm block w-full"
-                                            value={signalProcessingOptions["taper-length"]} 
-                                            onChange={(e) => handleSignalProcessingOptionsChange("taper-length", e.target.value, "number")}
-                                        />
-                                    </div>
-                                    <MenuButton onClick={handleTaperApply} />
-                                </div>
-                            </DropDownButton>
-                            <DropDownButton label="Trim" icon={<IoCut />}>
-                                <div className="flex flex-col items-stretch gap-3">
-                                    <div>
-                                        <LabelElement label="Trim left side" id="trim-left-side" />
-                                        <NumberInputElement 
-                                            id="trim-left-side"
-                                            name="trim-left-side"
-                                            min={0}
-                                            max={duration} 
-                                            step={0.1}
-                                            className="input-sm mt-3 block w-full"
-                                            value={signalProcessingOptions["trim-left-side"]} 
-                                            onChange={(e) => handleSignalProcessingOptionsChange("trim-left-side", e.target.value, "number")}
-                                        />
+                                </DropDownButton>
+                                <DropDownButton label="Trim" icon={<IoCut />}>
+                                    <div className="flex flex-col items-stretch gap-3">
+                                        <div>
+                                            <LabelElement label="Trim left side" id="trim-left-side" />
+                                            <NumberInputElement 
+                                                id="trim-left-side"
+                                                name="trim-left-side"
+                                                min={0}
+                                                max={duration} 
+                                                step={0.1}
+                                                className="input-sm mt-3 block w-full"
+                                                value={signalProcessingOptions["trim-left-side"]} 
+                                                onChange={(e) => handleSignalProcessingOptionsChange("trim-left-side", e.target.value, "number")}
+                                            />
 
-                                        <SliderElement 
-                                            id="trim-left-side"
-                                            name="trim-left-side"
-                                            min={0}
-                                            max={duration} 
-                                            step={0.1}
-                                            className="range-xs mt-3 block w-full"
-                                            value={signalProcessingOptions["trim-left-side"]} 
-                                            onChange={(e) => handleSignalProcessingOptionsChange("trim-left-side", e.target.value, "number")}
-                                        />
+                                            <SliderElement 
+                                                id="trim-left-side"
+                                                name="trim-left-side"
+                                                min={0}
+                                                max={duration} 
+                                                step={0.1}
+                                                className="range-xs mt-3 block w-full"
+                                                value={signalProcessingOptions["trim-left-side"]} 
+                                                onChange={(e) => handleSignalProcessingOptionsChange("trim-left-side", e.target.value, "number")}
+                                            />
+                                        </div>
+                                        <div className="flex flex-col gap-3">
+                                            <LabelElement label="Trim right side" id="trim-right-side" />
+                                            <NumberInputElement 
+                                                id="trim-right-side"
+                                                name="trim-right-side"
+                                                min={0}
+                                                max={duration} 
+                                                step={0.1}
+                                                className="input-sm block w-full"
+                                                value={signalProcessingOptions["trim-right-side"]} 
+                                                onChange={(e) => handleSignalProcessingOptionsChange("trim-right-side", e.target.value, "number")}
+                                            />
+                                            <SliderElement 
+                                                id="trim-right-side"
+                                                name="trim-right-side"
+                                                min={0}
+                                                max={duration} 
+                                                step={0.1}
+                                                className="range-xs block w-full"
+                                                value={signalProcessingOptions["trim-right-side"]} 
+                                                onChange={(e) => handleSignalProcessingOptionsChange("trim-right-side", e.target.value, "number")}
+                                            />
+                                        </div>
+                                        <MenuButton onClick={handleTrimApply} />
                                     </div>
-                                    <div className="flex flex-col gap-3">
-                                        <LabelElement label="Trim right side" id="trim-right-side" />
-                                        <NumberInputElement 
-                                            id="trim-right-side"
-                                            name="trim-right-side"
-                                            min={0}
-                                            max={duration} 
-                                            step={0.1}
-                                            className="input-sm block w-full"
-                                            value={signalProcessingOptions["trim-right-side"]} 
-                                            onChange={(e) => handleSignalProcessingOptionsChange("trim-right-side", e.target.value, "number")}
-                                        />
-                                        <SliderElement 
-                                            id="trim-right-side"
-                                            name="trim-right-side"
-                                            min={0}
-                                            max={duration} 
-                                            step={0.1}
-                                            className="range-xs block w-full"
-                                            value={signalProcessingOptions["trim-right-side"]} 
-                                            onChange={(e) => handleSignalProcessingOptionsChange("trim-right-side", e.target.value, "number")}
-                                        />
+                                </DropDownButton>
+                                <DropDownButton label="Detrend" icon={<MdAlignVerticalCenter />}>
+                                    <div className="flex flex-col items-stretch gap-3">
+                                        <div>
+                                            <LabelElement label="Type" id="detrend-type" />
+                                            <SelectElement 
+                                                id="detrend-type"
+                                                name="detrend-type"
+                                                optionsList={detrendTypeOptions}
+                                                className="select-sm block w-full"
+                                                value={signalProcessingOptions["detrend-type"]} 
+                                                onChange={(e) => handleSignalProcessingOptionsChange("detrend-type", e.target.value)}
+                                            />
+                                        </div>
+                                        <MenuButton onClick={handleDetrendApply} />
                                     </div>
-                                    <MenuButton onClick={handleTrimApply} />
+                                </DropDownButton>
+                                <DropDownButton label="Filter" icon={<IoFilter />}>
+                                    <div className="flex flex-col items-stretch gap-3">
+                                        <div>
+                                            <LabelElement label="Min frequency" id="filter-min" />
+                                            <NumberInputElement 
+                                                id="filter-min"
+                                                name="filter-min"
+                                                min={0}
+                                                max={duration} 
+                                                step={0.1}
+                                                className="input-sm mt-3 block w-full"
+                                                value={signalProcessingOptions["filter-min"]} 
+                                                onChange={(e) => handleSignalProcessingOptionsChange("filter-min", e.target.value)}
+                                            />
+                                        </div>
+                                        <div className="flex flex-col gap-3">
+                                            <LabelElement label="Max frequency" id="freq-max" />
+                                            <NumberInputElement 
+                                                id="freq-max"
+                                                name="freq-max"
+                                                min={0}
+                                                max={duration} 
+                                                step={0.1}
+                                                className="input-sm block w-full"
+                                                value={signalProcessingOptions["filter-max"]} 
+                                                onChange={(e) => handleSignalProcessingOptionsChange("filter-max", e.target.value)}
+                                            />
+                                        </div>
+                                        <p className="text-center text-sm">If zero, it is considered not filled</p>
+                                        <MenuButton onClick={handleFilterApply} />
+                                    </div>
+                                </DropDownButton>
+                            </div>
+                            <Spinner visible={loading} />
+                            <div>
+                                <p>Filters applied:</p>
+                                <div>
+                                    {
+                                        appliedProcesses.length !== 0 && (
+                                            <div>
+                                                <div className="flex flex-row flex-wrap gap-2 my-6">
+                                                    {
+                                                        appliedProcesses.map((process, index) => (
+                                                            <span key={process.text} className="badge badge-info">
+                                                                {index+1}. {process.text}
+                                                            </span>
+                                                        ))
+                                                    }
+                                                </div>
+                                                <button onClick={handleRemoveProcesses} className="btn btn-xs btn-error">
+                                                    remove all filters
+                                                    <IoMdClose />
+                                                </button>
+                                            </div>
+                                        )
+                                    }
+                                    {
+                                        appliedProcesses.length === 0 && (
+                                            <p className="mt-5">There are not filters applied!</p>
+                                        )
+                                    }
+                                    
                                 </div>
-                            </DropDownButton>
-                            <DropDownButton label="Detrend" icon={<MdAlignVerticalCenter />}>
-                                <div className="flex flex-col items-stretch gap-3">
-                                    <div>
-                                        <LabelElement label="Type" id="detrend-type" />
-                                        <SelectElement 
-                                            id="detrend-type"
-                                            name="detrend-type"
-                                            optionsList={detrendTypeOptions}
-                                            className="select-sm block w-full"
-                                            value={signalProcessingOptions["detrend-type"]} 
-                                            onChange={(e) => handleSignalProcessingOptionsChange("detrend-type", e.target.value)}
-                                        />
-                                    </div>
-                                    <MenuButton onClick={handleDetrendApply} />
-                                </div>
-                            </DropDownButton>
-                            <DropDownButton label="Filter" icon={<IoFilter />}>
-                                <div className="flex flex-col items-stretch gap-3">
-                                    <div>
-                                        <LabelElement label="Min frequency" id="filter-min" />
-                                        <NumberInputElement 
-                                            id="filter-min"
-                                            name="filter-min"
-                                            min={0}
-                                            max={duration} 
-                                            step={0.1}
-                                            className="input-sm mt-3 block w-full"
-                                            value={signalProcessingOptions["filter-min"]} 
-                                            onChange={(e) => handleSignalProcessingOptionsChange("filter-min", e.target.value)}
-                                        />
-                                    </div>
-                                    <div className="flex flex-col gap-3">
-                                        <LabelElement label="Max frequency" id="freq-max" />
-                                        <NumberInputElement 
-                                            id="freq-max"
-                                            name="freq-max"
-                                            min={0}
-                                            max={duration} 
-                                            step={0.1}
-                                            className="input-sm block w-full"
-                                            value={signalProcessingOptions["filter-max"]} 
-                                            onChange={(e) => handleSignalProcessingOptionsChange("filter-max", e.target.value)}
-                                        />
-                                    </div>
-                                    <p className="text-center text-sm">If zero, it is considered not filled</p>
-                                    <MenuButton onClick={handleFilterApply} />
-                                </div>
-                            </DropDownButton>
-                        </div>
-                        <Spinner visible={loading} />
-                        <div>
-                            <p>Filters applied:</p>
+                            </div>
                             <div>
                                 {
-                                    appliedProcesses.length !== 0 && (
+                                    traces.map((tr, ind) => (
+                                        <div key={tr.trace_id}>
+                                            {
+                                                <LineGraph
+                                                    xData={traces.length !== 0 ? [tr["xdata"]] : []}
+                                                    yData={traces.length !== 0 ? [tr["ydata"]] : []}
+                                                    graphTitle=""
+                                                    showLegend={false}
+                                                    height="220px"
+                                                    shapes={shapes}
+                                                />
+                                            }
+                                        </div>
+                                    ))
+                                }
+                            </div>
+                            <Collapse label="Fourier Spectra">
+                                {
+                                    fourierData.length !== 0 && (
                                         <div>
-                                            <div className="flex flex-row flex-wrap gap-2 my-6">
-                                                {
-                                                    appliedProcesses.map((process, index) => (
-                                                        <span key={process.text} className="badge badge-info">
-                                                            {index+1}. {process.text}
-                                                        </span>
-                                                    ))
-                                                }
-                                            </div>
-                                            <button onClick={handleRemoveProcesses} className="btn btn-xs btn-error">
-                                                remove all filters
-                                                <IoMdClose />
-                                            </button>
+                                            {
+                                                fourierData.map((tr, ind) => (
+                                                    <div key={tr.trace_id}>
+                                                        <LineGraph
+                                                            xData={[tr["fas_freqs"]]}
+                                                            yData={[tr["fas_amps"]]}
+                                                            graphTitle=""
+                                                            scale="log"
+                                                            showLegend={false}
+                                                            height="220px"
+                                                            legendTitle={tr.component}
+                                                        />
+                                                    </div>
+                                                ))
+                                            }
                                         </div>
                                     )
                                 }
-                                {
-                                    appliedProcesses.length === 0 && (
-                                        <p className="mt-5">There are not filters applied!</p>
-                                    )
-                                }
-                                
-                            </div>
-                        </div>
-                        <div>
-                            {
-                                traces.map((tr, ind) => (
-                                    <div key={tr.trace_id}>
-                                        {
-                                            <LineGraph
-                                                xData={traces.length !== 0 ? [tr["xdata"]] : []}
-                                                yData={traces.length !== 0 ? [tr["ydata"]] : []}
-                                                graphTitle=""
-                                                showLegend={false}
-                                                height="220px"
-                                                shapes={shapes}
-                                            />
-                                        }
-                                    </div>
-                                ))
-                            }
-                        </div>
-                        <Collapse label="Fourier Spectra">
-                            {
-                                fourierData.length !== 0 && (
-                                    <div>
-                                        {
-                                            fourierData.map((tr, ind) => (
-                                                <div key={tr.trace_id}>
-                                                    <LineGraph
-                                                        xData={[tr["fas_freqs"]]}
-                                                        yData={[tr["fas_amps"]]}
-                                                        graphTitle=""
-                                                        scale="log"
-                                                        showLegend={false}
-                                                        height="220px"
-                                                        legendTitle={tr.component}
-                                                    />
-                                                </div>
-                                            ))
-                                        }
-                                    </div>
-                                )
-                            }
-                        </Collapse>
-                        <Collapse label="HVSR">
-                            <div>
-                                <LabelElement label="Vertical component" id="vertical-component" />
-                                <SelectElement 
-                                    id="vertical-component"
-                                    name="vertical-component"
-                                    optionsList={traces.map(tr => ({label: tr.stats.channel, value: tr.stats.channel}))}
-                                    value={verticalComponent} 
-                                    className="select-sm"
-                                    onChange={(e) => setVerticalComponent(e.target.value)}
+                            </Collapse>
+                            <Collapse label="HVSR">
+                                <div>
+                                    <LabelElement label="Vertical component" id="vertical-component" />
+                                    <SelectElement 
+                                        id="vertical-component"
+                                        name="vertical-component"
+                                        optionsList={traces.map(tr => ({label: tr.stats.channel, value: tr.stats.channel}))}
+                                        value={verticalComponent} 
+                                        className="select-sm"
+                                        onChange={(e) => setVerticalComponent(e.target.value)}
+                                    />
+                                </div>
+                                <LineGraph
+                                    xData={[fourierData.length !== 0 ? fourierData[0]["fas_freqs"] : []]}
+                                    yData={[HVSRData.length !== 0 ? HVSRData : []]}
+                                    graphTitle=""
+                                    scale="log"
+                                    showLegend={false}
+                                    height="220px"
                                 />
-                            </div>
-                            <LineGraph
-                                xData={[fourierData.length !== 0 ? fourierData[0]["fas_freqs"] : []]}
-                                yData={[HVSRData.length !== 0 ? HVSRData : []]}
-                                graphTitle=""
-                                scale="log"
-                                showLegend={false}
-                                height="220px"
-                            />
-                        </Collapse>
+                            </Collapse>
                     </>
                 )
             }

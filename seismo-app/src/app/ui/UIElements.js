@@ -1,16 +1,16 @@
-export function RadioButtonElement({ className, ...props }) {
+export function RadioButtonElement({ className, block=false, ...props }) {
     return (
         <input 
             {...props}
             type="radio" 
-            className={`radio border-gray-700 ${className ? className : ""}`}
+            className={`radio ${block && "block w-full"}  ${className ? className : ""}`}
         />
     );
 }
 
-export function SelectElement({ className, optionsList, ...props }) {
+export function SelectElement({ className, block=false, optionsList, ...props }) {
     return (
-        <select {...props} className={`select select-bordered  ${className ? className: ""}`}>
+        <select {...props} className={`select select-bordered  ${block && "block w-full"}  ${className ? className: ""}`}>
             {
                 optionsList.map(el => (
                     <option key={el.label} value={el.value}>{el.label}</option>
@@ -20,104 +20,104 @@ export function SelectElement({ className, optionsList, ...props }) {
     );
 }
 
-export function NumberInputElement({ className, ...props }) {
+export function NumberInputElement({ className, block=false, ...props }) {
     return (
         <input 
             {...props}
             type="number" 
-            className={`input input-bordered  ${className ? className: ""}`}
+            className={`input input-bordered  ${block && "block w-full"}  ${className ? className: ""}`}
             readOnly={props.readOnly ? true : false}
         />
     );
 }
 
-export function DateInputElement({ className, ...props }) {
+export function DateInputElement({ className, block=false, ...props }) {
     return (
         <input 
             {...props}
             type="date" 
-            className={`input input-bordered  ${className ? className: ""}`}
+            className={`input input-bordered  ${block && "block w-full"}  ${className ? className: ""}`}
         />
     );
 }
 
-export function TimeInputElement({ className, ...props }) {
+export function TimeInputElement({ className, block=false, ...props }) {
     return (
         <input 
             {...props}
             type="time" 
-            className={`input input-bordered  ${className ? className: ""}`}
+            className={`input input-bordered  ${block && "block w-full"}  ${className ? className: ""}`}
         />
     );
 }
 
-export function TextInputElement({ className, ...props }) {
+export function TextInputElement({ className, block=false, ...props }) {
     return (
         <input 
             {...props}
             type="text" 
-            className={`input input-bordered  ${className ? className: ""}`}
+            className={`input input-bordered  ${block && "block w-full"}  ${className ? className: ""}`}
             readOnly={props.readOnly ? true : false}
         />
     );
 }
 
-export function EmailInputElement({ className, ...props }) {
+export function EmailInputElement({ className, block=false, ...props }) {
     return (
         <input 
             {...props}
             type="email" 
-            className={`input input-bordered  ${className ? className: ""}`}
+            className={`input input-bordered  ${block && "block w-full"}  ${className ? className: ""}`}
             readOnly={props.readOnly ? true : false}
         />
     );
 }
 
-export function TextAreaElement({ className, ...props }) {
+export function TextAreaElement({ className, block=false, ...props }) {
     return (
         <textarea 
             {...props}
             type="email" 
-            className={`textarea textarea-bordered  ${className ? className: ""}`}
+            className={`textarea textarea-bordered  ${block && "block w-full"}  ${className ? className: ""}`}
             readOnly={props.readOnly ? true : false}
         ></textarea>
     );
 }
 
-export function SearchInputElement({ className, ...props }) {
+export function SearchInputElement({ className, block=false, ...props }) {
     return (
         <input 
             {...props}
             type="search" 
-            className={`input input-bordered  ${className ? className: ""}`}
+            className={`input input-bordered  ${block && "block w-full"}  ${className ? className: ""}`}
         />
     );
 }
 
-export function SliderElement({ className, ...props }) {
+export function SliderElement({ className, block=false, ...props }) {
     return (
         <input 
             {...props}
             type="range" 
-            className={`range  ${className ? className: ""}`}
+            className={`range  ${block && "block w-full"}  ${className ? className: ""}`}
         />
     );
 }
 
-export function CheckboxElement({ className, ...props }) {
+export function CheckboxElement({ className, block=false, ...props }) {
     return (
         <input 
             {...props}
             type="checkbox" 
-            className={`checkbox  ${className ? className: ""}`}
+            className={`checkbox ${block && "block w-full"}  ${className ? className: ""}`}
         />
     );
 }
 
-export function LabelElement({ className, ...props }) {
+export function LabelElement({ className, block=false, ...props }) {
     return (
         <label 
-            className={`label label-text block py-1 ${className ? className : ""}`} 
+            className={`label text-lg label-text block py-1 ${className ? className : ""}`} 
             htmlFor={props.id}
         >
             {props.label}

@@ -1,4 +1,12 @@
+import { FaFacebook, FaInstagram, FaLinkedin } from "react-icons/fa";
+
 export const serverUrl = "http://127.0.0.1:8000"
+
+export const socialMediaInfo = [
+    {app: "facebook", url: "https://www.facebook.com/giannis.mar.5/", icon: FaFacebook},
+    {app: "instagram", url: "https://www.instagram.com/giannis_mar95/", icon: FaInstagram},
+    {app: "linkedin", url: "https://www.linkedin.com/in/ioannis-maragkakis-1ba2851a9/", icon: FaLinkedin},
+]
 
 export const fastapiEndpoints = {
     "CALCULATE-DISTANCE": `${serverUrl}/utilities/calculate-distance`,
@@ -19,6 +27,7 @@ export const fastapiEndpoints = {
     "TAPER-SIDE-OPTIONS": `${serverUrl}/static-data/get-taper-side-options`,   
     "DETREND-TYPE-OPTIONS": `${serverUrl}/static-data/get-detrend-type-options`,   
     "FILTER-OPTIONS": `${serverUrl}/static-data/get-filter-options`,   
+    "DELIMITER-OPTIONS": `${serverUrl}/static-data/get-delimiter-options`,   
 }
 
 export const navLinks = [

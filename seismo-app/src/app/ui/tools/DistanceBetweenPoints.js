@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 
-import ButtonWithIcon from "@/components/ButtonWithIcon";
+import Button from "@/components/Button";
+import LinkTag from "@/components/LinkTag";
 import Message from "@/components/Message";
 import Spinner from "@/components/Spinner";
 import { NumberInputElement } from "@/components/UIElements"
@@ -84,7 +85,7 @@ export default function DistanceBetweenPoints() {
             {
                 success && <Message type="success" text={success} />
             }
-            <div className="flex flex-row flex-wrap justify-center items-center gap-8">
+            <div className="flex flex-row flex-wrap lg:flex-nowrap justify-center items-center gap-8">
                 <CoordContainer label="Point 1">
                     <CoordItem
                         coordLabel="Latitude"
@@ -114,16 +115,16 @@ export default function DistanceBetweenPoints() {
                     />
                 </CoordContainer>
             </div>
-            <div className="flex flex-row justify-center gap-2">
-                <ButtonWithIcon 
-                    text="Compute" 
+                <Button 
                     onClick={handleComputeButton} 
                     disabled={!coords["lat1"] || !coords["lon1"] || !coords["lat2"] || !coords["lon2"]} 
-                    icon={<LuCalculator />} 
-                    className="btn-md btn-primary"
-                />
-            </div>
-            <Spinner visible={loading} />
+                    loading={loading}
+                    variant="primary"
+                    className="mt-8"
+                >
+                    Compute
+                    <LuCalculator />
+                </Button>
             {distance && (
                 <p className="text-center">
                     The distance between point 1 (lat: {coords["lat1"]}, lon: {coords["lon1"]}) and point 2 (lat: {coords["lat2"]}, lon: {coords["lon2"]}) is:{" "}
@@ -133,15 +134,17 @@ export default function DistanceBetweenPoints() {
             <div>
                 <Map coords={coords} />
             </div>
-            <p>
-                The tool uses the ObsPy <a className="link-info" target="_blank" href="https://docs.obspy.org/packages/autogen/obspy.geodetics.base.gps2dist_azimuth.html"><code>gps2dist_azimuth</code> </a> function to do the calculation:
-            </p>
-            <div className="mockup-code">
-                <pre>
-                    <code>
-                        gps2dist_azimuth(lat1, lon1, lat2, lon2, a=6378137.0, f=0.0033528106647474805)
-                    </code>
-                </pre>
+            <div>
+                <p>
+                    The tool uses the ObsPy <LinkTag variant="info" href="https://docs.obspy.org/packages/autogen/obspy.geodetics.base.gps2dist_azimuth.html"><code>gps2dist_azimuth</code></LinkTag> function to do the calculation:
+                </p>
+                <div className="mockup-code my-4">
+                    <pre>
+                        <code>
+                            gps2dist_azimuth(lat1, lon1, lat2, lon2, a=6378137.0, f=0.0033528106647474805)
+                        </code>
+                    </pre>
+                </div>
             </div>
         </Section>
     );

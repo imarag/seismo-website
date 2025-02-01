@@ -5,7 +5,7 @@ import { useState } from "react";
 import LineGraph from "@/components/LineGraph"
 import Spinner from "@/components/Spinner";
 import Section from "@/components/Section";
-import ButtonWithIcon from "@/components/ButtonWithIcon";
+import Button from "@/components/Button";
 import UploadFileButton from "@/components/UploadFileButton";
 import StartingUploadFile from "@/components/StartingUploadFile";
 import Message from "@/components/Message";
@@ -100,34 +100,44 @@ export default function EditSeismicFile() {
                                 setError={setError}
                                 setSuccess={setSuccess} 
                             />
-                            <ButtonWithIcon 
-                                text="Restore initial" 
-                                onClick={() => setTraces(backupTraces)} 
-                                icon={<CiUndo />} 
-                                className={"btn-ghost"}
-                            />
+                            <Button 
+                                onClick={() => setTraces(backupTraces)}  
+                                variant="ghost"
+                            >
+                                Restore initial
+                                <CiUndo />
+                            </Button>
                         </div>
                         <hr />
                     </div>
                     <div className="flex flex-row flex-wrap gap-2">
-                        <ButtonWithIcon 
-                            text="Download to MSEED" 
+                        <Button 
                             onClick={() => handleDownloadFile("mseed", traces, traces[0].stats.record_name + "_download")} 
-                            icon={<MdOutlineFileDownload />} 
-                            className={"btn-outline btn-secondary btn-sm"}
-                        />
-                        <ButtonWithIcon 
-                            text="Download header" 
+                            variant="neutral"
+                            outline={true}
+                            size="small"
+                        >
+                            Download to MSEED
+                            <MdOutlineFileDownload />
+                        </Button>
+                        <Button 
                             onClick={() => handleDownloadFile("json", traces.map(tr => tr.stats), traces[0].stats.record_name + "_header")} 
-                            icon={<MdOutlineFileDownload />} 
-                            className={"btn-outline btn-secondary btn-sm"}
-                        />
-                        <ButtonWithIcon 
-                            text="Download Data samples" 
-                            onClick={() => handleDownloadFile("json", traces.map(tr => ({"component": tr.stats.channel, "data": tr.ydata})), traces[0].stats.record_name + "_data")} 
-                            icon={<MdOutlineFileDownload />} 
-                            className={"btn-outline btn-secondary btn-sm"}
-                        />
+                            variant="neutral"
+                            outline={true}
+                            size="small"
+                        >
+                            Download header
+                            <MdOutlineFileDownload />
+                        </Button>
+                        <Button 
+                            onClick={() => handleDownloadFile("json", traces.map(tr => ({"component": tr.stats.channel, "data": tr.ydata})), traces[0].stats.record_name + "_data")}
+                            variant="neutral"
+                            outline={true}
+                            size="small"
+                        >
+                            Download Data samples
+                            <MdOutlineFileDownload />
+                        </Button>
                     </div>
                     <Spinner visible={loading} />
                 </>
@@ -138,12 +148,22 @@ export default function EditSeismicFile() {
                         <div key={tr.trace_id}>
                             <div className="flex flex-row justify-end gap-2 relative">
                                 <div>
-                                    <button className="btn btn-sm btn-info me-2" onClick={() => handleOptionsMenuButtonClick(ind)}>
-                                        <PiGearLight />
-                                    </button>
-                                    <button className="btn btn-sm btn-error" onClick={() => handleDeleteTrace(tr.trace_id)}>
-                                        <MdDeleteOutline  />
-                                    </button>
+                                    <div className="flex flex-row justify-end gap-2">
+                                        <Button 
+                                            onClick={() => handleOptionsMenuButtonClick(ind)}
+                                            variant="neutral"
+                                            size="small"
+                                        >
+                                            <PiGearLight />
+                                        </Button>
+                                        <Button 
+                                            onClick={() => handleDeleteTrace(tr.trace_id)}
+                                            variant="error"
+                                            size="small"
+                                        >
+                                            <MdDeleteOutline />
+                                        </Button>
+                                    </div>
                                     {
                                         activatedMenuIndex === ind && (
                                             <div className="flex flex-col items-stretch gap-1 absolute top-100 end-0 bg-white border shadow py-3 px-4 rounded z-50">
@@ -212,7 +232,14 @@ export default function EditSeismicFile() {
                                                     />
                                                 </div>
                                                 <p className="text-sm text-center my-1">Elements with "*" are readonly</p>
-                                                <button className="btn btn-secondary btn-sm btn-block mt-2" onClick={() => setActivatedMenuIndex(null)}>Close Menu</button>
+                                                <Button 
+                                                    onClick={() => setActivatedMenuIndex(null)}
+                                                    variant="secondary"
+                                                    size="small"
+                                                    block={true}
+                                                >
+                                                    Close Menu
+                                                </Button>
                                             </div>
                                         )
                                     }

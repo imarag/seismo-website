@@ -1,9 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import signal_processing, handle_seismic_traces, utilities, static_data
+from routers import signal_processing, handle_seismic_traces, utilities
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
+from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
 
@@ -11,7 +12,9 @@ app = FastAPI()
 app.include_router(signal_processing.router)
 app.include_router(handle_seismic_traces.router)
 app.include_router(utilities.router)
-app.include_router(static_data.router)
+
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # this is for raising httpexception erros
 @app.exception_handler(StarletteHTTPException)
@@ -50,7 +53,9 @@ origins = [
     "https://localhost:8000",
     "http://localhost:8000",
     "https://localhost:3000",
-    "http://localhost:3000"
+    "http://localhost:3000",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
 ]
 
 

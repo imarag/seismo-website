@@ -1,7 +1,7 @@
 import Image from "next/image"
 
+import { Title } from "@/components/Typography"
 import Section from "@/components/Section"
-import Title from "@/components/Title"
 
 import { allArticles } from "@/utils/all-topics"
 

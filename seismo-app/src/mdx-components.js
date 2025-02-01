@@ -7,7 +7,7 @@ import {dracula} from 'react-syntax-highlighter/dist/esm/styles/prism'
 export function useMDXComponents(components) {
   return {
     h1: ({ children }) => (
-      <h1 className="text-5xl text-start font-normal mb-10 mt-20">{children}</h1>
+      <h1 className="text-4xl text-start font-normal mb-10 mt-20">{children}</h1>
     ),
     h2: ({ children }) => (
       <h2 className="text-3xl text-start font-normal mt-10 mb-5" >{children}</h2>

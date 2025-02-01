@@ -23,19 +23,17 @@ export default function ArticleSearchInput() {
         }
         router.replace(`${pathname}?${params.toString()}`)
     }
-
+    
     return (
-        <div className="mb-10 ">
-            <div className="flex flex-row gap-3 items-center max-w-4xl mx-auto">
-                <SearchInputElement 
-                    id="search"
-                    name="search"
-                    className="select-md block w-full text-neutral border-neutral"
-                    placeholder="Search"
-                    onChange={(e) => handleSeachInputValue(e.target.value)} 
-                />
-                <label htmlFor="search"><CiSearch className="size-9 text-neutral border-neutral" /></label>
-            </div>
+        <div className="w-full mb-20">
+            <SearchInputElement 
+                id="search"
+                name="search"
+                block={true}
+                placeholder="Search"
+                onChange={(e) => handleSeachInputValue(e.target.value)} 
+                className="max-w-3xl mx-auto"
+            />
         </div>
     )
 }

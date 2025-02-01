@@ -1,11 +1,12 @@
 import Image from "next/image";
 
 import Section from "@/components/Section";
-import Title from "@/components/Title";
-import SubTitle from "@/components/SubTitle";
-import Card from "@/components/Card";
+import Container from "@/components/Container"
+import { HeroTitle, Title, SubTitle, HeroSubTitle } from "@/components/Typography"
+import AlignVertical from "@/components/AlignVertical";
+import { CardTitle, CardParagraph, CardLink, CardContainer, CardImage } from "@/components/CardElements"
 import ToolsGallery from "@/components/ToolsGallery";
-import CTAButton from "@/components/CTAButton";
+import LinkTag from "@/components/LinkTag";
 
 import { IoIosArrowRoundForward } from "react-icons/io";
 
@@ -24,60 +25,71 @@ export default function Home() {
                 className={`bg-no-repeat bg-contain bg-top`}
             >
                 <div className="min-h-screen flex flex-row items-center justify-center">
-                    <div>
-                        <h1 className="text-center text-4xl md:text-8xl font-bold">
-                            A JOURNEY INTO
-                            <br />
-                            <span className="text-secondary">SEISMOLOGY</span>
-                        </h1>
-                        <p className="text-center py-6 font-normal text-lg md:text-3xl">
-                            Discover different seismic articles, interact with tools, and deepen
-                            your understanding.
-                        </p>
-                        <CTAButton href="/articles" label="Get started" />
+                    <div className="flex flex-col items-center">
+                        <HeroTitle text="A JOURNEY INTO" styledText="SEISMOLOGY"/>
+                        <HeroSubTitle
+                            text="Discover different seismic articles, interact with tools, and deepen
+                            your understanding." 
+                            className="text-center py-6 font-normal text-lg md:text-3xl" />
+                        <LinkTag href="/articles" button={true} large={true}>Get started</LinkTag>
                     </div>
                 </div>
                 <Section className="mt-52">
-                    <Title text="Discover the" styledText="seismic articles" />
-                    <SubTitle
-                        text="Explore a range of seismic articles designed to deepen your understanding of the mechanisms behind earthquakes and the advanced technologies used to analyze them."
-                    />
-                    <div className="flex flex-col md:flex-row items-center justify-center gap-8">
-                        <Card
-                            title="Introduction to Seismology"
-                            description="Delve into the various seismological concepts about the creation of the earthquakes, the various seismic waves generated, the mechanisms that trigger the seismic faults and the effects of the seismic waves on the surface."
-                            imgURL={ArrivalPickIcon}
-                            imgAlt="seismological concepts about the creation of the earthquakes, the various seismic waves generated"
-                            pageURL="/articles/introduction-to-seismology"
-                            className="w-full md:w-1/2 xl:w-5/12"
-                        />
-                        <Card
-                            title="Seismic Site Effect"
-                            description="Learn about the influence of the underground geology on the incoming ground motion. Discover the local conditions that cause the site effect and whether we can estimate it or not. Lastly, explore a research that took place to understand it."
-                            imgURL={SiteEffectIcon}
-                            imgAlt="influence of the underground geology on the incoming ground motion"
-                            pageURL="/articles/site-effect"
-                            className="w-full md:w-1/2 xl:w-5/12"
-                        />
-                    </div>
-                    <CTAButton href="/articles" label="Learn about the seismic articles" link={true} linkIcon={<IoIosArrowRoundForward/>} />
+                    <Container>
+                        <AlignVertical>
+                            <Title text="Discover the" styledText="seismic articles" />
+                            <SubTitle
+                                text="Explore a range of seismic articles designed to deepen your understanding of the mechanisms behind earthquakes and the advanced technologies used to analyze them."
+                            />
+                            <div className="flex flex-row items-center justify-center gap-8 flex-wrap md:flex-nowrap w-full">
+                                <CardContainer>
+                                    <CardImage src={ArrivalPickIcon} alt="seismological concepts about the creation of the earthquakes, the various seismic waves generated" />
+                                    <CardTitle text="Introduction to Seismology" />
+                                    <CardParagraph text="Delve into the various seismological concepts about the creation of the earthquakes, the various seismic waves generated, the mechanisms that trigger the seismic faults and the effects of the seismic waves on the surface." />
+                                    <CardLink text="Go to page" href="/articles/introduction-to-seismology" />
+                                </CardContainer>
+                                <CardContainer>
+                                    <CardImage src={SiteEffectIcon} alt="influence of the underground geology on the incoming ground motion" />
+                                    <CardTitle text="Seismic Site Effect" />
+                                    <CardParagraph text="Learn about the influence of the underground geology on the incoming ground motion. Discover the local conditions that cause the site effect and whether we can estimate it or not. Lastly, explore a research that took place to understand it." />
+                                    <CardLink text="Go to page" href="/articles/site-effect" />
+                                </CardContainer>
+                            </div>
+                            <LinkTag href="/articles">
+                                Learn about the seismic articles
+                                <IoIosArrowRoundForward />
+                            </LinkTag>
+                        </AlignVertical>
+                    </Container>
                 </Section>
                 <Section>
-                    <Image src={ObsPyIcon} className="w-20 block mx-auto"  alt="ObsPy Logo" />
-                    <Title text="Learn about the" styledText="Python ObsPy" />
-                    <SubTitle
-                        text="Process seismic data using the various ObsPy functions, manipulate date and time, and plot earthquake recordings."
-                    />
-                    <CTAButton href="/articles/obspy" label="Learn More" />
-                    <Image src={ObsPyScriptExample} alt="python script example" className="block mx-auto max-w-3xl" unoptimized />
+                    <Container>
+                        <AlignVertical>
+                            <Image src={ObsPyIcon} className="w-20 block mx-auto"  alt="ObsPy Logo" />
+                            <Title text="Learn about the" styledText="Python ObsPy" />
+                            <SubTitle
+                                text="Process seismic data using the various ObsPy functions, manipulate date and time, and plot earthquake recordings."
+                            />
+                            <LinkTag href="/articles/obspy" button={true}>
+                                Learn More
+                            </LinkTag>
+                            <Image src={ObsPyScriptExample} alt="python script example" className="block mx-auto max-w-3xl" unoptimized />
+                        </AlignVertical>
+                    </Container>
                 </Section>
                 <Section>
-                    <Title text="Utilize the" styledText="interactive tools" />
-                    <SubTitle
-                        text="Explore a range of seismic articles designed to deepen your understanding of the mechanisms behind earthquakes and the advanced technologies used to analyze them."
-                    />
-                    <CTAButton href="/tools" label="Learn More" />
-                    <ToolsGallery />
+                    <Container>
+                        <AlignVertical>
+                            <Title text="Utilize the" styledText="interactive tools" />
+                            <SubTitle
+                                text="Explore a range of seismic articles designed to deepen your understanding of the mechanisms behind earthquakes and the advanced technologies used to analyze them."
+                            />
+                            <LinkTag href="/tools" button={true}>
+                                Learn More
+                            </LinkTag>
+                            <ToolsGallery />
+                        </AlignVertical>
+                    </Container>
                 </Section>
             </div>
         </>

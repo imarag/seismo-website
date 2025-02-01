@@ -1,7 +1,6 @@
 import UploadFileButton from "@/components/UploadFileButton"
 import ToolTip from "@/components/ToolTip";
-
-import { fastapiEndpoints } from "@/utils/static";
+import { Title } from "@/components/Typography";
 
 import { IoInformationCircleOutline } from "react-icons/io5";
 
@@ -15,11 +14,6 @@ export default function StartingUploadFile({ setTraces, setBackupTraces, setErro
                         <IoInformationCircleOutline className="size-5" />
                     </a>
                 </ToolTip>
-            </p>
-            <p className="text-center text-md font-light">
-                Don't have a seismic data file ? 
-                Click <a className="link link-info" href={fastapiEndpoints['DOWNLOAD-TEST-FILE']}>here</a> to download one, to experiment 
-                with the tool. 
             </p>
             <UploadFileButton 
                 setTraces={setTraces} 

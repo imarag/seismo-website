@@ -1,7 +1,11 @@
+import { useRef, useState } from "react";
+
+import Button from "@/components/Button";
+import AlignVertical from "./AlignVertical";
+
 import fetchRequest from "@/utils/functions/fetchRequest";
 import { fastapiEndpoints } from "@/utils/static";
-import { useRef, useState } from "react";
-import ButtonWithIcon from "@/components/ButtonWithIcon";
+
 import { MdOutlineFileUpload } from "react-icons/md";
 
 
@@ -35,13 +39,18 @@ export default function UploadFileButton({setTraces, setBackupTraces, setError, 
 
     return (
         <>
+        <AlignVertical>
             <input ref={inputRef} name="file" type="file" onChange={handleFileSelection} id="upload-seismic-file-input" hidden />
-            <ButtonWithIcon 
-                text="Upload file" 
-                onClick={handleFileUpload} 
-                icon={<MdOutlineFileUpload className="size-4" />} 
-                className={`btn-primary ${buttonClass ? buttonClass : ""}`}
-            />
+            <p className="text-center text-md font-light">
+                Don't have a seismic data file ? 
+                Click <a className="link link-info" href={fastapiEndpoints['DOWNLOAD-TEST-FILE']}>here</a> to download one, to experiment 
+                with the tool. 
+            </p>
+            <Button onClick={handleFileUpload} >
+                Upload file
+                <MdOutlineFileUpload />
+            </Button>
+        </AlignVertical>
         </>
     )
 }
