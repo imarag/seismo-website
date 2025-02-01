@@ -5,7 +5,7 @@ import Container from "@/components/ui/Container"
 import { HeroTitle, Title, SubTitle, HeroSubTitle } from "@/components/ui/Typography"
 import AlignVertical from "@/components/ui/AlignVertical";
 import { CardTitle, CardParagraph, CardLink, CardContainer, CardImage } from "@/components/ui/CardElements"
-import ToolsGallery from "@/components/ui/toolsGallery";
+import ToolsGallery from "@/components/ui/ToolsGallery";
 import LinkTag from "@/components/ui/LinkTag";
 import { IoIosArrowRoundForward } from "react-icons/io";
 

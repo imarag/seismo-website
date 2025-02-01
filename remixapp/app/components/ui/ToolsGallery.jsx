@@ -35,7 +35,7 @@ export default function ToolsGallery() {
         </div>
         <div className="mockup-window bg-base-300 border">
             <div className="bg-base-200 flex justify-center px-8 py-16">
-              <Image src={gifURLSelected} alt="a gif about seismological processing" className="block mx-auto max-w-3xl display-image" unoptimized />
+              <Image src={gifURLSelected} alt="a gif about seismological processing" className="block mx-auto max-w-3xl display-image" />
             </div>
         </div>
     </section>

@@ -13,8 +13,8 @@ export default function Contact() {
     return (
         <Section>
             <Container>
-                <div className="flex flex-col lg:flex-row gap-10">
-                    <div className="basis-0 grow">
+                <div className="flex flex-row gap-10">
+                    <div className="flex-grow">
                         <AlignVertical align="stretch">
                             <Title text="Contact Us" />
                             <SubTitle text="Connect with us and share your suggestions and improvements" />
@@ -22,7 +22,7 @@ export default function Contact() {
                             <ContactForm />
                         </AlignVertical>
                     </div>
-                    <div className="basis-0 grow">
+                    <div className="w-2/6 flex-shrink-0 flex-grow-0">
                         <Image 
                             src={OldSeismogram} 
                             className="h-full max-w-full object-cover" 
