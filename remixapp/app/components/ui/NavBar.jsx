@@ -1,4 +1,4 @@
-"use client";
+
 import { navLinks } from "@/utils/static"
 import { NavLink } from "@remix-run/react";
 import Logo from "@/components/ui/Logo"
