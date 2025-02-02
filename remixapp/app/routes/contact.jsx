@@ -6,15 +6,16 @@ import AlignVertical from "@/components/ui/AlignVertical"
 import Section from "@/components/ui/Section"
 import { Title, SubTitle } from "@/components/ui/Typography"
 import Container from "@/components/ui/Container"
-
+import SeismogramLargeCropped from "@/images/seismogram-large-cropped.svg";
 import OldSeismogram from "@/images/seismometer2.jpg"
 
 export default function Contact() {
     return (
         <Section>
             <Container>
-                <div className="flex flex-row gap-10">
-                    <div className="flex-grow">
+              
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-10">
+                    <div>
                         <AlignVertical align="stretch">
                             <Title text="Contact Us" />
                             <SubTitle text="Connect with us and share your suggestions and improvements" />
@@ -22,10 +23,10 @@ export default function Contact() {
                             <ContactForm />
                         </AlignVertical>
                     </div>
-                    <div className="w-2/6 flex-shrink-0 flex-grow-0">
+                    <div className="hidden xl:block">
                         <Image 
-                            src={OldSeismogram} 
-                            className="h-full max-w-full object-cover" 
+                            src={SeismogramLargeCropped} 
+                            className="h-full max-w-full object-contain" 
                             alt="an old seismogram at a seismological station" 
                         />
                     </div>

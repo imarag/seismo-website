@@ -9,7 +9,7 @@ export default function LinkTag({
     children 
 }) {
     const tagClassName = button 
-        ? (`btn btn-${variance} ${large ? "btn-lg" : ""}`)
+        ? (`btn btn-primary ${large ? "btn-lg" : ""}`)
         : (`link link-${variance} inline-flex items-center gap-2`);
 
     return external ? (

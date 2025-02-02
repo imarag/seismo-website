@@ -16,7 +16,7 @@ export default function ArticlesPage() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full mt-20">
                     {
                         tools.map(tool => (
-                            <section key={tool.id} className="bg-base-200 hover:bg-base-300 rounded-lg p-12">
+                            <section key={tool.id} className="bg-base-100 rounded-lg p-12">
                                 <CardContainer>
                                     <Image src={tool.image_src} alt={tool.image_alt} className="w-32 block mx-auto" />
                                     <CardTitle text={tool.title} />

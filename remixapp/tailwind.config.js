@@ -35,21 +35,31 @@ export default {
   },
   plugins: [daisyui],
   daisyui: {
-    themes: [
+    themes: [ 
       {
         mytheme: {
-          "primary": "#4CAF50",      
-          "secondary": "#81C784",
-          "accent": "#388E3C",
-          "neutral": "#37474F",
-          "base-100": "#FFFFFF",
-          "base-200": "#f7f7f7",
-          "info": "#aaa9ff",
-          "success": "#43A047",
-          "warning": "#F9A825",
-          "error": "#D32F2F",
+          "primary": "#3B9C67",
+          "primary-content": "#0F2F1D",
+          "secondary": "#A89C68",
+          "secondary-content": "#0F2F1D",
+          "accent": "#4BAA99",
+          "accent-content": "#103731",
+          "neutral": "#2F3E46",
+          "neutral-content": "#E8EDEF",
+          "base-100": "#fafafa",
+          "base-200": "#B8D8BE",
+          "base-300": "#9BB9A1",
+          "base-content": "#1C2D21",
+          "info": "#67B7D1",
+          "info-content": "#0F2530",
+          "success": "#46A36F",
+          "success-content": "#0D2C1A",
+          "warning": "#F4D03F",
+          "warning-content": "#5A4710",
+          "error": "#D9534F",
+          "error-content": "#3B1614",
           },
-        },
+        }
       ],
   },
 };

@@ -78,7 +78,9 @@ export default function Index() {
                             <LinkTag variance="primary"  href="/articles-search/obspy" button={true}>
                                 Learn More
                             </LinkTag>
-                            <Image src={ObsPyScriptExample} alt="python script example" className="block mx-auto max-w-3xl" unoptimized />
+                            <div className="max-w-4xl mx-auto">
+                                <Image src={ObsPyScriptExample} alt="python script example" className="block mx-auto max-w-3xl" />
+                            </div>
                         </AlignVertical>
                     </Container>
                 </Section>
@@ -92,7 +94,9 @@ export default function Index() {
                             <LinkTag variance="primary"  href="/tools-search" button={true}>
                                 Learn More
                             </LinkTag>
-                            <ToolsGallery />
+                            <div className="max-w-4xl mx-auto">
+                                <ToolsGallery />
+                            </div>
                         </AlignVertical>
                     </Container>
                 </Section>
