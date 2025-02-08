@@ -33,9 +33,9 @@ export default function ToolsGallery() {
           <ToolsHoverButtons onMouseEnter={() => setGifURLSelected(TrimGif)} icon={AsciiToMseed} title="ASCII to MSEED" />
           <ToolsHoverButtons onMouseEnter={() => setGifURLSelected(TaperGif)} icon={SignalProcessIcon} title="Signal processing" />
         </div>
-        <div className="mockup-window bg-base-300 border">
-            <div className="bg-base-200 flex justify-center px-8 py-16">
-              <Image src={gifURLSelected} alt="a gif about seismological processing" className="block mx-auto max-w-3xl display-image" />
+        <div className="mockup-window bg-base-300 border  z-10">
+            <div className="bg-base-200 flex justify-center px-8 py-16  z-10">
+              <Image src={gifURLSelected} alt="a gif about seismological processing" className="block mx-auto max-w-3xl display-image  z-10" />
             </div>
         </div>
     </section>

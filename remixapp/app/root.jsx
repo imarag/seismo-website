@@ -34,9 +34,11 @@ export function Layout({ children }) {
         <Links />
       </head>
       <body>
-        <header><NavBar /></header>
-        <main className="px-4">{children}</main>
-        <footer><Footer /></footer>
+        <header className="fixed left-0 right-0 h-20 bg-white/30 backdrop-blur-md z-50"><NavBar /></header>
+        <main className="px-4 h-screen overflow-auto pt-24">
+          {children}
+          <footer><Footer /></footer>
+        </main>
         <ScrollRestoration />
         <Scripts />
       </body>

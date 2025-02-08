@@ -6,7 +6,7 @@ import { HeroTitle, Title, SubTitle, HeroSubTitle } from "@/components/ui/Typogr
 import AlignVertical from "@/components/ui/AlignVertical";
 import { CardTitle, CardParagraph, CardLink, CardContainer, CardImage } from "@/components/ui/CardElements"
 import ToolsGallery from "@/components/ui/ToolsGallery";
-import LinkTag from "@/components/ui/LinkTag";
+import { ButtonLinkTag, LinkTag } from "@/components/ui/LinkComponents";
 import { IoIosArrowRoundForward } from "react-icons/io";
 
 import SiteEffectIcon from "@/images/template-images/resized/site-effect-icon.png"
@@ -36,7 +36,7 @@ export default function Index() {
                             text="Discover different seismic articles, interact with tools, and deepen
                             your understanding." 
                             className="text-center py-6 font-normal text-lg md:text-3xl" />
-                        <LinkTag variance="primary" href="/articles-search" button={true} large={true}>Get started</LinkTag>
+                        <ButtonLinkTag href="/articles-search" size="large">Get started</ButtonLinkTag>
                     </div>
                 </div>
                 <Section className="mt-52">
@@ -75,9 +75,9 @@ export default function Index() {
                             <SubTitle
                                 text="Process seismic data using the various ObsPy functions, manipulate date and time, and plot earthquake recordings."
                             />
-                            <LinkTag variance="primary"  href="/articles-search/obspy" button={true}>
+                            <ButtonLinkTag href="/articles-search/obspy">
                                 Learn More
-                            </LinkTag>
+                            </ButtonLinkTag>
                             <div className="max-w-4xl mx-auto">
                                 <Image src={ObsPyScriptExample} alt="python script example" className="block mx-auto max-w-3xl" />
                             </div>
@@ -91,9 +91,9 @@ export default function Index() {
                             <SubTitle
                                 text="Explore a range of seismic articles designed to deepen your understanding of the mechanisms behind earthquakes and the advanced technologies used to analyze them."
                             />
-                            <LinkTag variance="primary"  href="/tools-search" button={true}>
+                            <ButtonLinkTag href="/tools-search">
                                 Learn More
-                            </LinkTag>
+                            </ButtonLinkTag>
                             <div className="max-w-4xl mx-auto">
                                 <ToolsGallery />
                             </div>

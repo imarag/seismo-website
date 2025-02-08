@@ -1,4 +1,4 @@
-import LinkTag from '@/components/ui/LinkTag'
+import { LinkTag } from "@/components/ui/LinkComponents";
 import Image from "@/components/ui/Image"
 
 export function CardTitle({ text, center=true }) {
@@ -31,7 +31,7 @@ export function CardLink({ text="Go to page", variance="primary", href=null }) {
 
 export function CardContainer({ children }) {
     return (
-        <div className={`flex flex-col items-center p-5 gap-4`}>
+        <div className={`flex flex-col items-center p-8 gap-4`}>
             { children }
         </div>
     )

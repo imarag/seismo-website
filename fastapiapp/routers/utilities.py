@@ -166,22 +166,22 @@ async def download_mseed(
 @router.post("/download-file")
 async def download_file(
     background_tasks: BackgroundTasks, 
-    data: Annotated[list, Body()], 
+    data: Annotated[list | dict, Body()], 
     file_type: Annotated[str, Body()]
     ):
 
     temp_file_name = "temp-file" + "." + file_type
     temp_file_path = os.path.join(Settings.RESOURCES_PATH.value, temp_file_name)
     
-    if file_type.lower().strip() == "mseed":
-        try:
-            stream = convert_traces_to_stream(data)
-            stream.write(temp_file_path)
-        except Exception as e:
-            error_message = f"Cannot download the file!"
-            raise HTTPException(status_code=500, detail=error_message)
+    # if file_type.lower().strip() == "mseed":
+    #     try:
+    #         stream = convert_traces_to_stream(data)
+    #         stream.write(temp_file_path)
+    #     except Exception as e:
+    #         error_message = f"Cannot download the file!"
+    #         raise HTTPException(status_code=500, detail=error_message)
     
-    elif file_type.lower().strip() == "json":
+    if file_type.lower().strip() == "json":
         with open(temp_file_path, "w") as fw:
             json.dump(data, fw)
     else:

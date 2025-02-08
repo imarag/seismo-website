@@ -1,6 +1,6 @@
 import Image from "@/components/ui/Image"
 
-import LinkTag from "@/components/ui/LinkTag";
+import { LinkTag } from "@/components/ui/LinkComponents";
 import { Paragraph } from "@/components/ui/Typography"
 import { CardTitle, CardParagraph, CardLink, CardContainer } from "@/components/ui/CardElements"
 

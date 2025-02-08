@@ -1,11 +1,11 @@
 
 import { useEffect, useState } from "react"
 
-import UploadFileButton from "@/components/ui/UploadFileButton";
-import StartingUploadFile from "@/components/ui/StartingUploadFile";
+// import UploadFileButton from "@/components/ui/UploadFileButton";
+// import StartingUploadFile from "@/components/ui/StartingUploadFile";
 import Message from "@/components/ui/Message";
 import Section from "@/components/ui/Section";
-import Button from "@/components/ui/Button"
+import { PrimaryButton, GhostButton } from "@/components/ui/ButtonComponents";
 import { RadioButtonElement, SelectElement, NumberInputElement, LabelElement } from "@/components/ui/UIElements";
 import LineGraph from "@/components/ui/LineGraph"
 import Spinner from "@/components/ui/Spinner"
@@ -203,7 +203,7 @@ export default function PickArrivals() {
             {
                 success && <Message type="success" text={success} />
             }
-            {backupTraces.length === 0 && (
+            {/* {backupTraces.length === 0 && (
                 <StartingUploadFile 
                     setTraces={setTraces} 
                     setSuccess={setSuccess} 
@@ -211,28 +211,28 @@ export default function PickArrivals() {
                     setError={setError} 
                     setLoading={setLoading} 
                 />
-            )}
+            )} */}
             {
                 backupTraces.length !== 0 && (
                     <>
                         <div>
                             <div className="flex flex-row items-center justify-start gap-1">
-                                <UploadFileButton 
+                                {/* <UploadFileButton 
                                     setTraces={setTraces}
                                     setBackupTraces={setBackupTraces} 
                                     setError={setError}
                                     setSuccess={setSuccess}
                                     setLoading={setLoading} 
                                     buttonClass="btn-ghost btn-sm" 
-                                />
-                                <Button 
+                                /> */}
+                                <PrimaryButton 
                                     onClick={handleSaveArrivals} 
                                     disabled={traces.length===0 || (!formattedArrivals["P"] && !formattedArrivals["S"])} 
                                     variant="ghost"
                                 >
                                     <MdOutlineFileDownload />
                                     Download arrivals
-                                </Button>
+                                </PrimaryButton>
                             </div>
                             <hr className="mt-2 mb-8" />
                             <div className="flex flex-row items-center justify-around mt-3 py-3">
@@ -264,8 +264,8 @@ export default function PickArrivals() {
                                         />
                                     </div>
                                     <div className="flex gap-2 ms-4">
-                                        <button onClick={(e) => handleDeleteWave("P")} className="btn btn-sm btn-error" disabled={!formattedArrivals["P"]}>Del. P</button>
-                                        <button onClick={(e) => handleDeleteWave("S")} className="btn btn-sm btn-error" disabled={!formattedArrivals["S"]}>Del. S</button>
+                                        <PrimaryButton onClick={(e) => handleDeleteWave("P")} className="btn btn-sm btn-error" disabled={!formattedArrivals["P"]}>Del. P</PrimaryButton>
+                                        <PrimaryButton onClick={(e) => handleDeleteWave("S")} className="btn btn-sm btn-error" disabled={!formattedArrivals["S"]}>Del. S</PrimaryButton>
                                     </div>
                                 </div>
                                 <SelectElement 

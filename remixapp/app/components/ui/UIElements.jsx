@@ -56,7 +56,7 @@ export function TextInputElement({ className, block=false, ...props }) {
         <input 
             {...props}
             type="text" 
-            className={`input input-bordered  ${block && "block w-full"}  ${className ? className: ""}`}
+            className={`input input-bordered text-sm  ${block && "block w-full"}  ${className ? className: ""}`}
             readOnly={props.readOnly ? true : false}
         />
     );
@@ -67,7 +67,7 @@ export function EmailInputElement({ className, block=false, ...props }) {
         <input 
             {...props}
             type="email" 
-            className={`input input-bordered  ${block && "block w-full"}  ${className ? className: ""}`}
+            className={`input input-bordered text-sm  ${block && "block w-full"}  ${className ? className: ""}`}
             readOnly={props.readOnly ? true : false}
         />
     );
@@ -77,8 +77,7 @@ export function TextAreaElement({ className, block=false, ...props }) {
     return (
         <textarea 
             {...props}
-            type="email" 
-            className={`textarea textarea-bordered  ${block && "block w-full"}  ${className ? className: ""}`}
+            className={`textarea textarea-bordered text-sm  ${block && "block w-full"}  ${className ? className: ""}`}
             readOnly={props.readOnly ? true : false}
         ></textarea>
     );
@@ -89,7 +88,7 @@ export function SearchInputElement({ className, block=false, ...props }) {
         <input 
             {...props}
             type="search" 
-            className={`input input-bordered  ${block && "block w-full"}  ${className ? className: ""}`}
+            className={`input input-bordered text-sm  ${block && "block w-full"}  ${className ? className: ""}`}
         />
     );
 }
@@ -117,7 +116,7 @@ export function CheckboxElement({ className, block=false, ...props }) {
 export function LabelElement({ className, block=false, ...props }) {
     return (
         <label 
-            className={`label text-md font-light label-text block py-1 ${className ? className : ""}`} 
+            className={`label label-text ${className ? className : ""}`} 
             htmlFor={props.id}
         >
             {props.label}

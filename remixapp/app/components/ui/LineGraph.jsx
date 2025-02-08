@@ -10,8 +10,8 @@ export default function LineGraph({
     xData=[], 
     yData=[], 
     scale="linear", 
-    width="100%", 
-    height="210px", 
+    width=null, 
+    height=null, 
     legendTitle=["Legend"],
     showLegend=true,
     showGraphTitle=true,
@@ -30,7 +30,7 @@ export default function LineGraph({
             x: 0.5, 
             y: 0.96 
         },
-        autosize: true,
+       
         margin: { t: 20, b: 20, l: 20, r: 20 },
         legend: {
             x: 0.01, 
@@ -65,7 +65,7 @@ export default function LineGraph({
                 name: legendTitle[ind],
             }))}
             layout={defaultLayout}
-            style={{ width: "100%", height: "100%" }}
+            style={{ width: width ? width : "100%", height:  height ? height : "100%" }}
             useResizeHandler={true}
             config={{ scrollZoom: true }}
             onClick={onGraphClick}

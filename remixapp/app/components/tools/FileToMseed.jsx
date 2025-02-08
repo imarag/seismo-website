@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import ToolTip from "@/components/ui/ToolTip";
 import Section from "@/components/ui/Section";
 import Collapse from "@/components/ui/Collapse"
-import Button from "@/components/ui/Button";
+import { PrimaryButton, GhostButton } from "@/components/ui/ButtonComponents";
 import { MdDelete } from "react-icons/md";
 import fetchRequest from "@/utils/functions/fetchRequest";
 import { fastapiEndpoints } from "@/utils/static";
@@ -88,9 +88,9 @@ export default function EditSeismicFile() {
     return (
         <Section>
             <h1 className="text-center text-2xl">Upload a data file</h1>
-            <Button variant="secondary" position="center" onClick={() => setTraces([...traces, defaultTraceObject])}>
+            <PrimaryButton variant="secondary" position="center" onClick={() => setTraces([...traces, defaultTraceObject])}>
                 Upload Data
-            </Button>
+            </PrimaryButton>
             <p className="text-sm text-center">Supported files: .xlsx, .csv, .txt, .dat</p>
             <div className="flex flex-row items-center justify-center gap-3">
                 <LabelElement id="skip_rows" label="Skip rows" />
@@ -245,7 +245,7 @@ export default function EditSeismicFile() {
                             </div>
                         </div>
                         
-                        <Button 
+                        <PrimaryButton 
                             variant="error"
                             size="small"
                             position="start"
@@ -254,7 +254,7 @@ export default function EditSeismicFile() {
                         >
                             remove
                             <MdDelete />
-                        </Button>
+                        </PrimaryButton>
                                     
                     </Collapse>
                 ))

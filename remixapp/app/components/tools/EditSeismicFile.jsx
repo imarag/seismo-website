@@ -4,9 +4,9 @@ import { useState } from "react";
 import LineGraph from "@/components/ui/LineGraph"
 import Spinner from "@/components/ui/Spinner";
 import Section from "@/components/ui/Section";
-import Button from "@/components/ui/Button";
-import UploadFileButton from "@/components/ui/UploadFileButton";
-import StartingUploadFile from "@/components/ui/StartingUploadFile";
+import { PrimaryButton, GhostButton } from "@/components/ui/ButtonComponents";
+// import UploadFileButton from "@/components/ui/UploadFileButton";
+// import StartingUploadFile from "@/components/ui/StartingUploadFile";
 import Message from "@/components/ui/Message";
 import { NumberInputElement, TextInputElement, DateInputElement, TimeInputElement, LabelElement } from "@/components/ui/UIElements";
 
@@ -77,7 +77,7 @@ export default function EditSeismicFile() {
             {
                 success && <Message type="success" text={success} />
             }
-            {traces.length === 0 && (
+            {/* {traces.length === 0 && (
                 <StartingUploadFile 
                     setTraces={setTraces} 
                     setBackupTraces={setBackupTraces} 
@@ -85,32 +85,31 @@ export default function EditSeismicFile() {
                     setSuccess={setSuccess} 
                     setLoading={setLoading} 
                 />
-            )}
+            )} */}
             {
                 traces.length !== 0 && (
                 <>
                     <div>
                         <div className="flex flex-row items-center justify-start gap-1">
-                            <UploadFileButton 
+                            {/* <UploadFileButton 
                                 setTraces={setTraces} 
                                 setBackupTraces={setBackupTraces}
                                 setLoading={setLoading} 
                                 buttonClass="btn-ghost" 
                                 setError={setError}
                                 setSuccess={setSuccess} 
-                            />
-                            <Button 
+                            /> */}
+                            <GhostButton 
                                 onClick={() => setTraces(backupTraces)}  
-                                variant="ghost"
                             >
                                 Restore initial
                                 <CiUndo />
-                            </Button>
+                            </GhostButton>
                         </div>
                         <hr />
                     </div>
                     <div className="flex flex-row flex-wrap gap-2">
-                        <Button 
+                        <GhostButton 
                             onClick={() => handleDownloadFile("mseed", traces, traces[0].stats.record_name + "_download")} 
                             variant="neutral"
                             outline={true}
@@ -118,8 +117,8 @@ export default function EditSeismicFile() {
                         >
                             Download to MSEED
                             <MdOutlineFileDownload />
-                        </Button>
-                        <Button 
+                        </GhostButton>
+                        <GhostButton 
                             onClick={() => handleDownloadFile("json", traces.map(tr => tr.stats), traces[0].stats.record_name + "_header")} 
                             variant="neutral"
                             outline={true}
@@ -127,8 +126,8 @@ export default function EditSeismicFile() {
                         >
                             Download header
                             <MdOutlineFileDownload />
-                        </Button>
-                        <Button 
+                        </GhostButton>
+                        <GhostButton 
                             onClick={() => handleDownloadFile("json", traces.map(tr => ({"component": tr.stats.channel, "data": tr.ydata})), traces[0].stats.record_name + "_data")}
                             variant="neutral"
                             outline={true}
@@ -136,7 +135,7 @@ export default function EditSeismicFile() {
                         >
                             Download Data samples
                             <MdOutlineFileDownload />
-                        </Button>
+                        </GhostButton>
                     </div>
                     <Spinner visible={loading} />
                 </>
@@ -148,20 +147,20 @@ export default function EditSeismicFile() {
                             <div className="flex flex-row justify-end gap-2 relative">
                                 <div>
                                     <div className="flex flex-row justify-end gap-2">
-                                        <Button 
+                                        <GhostButton 
                                             onClick={() => handleOptionsMenuButtonClick(ind)}
                                             variant="neutral"
                                             size="small"
                                         >
                                             <PiGearLight />
-                                        </Button>
-                                        <Button 
+                                        </GhostButton>
+                                        <GhostButton 
                                             onClick={() => handleDeleteTrace(tr.trace_id)}
                                             variant="error"
                                             size="small"
                                         >
                                             <MdDeleteOutline />
-                                        </Button>
+                                        </GhostButton>
                                     </div>
                                     {
                                         activatedMenuIndex === ind && (
@@ -231,14 +230,6 @@ export default function EditSeismicFile() {
                                                     />
                                                 </div>
                                                 <p className="text-sm text-center my-1">Elements with "*" are readonly</p>
-                                                <Button 
-                                                    onClick={() => setActivatedMenuIndex(null)}
-                                                    variant="secondary"
-                                                    size="small"
-                                                    block={true}
-                                                >
-                                                    Close Menu
-                                                </Button>
                                             </div>
                                         )
                                     }

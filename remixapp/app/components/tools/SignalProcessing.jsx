@@ -1,4 +1,4 @@
-import Button from "@/components/ui/Button"
+import { PrimaryButton, GhostButton } from "@/components/ui/ButtonComponents";
 import LineGraph from "@/components/ui/LineGraph"
 import Spinner from "@/components/ui/Spinner"
 import Container from "@/components/ui/Container"
@@ -18,17 +18,17 @@ import { MdAlignVerticalCenter, MdArrowDropDown } from "react-icons/md";
 function UploadButon({ outline=false, loading=false, handleFileUpload=null }) {
     return (
         <>
-            <Button onClick={handleFileUpload} variance="ghost" outline={outline} loading={loading}>
+            <PrimaryButton onClick={handleFileUpload} loading={loading}>
                 <FiUpload />
                 Upload file
-            </Button>
+            </PrimaryButton>
         </>
     )
 }
 
 function MenuButton({ onClick }) {
     return (
-        <button className="btn btn-sm btn-secondary block w-full mt-4" onClick={onClick}>apply</button>
+        <PrimaryButton onClick={onClick}>apply</PrimaryButton>
     )
 }
 

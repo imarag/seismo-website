@@ -5,11 +5,10 @@ import Section from "@/components/ui/Section"
 import Collapse from "@/components/ui/Collapse"
 import { tools } from "@/utils/topics"
 
-
 export default function ToolsSlugPage() {
     const { slug } = useParams();
     const selectedTool = tools.find(el => el.slug === slug)
-    const ToolComponent = selectedTool.component 
+    const ToolComponent = selectedTool.component
     return (
         <Section>
             <Image src={selectedTool.image_src} alt={selectedTool.image_alt} className="block w-20 mx-auto" />
