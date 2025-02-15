@@ -36,7 +36,7 @@ export default function NavSearchBar({ setShowNavbar }) {
     return (
         <section className="relative">
             <SearchInputElement 
-                placeholder="Search"
+                placeholder="search a topic..."
                 className="input input-bordered input-md w-36 md:w-auto"
                 onChange={handleSearchBarChange}
             />

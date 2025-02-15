@@ -1,13 +1,11 @@
-import Image from "@/components/ui/Image"
-
-import SocialMedia from "@/components/ui/SocialMedia"
-import ContactForm from "@/components/ui/ContactForm"
-import AlignVertical from "@/components/ui/AlignVertical"
-import Section from "@/components/ui/Section"
-import { Title, SubTitle } from "@/components/ui/Typography"
-import Container from "@/components/ui/Container"
+import Image from "@/components/utils/Image"
+import SocialMedia from "@/components/utils/SocialMedia"
+import AlignVertical from "@/components/utils/AlignVertical"
+import Section from "@/components/utils/Section"
+import { Title, SubTitle } from "@/components/utils/Typography"
+import Container from "@/components/utils/Container"
 import SeismogramLargeCropped from "@/images/seismogram-large-cropped.svg";
-
+import ContactForm from "@/components/contact/ContactForm"
 
 export default function ContactPage() {
     return (

@@ -1,7 +1,7 @@
 import { PrimaryButton, GhostButton } from "@/components/ui/ButtonComponents";
 import LineGraph from "@/components/ui/LineGraph"
 import Spinner from "@/components/ui/Spinner"
-import Container from "@/components/ui/Container"
+import Container from "@/components/utils/Container"
 import { NumberInputElement, LabelElement, SelectElement, SliderElement } from "@/components/ui/UIElements";
 import { taperTypeOptions, taperSideOptions, detrendTypeOptions } from "@/utils/static"
 import { useState, useRef, useEffect } from "react";

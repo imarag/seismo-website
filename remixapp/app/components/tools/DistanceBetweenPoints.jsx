@@ -2,11 +2,11 @@
 import { useState } from "react";
 
 import { PrimaryButton, GhostButton } from "@/components/ui/ButtonComponents";
-import LinkTag from "@/components/ui/LinkTag";
+// import LinkTag from "@/components/ui/LinkTag";
 import Message from "@/components/ui/Message";
 import Spinner from "@/components/ui/Spinner";
 import { NumberInputElement } from "@/components/ui/UIElements"
-import Section from "@/components/ui/Section";
+import Section from "@/components/utils/Section";
 
 import { fastapiEndpoints } from "@/utils/static";
 import fetchRequest from "@/utils/functions/fetchRequest";
@@ -132,9 +132,9 @@ export default function DistanceBetweenPoints() {
                 <Map coords={coords} />
             </div>
             <div>
-                <p>
+                {/* <p>
                     The tool uses the ObsPy <LinkTag variant="info" href="https://docs.obspy.org/packages/autogen/obspy.geodetics.base.gps2dist_azimuth.html"><code>gps2dist_azimuth</code></LinkTag> function to do the calculation:
-                </p>
+                </p> */}
                 <div className="mockup-code my-4">
                     <pre>
                         <code>

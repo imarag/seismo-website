@@ -21,8 +21,8 @@ export const links = () => [
   },
 ];
 
-import Footer from "@/components/ui/Footer"
-import NavBar from "@/components/ui/NavBar"
+import Footer from "@/components/root/Footer"
+import NavBar from "@/components/root/NavBar"
 
 export function Layout({ children }) {
   return (

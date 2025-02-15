@@ -1,8 +1,8 @@
-import { Title, SubTitle } from "@/components/ui/Typography"
+import { Title, SubTitle } from "@/components/utils/Typography"
 import { SearchInputElement } from "@/components/ui/UIElements"
-import Section from "@/components/ui/Section";
-import Container from "@/components/ui/Container"
-import Image from "@/components/ui/Image"
+import Section from "@/components/utils/Section";
+import Container from "@/components/utils/Container"
+import Image from "@/components/utils/Image"
 import { LinkTag } from "@/components/ui/LinkComponents";
 import { CardTitle, CardParagraph } from "@/components/ui/CardElements"
 import { useState } from "react";

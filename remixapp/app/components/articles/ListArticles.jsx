@@ -1,8 +1,8 @@
-import Image from "@/components/ui/Image"
+import Image from "@/components/utils/Image"
 
-import { LinkTag } from "@/components/ui/LinkComponents";
-import { Paragraph } from "@/components/ui/Typography"
-import { CardTitle, CardParagraph, CardLink, CardContainer } from "@/components/ui/CardElements"
+import { LinkTag } from "@/components/utils/LinkComponents";
+import { Paragraph } from "@/components/utils/Typography"
+import { CardTitle, CardParagraph } from "@/components/utils/CardElements"
 
 
 export default function ListArticles({ allArticles }) {

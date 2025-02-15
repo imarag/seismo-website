@@ -1,4 +1,4 @@
-import Image from "@/components/ui/Image"
+import Image from "@/components/utils/Image"
 import LogoImage from "@/images/logo.png"
 
 export default function Logo() {

@@ -8,7 +8,7 @@ import FourierGif from "@/images/fourier-gif.gif";
 import PickGif from "@/images/pick-gif.gif";
 import TrimGif from "@/images/trim-gif.gif";
 import TaperGif from "@/images/taper-gif.gif";
-import Image from "@/components/ui/Image"
+import Image from "@/components/utils/Image"
 import { useState } from "react";
 
 function ToolsHoverButtons({ onMouseEnter, icon, title }) {

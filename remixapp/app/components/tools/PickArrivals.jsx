@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 // import UploadFileButton from "@/components/ui/UploadFileButton";
 // import StartingUploadFile from "@/components/ui/StartingUploadFile";
 import Message from "@/components/ui/Message";
-import Section from "@/components/ui/Section";
+import Section from "@/components/utils/Section";
 import { PrimaryButton, GhostButton } from "@/components/ui/ButtonComponents";
 import { RadioButtonElement, SelectElement, NumberInputElement, LabelElement } from "@/components/ui/UIElements";
 import LineGraph from "@/components/ui/LineGraph"

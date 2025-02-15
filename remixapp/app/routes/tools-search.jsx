@@ -1,11 +1,11 @@
-import { Title, SubTitle } from "@/components/ui/Typography"
+import { Title, SubTitle } from "@/components/utils/Typography"
 import { ExternalLinkTag } from "@/components/ui/LinkComponents"
 import { ButtonLinkTag } from "@/components/ui/LinkComponents";
 import { fastapiEndpoints } from "@/utils/static"
 import { CardTitle, CardParagraph, CardLink, CardContainer } from "@/components/ui/CardElements"
-import Section from "@/components/ui/Section";
-import Container from "@/components/ui/Container"
-import Image from "@/components/ui/Image"
+import Section from "@/components/utils/Section";
+import Container from "@/components/utils/Container"
+import Image from "@/components/utils/Image"
 import { tools } from "@/utils/topics"
 
 export default function ArticlesPage() {

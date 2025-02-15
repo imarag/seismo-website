@@ -1,8 +1,8 @@
 
 import { navLinks } from "@/utils/static"
 import { NavLink } from "@remix-run/react";
-import Logo from "@/components/ui/Logo"
-import NavSearchBar from "@/components/ui/NavSearchBar"
+import Logo from "@/components/utils/Logo"
+import NavSearchBar from "@/components/root/NavSearchBar"
 import { AiOutlineMenu } from "react-icons/ai";
 import { IoMdClose } from "react-icons/io";
 import { useState } from "react";

@@ -1,5 +1,5 @@
 import { LinkTag } from "@/components/ui/LinkComponents";
-import Image from "@/components/ui/Image"
+import Image from "@/components/utils/Image"
 
 export function CardTitle({ text, center=true }) {
     return (

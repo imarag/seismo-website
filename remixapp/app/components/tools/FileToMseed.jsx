@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react"
 import ToolTip from "@/components/ui/ToolTip";
-import Section from "@/components/ui/Section";
+import Section from "@/components/utils/Section";
 import Collapse from "@/components/ui/Collapse"
 import { PrimaryButton, GhostButton } from "@/components/ui/ButtonComponents";
 import { MdDelete } from "react-icons/md";

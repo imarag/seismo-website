@@ -1,7 +1,7 @@
 import { useParams } from "@remix-run/react";
-import Image from "@/components/ui/Image"
-import { Title, SubTitle, Paragraph } from "@/components/ui/Typography"
-import Section from "@/components/ui/Section"
+import Image from "@/components/utils/Image"
+import { Title, SubTitle, Paragraph } from "@/components/utils/Typography"
+import Section from "@/components/utils/Section"
 import Collapse from "@/components/ui/Collapse"
 import { tools } from "@/utils/topics"
 

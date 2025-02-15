@@ -1,7 +1,6 @@
-import Image from "@/components/ui/Image"
 import { NavLink } from "@remix-run/react";
-import SocialMedia from "@/components/ui/SocialMedia"
-import Logo from "@/components/ui/Logo"
+import SocialMedia from "@/components/utils/SocialMedia"
+import Logo from "@/components/utils/Logo"
 import { navLinks } from "@/utils/static"
 import { articles, tools } from "@/utils/topics";
 import { IoIosArrowRoundForward } from "react-icons/io";
