@@ -38,7 +38,7 @@ export default {
     themes: [ 
       {
         mytheme: {
-          "primary": "#3B9C67",
+          "primary": "#48b97c",
           "primary-content": "#0F2F1D",
           "secondary": "#A89C68",
           "secondary-content": "#0F2F1D",

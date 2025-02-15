@@ -4,69 +4,52 @@ import { NavLink } from "@remix-run/react";
 import Logo from "@/components/utils/Logo"
 import NavSearchBar from "@/components/root/NavSearchBar"
 import { AiOutlineMenu } from "react-icons/ai";
-import { IoMdClose } from "react-icons/io";
+import SideNavBar from "@/components/root/SideNavBar"
 import { useState } from "react";
- 
+import Container from "@/components/utils/Container" 
+
 export default function NavBar() {
     const [showNavBar, setShowNavbar] = useState(false)
 
     return (
-        <nav className="container mx-auto">
-            <div className="navbar flex flex-row relative">
-                <NavLink to="/">
-                    <Logo />
-                </NavLink>
-                <div className="navbar-center hidden lg:flex ms-4">
-                    <ul className="menu menu-horizontal px-1">
-                        {
-                            navLinks.map(item => (
-                                <li key={item.label}>
-                                    <NavLink 
-                                        to={item.href} 
-                                        className={`text-lg`} 
-                                        onClick={() => setShowNavbar(false)}
-                                    >
-                                        {item.label}
-                                    </NavLink>
-                                </li>
-                            ))
-                        }
-                    </ul>
-                </div>
-                <button className="ms-auto btn text-xl btn-ghost lg:hidden" onClick={() => setShowNavbar(true)}>
-                    <AiOutlineMenu />
-                </button>
-
-                <div className="ms-auto hidden lg:flex">
-                    <NavSearchBar setShowNavbar={setShowNavbar} />    
-                </div>
-                {
-                    showNavBar && (
-                        <div className="fixed end-0 top-0 bottom-0 w-full sm:w-96 bg-base-200 shadow-lg lg:hidden z-50">
-                            <button className="btn btn-ghost absolute top-4 start-4 " onClick={() => setShowNavbar(false)}>
-                                <IoMdClose className="text-xl" />
-                            </button>
-                            <div className="absolute top-20 start-1/2 -translate-x-1/2">
-                                <NavSearchBar setShowNavbar={setShowNavbar} />
-                            </div>
-                            <div className="flex flex-col items-center justify-center h-full w-full gap-1">
+        <>
+            <nav className="fixed left-0 right-0 h-20 bg-white/30 backdrop-blur-md z-40">
+                <Container>
+                    <div className="navbar flex flex-row relative">
+                        <NavLink to="/">
+                            <Logo />
+                        </NavLink>
+                        <div className="navbar-center hidden lg:flex ms-4">
+                            <ul className="menu menu-horizontal px-1">
                                 {
                                     navLinks.map(item => (
-                                        <NavLink 
-                                            key={item.label} 
-                                            to={item.href} 
-                                            onClick={() => setShowNavbar(false)} 
-                                            className="btn btn-ghost text-lg"
-                                        >
-                                            {item.label}
-                                        </NavLink>
+                                        <li key={item.label}>
+                                            <NavLink 
+                                                to={item.href} 
+                                                className={`text-lg`} 
+                                                onClick={() => setShowNavbar(false)}
+                                            >
+                                                {item.label}
+                                            </NavLink>
+                                        </li>
                                     ))
                                 }
-                            </div>
+                            </ul>
                         </div>
-                    )
-                }
-            </div>
-        </nav>
+                        <button className="ms-auto btn text-xl btn-ghost lg:hidden" onClick={() => setShowNavbar(true)}>
+                            <AiOutlineMenu />
+                        </button>
+                        <div className="ms-auto hidden lg:flex">
+                            <NavSearchBar setShowNavbar={setShowNavbar} />    
+                        </div>
+                    </div>
+                </Container>
+            </nav>
+            {
+                showNavBar && (
+                    <SideNavBar setShowNavbar={setShowNavbar} />
+                )
+            }
+        </>
     )
 }

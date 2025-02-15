@@ -4,7 +4,7 @@ import Logo from "@/components/utils/Logo"
 import { navLinks } from "@/utils/static"
 import { articles, tools } from "@/utils/topics";
 import { IoIosArrowRoundForward } from "react-icons/io";
-
+import FooterTitle from "@/components/root/FooterTitle"
 
 export default function Footer() {
     const completedTools = tools.filter(el => el.completed)
@@ -20,7 +20,7 @@ export default function Footer() {
             <SocialMedia bg="base-300" hoverBg="base-100" />
         </aside>
         <nav>
-            <h6 className="footer-title">Sitemap</h6>
+            <FooterTitle text="Sitemap" />
             {
                 navLinks.map(item => (
                     <a key={item.label} href={item.href} className="link link-hover">{item.label}</a>
@@ -28,7 +28,7 @@ export default function Footer() {
             }
         </nav>
         <nav>
-            <h6 className="footer-title">Articles</h6>
+            <FooterTitle text="Articles" />
             {
                 completedArticles.map(el => (
                     <NavLink key={el.title} to={`/article/${el.slug}`} className="link link-hover">{el.title}</NavLink>
@@ -40,7 +40,7 @@ export default function Footer() {
             </NavLink>
         </nav>
         <nav>
-            <h6 className="footer-title">Tools</h6>
+            <FooterTitle text="Tools" />
             {
                 completedTools.map(el => (
                     <NavLink key={el.title} to={`/tool/${el.slug}`} className="link link-hover">{el.title}</NavLink>

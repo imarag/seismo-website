@@ -21,8 +21,8 @@ export const links = () => [
   },
 ];
 
-import Footer from "@/components/root/Footer"
-import NavBar from "@/components/root/NavBar"
+import Footer from "@/components/root/Footer";
+import NavBar from "@/components/root/NavBar";
 
 export function Layout({ children }) {
   return (
@@ -34,11 +34,15 @@ export function Layout({ children }) {
         <Links />
       </head>
       <body>
-        <header className="fixed left-0 right-0 h-20 bg-white/30 backdrop-blur-md z-50"><NavBar /></header>
-        <main className="px-4 h-screen overflow-auto pt-24">
+        <header>
+          <NavBar />
+        </header>
+        <main className="px-4 pt-20">
           {children}
-          <footer><Footer /></footer>
         </main>
+        <footer>
+            <Footer />
+        </footer>
         <ScrollRestoration />
         <Scripts />
       </body>
@@ -49,5 +53,3 @@ export function Layout({ children }) {
 export default function App() {
   return <Outlet />;
 }
-
-

@@ -1,4 +1,4 @@
-import { LinkTag } from "@/components/ui/LinkComponents";
+import { ButtonLinkTag } from "@/components/ui/LinkComponents";
 import Image from "@/components/utils/Image"
 
 export function CardTitle({ text, center=true }) {
@@ -25,9 +25,9 @@ export function CardParagraph({ text, center=true }) {
 
 export function CardLink({ text="Go to page", variance="primary", href=null }) {
     return (
-        <LinkTag href={href} variance={variance} button={true}>{ text }</LinkTag>
+        <ButtonLinkTag href={href}>{ text }</ButtonLinkTag>
     )
-}
+} 
 
 export function CardContainer({ children }) {
     return (

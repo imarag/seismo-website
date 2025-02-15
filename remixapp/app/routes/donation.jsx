@@ -3,6 +3,7 @@ import { Title, SubTitle } from "@/components/utils/Typography"
 import Section from "@/components/utils/Section"
 import AlignVertical from "@/components/utils/AlignVertical"
 import SeismologicalStationImage from '@/images/seismological-station.jpg'
+import DonateButton from "@/components/donate/DonateButton"
 
 export default function Donation() {
     return (
