@@ -1,20 +1,15 @@
 
 import { useEffect, useState } from "react"
-
-// import UploadFileButton from "@/components/ui/UploadFileButton";
-// import StartingUploadFile from "@/components/ui/StartingUploadFile";
 import Message from "@/components/ui/Message";
-import Section from "@/components/utils/Section";
-import { PrimaryButton, GhostButton } from "@/components/ui/ButtonComponents";
+import Button from "@/components/ui/Button";
 import { RadioButtonElement, SelectElement, NumberInputElement, LabelElement } from "@/components/ui/UIElements";
 import LineGraph from "@/components/ui/LineGraph"
 import Spinner from "@/components/ui/Spinner"
-
 import { fastapiEndpoints, arrivalsStyles } from "@/utils/static";
 import fetchRequest from "@/utils/functions/fetchRequest";
 import { downloadURI } from "@/utils/functions";
-
 import { MdOutlineFileDownload } from "react-icons/md";
+import { filterOptions } from "@/utils/static"
 
 export default function PickArrivals() {
     const [error, setError] = useState(null)
@@ -24,24 +19,7 @@ export default function PickArrivals() {
     const [arrivals, setArrivals] = useState([]);
     const [manualFilter, setManualFilter] = useState({freqMin: 0.1, freqMax: 3})
     const [selectedFilter, setSelectedFilter] = useState("initial")
-    const [filterOptions, setFilterOptions] = useState([])
 
-    useEffect(() => {
-        const fetchFilterOptions = async () => {
-
-            const jsonData = await fetchRequest({
-                endpoint: fastapiEndpoints["FILTER-OPTIONS"],
-                setError: setError,
-                setSuccess: setSuccess,
-                setLoading: setLoading,
-                method: "GET",
-            });
-
-            setFilterOptions(jsonData); 
-        };
-    
-        fetchFilterOptions();
-      }, []); 
 
     // transform the arrivals list into an object to get easier the arrival values
     // of the P & S waves
@@ -196,141 +174,116 @@ export default function PickArrivals() {
     }
 
     return (
-        <Section>
+        <>
             {
                 error && <Message type="error" text={error} />
             }
             {
                 success && <Message type="success" text={success} />
             }
-            {/* {backupTraces.length === 0 && (
-                <StartingUploadFile 
-                    setTraces={setTraces} 
-                    setSuccess={setSuccess} 
-                    setBackupTraces={setBackupTraces} 
-                    setError={setError} 
-                    setLoading={setLoading} 
-                />
-            )} */}
-            {
-                backupTraces.length !== 0 && (
-                    <>
-                        <div>
-                            <div className="flex flex-row items-center justify-start gap-1">
-                                {/* <UploadFileButton 
-                                    setTraces={setTraces}
-                                    setBackupTraces={setBackupTraces} 
-                                    setError={setError}
-                                    setSuccess={setSuccess}
-                                    setLoading={setLoading} 
-                                    buttonClass="btn-ghost btn-sm" 
-                                /> */}
-                                <PrimaryButton 
-                                    onClick={handleSaveArrivals} 
-                                    disabled={traces.length===0 || (!formattedArrivals["P"] && !formattedArrivals["S"])} 
-                                    variant="ghost"
-                                >
-                                    <MdOutlineFileDownload />
-                                    Download arrivals
-                                </PrimaryButton>
-                            </div>
-                            <hr className="mt-2 mb-8" />
-                            <div className="flex flex-row items-center justify-around mt-3 py-3">
-                                <div className="flex flex-row items-center">
-                                    <div className="flex flex-row items-center">
-                                        <LabelElement label="P" className="mx-1 text-lg" />
-                                        <RadioButtonElement 
-                                            label="P"
-                                            id="p-wave-radio"
-                                            name="ps-wave-radio"
-                                            value="P"
-                                            checked={selectedWave === "P"}
-                                            onChange={() => setSelectedWave("P")}
-                                            disabled={traces.length===0 || formattedArrivals["P"]}
-                                            className="radio-sm"
-                                        />
-                                    </div>
-                                    <div className="flex flex-row items-center mx-5">
-                                        <LabelElement label="S" className="mx-1 text-lg" />
-                                        <RadioButtonElement 
-                                            label="S"
-                                            id="s-wave-radio"
-                                            name="ps-wave-radio"
-                                            value="S"
-                                            checked={selectedWave === "S"}
-                                            onChange={() => setSelectedWave("S")}
-                                            disabled={traces.length===0 || formattedArrivals["S"]}
-                                            className="radio-sm"
-                                        />
-                                    </div>
-                                    <div className="flex gap-2 ms-4">
-                                        <PrimaryButton onClick={(e) => handleDeleteWave("P")} className="btn btn-sm btn-error" disabled={!formattedArrivals["P"]}>Del. P</PrimaryButton>
-                                        <PrimaryButton onClick={(e) => handleDeleteWave("S")} className="btn btn-sm btn-error" disabled={!formattedArrivals["S"]}>Del. S</PrimaryButton>
-                                    </div>
-                                </div>
-                                <SelectElement 
-                                    id="filters-dropdown"
-                                    name="filters-dropdown"
-                                    value={selectedFilter}
-                                    onChange={handleDropdownFilterChange}
-                                    disabled={traces.length===0}
-                                    optionsList={filterOptions}
-                                    className="select-sm"
-                                />
-                            </div>
-                            <Spinner visible={loading} />
-                            <div className="my-3">
+            <div>
+                <div className="flex flex-row items-center justify-start gap-1">
+                    <Button  
+                        variant="ghost"
+                        onClick={handleSaveArrivals} 
+                        // disabled={traces.length===0 || (!formattedArrivals["P"] && !formattedArrivals["S"])} 
+                    >
+                        <MdOutlineFileDownload />
+                        Download arrivals
+                    </Button>
+                </div>
+                <hr className="mt-2 mb-8" />
+                <div className="flex flex-row items-center justify-around mt-3 py-3">
+                    <div className="flex flex-row items-center">
+                        <div className="flex flex-row items-center">
+                            <LabelElement label="P" className="mx-1 text-lg" />
+                            <RadioButtonElement 
+                                label="P"
+                                id="p-wave-radio"
+                                name="ps-wave-radio"
+                                value="P"
+                                checked={selectedWave === "P"}
+                                onChange={() => setSelectedWave("P")}
+                                // disabled={traces.length===0 || formattedArrivals["P"]}
+                                className="radio-sm"
+                            />
+                        </div>
+                        <div className="flex flex-row items-center mx-5">
+                            <LabelElement label="S" className="mx-1 text-lg" />
+                            <RadioButtonElement 
+                                label="S"
+                                id="s-wave-radio"
+                                name="ps-wave-radio"
+                                value="S"
+                                checked={selectedWave === "S"}
+                                onChange={() => setSelectedWave("S")}
+                                // disabled={traces.length===0 || formattedArrivals["S"]}
+                                className="radio-sm"
+                            />
+                        </div>
+                        <div className="flex gap-2 ms-4">
+                            <Button onClick={(e) => handleDeleteWave("P")} className="btn btn-sm btn-error" disabled={!formattedArrivals["P"]}>Del. P</Button>
+                            <Button onClick={(e) => handleDeleteWave("S")} className="btn btn-sm btn-error" disabled={!formattedArrivals["S"]}>Del. S</Button>
+                        </div>
+                    </div>
+                    <SelectElement 
+                        id="filters-dropdown"
+                        name="filters-dropdown"
+                        value={selectedFilter}
+                        onChange={handleDropdownFilterChange}
+                        disabled={traces.length===0}
+                        optionsList={filterOptions}
+                        className="select-sm"
+                    />
+                </div>
+                <Spinner visible={loading} />
+                <div className="my-3 h-96 border">
+                    {
+                        traces.map((tr, ind) => (
+                            <div key={tr.trace_id}>
                                 {
-                                    traces.map((tr, ind) => (
-                                        <div key={tr.trace_id}>
-                                            {
-                                                <LineGraph 
-                                                    xData={[tr["xdata"]]} 
-                                                    yData={[tr["ydata"]]} 
-                                                    height="220px"
-                                                    legendTitle={[`Component: ${tr["stats"]["channel"]}`]}
-                                                    showGraphTitle={ind === 0}
-                                                    graphTitle={""}
-                                                    shapes={shapes}
-                                                    annotations={annotations}
-                                                    onGraphClick={onGraphClick}
-                                                />
-                                            }
-                                        </div>
-                                    ))
+                                    <LineGraph 
+                                        xData={[tr["xdata"]]} 
+                                        yData={[tr["ydata"]]} 
+                                        height="220px"
+                                        legendTitle={[`Component: ${tr["stats"]["channel"]}`]}
+                                        showGraphTitle={ind === 0}
+                                        graphTitle={""}
+                                        shapes={shapes}
+                                        annotations={annotations}
+                                        onGraphClick={onGraphClick}
+                                    />
                                 }
                             </div>
-                            <div className="flex justify-end align-center gap-3 mt-4">
-                                <div className="mb-3">
-                                    <NumberInputElement 
-                                        id="freq_min" 
-                                        name="freq_min" 
-                                        value={manualFilter["freqMin"]} 
-                                        onKeyDown={handleEnterKey} 
-                                        onChange={(e) => setManualFilter({...manualFilter, freqMin: e.target.value})} 
-                                        placeholder="e.g. 0.1"
-                                        disabled={traces.length===0}
-                                        className="input-sm"
-                                    />
-                                </div>
-                                <div className="mb-3">
-                                    <NumberInputElement 
-                                        id="freq_max" 
-                                        name="freq_max" 
-                                        value={manualFilter["freqMax"]} 
-                                        onKeyDown={handleEnterKey} 
-                                        onChange={(e) => setManualFilter({...manualFilter, freqMax: e.target.value})} 
-                                        placeholder="e.g. 3"
-                                        disabled={traces.length===0}
-                                        className="input-sm"
-                                    />
-                                </div>
-                            </div>
-                            <Spinner visible={loading} />
-                        </div>
-                    </>
-                )
-            }
-        </Section>
+                        ))
+                    }
+                </div>
+                <div className="flex justify-end align-center gap-3 mt-4">
+                    <LabelElement text="na" />
+                    <NumberInputElement 
+                        id="freq_min" 
+                        name="freq_min" 
+                        value={manualFilter["freqMin"]} 
+                        onKeyDown={handleEnterKey} 
+                        onChange={(e) => setManualFilter({...manualFilter, freqMin: e.target.value})} 
+                        placeholder="e.g. 0.1"
+                        // disabled={traces.length===0}
+                        className="input-sm w-40"
+                    />
+                    <NumberInputElement 
+                        id="freq_max" 
+                        name="freq_max" 
+                        value={manualFilter["freqMax"]} 
+                        onKeyDown={handleEnterKey} 
+                        onChange={(e) => setManualFilter({...manualFilter, freqMax: e.target.value})} 
+                        placeholder="e.g. 3"
+                        // disabled={traces.length===0}
+                        className="input-sm w-40"
+                    />
+                </div>
+                <Spinner visible={loading} />
+            </div>
+                  
+        </>
     )
 }

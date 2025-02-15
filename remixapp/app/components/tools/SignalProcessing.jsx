@@ -1,7 +1,6 @@
-import { PrimaryButton, GhostButton } from "@/components/ui/ButtonComponents";
+import Button from "@/components/ui/Button";
 import LineGraph from "@/components/ui/LineGraph"
 import Spinner from "@/components/ui/Spinner"
-import Container from "@/components/utils/Container"
 import { NumberInputElement, LabelElement, SelectElement, SliderElement } from "@/components/ui/UIElements";
 import { taperTypeOptions, taperSideOptions, detrendTypeOptions } from "@/utils/static"
 import { useState, useRef, useEffect } from "react";
@@ -18,17 +17,17 @@ import { MdAlignVerticalCenter, MdArrowDropDown } from "react-icons/md";
 function UploadButon({ outline=false, loading=false, handleFileUpload=null }) {
     return (
         <>
-            <PrimaryButton onClick={handleFileUpload} loading={loading}>
+            <Button onClick={handleFileUpload} loading={loading}>
                 <FiUpload />
                 Upload file
-            </PrimaryButton>
+            </Button>
         </>
     )
 }
 
 function MenuButton({ onClick }) {
     return (
-        <PrimaryButton onClick={onClick}>apply</PrimaryButton>
+        <Button onClick={onClick}>apply</Button>
     )
 }
 
@@ -534,7 +533,7 @@ export default function SignalProcessingPage() {
 
     return (
         <div>
-            {/* {
+            {
                 error && <Message type="error" text={error} />
             }
             {
@@ -595,7 +594,7 @@ export default function SignalProcessingPage() {
             <div className="flex flex-row items-center justify-center bg-slate-500">
                     <div className="h-20 flex-grow bg-blue-500">dsrgs</div>
                     <div className="h-20 flex-grow bg-red-500">dsf</div>
-                </div> */}
+                </div>
         </div>
     )
 }

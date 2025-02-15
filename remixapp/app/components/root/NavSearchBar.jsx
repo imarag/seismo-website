@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { SearchInputElement } from "@/components/ui/UIElements"
-import { LinkTag } from "@/components/ui/LinkComponents";
+import LinkTag from "@/components/ui/LinkTag";
 
 import { articles } from "@/utils/topics";
 import { tools } from "@/utils/topics";

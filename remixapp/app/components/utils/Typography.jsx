@@ -2,7 +2,7 @@
 export function Title({text, styledText = null, className=null}) {
     return (
         <h1 className={`text-4xl md:text-6xl text-center font-normal ${className || ""}`}>
-            {text}
+            { text }
             <br />
             {styledText && <span className="text-primary">{styledText}</span>}
         </h1>
@@ -11,8 +11,8 @@ export function Title({text, styledText = null, className=null}) {
 
 export function SubTitle({ text, className=null }) {
     return (
-        <h2 className={`text-2xl text-center font-extralight ${className || ""}`}>
-            {text}
+        <h2 className={`text-2xl text-center font-extralight max-w-5xl mx-auto ${className || ""}`}>
+            { text }
         </h2>
     );
 }
@@ -20,7 +20,7 @@ export function SubTitle({ text, className=null }) {
 export function Paragraph({ text, small = false, className }) {
     return (
         <p className={`${small === true ? "text-sm" : "text-lg"} ${className || ""}`}>
-            {text}
+            { text }
         </p>
     )
 }

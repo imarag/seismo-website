@@ -1,5 +1,5 @@
 import { CardTitle, CardParagraph, CardLink, CardContainer, CardImage } from "@/components/ui/CardElements"
-import { LinkTag } from "@/components/ui/LinkComponents"
+import LinkTag from "@/components/ui/LinkTag"
 import { Title, SubTitle } from "@/components/utils/Typography"
 import { IoIosArrowRoundForward } from "react-icons/io";
 import SiteEffectIcon from "@/images/template-images/resized/site-effect-icon.png"

@@ -1,9 +1,9 @@
 
 import { useEffect, useState } from "react"
-import ToolTip from "@/components/ui/ToolTip";
+// import ToolTip from "@/components/ui/ToolTip";
 import Section from "@/components/utils/Section";
 import Collapse from "@/components/ui/Collapse"
-import { PrimaryButton, GhostButton } from "@/components/ui/ButtonComponents";
+import Button from "@/components/ui/Button";
 import { MdDelete } from "react-icons/md";
 import fetchRequest from "@/utils/functions/fetchRequest";
 import { fastapiEndpoints } from "@/utils/static";
@@ -12,9 +12,9 @@ import { NumberInputElement, TextInputElement, SelectElement, DateInputElement, 
 
 function StatsItemToolTip({ text }) {
     return (
-        <ToolTip text={text}>
             <IoInformationCircleOutline className="size-5" />
-        </ToolTip>
+        // <ToolTip text={text}>
+        // </ToolTip>
     )
 }
 
@@ -88,9 +88,9 @@ export default function EditSeismicFile() {
     return (
         <Section>
             <h1 className="text-center text-2xl">Upload a data file</h1>
-            <PrimaryButton variant="secondary" position="center" onClick={() => setTraces([...traces, defaultTraceObject])}>
+            <Button variant="secondary" position="center" onClick={() => setTraces([...traces, defaultTraceObject])}>
                 Upload Data
-            </PrimaryButton>
+            </Button>
             <p className="text-sm text-center">Supported files: .xlsx, .csv, .txt, .dat</p>
             <div className="flex flex-row items-center justify-center gap-3">
                 <LabelElement id="skip_rows" label="Skip rows" />
@@ -245,7 +245,7 @@ export default function EditSeismicFile() {
                             </div>
                         </div>
                         
-                        <PrimaryButton 
+                        <Button 
                             variant="error"
                             size="small"
                             position="start"
@@ -254,7 +254,7 @@ export default function EditSeismicFile() {
                         >
                             remove
                             <MdDelete />
-                        </PrimaryButton>
+                        </Button>
                                     
                     </Collapse>
                 ))

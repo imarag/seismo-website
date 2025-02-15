@@ -6,7 +6,7 @@ import {
     LabelElement,
 } from "@/components/ui/UIElements";
 import Message from "@/components/ui/Message";
-import { PrimaryButton } from "@/components/ui/ButtonComponents";
+import Button from "@/components/ui/Button";
 import emailjs from "@emailjs/browser";
 
 export default function ContactForm() {
@@ -126,9 +126,9 @@ export default function ContactForm() {
                         )}
                     </div>
                     <div className="my-4 flex flex-col items-stretch">
-                        <PrimaryButton type="submit" disabled={loading} loading={loading}>
+                        <Button type="submit" disabled={loading} loading={loading}>
                             Submit
-                        </PrimaryButton>
+                        </Button>
                     </div>
                 </div>
             </form>

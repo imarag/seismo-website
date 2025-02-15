@@ -1,9 +1,8 @@
 import { useParams } from "@remix-run/react";
-import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter'
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import Image from "@/components/utils/Image"
 import { Title } from "@/components/utils/Typography"
 import Section from "@/components/utils/Section"
-
 import { articles } from "@/utils/topics"
 
 

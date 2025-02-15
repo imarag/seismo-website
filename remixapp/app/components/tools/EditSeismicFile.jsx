@@ -4,7 +4,7 @@ import { useState } from "react";
 import LineGraph from "@/components/ui/LineGraph"
 import Spinner from "@/components/ui/Spinner";
 import Section from "@/components/utils/Section";
-import { PrimaryButton, GhostButton } from "@/components/ui/ButtonComponents";
+import Button from "@/components/ui/Button";
 // import UploadFileButton from "@/components/ui/UploadFileButton";
 // import StartingUploadFile from "@/components/ui/StartingUploadFile";
 import Message from "@/components/ui/Message";

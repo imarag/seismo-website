@@ -3,7 +3,7 @@ import { SearchInputElement } from "@/components/ui/UIElements"
 import Section from "@/components/utils/Section";
 import Container from "@/components/utils/Container"
 import Image from "@/components/utils/Image"
-import { LinkTag } from "@/components/ui/LinkComponents";
+import LinkTag from "@/components/ui/LinkTag";
 import { CardTitle, CardParagraph } from "@/components/ui/CardElements"
 import { useState } from "react";
 import { articles } from "@/utils/topics"

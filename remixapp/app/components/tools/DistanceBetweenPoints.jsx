@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 
-import { PrimaryButton, GhostButton } from "@/components/ui/ButtonComponents";
+import Button from "@/components/ui/Button";
 // import LinkTag from "@/components/ui/LinkTag";
 import Message from "@/components/ui/Message";
 import Spinner from "@/components/ui/Spinner";
@@ -114,14 +114,14 @@ export default function DistanceBetweenPoints() {
                     />
                 </CoordContainer>
             </div>
-                <PrimaryButton 
+                <Button 
                     onClick={handleComputeButton} 
                     disabled={!coords["lat1"] || !coords["lon1"] || !coords["lat2"] || !coords["lon2"]} 
                     loading={loading}
                 >
                     Compute
                     <LuCalculator />
-                </PrimaryButton>
+                </Button>
             {distance && (
                 <p className="text-center">
                     The distance between point 1 (lat: {coords["lat1"]}, lon: {coords["lon1"]}) and point 2 (lat: {coords["lat2"]}, lon: {coords["lon2"]}) is:{" "}

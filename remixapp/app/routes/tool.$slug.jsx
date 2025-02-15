@@ -4,6 +4,8 @@ import { Title, SubTitle, Paragraph } from "@/components/utils/Typography"
 import Section from "@/components/utils/Section"
 import Collapse from "@/components/ui/Collapse"
 import { tools } from "@/utils/topics"
+import Container from "@/components/utils/Container"
+import AlignVertical from "@/components/utils/AlignVertical"
 
 export default function ToolsSlugPage() {
     const { slug } = useParams();
@@ -11,16 +13,24 @@ export default function ToolsSlugPage() {
     const ToolComponent = selectedTool.component
     return (
         <Section>
-            <Image src={selectedTool.image_src} alt={selectedTool.image_alt} className="block w-20 mx-auto" />
-            <Title text={selectedTool.title} />
-            <SubTitle text={selectedTool.subtitle} />
-            <div className="max-w-5xl mx-auto">
-                <Paragraph text={selectedTool.description} className="mt-20 mb-8"/>
-                <Collapse label="User guide">
-                    <p>{ selectedTool.userGuide }</p>
-                </Collapse>
-            </div>
-            <ToolComponent />
+            <Container>
+                <AlignVertical>
+                    <Image src={selectedTool.image_src} alt={selectedTool.image_alt} className="block w-20 mx-auto" />
+                    <Title text={selectedTool.title} />
+                    <SubTitle text={selectedTool.subtitle} />
+                </AlignVertical>
+                <div className="max-w-5xl mx-auto mt-20 mb-8">
+                    <AlignVertical>
+                        <Paragraph text={selectedTool.description}/>
+                        <Collapse label="User guide">
+                            <p>{ selectedTool.userGuide }</p>
+                        </Collapse>
+                    </AlignVertical>
+                </div>
+                <div className="mt-10">
+                    <ToolComponent />
+                </div>
+            </Container>
         </Section>
     )
 }

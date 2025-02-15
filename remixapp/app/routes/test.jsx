@@ -1,28 +1,48 @@
-import { json } from "@remix-run/node"; 
-import { useFetcher } from "@remix-run/react";
+import Button from "@/components/ui/Button"
 
-export function loader() {
-    console.log("Loader is running...");
-    return json({ languages: ["html", "css", "python", "java"]})
-    
-}
-
-export default function testPage() {
-    const fetcher = useFetcher();
-    function myfunc() {
-        fetcher.load("/test")
-    }
+export default function TestPage() {
     return (
-        <div>
-            <h1>You are in test</h1>
-            <button className="btn btn-primary" onClick={myfunc}>cklick me</button>
-            {fetcher.data && fetcher.data.languages && (
-                <div>
-                    {fetcher.data.languages.map((el, i) => (
-                        <p key={i}>{el}</p>
-                    ))}
-                </div>
-            )}
-        </div>
-    )
+        <>
+            <div>
+                <Button variant="primary">press</Button>
+                <Button variant="secondary">press</Button>
+                <Button variant="info">press</Button>
+                <Button variant="error">press</Button>
+                <Button variant="success">press</Button>
+                <Button variant="ghost">press</Button>
+            </div>
+            <div>
+                <Button outline={true} variant="primary">press</Button>
+                <Button outline={true} variant="secondary">press</Button>
+                <Button outline={true} variant="info">press</Button>
+                <Button outline={true} variant="error">press</Button>
+                <Button outline={true} variant="success">press</Button>
+                <Button outline={true} variant="ghost">press</Button>
+            </div>
+            <div>
+                <Button outline={false} size="large" variant="primary">press</Button>
+                <Button outline={false} size="large" variant="secondary">press</Button>
+                <Button outline={false} size="large" variant="info">press</Button>
+                <Button outline={false} size="large" variant="error">press</Button>
+                <Button outline={false} size="large" variant="success">press</Button>
+                <Button outline={false} size="large" variant="ghost">press</Button>
+            </div>
+            <div>
+                <Button outline={false} size="medium" variant="primary">press</Button>
+                <Button outline={false} size="medium" variant="secondary">press</Button>
+                <Button outline={false} size="medium" variant="info">press</Button>
+                <Button outline={false} size="medium" variant="error">press</Button>
+                <Button outline={false} size="medium" variant="success">press</Button>
+                <Button outline={false} size="medium" variant="ghost">press</Button>
+            </div>
+            <div>
+                <Button outline={false} size="small" variant="primary">press</Button>
+                <Button outline={false} size="small" variant="secondary">press</Button>
+                <Button outline={false} size="small" variant="info">press</Button>
+                <Button outline={false} size="small" variant="error">press</Button>
+                <Button outline={false} size="small" variant="success">press</Button>
+                <Button outline={false} size="small" variant="ghost">press</Button>
+            </div>
+        </>
+    )   
 }

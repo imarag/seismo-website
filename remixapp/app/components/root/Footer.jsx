@@ -11,7 +11,7 @@ export default function Footer() {
     const completedArticles = articles.filter(el => el.completed)
     
   return (
-    <div className="footer bg-base-100 p-10 mt-20">
+    <div className="footer bg-base-100 p-10">
         <aside className="flex flex-col items-center justify-center gap-3">
             <Logo />
             <p className="text-center text-xl font-semibold">

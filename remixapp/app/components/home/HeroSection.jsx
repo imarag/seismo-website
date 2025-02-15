@@ -1,6 +1,6 @@
 import HeroTitle from "@/components/home/HeroTitle"
 import HeroSubTitle from "@/components/home/HeroSubTitle"
-import { ButtonLinkTag } from "@/components/ui/LinkComponents";
+import LinkTag from "@/components/ui/LinkTag";
 
 export default function HeroSection() {
     return (
@@ -11,7 +11,7 @@ export default function HeroSection() {
                     text="Discover various seismic articles, interact with tools, and deepen
                     your understanding" 
                     className="text-center py-6 font-normal text-lg md:text-3xl" />
-                <ButtonLinkTag href="/articles-search" size="large">Get started</ButtonLinkTag>
+                <LinkTag variant="button" href="/articles-search" size="large">Get started</LinkTag>
             </div>
         </div>
     )
