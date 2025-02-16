@@ -15,7 +15,8 @@ export default function Button({
     const sizes = {
         small: "btn-sm",
         medium: "btn-md",
-        large: "btn-lg"
+        large: "btn-lg",
+        "extra-small": "btn-xs"
     };
 
     const variants = {

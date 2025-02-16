@@ -14,20 +14,12 @@ import { IoCut, IoFilter } from "react-icons/io5";
 import { BsSoundwave } from "react-icons/bs";
 import { MdAlignVerticalCenter, MdArrowDropDown } from "react-icons/md";
 
-function UploadButon({ outline=false, loading=false, handleFileUpload=null }) {
-    return (
-        <>
-            <Button onClick={handleFileUpload} loading={loading}>
-                <FiUpload />
-                Upload file
-            </Button>
-        </>
-    )
-}
 
-function MenuButton({ onClick }) {
+function MenuButton({ onClick, disabled=false }) {
     return (
-        <Button onClick={onClick}>apply</Button>
+        <div className="mt-4 flex justify-center">
+            <Button onClick={onClick} size="small" disabled={disabled} >apply</Button>
+        </div>
     )
 }
 
@@ -261,12 +253,15 @@ function MainMenu({ traces, setTraces, loading, setLoading, setError, setSuccess
         <>
             <div className="flex flex-row items-center justify-center">
                 <div className="grow-0 border-r">
-                    <UploadButon loading={loading} handleFileUpload={handleFileUpload} />
+                    <Button onClick={handleFileUpload} loading={loading} variant="ghost">
+                        <FiUpload />
+                        Upload file
+                    </Button>
                 </div>
                 <div className="grow">
                     <MenuDropdown icon={<BsSoundwave />}  label="Taper">
                         <div className="flex flex-col items-stretch gap-3">
-                            <div>
+                            <div className="flex flex-col gap-2">
                                 <LabelElement label="Type" id="taper-type" />
                                 <SelectElement 
                                     id="taper-type"
@@ -277,7 +272,7 @@ function MainMenu({ traces, setTraces, loading, setLoading, setError, setSuccess
                                     onChange={(e) => handleSigProcOptions("taper-type", e.target.value)}
                                 />
                             </div>
-                            <div>
+                            <div className="flex flex-col gap-2">
                                 <LabelElement label="Side" id="taper-side" />
                                 <SelectElement 
                                     id="taper-side"
@@ -288,7 +283,7 @@ function MainMenu({ traces, setTraces, loading, setLoading, setError, setSuccess
                                     onChange={(e) => handleSigProcOptions("taper-side", e.target.value)}
                                 />
                             </div>
-                            <div>
+                            <div className="flex flex-col gap-2">
                                 <LabelElement label="Length" id="taper-length" />
                                 <NumberInputElement 
                                     id="taper-length"
@@ -301,20 +296,20 @@ function MainMenu({ traces, setTraces, loading, setLoading, setError, setSuccess
                                     onChange={(e) => handleSigProcOptions("taper-length", e.target.value, "number")}
                                 />
                             </div>
-                            <MenuButton onClick={handleTaperApply} />
+                            <MenuButton onClick={handleTaperApply} disabled={traces.length === 0} />
                         </div>
                     </MenuDropdown>
                     <MenuDropdown icon={<IoCut />}  label="Trim">
                         <div className="flex flex-col items-stretch gap-3">
-                            <div>
-                                <LabelElement label="start time [sec]" id="trim-left-side" />
+                            <div className="flex flex-col gap-2">
+                                <LabelElement label="Start time (sec)" id="trim-left-side" />
                                 <NumberInputElement 
                                     id="trim-left-side"
                                     name="trim-left-side"
                                     min={0}
                                     max={duration} 
-                                    step={0.1}
-                                    className="input-sm mt-3 block w-full"
+                                    step={0.1} 
+                                    className="input-sm block w-full"
                                     value={sigProcOptions["trim-left-side"]} 
                                     onChange={(e) => handleSigProcOptions("trim-left-side", e.target.value, "number")}
                                 />
@@ -324,13 +319,13 @@ function MainMenu({ traces, setTraces, loading, setLoading, setError, setSuccess
                                     min={0}
                                     max={duration} 
                                     step={0.1}
-                                    className="range-xs mt-3 block w-full"
+                                    className="range-xs block w-full"
                                     value={sigProcOptions["trim-left-side"]} 
                                     onChange={(e) => handleSigProcOptions("trim-left-side", e.target.value, "number")}
                                 />
                             </div>
-                            <div className="flex flex-col gap-3">
-                                <LabelElement label="end time [sec]" id="trim-right-side" />
+                            <div className="flex flex-col gap-2">
+                                <LabelElement label="End time (sec)" id="trim-right-side" />
                                 <NumberInputElement 
                                     id="trim-right-side"
                                     name="trim-right-side"
@@ -352,12 +347,12 @@ function MainMenu({ traces, setTraces, loading, setLoading, setError, setSuccess
                                     onChange={(e) => handleSigProcOptions("trim-right-side", e.target.value, "number")}
                                 />
                             </div>
-                            <MenuButton onClick={handleTrimApply} />
+                            <MenuButton onClick={handleTrimApply} disabled={traces.length === 0} />
                         </div>
                     </MenuDropdown>
                     <MenuDropdown icon={<MdAlignVerticalCenter />}  label="Detrend">
                         <div className="flex flex-col items-stretch gap-3">
-                            <div>
+                            <div className="flex flex-col gap-2">
                                 <LabelElement label="Type" id="detrend-type" />
                                 <SelectElement 
                                     id="detrend-type"
@@ -368,12 +363,12 @@ function MainMenu({ traces, setTraces, loading, setLoading, setError, setSuccess
                                     onChange={(e) => handleSigProcOptions("detrend-type", e.target.value)}
                                 />
                             </div>
-                            <MenuButton onClick={handleDetrendApply} />
+                            <MenuButton onClick={handleDetrendApply} disabled={traces.length === 0} />
                         </div>
                     </MenuDropdown>
                     <MenuDropdown icon={<IoFilter />} label="Filter">
                         <div className="flex flex-col items-stretch gap-3">
-                            <div>
+                            <div className="flex flex-col gap-2">
                                 <LabelElement label="Min frequency" id="filter-min" />
                                 <NumberInputElement 
                                     id="filter-min"
@@ -381,12 +376,12 @@ function MainMenu({ traces, setTraces, loading, setLoading, setError, setSuccess
                                     min={0}
                                     max={duration} 
                                     step={0.1}
-                                    className="input-sm mt-3 block w-full"
+                                    className="input-sm block w-full"
                                     value={sigProcOptions["filter-min"]} 
                                     onChange={(e) => handleSigProcOptions("filter-min", e.target.value)}
                                 />
                             </div>
-                            <div className="flex flex-col gap-3">
+                            <div className="flex flex-col gap-2">
                                 <LabelElement label="Max frequency" id="freq-max" />
                                 <NumberInputElement 
                                     id="freq-max"
@@ -399,8 +394,7 @@ function MainMenu({ traces, setTraces, loading, setLoading, setError, setSuccess
                                     onChange={(e) => handleSigProcOptions("filter-max", e.target.value)}
                                 />
                             </div>
-                            <p className="text-center text-sm">If zero, it is considered not filled</p>
-                            <MenuButton onClick={handleFilterApply} />
+                            <MenuButton onClick={handleFilterApply} disabled={traces.length === 0} />
                         </div>
                     </MenuDropdown>
                 </div>
@@ -409,56 +403,85 @@ function MainMenu({ traces, setTraces, loading, setLoading, setError, setSuccess
     )
 }
 
-function Graphs({ traces, fourierData, loading, handleFileUpload }) {
+function Graphs({ traces, fourierData}) {
     return (
         <>
             {
-                traces.length === 0 ? (
-                    <div className="flex flex-row justify-center items-center h-5/6">
-                        <div className="flex flex-col items-center justify-center gap-3">
-                            <p className="font-semibold text-xl">Upload a seismic file</p>
-                            <UploadButon outline={true} handleFileUpload={handleFileUpload} />
-                            <Spinner visible={loading}/>
+                traces.map((tr, ind) => (
+                    <div key={tr.trace_id} className="h-1/3">
+                        <LineGraph
+                            xData={traces.length !== 0 ? [tr["xdata"]] : []}
+                            yData={traces.length !== 0 ? [tr["ydata"]] : []}
+                            graphTitle=""
+                            showLegend={false}
+                        />
+                    </div>
+                ))
+            }
+        </>   
+    )
+}
+        // <div className="flex flex-row justify-center items-center">
+        //     <div className="grow-7 bg-blue-500 h-20">
+        //         {
+        //             traces.map((tr, ind) => (
+        //                 <div key={tr.trace_id}>
+        //                     <LineGraph
+        //                         xData={traces.length !== 0 ? [tr["xdata"]] : []}
+        //                         yData={traces.length !== 0 ? [tr["ydata"]] : []}
+        //                         graphTitle=""
+        //                         showLegend={false}
+        //                     />
+        //                 </div>
+        //             ))
+        //         }
+        //     </div>
+        //     <div className="grow-1 bg-red-500 h-10">
+        //         {/* {
+        //             fourierData.map((tr, ind) => (
+        //                 <div key={tr.trace_id}>
+        //                     <LineGraph
+        //                         xData={[tr["fas_freqs"]]}
+        //                         yData={[tr["fas_amps"]]}
+        //                         graphTitle=""
+        //                         scale="log"
+        //                         showLegend={false}
+        //                         legendTitle={tr.component}
+        //                     />
+        //                 </div>
+        //             ))
+        //         } */}
+        //     </div>
+        // </div>
+//     )
+// }
+
+function ProcessingFilters({appliedProcesses, handleRemoveProcesses}) {
+    return (
+        <div>
+            {
+                appliedProcesses.length !== 0 && (
+                    <div>
+                        <div className="flex flex-row items-center flex-wrap gap-2 my-6">
+                            <p>Filters applied:</p>
+                            {
+                                appliedProcesses.map((process, index) => (
+                                    <span key={process.processId} className="badge badge-info">
+                                        {index+1}. {process.text}
+                                    </span>
+                                ))
+                            }
+                            <span className="ms-5">
+                                <Button variant="error" size="extra-small" onClick={handleRemoveProcesses}>
+                                    remove all
+                                    <IoMdClose />
+                                </Button>
+                            </span>
                         </div>
                     </div>
-                ) : (
-                    <>
-                        <div className="flex flex-row justify-center items-center">
-                            <div className="grow-7 bg-blue-500 h-20">
-                                {/* {
-                                    traces.map((tr, ind) => (
-                                        <div key={tr.trace_id}>
-                                            <LineGraph
-                                                xData={traces.length !== 0 ? [tr["xdata"]] : []}
-                                                yData={traces.length !== 0 ? [tr["ydata"]] : []}
-                                                graphTitle=""
-                                                showLegend={false}
-                                            />
-                                        </div>
-                                    ))
-                                } */}
-                            </div>
-                            <div className="grow-1 bg-red-500 h-10">
-                                {/* {
-                                    fourierData.map((tr, ind) => (
-                                        <div key={tr.trace_id}>
-                                            <LineGraph
-                                                xData={[tr["fas_freqs"]]}
-                                                yData={[tr["fas_amps"]]}
-                                                graphTitle=""
-                                                scale="log"
-                                                showLegend={false}
-                                                legendTitle={tr.component}
-                                            />
-                                        </div>
-                                    ))
-                                } */}
-                            </div>
-                        </div>
-                    </>
                 )
             }
-        </>
+        </div>
     )
 }
 
@@ -470,9 +493,8 @@ export default function SignalProcessingPage() {
     const [traces, setTraces] = useState([]);
     const [fourierData, setFourierData] = useState([])
     const [backupTraces, setBackupTraces] = useState([])
-    const [appliedProcesses, setAppliedProcesses] = useState([])
     const inputRef = useRef();
-
+    const [appliedProcesses, setAppliedProcesses] = useState([])
 
     useEffect(() => {
         async function applyProcesses() {
@@ -501,6 +523,11 @@ export default function SignalProcessingPage() {
     
     }, [traces])
 
+    function handleRemoveProcesses() {
+        setTraces(backupTraces)
+        setAppliedProcesses([])
+    }
+
     async function handleFileSelection(e) {
         e.preventDefault();
   
@@ -526,22 +553,18 @@ export default function SignalProcessingPage() {
         inputRef.current.click();
     }
 
-    function handleRemoveProcesses(process) {
-        setTraces(backupTraces)
-        setAppliedProcesses([])
-    }
 
     return (
         <div>
             {
-                error && <Message type="error" text={error} />
+                error && <Message setError={setError} setSuccess={setSuccess} type="error" text={error} />
             }
             {
-                success && <Message type="success" text={success} />
+                success && <Message setError={setError} setSuccess={setSuccess} type="success" text={success} />
             }
             <input ref={inputRef} name="file" type="file" onChange={handleFileSelection} hidden />
-            <div className="flex flex-col justify-center items-stretch border">
-                <div className="border">
+            <div className="h-screen min-h-96">
+                <div className="border rounded-t-lg bg-base-100 p-1">
                     <MainMenu 
                         traces={traces} 
                         setTraces={setTraces} 
@@ -554,47 +577,33 @@ export default function SignalProcessingPage() {
                         setAppliedProcesses={setAppliedProcesses}
                     />
                 </div>
-                <div>
-                    <div>
-                        {
-                            appliedProcesses.length !== 0 && (
-                                <div>
-                                    <div className="flex flex-row items-center flex-wrap gap-2 my-6">
-                                        <p>Filters applied:</p>
-                                        {
-                                            appliedProcesses.map((process, index) => (
-                                                <span key={process.processId} className="badge badge-info">
-                                                    {index+1}. {process.text}
-                                                </span>
-                                            ))
-                                        }
-                                        <span className="ms-5">
-                                            <Button variance="error" size="small" onClick={handleRemoveProcesses}>
-                                                remove all
-                                                <IoMdClose />
-                                            </Button>
-                                        </span>
-                                    </div>
-                                </div>
-                            )
-                        }
-                    
-                    </div>
+                <div className="border h-2/3 overflow-y-scroll p-4 relative">
+                    {
+                        traces.length === 0 ? (
+                            <div className="flex flex-col items-center justify-center gap-3 absolute top-1/2 start-1/2 -translate-x-1/2 -translate-y-1/2">
+                                <h1 className="font-semibold text-3xl">Upload a seismic file</h1>
+                                <p className="text-lg">Start by uploading a seismic file to interact with the tool</p>
+                                <Button onClick={handleFileUpload} loading={loading}>
+                                    <FiUpload />
+                                    Upload file
+                                </Button>
+                            </div>
+                        ) : (
+                            <>
+                                <ProcessingFilters 
+                                    appliedProcesses={appliedProcesses}
+                                    handleRemoveProcesses={handleRemoveProcesses}
+                                />
+                                <Graphs 
+                                    traces={traces} 
+                                    fourierData={fourierData}
+                                />
+                            </>
+                        )
+                    }
                 </div>
-                <div>
-                    <Graphs 
-                        traces={traces} 
-                        fourierData={fourierData}
-                        loading={loading} 
-                        handleFileUpload={handleFileUpload}
-                    />
-                </div>
-                
             </div>
-            <div className="flex flex-row items-center justify-center bg-slate-500">
-                    <div className="h-20 flex-grow bg-blue-500">dsrgs</div>
-                    <div className="h-20 flex-grow bg-red-500">dsf</div>
-                </div>
         </div>
     )
 }
+

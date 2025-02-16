@@ -116,7 +116,7 @@ export function CheckboxElement({ className, block=false, ...props }) {
 export function LabelElement({ className, block=false, ...props }) {
     return (
         <label 
-            className={`label label-text ${className ? className : ""}`} 
+            className={`label label-text my-0 py-0 ${className ? className : ""}`} 
             htmlFor={props.id}
         >
             {props.label}
