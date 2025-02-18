@@ -7,10 +7,26 @@ import { tools } from "@/utils/topics"
 import Container from "@/components/utils/Container"
 import AlignVertical from "@/components/utils/AlignVertical"
 
+
 export default function ToolsSlugPage() {
     const { slug } = useParams();
-    const selectedTool = tools.find(el => el.slug === slug)
-    const ToolComponent = selectedTool.component
+    const selectedTool = tools.find(el => el.slug === slug);
+
+    if (!selectedTool) {
+        return (
+            <Section>
+                <Container>
+                    <AlignVertical>
+                        <Title text="Tool Not Found" />
+                        <Paragraph text="The tool you are looking for does not exist." />
+                    </AlignVertical>
+                </Container>
+            </Section>
+        );
+    }
+
+    const ToolComponent = selectedTool.component;
+
     return (
         <Section>
             <Container>
@@ -23,7 +39,7 @@ export default function ToolsSlugPage() {
                     <AlignVertical>
                         <Paragraph text={selectedTool.description}/>
                         <Collapse label="User guide">
-                            <p>{ selectedTool.userGuide }</p>
+                            <p>{selectedTool.userGuide}</p>
                         </Collapse>
                     </AlignVertical>
                 </div>
@@ -32,5 +48,5 @@ export default function ToolsSlugPage() {
                 </div>
             </Container>
         </Section>
-    )
+    );
 }

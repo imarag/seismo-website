@@ -38,9 +38,9 @@ export default async function fetchRequest({
             const errorData = await response.json();
             setError(errorData["error_message"] || `Error: ${response.statusText}`);
             setSuccess(null);
-            // setTimeout(() => {
-            //     setError(null); // Clear error message after 5 seconds
-            // }, 5000);
+            setTimeout(() => {
+                setError(null); // Clear error message after 5 seconds
+            }, 8000);
             throw new Error(errorData["error_message"] || `Error: ${response.statusText}`);
         }
 
@@ -54,18 +54,18 @@ export default async function fetchRequest({
             setSuccess(successMessage);
         }
         setError(null); 
-        // setTimeout(() => {
-        //     setSuccess(null);
-        // }, 8000);
+        setTimeout(() => {
+            setSuccess(null);
+        }, 8000);
 
         return result;
     } catch (error) {
         console.error(`Fetch request failed: ${error.message}`);
         setError(error.message);
         setSuccess(null);
-        // setTimeout(() => {
-        //     setError(null);
-        // }, 8000);
+        setTimeout(() => {
+            setError(null);
+        }, 8000);
         throw error;
     } finally {
         setLoading(false); 
