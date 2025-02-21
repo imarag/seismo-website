@@ -10,7 +10,7 @@ export default function Button({
     toolTipText = null,
     className = "" 
 }) {
-    const baseStyles = "btn inline-flex items-center gap-2"; 
+    const baseStyles = "btn inline-flex items-center gap-2 disabled:bg-transparent disabled:text-gray-350"; 
 
     const sizes = {
         small: "btn-sm",

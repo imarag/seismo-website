@@ -148,7 +148,7 @@ export const tools = [
     type: "tool",
     slug: "file-to-mseed",
     component: FileToMseed,
-    completed: true,
+    completed: false,
     userGuide: "This tool simplifies the process of converting various seismic file formats into MiniSEED. Upload your file and specify conversion settings, such as station codes and sample rates. The tool validates input data to ensure compatibility and generates standardized MiniSEED files. Download the converted files for seamless integration with analysis software."
   },
   {

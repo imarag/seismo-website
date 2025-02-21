@@ -1,30 +1,124 @@
 
-import { useState } from "react";
+import { useRef, useState } from "react"
 
 import LineGraph from "@/components/ui/LineGraph"
 import Spinner from "@/components/ui/Spinner";
-import Section from "@/components/utils/Section";
 import Button from "@/components/ui/Button";
-// import UploadFileButton from "@/components/ui/UploadFileButton";
-// import StartingUploadFile from "@/components/ui/StartingUploadFile";
+import { IoMdClose } from "react-icons/io";
 import Message from "@/components/ui/Message";
 import { NumberInputElement, TextInputElement, DateInputElement, TimeInputElement, LabelElement } from "@/components/ui/UIElements";
-
+import { FiUpload } from "react-icons/fi";
 import { fastapiEndpoints } from "@/utils/static";
 import fetchRequest from "@/utils/functions/fetchRequest";
 import { downloadURI } from "@/utils/functions";
 
 import { MdOutlineFileDownload, MdDeleteOutline } from "react-icons/md";
 import { PiGearLight } from "react-icons/pi";
-import { CiUndo } from "react-icons/ci";
+import { RiResetLeftFill } from "react-icons/ri";
 
-export default function EditSeismicFile() {
-    const [error, setError] = useState(null)
-    const [success, setSuccess] = useState(null)
-    const [loading, setLoading] = useState(false)
-    const [traces, setTraces] = useState([]);
-    const [backupTraces, setBackupTraces] = useState([]);
-    const [activatedMenuIndex, setActivatedMenuIndex] = useState(null)
+function TraceInfoMenu({ activatedMenuIndex, setActivatedMenuIndex, traces, setTraces, ind, trace }) {
+
+    function handleInputChange(traceId, parameter, value) {
+        console.log(traceId, parameter, value)
+        let newTraces = traces.map((trace, i) => {
+            if (trace.trace_id === traceId) {
+                let newTrace = {...trace, stats: {...trace.stats, [parameter]: value}}
+                return newTrace
+            } else {
+                return trace
+            }
+        })
+       setTraces(newTraces)
+    }
+
+    return (
+        <>
+            {
+                activatedMenuIndex === ind && (
+                    <div className="flex flex-col py-6 px-4 items-stretch gap-1 absolute top-100 end-0 bg-white border shadow rounded z-50">
+                        <div  className="absolute top-1 end-2">
+                            <Button 
+                                variant="ghost" 
+                                size="small"
+                                onClick={() => setActivatedMenuIndex(null)}
+                            >
+                                <IoMdClose />
+                            </Button>
+                        </div>
+                        <div>
+                            <LabelElement id="station" label="station" />
+                            <TextInputElement
+                                id={"station"}
+                                name={"station"}
+                                value={trace.stats.station}
+                                onChange={(e) => handleInputChange(trace.trace_id, "station", e.target.value)}
+                                placeholder={"e.g. SEIS"}
+                                className={"input-sm"}
+                            />
+                        </div>
+                        <div>
+                            <LabelElement id="start_date" label="Start date" />
+                            <DateInputElement
+                                id={"start_date"}
+                                name={"start_date"}
+                                value={trace.stats.start_date}
+                                onChange={(e) => handleInputChange(trace.trace_id, "start_date", e.target.value)}
+                                className={"input-sm block w-full"}
+                            />
+                        </div>
+                        <div>
+                            <LabelElement id="start_time" label="Start time" />
+                            <TimeInputElement
+                                id={"start_time"}
+                                name={"start_time"}
+                                value={trace.stats.start_time}
+                                onChange={(e) => handleInputChange(trace.trace_id, "start_time", e.target.value)}
+                                className={"input-sm block w-full"}
+                            />
+                        </div>
+                        <div>
+                            <LabelElement id="fs" label="Sampling rate *" />
+                            <NumberInputElement
+                                id={"fs"}
+                                name={"fs"}
+                                value={trace.stats.sampling_rate}
+                                onChange={(e) => handleInputChange(trace.trace_id, "sampling_rate", e.target.value)}
+                                className={"input-sm"}
+                                readOnly={true}
+                            />
+                        </div>
+                        <div>
+                            <LabelElement id="npts" label="Total sample points *" />
+                            <NumberInputElement
+                                id={"npts"}
+                                name={"npts"}
+                                value={trace.stats.npts}
+                                onChange={(e) => handleInputChange(trace.trace_id, "npts", e.target.value)}
+                                className={"input-sm"}
+                                readOnly={true}
+                            />
+                        </div>
+                        <div>
+                            <LabelElement id="channel" label="Component" />
+                            <TextInputElement
+                                id={"channel"}
+                                name={"channel"}
+                                value={trace.stats.channel}
+                                onChange={(e) => handleInputChange(trace.trace_id, "channel", e.target.value)}
+                                placeholder={"e.g. E"}
+                                className={"input-sm"}
+                            />
+                        </div>
+                        <p className="text-sm text-center my-1">Elements with "*" are readonly</p>
+                    </div>
+                )
+            }
+        </>
+    )
+}
+
+function MainMenu({ traces, setTraces, setLoading, setError, setSuccess, handleFileUpload, backupTraces }) {
+    
 
     async function handleDownloadFile(fileType, data, downloadName) {
         const blobData = await fetchRequest({
@@ -42,6 +136,60 @@ export default function EditSeismicFile() {
     }
 
 
+    return (
+        <>
+            <div className="flex flex-row items-center justify-start">
+                <Button 
+                    onClick={handleFileUpload} 
+                    variant="ghost"
+                    size="small"
+                >
+                    <FiUpload />
+                    Upload file
+                </Button>
+                <Button  
+                    variant="ghost"
+                    size="small"
+                    onClick={() => setTraces(backupTraces)} 
+                    disabled={traces.length===0} 
+                >
+                    <RiResetLeftFill />
+                    Reset traces
+                </Button>
+                <Button 
+                    variant="ghost"
+                    size="small"
+                    onClick={() => handleDownloadFile("mseed", traces, traces[0].stats.record_name + "_download")} 
+                    disabled={traces.length===0} 
+                >
+                    Download to MSEED
+                    <MdOutlineFileDownload />
+                </Button>
+                <Button 
+                    variant="ghost"
+                    size="small"
+                    onClick={() => handleDownloadFile("json", traces.map(tr => tr.stats), traces[0].stats.record_name + "_header")} 
+                    disabled={traces.length===0} 
+                >
+                    Download header
+                    <MdOutlineFileDownload />
+                </Button>
+                <Button 
+                    variant="ghost"
+                    size="small"
+                    onClick={() => handleDownloadFile("json", traces.map(tr => ({"component": tr.stats.channel, "data": tr.ydata})), traces[0].stats.record_name + "_data")}
+                    disabled={traces.length===0} 
+                >
+                    Download Data samples
+                    <MdOutlineFileDownload />
+                </Button>
+            </div>
+        </>
+    )
+}
+
+function Graphs({ traces, setTraces, activatedMenuIndex, setActivatedMenuIndex }) {
+
     function handleOptionsMenuButtonClick(ind) {
         if (activatedMenuIndex === ind) {
             setActivatedMenuIndex(null)
@@ -56,197 +204,137 @@ export default function EditSeismicFile() {
         setTraces(newTraces)
     }
 
-    function handleInputChange(traceId, parameter, value) {
-        let newTraces = traces.map((tr, i) => {
-            if (tr.trace_id === traceId) {
-                let newTrace = {...tr, stats: {...tr.stats, [parameter]: value}}
-                return newTrace
-            } else {
-                return tr
-            }
-        })
-       setTraces(newTraces)
-    }
-    
-    
     return (
-        <Section>
+        <>
             {
-                error && <Message type="error" text={error} />
-            }
-            {
-                success && <Message type="success" text={success} />
-            }
-            {/* {traces.length === 0 && (
-                <StartingUploadFile 
-                    setTraces={setTraces} 
-                    setBackupTraces={setBackupTraces} 
-                    setError={setError} 
-                    setSuccess={setSuccess} 
-                    setLoading={setLoading} 
-                />
-            )} */}
-            {
-                traces.length !== 0 && (
-                <>
-                    <div>
-                        <div className="flex flex-row items-center justify-start gap-1">
-                            {/* <UploadFileButton 
-                                setTraces={setTraces} 
-                                setBackupTraces={setBackupTraces}
-                                setLoading={setLoading} 
-                                buttonClass="btn-ghost" 
-                                setError={setError}
-                                setSuccess={setSuccess} 
-                            /> */}
-                            <GhostButton 
-                                onClick={() => setTraces(backupTraces)}  
+                traces.map((tr, ind) => (
+                    <div key={tr.trace_id} className="h-1/3">
+                        <div className="flex flex-row justify-end gap-2">
+                            <Button 
+                                onClick={() => handleOptionsMenuButtonClick(ind)}
+                                variant="ghost"
+                                size="small"
                             >
-                                Restore initial
-                                <CiUndo />
-                            </GhostButton>
+                                <PiGearLight />
+                            </Button>
+                            <Button 
+                                onClick={() => handleDeleteTrace(tr.trace_id)}
+                                variant="ghost"
+                                size="small"
+                            >
+                                <MdDeleteOutline />
+                            </Button>
                         </div>
-                        <hr />
+                        <TraceInfoMenu 
+                            activatedMenuIndex = {activatedMenuIndex}
+                            setActivatedMenuIndex = {setActivatedMenuIndex}
+                            traces = {traces} 
+                            setTraces = {setTraces}
+                            ind = {ind}
+                            trace = {tr}
+                        />
+                        <LineGraph 
+                            xData={[tr["xdata"]]} 
+                            yData={[tr["ydata"]]} 
+                            height="220px"
+                            legendTitle={[`Component: ${tr["stats"]["channel"]}`]}
+                            showGraphTitle={ind === 0}
+                            graphTitle={""}
+                        />
                     </div>
-                    <div className="flex flex-row flex-wrap gap-2">
-                        <GhostButton 
-                            onClick={() => handleDownloadFile("mseed", traces, traces[0].stats.record_name + "_download")} 
-                            variant="neutral"
-                            outline={true}
-                            size="small"
-                        >
-                            Download to MSEED
-                            <MdOutlineFileDownload />
-                        </GhostButton>
-                        <GhostButton 
-                            onClick={() => handleDownloadFile("json", traces.map(tr => tr.stats), traces[0].stats.record_name + "_header")} 
-                            variant="neutral"
-                            outline={true}
-                            size="small"
-                        >
-                            Download header
-                            <MdOutlineFileDownload />
-                        </GhostButton>
-                        <GhostButton 
-                            onClick={() => handleDownloadFile("json", traces.map(tr => ({"component": tr.stats.channel, "data": tr.ydata})), traces[0].stats.record_name + "_data")}
-                            variant="neutral"
-                            outline={true}
-                            size="small"
-                        >
-                            Download Data samples
-                            <MdOutlineFileDownload />
-                        </GhostButton>
-                    </div>
-                    <Spinner visible={loading} />
-                </>
-            )}
-            <div>
-                {
-                    traces.map((tr, ind) => (
-                        <div key={tr.trace_id}>
-                            <div className="flex flex-row justify-end gap-2 relative">
-                                <div>
-                                    <div className="flex flex-row justify-end gap-2">
-                                        <GhostButton 
-                                            onClick={() => handleOptionsMenuButtonClick(ind)}
-                                            variant="neutral"
-                                            size="small"
-                                        >
-                                            <PiGearLight />
-                                        </GhostButton>
-                                        <GhostButton 
-                                            onClick={() => handleDeleteTrace(tr.trace_id)}
-                                            variant="error"
-                                            size="small"
-                                        >
-                                            <MdDeleteOutline />
-                                        </GhostButton>
-                                    </div>
-                                    {
-                                        activatedMenuIndex === ind && (
-                                            <div className="flex flex-col items-stretch gap-1 absolute top-100 end-0 bg-white border shadow py-3 px-4 rounded z-50">
-                                                <div>
-                                                    <LabelElement id="station" label="station" />
-                                                    <TextInputElement
-                                                        id={"station"}
-                                                        name={"station"}
-                                                        value={tr.stats.station}
-                                                        onChange={(e) => handleInputChange(tr.trace_id, "station", e.target.value)}
-                                                        placeholder={"e.g. SEIS"}
-                                                        className={"input-sm"}
-                                                    />
-                                                </div>
-                                                <div>
-                                                    <LabelElement id="date" label="Date" />
-                                                    <DateInputElement
-                                                        id={"date"}
-                                                        name={"date"}
-                                                        value={tr.stats.start_date}
-                                                        onChange={(e) => handleInputChange(tr.trace_id, "date", e.target.value)}
-                                                        className={"input-sm block w-full"}
-                                                    />
-                                                </div>
-                                                <div>
-                                                    <LabelElement id="time" label="Time" />
-                                                    <TimeInputElement
-                                                        id={"time"}
-                                                        name={"time"}
-                                                        value={tr.stats.start_time}
-                                                        onChange={(e) => handleInputChange(tr.trace_id, "time", e.target.value)}
-                                                        className={"input-sm block w-full"}
-                                                    />
-                                                </div>
-                                                <div>
-                                                    <LabelElement id="fs" label="Sampling rate *" />
-                                                    <NumberInputElement
-                                                        id={"fs"}
-                                                        name={"fs"}
-                                                        value={tr.stats.sampling_rate}
-                                                        onChange={(e) => handleInputChange(tr.trace_id, "sampling_rate", e.target.value)}
-                                                        className={"input-sm"}
-                                                        readOnly={true}
-                                                    />
-                                                </div>
-                                                <div>
-                                                    <LabelElement id="npts" label="Total sample points *" />
-                                                    <NumberInputElement
-                                                        id={"npts"}
-                                                        name={"npts"}
-                                                        value={tr.stats.npts}
-                                                        onChange={(e) => handleInputChange(tr.trace_id, "npts", e.target.value)}
-                                                        className={"input-sm"}
-                                                        readOnly={true}
-                                                    />
-                                                </div>
-                                                <div>
-                                                    <LabelElement id="channel" label="Component" />
-                                                    <TextInputElement
-                                                        id={"channel"}
-                                                        name={"channel"}
-                                                        value={tr.stats.channel}
-                                                        onChange={(e) => handleInputChange(tr.trace_id, "channel", e.target.value)}
-                                                        placeholder={"e.g. E"}
-                                                        className={"input-sm"}
-                                                    />
-                                                </div>
-                                                <p className="text-sm text-center my-1">Elements with "*" are readonly</p>
-                                            </div>
-                                        )
-                                    }
+                ))
+            }
+        </>   
+    )
+}
+
+
+export default function EditSeismicFile() {
+    const [error, setError] = useState([])
+    const [success, setSuccess] = useState(null)
+    const [loading, setLoading] = useState(false)
+    const [traces, setTraces] = useState([]);
+    const [backupTraces, setBackupTraces] = useState([]);    
+    const [activatedMenuIndex, setActivatedMenuIndex] = useState(null)
+    const inputRef = useRef();
+
+    
+    async function handleFileSelection(e) {
+        e.preventDefault();
+  
+        const formData = new FormData();
+        formData.append("file", e.target.files[0]);
+
+        const traces = await fetchRequest({
+            endpoint: fastapiEndpoints["UPLOAD-SEISMIC-FILE"],
+            setError: setError,
+            setSuccess: setSuccess,
+            setLoading: setLoading,
+            method: "POST",
+            data: formData,
+            successMessage: "The file has been succesfully uploaded!"
+        });
+
+        setTraces(traces);
+        setBackupTraces(traces)
+    }
+
+    function handleFileUpload(e) {
+        e.preventDefault();
+        inputRef.current.click();
+    }
+
+
+    return (
+        <>
+            {
+                error.length !==0 && <Message setError={setError} setSuccess={setSuccess} type="error" text={error} />
+            }
+            {
+                success && <Message setError={setError} setSuccess={setSuccess} type="success" text={success} />
+            }
+            <input ref={inputRef} name="file" type="file" onChange={handleFileSelection} hidden />
+            <div className="h-screen min-h-96">
+                <div className="border rounded-t-lg bg-base-100 p-3">
+                    <MainMenu 
+                        traces={traces} 
+                        setTraces={setTraces} 
+                        setLoading={setLoading} 
+                        setError={setError} 
+                        setSuccess={setSuccess} 
+                        handleFileUpload={handleFileUpload} 
+                        backupTraces={backupTraces}
+                    />
+                </div>
+                <div className="border h-2/3 overflow-y-scroll p-4 relative">
+                    <>
+                        <div className="absolute start-1/2 ">
+                            <Spinner visible={loading} />
+                        </div>
+                        {
+                            traces.length === 0 ? (
+                                <div className="flex flex-col items-center justify-center gap-3 absolute top-1/2 start-1/2 -translate-x-1/2 -translate-y-1/2">
+                                    <h1 className="font-semibold text-3xl">Upload a seismic file</h1>
+                                    <p className="text-lg">Start by uploading a seismic file to interact with the tool</p>
+                                    <Button onClick={handleFileUpload}>
+                                        <FiUpload />
+                                        Upload file
+                                    </Button>
                                 </div>
-                            </div>
-                            <LineGraph 
-                                xData={traces.length !== 0 ? [tr["xdata"]] : []} 
-                                yData={traces.length !== 0 ? [tr["ydata"]] : []} 
-                                graphTitle="" 
-                                showLegend={true} 
-                                legendTitle={[`Component: ${tr.stats.channel}`]}
-                                height="180px"
-                            />
-                        </div>
-                    ))
-                }
+                            ) : (
+                                <>
+                                    <Graphs 
+                                        traces={traces} 
+                                        setTraces={setTraces}
+                                        activatedMenuIndex={activatedMenuIndex}
+                                        setActivatedMenuIndex={setActivatedMenuIndex}
+                                    />
+                                </>
+                            )
+                        }
+                    </>
+                </div>
             </div>
-        </Section>
+        </>
     )
 }

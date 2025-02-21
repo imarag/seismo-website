@@ -86,7 +86,7 @@ export default function EditSeismicFile() {
         setFileData(jsonData)
     }
     return (
-        <Section>
+        <>
             <h1 className="text-center text-2xl">Upload a data file</h1>
             <Button variant="secondary" position="center" onClick={() => setTraces([...traces, defaultTraceObject])}>
                 Upload Data
@@ -259,7 +259,7 @@ export default function EditSeismicFile() {
                     </Collapse>
                 ))
             }
-        </Section>
+        </>
     )
 }
 

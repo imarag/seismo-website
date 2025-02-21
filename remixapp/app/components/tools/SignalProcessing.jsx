@@ -486,7 +486,7 @@ function ProcessingFilters({appliedProcesses, handleRemoveProcesses}) {
 
 export default function SignalProcessingPage() {
     
-    const [error, setError] = useState(null);
+    const [error, setError] = useState([]);
     const [success, setSuccess] = useState(null);
     const [loading, setLoading] = useState(false)
     const [traces, setTraces] = useState([]);
@@ -556,7 +556,7 @@ export default function SignalProcessingPage() {
     return (
         <div>
             {
-                error && <Message setError={setError} setSuccess={setSuccess} type="error" text={error} />
+                error.length !==0 && <Message setError={setError} setSuccess={setSuccess} type="error" text={error} />
             }
             {
                 success && <Message setError={setError} setSuccess={setSuccess} type="success" text={success} />
