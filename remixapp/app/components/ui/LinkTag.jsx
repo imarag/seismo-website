@@ -19,7 +19,7 @@ export default function LinkTag({
     };
 
     const variants = {
-        default: "text-blue-600 hover:underline", // Simple colored link
+        default: "text-info hover:underline", // Simple colored link
         button: `btn btn-primary ${outline ? "btn-outline" : ""} ${sizes[size]}`, // Button-style link
     };
 

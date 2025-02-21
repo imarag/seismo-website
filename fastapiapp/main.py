@@ -21,7 +21,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 async def http_exception_handler(request, exc):
         return JSONResponse(
             status_code=404,
-            content={"error_message": str(exc.detail)},
+            content={"error_message": [str(exc.detail)]},
         )
 
 # this is for errors related to validations of pydantic
@@ -31,7 +31,7 @@ async def validation_exception_handler(request, exc):
     errors = exc.errors()
     return JSONResponse(
             status_code=404,
-            content={"error_message": ", ".join([err["msg"] for err in errors])}
+            content={"error_message": [err["msg"] for err in errors]}
         )
 
 @app.get("/test")

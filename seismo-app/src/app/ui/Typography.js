@@ -34,10 +34,10 @@ export function SubTitle({ text }) {
     );
 }
 
-export function Paragraph({ text, small = false, className }) {
+export function Paragraph({ children, small = false, className }) {
     return (
         <p className={`${small === true ? "text-sm" : "text-lg"} ${className}`}>
-            {text}
+            { children }
         </p>
     )
 }

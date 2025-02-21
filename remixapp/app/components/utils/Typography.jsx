@@ -17,10 +17,10 @@ export function SubTitle({ text, className=null }) {
     );
 }
 
-export function Paragraph({ text, small = false, className }) {
+export function Paragraph({ children, small = false, className }) {
     return (
-        <p className={`${small === true ? "text-sm" : "text-lg"} ${className || ""}`}>
-            { text }
+        <p className={`my-0 py-0 ${small === true ? "text-sm" : "text-lg"} ${className || ""}`}>
+            { children }
         </p>
     )
 }

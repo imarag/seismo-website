@@ -68,14 +68,14 @@ export default function ContactForm() {
                     setLoading(false);
                     setSuccess("You have successfully sent the message. Thank you!");
                     setTimeout(() => setSuccess(null), 5000);
-                    setError(null);
+                    setError([]);
                     form.current.reset();
                 },
                 (error) => {
                     setLoading(false);
                     setSuccess(null);
                     setError(error.text);
-                    setTimeout(() => setError(null), 5000);
+                    setTimeout(() => setError([]), 5000);
                 }
             );
     }

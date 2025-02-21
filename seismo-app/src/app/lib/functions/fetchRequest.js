@@ -40,7 +40,7 @@ export default async function fetchRequest({
             setError(errorData["error_message"] || `Error: ${response.statusText}`);
             setSuccess(null);
             setTimeout(() => {
-                setError(null); // Clear error message after 5 seconds
+                setError([]); // Clear error message after 5 seconds
             }, 5000);
             throw new Error(errorData["error_message"] || `Error: ${response.statusText}`);
         }
@@ -54,7 +54,7 @@ export default async function fetchRequest({
         if (successMessage) {
             setSuccess(successMessage);
         }
-        setError(null); 
+        setError([]); 
         setTimeout(() => {
             setSuccess(null);
         }, 8000);
@@ -65,7 +65,7 @@ export default async function fetchRequest({
         setError(error.message);
         setSuccess(null);
         setTimeout(() => {
-            setError(null);
+            setError([]);
         }, 8000);
         throw error;
     } finally {

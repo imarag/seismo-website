@@ -43,8 +43,10 @@ export default function ToolsSlugPage() {
                         </Collapse>
                     </AlignVertical>
                 </div>
-                <div className="mt-10">
-                    <ToolComponent />
+                <div className="mt-24">
+                    <AlignVertical align="stretch">
+                        <ToolComponent />
+                    </AlignVertical>
                 </div>
             </Container>
         </Section>

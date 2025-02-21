@@ -55,7 +55,7 @@ export default function ContactForm() {
         .then(
             () => {
                 setLoading(false)
-                setError(null)
+                setError([])
             },
             (error) => {
                 setError(error.text)

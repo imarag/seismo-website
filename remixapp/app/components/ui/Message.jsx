@@ -3,7 +3,7 @@ import { MdError } from "react-icons/md";
 import { FaCheckCircle } from "react-icons/fa";
 
 export default function Message({ type, text, setError, setSuccess }) {
-    const messageBase = "flex flex-row items-center"
+    const messageBase = "flex flex-row items-center gap-4"
     const messagePosition = "fixed end-8 bottom-8 z-40"
     const messageText = "text-sm text-start font-semibold"
     const messageSize = "w-80 p-6"
@@ -15,7 +15,7 @@ export default function Message({ type, text, setError, setSuccess }) {
             <button 
                 className="btn btn-ghost btn-sm absolute end-1 top-1"
                 onClick={() => {
-                    setError(null)
+                    setError([])
                     setSuccess(null)
                 }}
             >
@@ -30,9 +30,17 @@ export default function Message({ type, text, setError, setSuccess }) {
                     )
                 }
             </div>
-            <p className="flex-grow">
-                { text }
-            </p>
+            <div className="flex-grow">
+                {
+                    type === "error" ? (
+                        text.map((errorElement, ind) => (
+                            <p key={ind}>{ errorElement }</p>
+                        ))
+                    ) : (
+                        <p>{ text }</p>
+                    )
+                }
+            </div>
         </div>
     )
 }

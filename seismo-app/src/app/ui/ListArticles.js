@@ -13,7 +13,9 @@ export default function ListArticles({ query }) {
     ))
     return (
         <div className="flex flex-col gap-8">
-            <Paragraph text={`${filteredArticles.length !== 0 ? filteredArticles.length : "No"} articles found`} />
+            <Paragraph>
+                {`${filteredArticles.length !== 0 ? filteredArticles.length : "No"} articles found`}
+            </Paragraph>
             {
                 filteredArticles.map(article => (
                     <div key={article.title} className="flex flex-row gap-8 flex-wrap md:flex-nowrap">

@@ -26,7 +26,9 @@ export default async function ToolSlugPage({ params }) {
                 <SubTitle text={selectedTool.subtitle} />
                 <div className="max-w-5xl mx-auto">
                     <AlignVertical>
-                        <Paragraph text={selectedTool.description} className="mt-20"/>
+                        <Paragraph className="mt-20">
+                            {selectedTool.description}
+                        </Paragraph>
                         <Collapse label="User guide">
                             <p>{ selectedTool.userGuide }</p>
                         </Collapse>

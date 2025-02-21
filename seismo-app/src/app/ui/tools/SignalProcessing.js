@@ -221,7 +221,7 @@ export default function SignalProcessing() {
 
         const jsonData = await response.json();
 
-        setError(null)
+        setError([])
         setTraces(
             traces.map(trace => {
                 const updatedTrace = jsonData.find((el) => el.trace_id === trace.trace_id);
@@ -269,7 +269,7 @@ export default function SignalProcessing() {
         }
 
         const jsonData = await response.json();
-        setError(null)
+        setError([])
         setTraces(
             traces.map(trace => {
                 const updatedTrace = jsonData.find((el) => el.trace_id === trace.trace_id);
@@ -310,7 +310,7 @@ export default function SignalProcessing() {
         }
 
         const jsonData = await response.json();
-        setError(null)
+        setError([])
         setTraces(
             traces.map(trace => {
                 const updatedTrace = jsonData.find((el) => el.trace_id === trace.trace_id);
@@ -679,7 +679,7 @@ export default function SignalProcessing() {
     //             }
         
     //             const jsonData = response.json();
-    //             setError(null)
+    //             setError([])
 
     //             allJSONData = jsonData; // Overwrite with the latest fetch result
     //         }
@@ -735,7 +735,7 @@ export default function SignalProcessing() {
         
             //     const jsonData = await response.json();
         
-            //     setError(null)
+            //     setError([])
             //     setTraces(
             //         traces.map(trace => {
             //             const updatedTrace = jsonData.find((el) => el.trace_id === trace.trace_id);
@@ -783,7 +783,7 @@ export default function SignalProcessing() {
             //     }
         
             //     const jsonData = await response.json();
-            //     setError(null)
+            //     setError([])
             //     setTraces(
             //         traces.map(trace => {
             //             const updatedTrace = jsonData.find((el) => el.trace_id === trace.trace_id);
@@ -824,7 +824,7 @@ export default function SignalProcessing() {
             //     }
         
             //     const jsonData = await response.json();
-            //     setError(null)
+            //     setError([])
             //     setTraces(
             //         traces.map(trace => {
             //             const updatedTrace = jsonData.find((el) => el.trace_id === trace.trace_id);
@@ -885,7 +885,7 @@ export default function SignalProcessing() {
             //     }
         
             //     const jsonData = await response.json();
-            //     setError(null)
+            //     setError([])
             //     setTraces(
             //         traces.map(trace => {
             //             const updatedTrace = jsonData.find((el) => el.trace_id === trace.trace_id);

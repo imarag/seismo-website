@@ -84,7 +84,7 @@ function MainMenu({ traces, setTraces, loading, setLoading, setError, setSuccess
 
         const jsonData = await response.json();
 
-        setError(null)
+        setError([])
         setTraces(
             traces.map(trace => {
                 const updatedTrace = jsonData.find((el) => el.trace_id === trace.trace_id);
@@ -132,7 +132,7 @@ function MainMenu({ traces, setTraces, loading, setLoading, setError, setSuccess
         }
 
         const jsonData = await response.json();
-        setError(null)
+        setError([])
         setTraces(
             traces.map(trace => {
                 const updatedTrace = jsonData.find((el) => el.trace_id === trace.trace_id);
@@ -173,7 +173,7 @@ function MainMenu({ traces, setTraces, loading, setLoading, setError, setSuccess
         }
 
         const jsonData = await response.json();
-        setError(null)
+        setError([])
         setTraces(
             traces.map(trace => {
                 const updatedTrace = jsonData.find((el) => el.trace_id === trace.trace_id);
