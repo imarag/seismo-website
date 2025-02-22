@@ -23,7 +23,6 @@ import DistanceBetweenPoints from "@/components/tools/DistanceBetweenPoints"
 import FileToMseed from "@/components/tools/FileToMseed"
 import PickArrivals from "@/components/tools/PickArrivals"
 import SignalProcessing from "@/components/tools/SignalProcessing"
-
 export const articles = [
   {
     id: 1,
@@ -35,6 +34,7 @@ export const articles = [
     slug: "obspy",
     markdown: ObsPyMarkdown,
     completed: true,
+    keywords: ["Python", "ObsPy", "seismology"]
   },
   {
     id: 2,
@@ -46,6 +46,7 @@ export const articles = [
     slug: "site-effect",
     markdown: SiteEffectMarkdown,
     completed: true,
+    keywords: ["site effects", "earthquake risk", "seismic ground motion"]
   },
   {
     id: 3,
@@ -57,6 +58,7 @@ export const articles = [
     slug: "introduction-to-seismology",
     markdown: SeismologyIntroMarkdown,
     completed: true,
+    keywords: ["seismology", "earthquake science", "seismic waves"]
   },
   {
     id: 4,
@@ -68,6 +70,7 @@ export const articles = [
     slug: "file-manipulation",
     markdown: FileManipulationMarkdown,
     completed: true,
+    keywords: ["Python", "file management", "automation"]
   },
   {
     id: 5,
@@ -79,6 +82,7 @@ export const articles = [
     slug: "matplotlib",
     markdown: MatplotlibMarkdown,
     completed: true,
+    keywords: ["Matplotlib", "seismic data", "visualization"]
   },
   {
     id: 6,
@@ -90,8 +94,10 @@ export const articles = [
     slug: "compute-fourier-on-window",
     markdown: ComputeFourierOnWindowMarkdown,
     completed: true,
+    keywords: ["Fourier analysis", "seismic data", "signal processing"]
   }
 ];
+
 
 export const tools = [
 

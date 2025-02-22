@@ -4,9 +4,11 @@ import Section from "@/components/utils/Section";
 import Container from "@/components/utils/Container"
 import Image from "@/components/utils/Image"
 import LinkTag from "@/components/ui/LinkTag";
+import Badge from "@/components/utils/Badge"
 import { CardTitle, CardParagraph } from "@/components/ui/CardElements"
 import { useState } from "react";
 import { articles } from "@/utils/topics"
+import { IoIosArrowRoundForward } from "react-icons/io";
 
 export default function ArticlesPage() {
 
@@ -52,14 +54,31 @@ export default function ArticlesPage() {
                                 </div>
                                 <div className="flex-shrink flex-grow">
                                     <CardTitle text={article.title} center={false} />
+                                    <div className="flex flex-row items-center gap-2">
+                                        {
+                                            article.keywords.map(keyword => (
+                                                <Badge 
+                                                    key={keyword} 
+                                                    type="info" 
+                                                    outline={true}
+                                                    size="small"
+                                                >{ keyword }</Badge>
+                                            ))
+                                        }
+                                    </div>
                                     <CardParagraph text={article.description} center={false} />
-                                    {
-                                        article.completed ? (
-                                            <LinkTag href={`/article/${article.slug}`}>Go to page</LinkTag>
-                                        ) : (
-                                            <span className="font-bold">Work in Progress</span>
-                                        )
-                                    }
+                                    <div className="mt-2">
+                                        {
+                                            article.completed ? (
+                                                <LinkTag href={`/article/${article.slug}`}>
+                                                    Go to page
+                                                    <IoIosArrowRoundForward className="size-5"/>
+                                                </LinkTag>
+                                            ) : (
+                                                <span className="font-bold">Work in Progress</span>
+                                            )
+                                        }
+                                    </div>
                                 </div>
                             </div>
                         ))
