@@ -49,6 +49,7 @@ function PSElements({ traces, selectedWave, setSelectedWave, handleDeleteWave, f
                         variant="error"
                         size="extra-small"
                         outline={true}
+                        toolTipText="Delete the selected P wave arrival"
                     >
                         P
                         <IoMdClose className="size-4"/>
@@ -62,6 +63,7 @@ function PSElements({ traces, selectedWave, setSelectedWave, handleDeleteWave, f
                         variant="error"
                         size="extra-small"
                         outline={true}
+                        toolTipText="Delete the selected S wave arrival"
                     >
                         S
                         <IoMdClose className="size-4"/>
@@ -173,6 +175,7 @@ function MainMenu({ traces, setTraces, handleFilterChange, loading, setLoading, 
                         onClick={handleFileUpload} 
                         variant="ghost"
                         size="small"
+                        toolTipText="Upload a seismic file"
                     >
                         <FiUpload />
                         Upload file
@@ -182,6 +185,7 @@ function MainMenu({ traces, setTraces, handleFilterChange, loading, setLoading, 
                         size="small"
                         onClick={handleSaveArrivals} 
                         disabled={traces.length===0 || (formattedArrivals["P"]===null && formattedArrivals["S"]===null)} 
+                        toolTipText="Download the selected P & S wave arrivals in a txt file"
                     >
                         <MdOutlineFileDownload />
                         Download arrivals
@@ -403,7 +407,11 @@ export default function ArrivalsPickingPage() {
                                 <div className="flex flex-col items-center justify-center gap-3 absolute top-1/2 start-1/2 -translate-x-1/2 -translate-y-1/2">
                                     <h1 className="font-semibold text-3xl">Upload a seismic file</h1>
                                     <p className="text-lg">Start by uploading a seismic file to interact with the tool</p>
-                                    <Button onClick={handleFileUpload}>
+                                    <Button 
+                                        onClick={handleFileUpload}
+                                        loading={loading}
+                                        toolTipText="Upload a seismic file"
+                                    >
                                         <FiUpload />
                                         Upload file
                                     </Button>

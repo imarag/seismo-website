@@ -41,6 +41,7 @@ function TraceInfoMenu({ activatedMenuIndex, setActivatedMenuIndex, traces, setT
                                 variant="ghost" 
                                 size="small"
                                 onClick={() => setActivatedMenuIndex(null)}
+                                toolTipText="Close the menu."
                             >
                                 <IoMdClose />
                             </Button>
@@ -143,6 +144,7 @@ function MainMenu({ traces, setTraces, setLoading, setError, setSuccess, handleF
                     onClick={handleFileUpload} 
                     variant="ghost"
                     size="small"
+                    toolTipText="Upload a seismic file"
                 >
                     <FiUpload />
                     Upload file
@@ -152,6 +154,7 @@ function MainMenu({ traces, setTraces, setLoading, setError, setSuccess, handleF
                     size="small"
                     onClick={() => setTraces(backupTraces)} 
                     disabled={traces.length===0} 
+                    toolTipText="Restore the initial uploaded traces"
                 >
                     <RiResetLeftFill />
                     Reset traces
@@ -161,6 +164,7 @@ function MainMenu({ traces, setTraces, setLoading, setError, setSuccess, handleF
                     size="small"
                     onClick={() => handleDownloadFile("mseed", traces, traces[0].stats.record_name + "_download")} 
                     disabled={traces.length===0} 
+                    toolTipText="Download the updated traces to MiniSEED file format"
                 >
                     Download to MSEED
                     <MdOutlineFileDownload />
@@ -170,6 +174,7 @@ function MainMenu({ traces, setTraces, setLoading, setError, setSuccess, handleF
                     size="small"
                     onClick={() => handleDownloadFile("json", traces.map(tr => tr.stats), traces[0].stats.record_name + "_header")} 
                     disabled={traces.length===0} 
+                    toolTipText="Download the header information of updated traces in a json format"
                 >
                     Download header
                     <MdOutlineFileDownload />
@@ -179,6 +184,7 @@ function MainMenu({ traces, setTraces, setLoading, setError, setSuccess, handleF
                     size="small"
                     onClick={() => handleDownloadFile("json", traces.map(tr => ({"component": tr.stats.channel, "data": tr.ydata})), traces[0].stats.record_name + "_data")}
                     disabled={traces.length===0} 
+                    toolTipText="Download the data values of the traces in a json file format"
                 >
                     Download Data samples
                     <MdOutlineFileDownload />
@@ -214,6 +220,7 @@ function Graphs({ traces, setTraces, activatedMenuIndex, setActivatedMenuIndex }
                                 onClick={() => handleOptionsMenuButtonClick(ind)}
                                 variant="ghost"
                                 size="small"
+                                toolTipText="Open the trace header menu. Feel free to update the fields."
                             >
                                 <PiGearLight />
                             </Button>
@@ -221,6 +228,7 @@ function Graphs({ traces, setTraces, activatedMenuIndex, setActivatedMenuIndex }
                                 onClick={() => handleDeleteTrace(tr.trace_id)}
                                 variant="ghost"
                                 size="small"
+                                toolTipText="Remove the respective trace."
                             >
                                 <MdDeleteOutline />
                             </Button>
@@ -316,7 +324,10 @@ export default function EditSeismicFile() {
                                 <div className="flex flex-col items-center justify-center gap-3 absolute top-1/2 start-1/2 -translate-x-1/2 -translate-y-1/2">
                                     <h1 className="font-semibold text-3xl">Upload a seismic file</h1>
                                     <p className="text-lg">Start by uploading a seismic file to interact with the tool</p>
-                                    <Button onClick={handleFileUpload}>
+                                    <Button 
+                                        onClick={handleFileUpload}
+                                        toolTipText="Upload a seismic file"
+                                    >
                                         <FiUpload />
                                         Upload file
                                     </Button>

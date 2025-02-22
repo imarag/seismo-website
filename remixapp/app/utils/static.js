@@ -9,14 +9,14 @@ export const socialMediaInfo = [
 ]
 
 export const fastapiEndpoints = {
-    "CALCULATE-DISTANCE": `${serverUrl}/utilities/calculate-distance`,
-    "UPLOAD-SEISMIC-FILE": `${serverUrl}/utilities/upload-seismic-file`,
-    "UPLOAD-DATA-FILE": `${serverUrl}/utilities/upload-data-file`,
-    "DOWNLOAD-SEISMIC-FILE": `${serverUrl}/utilities/download-seismic-file`,
-    "DOWNLOAD-TEST-FILE": `${serverUrl}/utilities/download-test-file`,
-    "DOWNLOAD-FILE": `${serverUrl}/utilities/download-file`,
-    "SAVE-ARRIVALS": `${serverUrl}/utilities/save-arrivals`,
-    "CONVERT-TO-MSEED": `${serverUrl}/utilities/convert-to-mseed`,   
+    "CALCULATE-DISTANCE": `${serverUrl}/core/calculate-distance`,
+    "UPLOAD-SEISMIC-FILE": `${serverUrl}/core/upload-seismic-file`,
+    "UPLOAD-DATA-FILE": `${serverUrl}/core/upload-data-file`,
+    "DOWNLOAD-SEISMIC-FILE": `${serverUrl}/core/download-seismic-file`,
+    "DOWNLOAD-TEST-FILE": `${serverUrl}/core/download-test-file`,
+    "DOWNLOAD-FILE": `${serverUrl}/core/download-file`,
+    "SAVE-ARRIVALS": `${serverUrl}/core/save-arrivals`,
+    "CONVERT-TO-MSEED": `${serverUrl}/core/convert-to-mseed`,   
     "TRIM-WAVEFORM": `${serverUrl}/signal-processing/trim`,
     "TAPER-WAVEFORM": `${serverUrl}/signal-processing/taper`,
     "DETREND-WAVEFORM": `${serverUrl}/signal-processing/detrend`,

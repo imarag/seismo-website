@@ -12,7 +12,7 @@ import { IoMdClose } from "react-icons/io";
 import { IoCut, IoFilter } from "react-icons/io5";
 import { BsSoundwave } from "react-icons/bs";
 import { MdAlignVerticalCenter, MdArrowDropDown } from "react-icons/md";
-
+import { downloadURI } from "@/utils/functions";
 
 function MenuButton({ onClick, disabled=false }) {
     return (
@@ -248,13 +248,43 @@ function MainMenu({ traces, setTraces, loading, setLoading, setError, setSuccess
         setSigProcOptions(newProcessingOptions)
     }
 
+    async function handleDownloadFile(fileType, data, downloadName) {
+        const blobData = await fetchRequest({
+            endpoint: fastapiEndpoints["DOWNLOAD-FILE"],
+            setError: setError,
+            setSuccess: setSuccess,
+            setLoading: setLoading,
+            method: "POST",
+            data: {data: data, file_type: fileType},
+            returnType: "blob",
+        });
+
+        const url = window.URL.createObjectURL(blobData);
+        downloadURI(url, downloadName + "." + fileType)
+    }
+
     return (
         <>
             <div className="flex flex-row items-center justify-center">
                 <div className="grow-0 border-r">
-                    <Button onClick={handleFileUpload} loading={loading} variant="ghost">
+                    <Button 
+                        onClick={handleFileUpload} 
+                        loading={loading} 
+                        variant="ghost"
+                        toolTipText="Upload a seismic file"
+                    >
                         <FiUpload />
                         Upload file
+                    </Button>
+                    <Button 
+                        loading={loading} 
+                        variant="ghost"
+                        onClick={() => handleDownloadFile("mseed", traces, traces[0].stats.record_name + "_download")} 
+                        disabled={traces.length===0} 
+                        toolTipText="Download the processed seismic file into MiniSEED file format"
+                    >
+                        <FiUpload />
+                        Download To MSEED
                     </Button>
                 </div>
                 <div className="grow">
@@ -471,7 +501,12 @@ function ProcessingFilters({appliedProcesses, handleRemoveProcesses}) {
                                 ))
                             }
                             <span className="ms-5">
-                                <Button variant="error" size="extra-small" onClick={handleRemoveProcesses}>
+                                <Button 
+                                    variant="error" 
+                                    size="extra-small" 
+                                    onClick={handleRemoveProcesses}
+                                    toolTipText="Remove all applied filters"
+                                >
                                     remove all
                                     <IoMdClose />
                                 </Button>
@@ -582,7 +617,11 @@ export default function SignalProcessingPage() {
                             <div className="flex flex-col items-center justify-center gap-3 absolute top-1/2 start-1/2 -translate-x-1/2 -translate-y-1/2">
                                 <h1 className="font-semibold text-3xl">Upload a seismic file</h1>
                                 <p className="text-lg">Start by uploading a seismic file to interact with the tool</p>
-                                <Button onClick={handleFileUpload} loading={loading}>
+                                <Button 
+                                    onClick={handleFileUpload} 
+                                    loading={loading}
+                                    toolTipText="Upload a seismic file"
+                                >
                                     <FiUpload />
                                     Upload file
                                 </Button>

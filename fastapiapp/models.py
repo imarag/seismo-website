@@ -1,7 +1,7 @@
-from pydantic import BaseModel, Field, ValidationError, model_validator
+from pydantic import BaseModel, Field, model_validator
 from typing import Literal
 from typing_extensions import Self
-import datetime 
+from typing import Any
 
 
 class SeismicDataKeys(BaseModel):
@@ -94,3 +94,20 @@ class HVSRData(BaseModel):
 class HVSRParams(BaseModel):
     fourier_data: list[HVSRData]
 
+class DownloadFileParams(BaseModel):
+    data: Any
+    file_type: Literal["txt", "mseed", "json"] = "txt"
+
+class ArrivalsParams(BaseModel):
+    Parr: float | None = None
+    Sarr: float | None = None
+
+    @model_validator(mode='after')
+    def check_arrivals(self) -> Self:
+        if self.Parr is None and self.Sarr is None:
+            raise ValueError("At least one wave arrival must be selected (P arrival or S arrival) to use this option!")
+    
+        if (self.Parr is not None and self.Sarr is not None) and (self.Sarr <= self.Parr):
+            raise ValueError("The S wave arrival cannot be less or equal to the P wave arrival!")
+        
+        return self
