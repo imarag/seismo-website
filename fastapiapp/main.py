@@ -1,6 +1,6 @@
+from routers import core, signal_processing, handle_seismic_traces
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import core, signal_processing, handle_seismic_traces
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
@@ -38,8 +38,16 @@ origins = [
     "http://seismo-website.vercel.app",
     "https://127.0.0.1:8000",
     "http://127.0.0.1:8000",
+    "https://127.0.0.1:5000",
+    "http://127.0.0.1:5000",
+    "https://127.0.0.1:5175",
+    "http://127.0.0.1:5175",
     "https://127.0.0.1:3000",
     "http://127.0.0.1:3000",
+    "https://localhost:5000",
+    "http://localhost:5000",
+    "https://localhost:5175",
+    "http://localhost:5175",
     "https://localhost:8000",
     "http://localhost:8000",
     "https://localhost:3000",
@@ -59,4 +67,4 @@ app.add_middleware(
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True, log_level="info")
+    uvicorn.run("main:app", host="127.0.0.1", port=5000, reload=True, log_level="info")

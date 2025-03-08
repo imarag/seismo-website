@@ -19,7 +19,7 @@ export function SubTitle({ text, className=null }) {
 
 export function Paragraph({ children, small = false, className }) {
     return (
-        <p className={`my-0 py-0 ${small === true ? "text-sm" : "text-lg"} ${className || ""}`}>
+        <p className={`my-0 py-0 font-light ${small === true ? "text-sm" : "text-lg"} ${className || ""}`}>
             { children }
         </p>
     )

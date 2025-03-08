@@ -58,6 +58,7 @@ export default async function fetchRequest({
             setSuccess(null);
         }, 8000);
 
+
         return result;
     } catch (error) {
         console.error(`Fetch request failed: ${error.message}`);

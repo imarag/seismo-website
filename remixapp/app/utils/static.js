@@ -1,7 +1,7 @@
 import { FaFacebook, FaInstagram, FaLinkedin } from "react-icons/fa";
 
-// export const serverUrl = "http://127.0.0.1:8000"
-export const serverUrl = "https://seismo-website.onrender.com/"
+export const serverUrl = "http://127.0.0.1:5000"
+// export const serverUrl = "https://seismo-website.onrender.com/"
 
 export const socialMediaInfo = [
     {app: "facebook", url: "https://www.facebook.com/giannis.mar.5/", icon: FaFacebook},
@@ -12,6 +12,7 @@ export const socialMediaInfo = [
 export const fastapiEndpoints = {
     "CALCULATE-DISTANCE": `${serverUrl}/core/calculate-distance`,
     "UPLOAD-SEISMIC-FILE": `${serverUrl}/core/upload-seismic-file`,
+    "ADD-TRACE": `${serverUrl}/handle-seismic-traces/add-trace`,
     "UPLOAD-DATA-FILE": `${serverUrl}/core/upload-data-file`,
     "DOWNLOAD-SEISMIC-FILE": `${serverUrl}/core/download-seismic-file`,
     "DOWNLOAD-TEST-FILE": `${serverUrl}/core/download-test-file`,

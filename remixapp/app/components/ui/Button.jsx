@@ -29,7 +29,7 @@ export default function Button({
     };
 
     return (
-        <div className="tooltip" data-tip={toolTipText}>
+        <div className="tooltip z-50" data-tip={toolTipText}>
             <button 
                 className={`${baseStyles} ${variants[variant]} ${outline ? "btn-outline" : ""} ${sizes[size]} ${className}`} 
                 type={type}

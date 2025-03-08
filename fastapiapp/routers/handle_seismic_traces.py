@@ -1,103 +1,93 @@
-from fastapi import APIRouter
-from pydantic import BaseModel, Field
-from obspy.core import read, UTCDateTime, Stream, Trace
-import datetime 
+from fastapi import APIRouter, Form, UploadFile, HTTPException, File
+import pandas as pd
+from pathlib import Path
+from datetime import datetime, timedelta
+from models import AddTraceParams, TraceParams, TraceStats
 import numpy as np
-from internals.config import Settings, logger
-from functions import convert_stream_to_traces
+from typing import Annotated
+from internals.config import logger
+from functions import convert_stream_to_traces_list
+from static import SupportedUploadFileTypes
 
 router = APIRouter(
     prefix="/handle-seismic-traces",
     tags=["handle seismic traces"],
 )
 
+def check_upload_data_params(df: pd.DataFrame, skip_rows: int, column: int):
+    if df.empty:
+        error_message = f"The provided file is empty"
+        logger.error(error_message)
+        raise HTTPException(status_code=404, detail=error_message)
 
-# class AddTraceParams(BaseModel):
-#     sampling_rate: float
-#     station: str = ""
-#     data: list
-#     channel: str = Field(pattern="^[A-Za-z][A-Za-z0-9]?$")
-#     start_date: datetime.date = datetime.date(1970, 1, 1)
-#     start_time: datetime.time = datetime.time(0, 0, 0)
+    if skip_rows >= len(df):
+        error_message = f"The 'skip rows' option is greater or equal to the total rows of the file!"
+        logger.error(error_message)
+        raise HTTPException(status_code=404, detail=error_message)
 
+    if column > len(df.columns):
+        error_message = f"Invalid column number {column}. The provided column is greater than the total column of the file. Please select a valid column between 1 and {len(df.columns)}."
+        logger.error(error_message)
+        raise HTTPException(status_code=404, detail=error_message)
 
-# @router.post("/add-trace")
-# def add_trace(add_trace_params: AddTraceParams):
+def read_file_to_dataframe(file_suffix: str, skip_rows: int, file_bytes):
+    if file_suffix == SupportedUploadFileTypes.CSV.value:
+        df = pd.read_csv(file_bytes, skiprows=skip_rows)
+    elif file_suffix == SupportedUploadFileTypes.TXT.value:
+        df = pd.read_csv(file_bytes, sep=r"\s+", skiprows=skip_rows)
+    elif file_suffix == SupportedUploadFileTypes.XLSX.value:
+        df = pd.read_excel(file_bytes, skiprows=skip_rows)
+    else:
+        error_message = f"The file format is not supported. Supported formats are: {','.join(SupportedUploadFileTypes.list_supported_extensions())}"
+        logger.error(error_message)
+        raise HTTPException(status_code=404, detail=error_message)
+    return df
 
-#     starttime = UTCDateTime(f"{add_trace_params.start_date} {add_trace_params.start_time}")
-
-#     trace_header = add_trace_params.model_dump()
-#     trace_header["starttime"] = starttime
- 
-#     new_trace = Trace(header=trace_header, data=np.array(trace_header["data"]))
     
-#     mseed_file_path = Settings.TEMP_DATA_PATH.value / Settings.MSEED_FILE_NAME.value
-#     stream = read(mseed_file_path)
-#     old_traces = stream.traces 
-#     new_traces = old_traces + [new_trace]
-#     stream.traces = new_traces
-
-#     stream.write(Settings.TEMP_DATA_PATH.value / Settings.MSEED_FILE_NAME.value)
-
-#     json_data = convert_stream_to_traces(stream)
-    
-#     return json_data
-
-
-# class UpdateTraceParams(BaseModel):
-#     sampling_rate: float
-#     station: str = ""
-#     data: list
-#     channel: str = Field(pattern="^[A-Za-z][A-Za-z0-9]?$")
-#     start_date: datetime.date = datetime.date(1970, 1, 1)
-#     start_time: datetime.time = datetime.time(0, 0, 0)
-
-
-# @router.post("/update-trace")
-# def update_trace(update_trace_params: UpdateTraceParams):
-
-#     starttime = UTCDateTime(f"{update_trace_params.start_date} {update_trace_params.start_time}")
-
-#     trace_header = update_trace_params.model_dump()
-#     trace_header["starttime"] = starttime
- 
-#     new_trace = Trace(header=trace_header, data=np.array(trace_header["data"]))
-    
-#     mseed_file_path = Settings.TEMP_DATA_PATH.value / Settings.MSEED_FILE_NAME.value
-#     stream = read(mseed_file_path)
-#     old_traces = stream.traces 
-#     new_traces = old_traces + [new_trace]
-#     stream.traces = new_traces
-
-#     stream.write(Settings.TEMP_DATA_PATH.value / Settings.MSEED_FILE_NAME.value)
-
-#     json_data = convert_stream_to_traces(stream)
-    
-#     return json_data
-
-
-# @router.get("/delete-trace/{trace_id}")
-# def delete_seismic_trace(trace_id):
-
-#     mseed_file_path = Settings.TEMP_DATA_PATH.value / Settings.MSEED_FILE_NAME.value
-#     stream = read(mseed_file_path)
+@router.post("/add-trace")
+def add_trace(
+        skiprows: Annotated[int, Form()],
+        column: Annotated[int, Form()],
+        station: Annotated[str, Form()],
+        component: Annotated[str, Form()],
+        startdate: Annotated[str, Form()],
+        starttime: Annotated[str, Form()],
+        fs: Annotated[float, Form()],
+        file: UploadFile = File()
+    ):
    
-#     traces = []
-#     for tr in stream.traces:
-#         if tr.get_id() == trace_id:
-#             continue 
-#         traces.append(tr)
+    filename = file.filename
+    if filename:
+        file_suffix = Path(filename).suffix.lower()
+    else:
+        error_message = "No file has been uploaded!"
+        logger.error(error_message)
+        raise HTTPException(status_code=404, detail=error_message)
     
-#     new_stream = Stream(traces=traces)
-
-#     if len(new_stream.traces) != 0:
-#         # write the uploaded file
-#         new_stream.write(
-#             Settings.TEMP_DATA_PATH.value / Settings.MSEED_FILE_NAME.value
-#         )
-#         # convert the uploaded mseed file to json
-#         json_data = convert_stream_to_traces(new_stream)
-#     else:
-#         return []
-
-#     return json_data
+    data_file = file.file
+    
+    try:
+        df = read_file_to_dataframe(file_suffix, skiprows, data_file)
+    except Exception as e:
+        error_message = f"Cannot read the uploaded file: {str(e)}"
+        logger.error(error_message)
+        raise HTTPException(status_code=500, detail=error_message)
+    
+    check_upload_data_params(df, skiprows, column)
+    npts = len(df)
+    total_duration_sec = npts / fs
+    starttime_dt = datetime.fromisoformat(f"{startdate} {starttime}")
+    trace_stats = TraceStats(
+        starttime = starttime_dt,
+        endtime = starttime_dt + timedelta(npts / fs),
+        station = station,
+        sampling_rate = fs,
+        npts = npts,
+        component = component,
+    )
+    trace_params = TraceParams(
+        ydata = df.iloc[:, column].tolist(),
+        xdata = list(np.linspace(0, total_duration_sec, npts)),
+        stats = trace_stats
+    )
+    return trace_params
