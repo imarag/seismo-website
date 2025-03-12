@@ -2,38 +2,21 @@ from pydantic import BaseModel, Field, model_validator, computed_field
 from typing import Literal
 from typing_extensions import Self
 import uuid
-import re
+from internals.static import SupportedDownloadFileTypes
 from typing import Any
 import datetime
 
 
 class TraceStats(BaseModel):
+    station: str = ""
+    component: str = ""
     starttime: datetime.datetime
     endtime: datetime.datetime
-    station: str = ""
     sampling_rate: float
     npts: int
-    component: str = ""
 
     class Config:
         extra = "ignore"
-
-    @model_validator(mode="after")
-    def validate_components(self) -> 'TraceStats':
-        """ Validate station name, sampling rate, npts, and component field """
-        if len(self.station) > 8:  # Ensure station name is up to 8 characters
-            raise ValueError("The station name must be up to 8 characters long!")
-        
-        if self.sampling_rate <= 0:
-            raise ValueError("The sampling rate must be greater than 0!")
-        
-        if self.npts <= 0:
-            raise ValueError("The number of sample points (npts) must be greater than 0!")
-        
-        # if not re.fullmatch(r"^[A-Za-z0-9_-]{1,8}$", self.component):
-        #     raise ValueError("Component code can only contain alphanumeric characters, underscores, or dashes and be between 1 and 8 characters long.")
-        
-        return self
     
     @computed_field
     def start_date(self) -> str:
@@ -53,7 +36,13 @@ class TraceStats(BaseModel):
     @computed_field
     def record_name(self) -> str:
         """ Extract the record name from starttime """
-        rec_name = f"{self.starttime.date().isoformat()}_{self.starttime.time().isoformat()}_{self.station}"
+        start_date_iso = self.starttime.date().isoformat()
+        start_time_iso = self.starttime.time().isoformat()
+        station = self.station
+        if station:
+            rec_name = f"{start_date_iso}_{start_time_iso}_{self.station}"
+        else:
+            rec_name = f"{start_date_iso}_{start_time_iso}"
         rec_name = rec_name.replace(":", "").replace("-", "")
         return rec_name
 
@@ -159,8 +148,8 @@ class HVSRParams(BaseModel):
     fourier_data: list[HVSRData]
 
 class DownloadFileParams(BaseModel):
-    data: Any
-    file_type: Literal["txt", "mseed", "json"] = "txt"
+    data: list | dict
+    file_type: str
 
 class ArrivalsParams(BaseModel):
     Parr: float | None = None

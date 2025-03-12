@@ -1,21 +1,26 @@
 from obspy.core import read, UTCDateTime, Trace, Stream
-from internals.config import logger
+from internals.config import Settings
 import numpy as np
 from pathlib import Path
 import json
-from fastapi import HTTPException
+from src.utils import RequestHandler
 from obspy.geodetics import gps2dist_azimuth
-from models import *
+from internals.models import (
+    TraceStats, TraceParams, TrimParams, TaperParams, 
+    DetrendParams, FilterParams, FourierParams, HVSRParams
+)
 
-def read_bytes_to_mseed(seismic_file_bytes: Any) -> Stream:
+settings = Settings()
+logger = settings.logger 
+
+def read_bytes_to_mseed(seismic_file_bytes) -> Stream:
     """Reads the given seismic file bytes and returns a Stream object."""
     try:
         stream = read(seismic_file_bytes)
         return stream
     except Exception as e:
         error_message = f"Invalid seismic file. Please refer to the ObsPy 'read' function documentation for supported file types. Error: {str(e)}"
-        logger.error(error_message)
-        raise HTTPException(status_code=404, detail=error_message)
+        RequestHandler.send_error(error_message, status_code=404)
     
 
 def validate_stream(stream: Stream) -> None:
@@ -25,22 +30,20 @@ def validate_stream(stream: Stream) -> None:
     # Check if the stream is empty
     if len(traces) == 0:
         error_message = "The stream provided is empty. There are no traces!"
-        logger.error(error_message)
-        raise HTTPException(status_code=404, detail=error_message)
+        RequestHandler.send_error(error_message, status_code=404)
     
     # Check if all traces have no data
     total_npts = [tr.stats.npts for tr in traces]
     if not any(total_npts):
         error_message = f"The traces have no data!"
-        logger.error(error_message)
-        raise HTTPException(status_code=404, detail=error_message)
+        RequestHandler.send_error(error_message, status_code=404)
     
     # Check for large traces that might cause performance issues
+    max_npts_allowed = settings.mseed_max_npts_allowed
     for tr in traces:
-        if tr.stats.npts > 500000:  # Threshold for performance issues (tune as necessary)
-            error_message = f"Trace contains an exceptionally large number of sampling points (npts > 500000). Consider trimming it before uploading!"
-            logger.error(error_message)
-            raise HTTPException(status_code=404, detail=error_message)
+        if tr.stats.npts > max_npts_allowed:  # Threshold for performance issues (tune as necessary)
+            error_message = f"A trace contains an exceptionally large number of sampling points (npts > {max_npts_allowed}). Consider trimming it before uploading!"
+            RequestHandler.send_error(error_message, status_code=404)
         
 
 def convert_stream_to_traces_list(stream: Stream) -> list[dict]:
@@ -57,7 +60,7 @@ def convert_stream_to_traces_list(stream: Stream) -> list[dict]:
     return traces_data_list
 
 
-def compute_distance(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
+def compute_distance_km(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
     """Calculates the distance in kilometers between two geographic points."""
     try:
         result = gps2dist_azimuth(lat1, lon1, lat2, lon2)[0] / 1000
@@ -65,39 +68,23 @@ def compute_distance(lat1: float, lon1: float, lat2: float, lon2: float) -> floa
         return result
     except Exception as e:
         error_message = f"Distance calculation failed: {e}"
-        logger.error(error_message)
-        raise HTTPException(status_code=500, detail=error_message)
+        RequestHandler.send_error(error_message, status_code=500)
 
 def write_json_to_file(data: list|dict, path: Path) -> None:
     """Helper function to write JSON data to a file."""
-    try:
-        with open(path, "w") as fw:
-            json.dump(data, fw)
-    except Exception as e:
-        error_message = f"Cannot write the json file: {str(e)}"
-        logger.error(error_message)
-        raise HTTPException(status_code=500, detail=error_message)
+    with open(path, "w") as fw:
+        json.dump(data, fw)
 
 def write_txt_to_file(data: list|dict, path: Path) -> None:
     """Helper function to write text data to a file."""
-    try:
-        with open(path, "w") as fw:
-            json_string = json.dumps(data)
-            fw.write(json_string)
-    except Exception as e:
-        error_message = f"Cannot write the txt file: {str(e)}"
-        logger.error(error_message)
-        raise HTTPException(status_code=500, detail=error_message)
+    with open(path, "w") as fw:
+        json_string = json.dumps(data)
+        fw.write(json_string)
 
 def write_mseed_to_file(data: list, path: Path) -> None:
     """Helper function to write miniseed data to a file."""
-    try:
-        stream = convert_traces_to_stream(data)
-        stream.write(path)
-    except Exception as e:
-        error_message = f"Cannot write the mseed file: {str(e)}"
-        logger.error(error_message)
-        raise HTTPException(status_code=500, detail=error_message)
+    stream = convert_traces_to_stream(data)
+    stream.write(path)
 
 def get_record_name(stream: Stream) -> str:
     """Generate a record name from the first trace in the stream"""
@@ -118,7 +105,7 @@ def convert_traces_to_stream(trace_list: list) -> Stream:
     """Construct a Stream object from the list of traces"""
     traces = []
     for tr_dict in trace_list:
-        trace_header = tr_dict.stats
+        trace_header = tr_dict["stats"]
         trace_header["starttime"] = UTCDateTime(trace_header["starttime"])
         trace_header["endtime"] = UTCDateTime(trace_header["endtime"])
         trace = Trace(data=np.array(tr_dict["ydata"]), header=trace_header)
@@ -139,8 +126,7 @@ def trim_trace(trim_params: TrimParams) -> list[dict]:
             )
         except Exception as e:
             error_message = f"Cannot trim the waveforms: {str(e)}"
-            logger.error(error_message)
-            raise HTTPException(status_code=500, detail=error_message)
+            RequestHandler.send_error(error_message, status_code=500)
         return_data_list.append({"trace_id": tr_dict.trace_id, "values": tr.data.tolist()})
     return return_data_list
   
@@ -159,8 +145,7 @@ def taper_trace(taper_params: TaperParams) -> list[dict]:
             )
         except Exception as e:
             error_message = f"Cannot taper the waveforms: {str(e)}"
-            logger.error(error_message)
-            raise HTTPException(status_code=500, detail=error_message)
+            RequestHandler.send_error(error_message, status_code=500)
         return_data_list.append({"trace_id": tr_dict.trace_id, "values": tr.data.tolist()})
     return return_data_list
 
@@ -176,8 +161,7 @@ def detrend_trace(detrend_params: DetrendParams) -> list[dict]:
             )
         except Exception as e:
             error_message = f"Cannot detrend the waveforms: {str(e)}"
-            logger.error(error_message)
-            raise HTTPException(status_code=500, detail=error_message)
+            RequestHandler.send_error(error_message, status_code=500)
         return_data_list.append({"trace_id": tr_dict.trace_id, "values": tr.data.tolist()})
     return return_data_list
 
@@ -202,8 +186,7 @@ def filter_trace(filter_params: FilterParams) -> list[dict]:
             
         except Exception as e:
             error_message = f"Cannot filter the waveforms: {str(e)}"
-            logger.error(error_message)
-            raise HTTPException(status_code=500, detail=error_message)
+            RequestHandler.send_error(error_message, status_code=500)
         return_data_list.append({"trace_id": tr_dict.trace_id, "values": tr.data.tolist()})
     return return_data_list
 
@@ -241,13 +224,11 @@ def compute_hvsr_spectra(hvsr_params: HVSRParams) -> list[float]:
 
     if len(horizontal_traces) not in [1, 2]: 
         error_message = "You have to provide a single or two horizontal components!"
-        logger.error(error_message)
-        raise HTTPException(status_code=404, detail=error_message)
+        RequestHandler.send_error(error_message, status_code=404)
         
     if vertical_trace is None: 
         error_message = "You have to provide a vertical component!"
-        logger.error(error_message)
-        raise HTTPException(status_code=404, detail=error_message)
+        RequestHandler.send_error(error_message, status_code=404)
     
     if len(horizontal_traces) == 1:
         horizontal_fourier = horizontal_traces[0]

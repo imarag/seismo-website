@@ -1,6 +1,12 @@
 from fastapi import APIRouter
-from functions import convert_traces_to_stream, trim_trace, taper_trace, detrend_trace, filter_trace, compute_fourier_spectra, compute_hvsr_spectra
-from models import TrimParams, TaperParams, DetrendParams, FilterParams, FourierParams, HVSRParams
+from src.functions import (
+    trim_trace, taper_trace, detrend_trace, 
+    filter_trace, compute_fourier_spectra, compute_hvsr_spectra
+    )
+from internals.models import (
+    TrimParams, TaperParams, DetrendParams, 
+    FilterParams, FourierParams, HVSRParams
+)
 
 router = APIRouter(
     prefix="/signal-processing",
