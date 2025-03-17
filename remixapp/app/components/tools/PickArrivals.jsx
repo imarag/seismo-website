@@ -176,7 +176,7 @@ function MainMenu({ traces, setTraces, handleFilterChange, loading, setLoading, 
     return (
         <>
             <div className="flex flex-row items-center justify-center">
-                <div className="grow-0 border-r">
+                <div className="grow-0 border-r border-neutral-500/20">
                     <Button 
                         onClick={handleFileUpload} 
                         variant="ghost"
@@ -386,7 +386,7 @@ export default function ArrivalsPickingPage() {
             }
             <input ref={inputRef} name="file" type="file" onChange={handleFileSelection} hidden />
             <div className="h-screen min-h-96">
-                <div className="border rounded-t-lg bg-base-100 p-3">
+                <div className="border border-neutral-500/20 rounded-t-lg bg-base-100 p-3">
                     <MainMenu 
                         traces={traces} 
                         setTraces={setTraces} 
@@ -403,7 +403,7 @@ export default function ArrivalsPickingPage() {
                         backupTraces={backupTraces}
                     />
                 </div>
-                <div className="border h-2/3 overflow-y-scroll p-4 relative">
+                <div className="border border-neutral-500/20 h-2/3 overflow-y-scroll p-4 relative">
                     <>
                         <div className="absolute start-1/2 ">
                             <Spinner visible={loading} />

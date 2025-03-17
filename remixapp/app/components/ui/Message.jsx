@@ -8,7 +8,7 @@ export default function Message({ type, text, setError, setSuccess }) {
     const messageText = "text-sm text-start font-semibold"
     const messageSize = "w-80 p-6"
     const messageBackground = `bg-base-100 shadow-2xl opacity-100`
-    const messageBorder = "border border-grey-300 rounded-lg"
+    const messageBorder = "border border-neutral-500/20 rounded-lg"
     const messageClassName = `${messageBase} ${messageBorder} ${messagePosition} ${messageText} ${messageSize} ${messageBackground}`
     return (
         <div className={messageClassName}>

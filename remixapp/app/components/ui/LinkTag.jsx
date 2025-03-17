@@ -10,7 +10,7 @@ export default function LinkTag({
     onClick,
     className = "", 
 }) {
-    const baseStyles = "inline-flex items-center gap-2 transition-all";
+    const baseStyles = "z-40 inline-flex items-center gap-2 transition-all";
 
     const sizes = {
         small: "btn-sm",
@@ -20,7 +20,7 @@ export default function LinkTag({
 
     const variants = {
         default: "text-info hover:underline", // Simple colored link
-        button: `btn btn-primary ${outline ? "btn-outline" : ""} ${sizes[size]}`, // Button-style link
+        button: `btn btn-primary rounded-md ${outline ? "btn-outline" : ""} ${sizes[size]}`, // Button-style link
     };
 
     const globalClass = `${baseStyles} ${variants[variant]} ${className}`;

@@ -22,20 +22,20 @@ import { downloadURI } from "@/utils/functions";
 function MenuButton({ onClick, disabled=false }) {
     return (
         <div className="mt-4 flex justify-center">
-            <Button onClick={onClick} size="small" disabled={disabled} >apply</Button>
+            <Button onClick={onClick} size="small" variant="primary" disabled={disabled} >apply</Button>
         </div>
     )
 }
 
 function MenuDropdown({ label, icon, children }) {
     return (
-        <div className="dropdown">
+        <div className="dropdown ">
             <div tabIndex={0} role="button" className="btn btn-ghost btn-md m-1">
                 { icon }
                 { label }
                 <Icon icon={MdArrowDropDown} />
             </div>
-            <div tabIndex={0} className="dropdown-content card card-compact bg-white rounded-lg z-[1] w-64 p-2 shadow-lg border">
+            <div tabIndex={0} className="dropdown-content card card-compact bg-base-100 border border-neutral-500/20 rounded-lg z-[1] w-64 p-2 shadow-lg">
                 <div className="card-body">
                     { children }
                 </div>
@@ -272,7 +272,7 @@ function MainMenu({ traces, setTraces, loading, setLoading, setError, setSuccess
     return (
         <>
             <div className="flex flex-row items-center justify-center">
-                <div className="grow-0 border-r">
+                <div className="grow-0 border-r border-neutral-500/20">
                     <Button 
                         onClick={handleFileUpload} 
                         loading={loading} 
@@ -614,7 +614,7 @@ export default function SignalProcessingPage() {
             }
             <input ref={inputRef} name="file" type="file" onChange={handleFileSelection} hidden />
             <div className="h-screen min-h-96">
-                <div className="border rounded-t-lg bg-base-100 p-1">
+                <div className="border border-neutral-500/20 rounded-t-lg bg-base-100 p-1">
                     <MainMenu 
                         traces={traces} 
                         setTraces={setTraces} 
@@ -627,7 +627,7 @@ export default function SignalProcessingPage() {
                         setAppliedProcesses={setAppliedProcesses}
                     />
                 </div>
-                <div className="border h-2/3 overflow-y-scroll p-4 relative">
+                <div className="border border-neutral-500/20 h-2/3 overflow-y-scroll p-4 relative">
                     {
                         traces.length === 0 ? (
                             <div className="flex flex-col items-center justify-center gap-3 absolute top-1/2 start-1/2 -translate-x-1/2 -translate-y-1/2">

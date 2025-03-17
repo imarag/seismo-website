@@ -11,13 +11,13 @@ export default function Footer() {
     const completedArticles = articles.filter(el => el.completed)
     
   return (
-    <div className="footer bg-base-100 p-10">
+    <div className="footer sm:footer-horizontal bg-base-100 p-10">
         <aside className="flex flex-col items-center justify-center gap-3">
             <Logo />
             <p className="text-center text-xl font-semibold">
                 Introduction To Seismology
             </p>
-            <SocialMedia bg="base-300" hoverBg="base-100" />
+            <SocialMedia/>
         </aside>
         <nav>
             <FooterTitle text="Sitemap" />

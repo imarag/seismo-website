@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import { FormElement } from "@/components/ui/UIElements";
 import LinkTag from "@/components/ui/LinkTag";
+import HRLine from "@/components/utils/HRLine";
 
 import { articles } from "@/utils/topics";
 import { tools } from "@/utils/topics";
@@ -42,31 +43,31 @@ export default function NavSearchBar({ setShowNavbar }) {
                 onChange={handleSearchBarChange}
             />
             {filteredTopics.length !== 0 && (
-                <div className="bg-base-200 rounded-3xl px-8 pt-5 pb-14 shadow-2xl w-80 h-80 absolute start-1/2 -translate-x-1/2 top-full mt-3">
+                <div className="bg-base-100 border border-neutral-500/50 rounded-lg px-8 pt-5 pb-14 shadow-2xl w-80 h-80 absolute start-1/2 -translate-x-1/2 top-full mt-3">
                     <button className="btn btn-sm btn-ghost absolute top-2 end-2" onClick={() => setFilteredTopics([])}>
                         <IoMdClose className="text-lg" />
                     </button>
                     <h1 className="font-semibold text-start text-lg">Search Results</h1>
-                    <hr className="my-3" />
+                    <HRLine className="my-3" />
                     <div className="h-full overflow-scroll ">
                         {
                             filteredTopics.map(tp => (
                                 <div key={tp.title}>
-                                    <div className={`badge badge-sm` + (tp.type === "tool" ? " badge-primary" : " badge-warning")}>seismic {tp.type === "tool" ? "tool" : "article"}</div>
-                                    <h1 className="font-normal text-md">
+                                    <div className={`badge badge-xs` + (tp.type === "tool" ? " badge-primary" : " badge-primary")}>seismic {tp.type === "tool" ? "tool" : "article"}</div>
+                                    <h1 className="font-semibold text-md ">
                                         {tp.title}
                                     </h1>
-                                    <p>
-                                        {`/${tp.type === "article" ? "articles" : "tools"}/${tp.slug}`}
+                                    <p className="font-light">
+                                        {`/${tp.type === "article" ? "article" : "tool"}/${tp.slug}`}
                                     </p>                 
                                     <LinkTag 
-                                        href={`/${tp.type === "article" ? "articles" : "tools"}/${tp.slug}`} 
+                                        href={`/${tp.type === "article" ? "article" : "tool"}/${tp.slug}`} 
                                         onClick={handleLinkClick}
                                     >
                                         <IoIosLink />
                                         <span>go to page</span>
                                     </LinkTag>
-                                    <hr className="my-4" />
+                                    <HRLine />
                                 </div>
                             ))
                         }

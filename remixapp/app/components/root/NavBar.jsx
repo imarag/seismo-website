@@ -7,13 +7,14 @@ import { AiOutlineMenu } from "react-icons/ai";
 import SideNavBar from "@/components/root/SideNavBar"
 import { useState } from "react";
 import Container from "@/components/utils/Container" 
+import ThemeControler from "@/components/root/ThemeControler";
 
 export default function NavBar() {
     const [showNavBar, setShowNavbar] = useState(false)
 
     return (
         <>
-            <nav className="fixed left-0 right-0 h-20 bg-white/30 backdrop-blur-md z-40">
+            <nav className="absolute left-0 right-0 h-20 bg-transparent backdrop-blur-md z-40">
                 <Container>
                     <div className="navbar flex flex-row relative">
                         <NavLink to="/">
@@ -26,7 +27,7 @@ export default function NavBar() {
                                         <li key={item.label}>
                                             <NavLink 
                                                 to={item.href} 
-                                                className={`text-lg`} 
+                                                className={`text-lg rounded-lg hover:bg-base-300`} 
                                                 onClick={() => setShowNavbar(false)}
                                             >
                                                 {item.label}
@@ -35,6 +36,9 @@ export default function NavBar() {
                                     ))
                                 }
                             </ul>
+                        </div>
+                        <div className="ms-12">
+                            <ThemeControler />
                         </div>
                         <button className="ms-auto btn text-xl btn-ghost lg:hidden" onClick={() => setShowNavbar(true)}>
                             <AiOutlineMenu />

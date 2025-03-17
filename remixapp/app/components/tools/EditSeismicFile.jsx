@@ -45,7 +45,7 @@ function NewTraceMenu({ setActivatedNewTraceMenu, newTraceOptions, setNewTraceOp
     const seismicParams = addTraceParameters.filter(obj => obj.category === "seismic parameters");
 
     return (
-        <div className="flex flex-col py-6 px-4 items-stretch gap-1 absolute start-0 bg-white border shadow rounded z-50 pt-10 w-72">
+        <div className="flex flex-col py-6 px-4 items-stretch gap-1 absolute start-0 bg-base-200 border border-neutral-500/20 shadow rounded z-50 pt-10 w-72">
             <div className="mb-2 z-50"> 
                 <div className="flex items-center justify-between">
                     <h2 className="text-start text-sm font-semibold mb-1">
@@ -152,7 +152,7 @@ function TraceInfoMenu({ setActivatedMenuIndex, traces, backupTraces, setTraces,
 
     return (
         <form onSubmit={(e) => handleUpdateHeader(e)}>
-            <div className="flex flex-col p-4 items-stretch gap-1 absolute top-100 end-0 bg-white border shadow rounded z-50">
+            <div className="flex flex-col p-4 items-stretch gap-1 absolute top-0 end-0 bg-base-200 border border-neutral-500/20 shadow rounded z-50">
                 <div  className="absolute top-1 end-2">
                     <Button 
                         variant="ghost" 
@@ -270,7 +270,7 @@ function Graphs({ traces, backupTraces, setTraces, setBackupTraces, setError, se
         <>
             {
                 traces.map((tr, ind) => (
-                    <div key={tr.trace_id} className="h-1/3">
+                    <div key={tr.trace_id} className="h-1/3 relative">
                         <div className="flex flex-row justify-end items-center gap-2">
                             <Button
                                 variant="ghost"
@@ -427,14 +427,14 @@ export default function EditSeismicFile() {
             }
             <input ref={uploadFileInputRef} name="file" type="file" onChange={(e) => handleFileSelection(e, "UPLOAD-SEISMIC-FILE")} hidden />
             <div className="h-screen min-h-96">
-                <div className="border rounded-t-lg bg-base-100 p-3 flex flex-row items-center justify-start">
+                <div className="border border-neutral-500/20 rounded-t-lg bg-base-200 p-3 flex flex-row items-center justify-start">
                     <MainMenu 
                         traces={traces} 
                         handleFileUpload={handleFileUpload} 
                         handleDownloadFile={handleDownloadFile}
                     />
                 </div>
-                <div className="border h-2/3 overflow-y-scroll p-4 relative">
+                <div className="border border-neutral-500/20 h-2/3 overflow-y-scroll p-4 relative">
                     {
                         traces.length === 0 ? (
                             <div className="flex flex-col items-center justify-center gap-3 absolute top-1/2 start-1/2 -translate-x-1/2 -translate-y-1/2">

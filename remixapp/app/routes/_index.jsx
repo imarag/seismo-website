@@ -5,7 +5,6 @@ import ToolsSection from "@/components/home/ToolsSection"
 import Section from "@/components/utils/Section";
 import Container from "@/components/utils/Container"
 import AlignVertical from "@/components/utils/AlignVertical";
-import SeismogramLargeCropped from "@/images/seismogram-large-cropped.svg";
 
 export const meta = () => {
   return [
@@ -17,30 +16,28 @@ export const meta = () => {
 export default function Index() {
     return (
         <>
-            <div style={{ backgroundImage: `url('${SeismogramLargeCropped}')` }} className={`bg-no-repeat bg-contain bg-top`}>
-                <HeroSection />
-                <Section>
-                    <Container>
-                        <AlignVertical>
-                            <ArticleCardsSection />
-                        </AlignVertical>
-                    </Container>
-                </Section>
-                <Section>
-                    <Container>
-                        <AlignVertical>
-                            <ObspySection />
-                        </AlignVertical>
-                    </Container>
-                </Section>
-                <Section>
-                    <Container>
-                        <AlignVertical>
-                            <ToolsSection />
-                        </AlignVertical>
-                    </Container>
-                </Section>
-            </div>
+            <HeroSection />
+            <Section>
+                <Container>
+                    <AlignVertical>
+                        <ArticleCardsSection />
+                    </AlignVertical>
+                </Container>
+            </Section>
+            <Section>
+                <Container>
+                    <AlignVertical>
+                        <ObspySection />
+                    </AlignVertical>
+                </Container>
+            </Section>
+            <Section>
+                <Container>
+                    <AlignVertical>
+                        <ToolsSection />
+                    </AlignVertical>
+                </Container>
+            </Section>
         </>
     );
 }

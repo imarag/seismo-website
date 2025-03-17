@@ -84,7 +84,7 @@ export default function ContactForm() {
             {error && <Message type="error" text={error} />}
             {success && <Message type="success" text={success} />}
             <form method="post" onSubmit={handleSubmitForm} ref={form}>
-                <div className="flex flex-col item-stretch gap-4">
+                <div className="flex flex-col item-center gap-4">
                     {
                         contactFormElements.map(obj => {
                             const element = (
@@ -93,9 +93,9 @@ export default function ContactForm() {
                                 formErrors.messageError
                             )
                             return (
-                                <div key={obj.id} className="flex flex-col items-stretch gap-1">
-                                    <LabelElement label={obj.label} id={obj.id} />
-                                    <FormElement {...obj}/>
+                                <div key={obj.id} className="flex flex-col gap-1">
+                                    <LabelElement label={obj.label} id={obj.id} className="w-full mx-auto" />
+                                    <FormElement {...obj} className="w-full mx-auto"/>
                                     {
                                         element && (
                                             <p className="text-error my-2 text-sm">
@@ -108,7 +108,7 @@ export default function ContactForm() {
                         })
                     }
                     <div className="my-4 flex flex-col items-stretch">
-                        <Button type="submit" disabled={loading} loading={loading}>
+                        <Button type="submit" block={true} disabled={loading} loading={loading}>
                             Submit
                         </Button>
                     </div>

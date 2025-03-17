@@ -21,7 +21,7 @@ export function FormElement({
       textarea: `textarea textarea-${size} textarea-bordered`
     };
   
-    const mainElementClass = `${elementClasses[type]} ${className}`;
+    const mainElementClass = `${elementClasses[type]} ${className} rounded-md`;
   
     if (type === "select") {
       return (

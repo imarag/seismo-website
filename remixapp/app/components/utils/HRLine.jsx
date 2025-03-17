@@ -1,5 +1,5 @@
 export default function HRLine() {
     return (
-        <hr className="border-gray-300 dark:border-gray-600" />
+        <hr className="border-neutral-500/50 my-2" />
     )
 }

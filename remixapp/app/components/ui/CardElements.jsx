@@ -3,7 +3,7 @@ import LinkTag from "@/components/ui/LinkTag";
 
 export function CardTitle({ text, center = true, className = "" }) {
     return (
-        <h1 className={`${center ? "text-center" : "text-start"} font-semibold text-xl mb-1 ${className}`}>
+        <h1 className={`text-primary ${center ? "text-center" : "text-start"} font-semibold text-xl mb-1 ${className}`}>
             { text }
         </h1>
     );

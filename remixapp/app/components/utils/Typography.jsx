@@ -2,7 +2,7 @@
 export function Title({text, styledText = null, className=null}) {
     return (
         <h1 className={`text-4xl md:text-6xl text-center font-normal ${className || ""}`}>
-            { text }
+            <span className="text-primary">{ text }</span>
             <br />
             {styledText && <span className="text-primary">{styledText}</span>}
         </h1>

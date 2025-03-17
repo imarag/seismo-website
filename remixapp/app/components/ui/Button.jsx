@@ -2,6 +2,7 @@ export default function Button({
     variant = "primary", 
     size = "medium",
     type = "button", 
+    block = false,
     outline = false, 
     onClick, 
     disabled = false, 
@@ -10,7 +11,7 @@ export default function Button({
     toolTipText = null,
     className = "" 
 }) {
-    const baseStyles = "btn inline-flex items-center gap-2 disabled:bg-transparent disabled:text-gray-350"; 
+    const baseStyles = "btn z-40 rounded-md inline-flex items-center gap-2 disabled:bg-transparent"; 
 
     const sizes = {
         small: "btn-sm",
@@ -31,7 +32,7 @@ export default function Button({
     return (
         <div className="tooltip z-40" data-tip={toolTipText}>
             <button 
-                className={`${baseStyles} ${variants[variant]} ${outline ? "btn-outline" : ""} ${sizes[size]} ${className}`} 
+                className={`${baseStyles} ${variants[variant]} ${outline ? "btn-outline" : ""} ${block && "btn-block"} ${sizes[size]} ${className}`} 
                 type={type}
                 onClick={onClick} 
                 disabled={disabled || loading}

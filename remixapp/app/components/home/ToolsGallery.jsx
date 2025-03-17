@@ -14,7 +14,7 @@ import { useState } from "react";
 function ToolsHoverButtons({ onMouseEnter, icon, title }) {
   return (
     <div 
-      className="w-36 flex flex-col gap-3 items-center justify-center p-2 rounded-lg  hover:shadow-lg bg-base-100" 
+      className="w-36 flex flex-col gap-3 items-center justify-center p-2 rounded-lg  hover:bg-base-300 bg-base-100" 
       onMouseEnter={onMouseEnter}
     >
         <Image src={icon} alt="button icon" />

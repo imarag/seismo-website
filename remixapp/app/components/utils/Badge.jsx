@@ -9,7 +9,7 @@ export default function Badge({ type="neutral", outline=false, size="medium", ch
 
     return (
         <div 
-            className={`badge badge-${type} ${outline && "badge-outline"} ${sizes[size]}`}
+            className={`badge badge-${type} ${outline && "badge-outline"} ${sizes[size]} hover:scale-115`}
             {...props}
         >
             { children }

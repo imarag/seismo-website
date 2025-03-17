@@ -21,7 +21,7 @@ export default function ArticlesPage() {
                 <div className="flex flex-row flex-wrap justify-center mt-20 gap-8">
                     {
                         tools.map(tool => (
-                            <section key={tool.id} className="w-96 border-2 border-transparent hover:border-gray-300 rounded-lg flex-grow-0 bg-base-100 hover:scale-110 transition-all">
+                            <section key={tool.id} className="w-96 border-2 border-transparent rounded-lg flex-grow-0 bg-base-200 hover:scale-110 transition-all">
                                 <CardContainer>
                                     <Image src={tool.image_src} alt={tool.image_alt} className="w-32 block mx-auto" />
                                     <CardTitle text={tool.title} />

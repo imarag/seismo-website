@@ -48,41 +48,47 @@ export default function ArticlesPage() {
                 </div>
                 <div>
                     {
-                        filteredArticlesList?.map(article => (
-                            <div key={article.title} className="flex flex-row gap-8 flex-wrap md:flex-nowrap my-8">
-                                <div className="shrink-0 grow-0">
-                                    <Image src={article.image_src} alt={article.image_alt} className="w-20 md:w-28" />
-                                </div>
-                                <div className="flex-shrink flex-grow">
-                                    <CardTitle text={article.title} center={false} />
-                                    <div className="flex flex-row items-center gap-2">
-                                        {
-                                            article.keywords.map(keyword => (
-                                                <Badge 
-                                                    key={keyword} 
-                                                    type="info" 
-                                                    outline={true}
-                                                    size="small"
-                                                >{ keyword }</Badge>
-                                            ))
-                                        }
+                        filteredArticlesList.length !== 0 ? (
+                            filteredArticlesList?.map(article => (
+                                <div key={article.title} className="flex flex-row items-center gap-8 flex-wrap md:flex-nowrap my-8">
+                                    <div className="shrink-0 grow-0">
+                                        <Image src={article.image_src} alt={article.image_alt} className="w-20 md:w-28" />
                                     </div>
-                                    <CardParagraph text={article.description} center={false} />
-                                    <div className="mt-2">
-                                        {
-                                            article.completed ? (
-                                                <LinkTag href={`/article/${article.slug}`}>
-                                                    Go to page
-                                                    <IoIosArrowRoundForward className="size-5"/>
-                                                </LinkTag>
-                                            ) : (
-                                                <span className="font-bold">Work in Progress</span>
-                                            )
-                                        }
+                                    <div className="flex-shrink flex-grow">
+                                        <CardTitle text={article.title} center={false} />
+                                        <div className="flex flex-row items-center gap-2 my-2">
+                                            {
+                                                article.keywords.map(keyword => (
+                                                    <Badge 
+                                                        key={keyword} 
+                                                        type="neutral" 
+                                                        outline={true}
+                                                        size="extra-small"
+                                                    >
+                                                        { keyword }
+                                                    </Badge>
+                                                ))
+                                            }
+                                        </div>
+                                        <CardParagraph text={article.description} center={false} />
+                                        <div className="mt-2">
+                                            {
+                                                article.completed ? (
+                                                    <LinkTag href={`/article/${article.slug}`}>
+                                                        Go to page
+                                                        <IoIosArrowRoundForward className="size-5"/>
+                                                    </LinkTag>
+                                                ) : (
+                                                    <span className="font-bold">Work in Progress</span>
+                                                )
+                                            }
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))
+                            ))
+                        ) : (
+                            <p>No articles match your search criteria!</p>
+                        )
                     }
                 </div>
             </Container>
