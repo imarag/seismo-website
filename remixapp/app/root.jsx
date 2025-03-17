@@ -7,7 +7,7 @@ import {
 } from "@remix-run/react";
 
 import "./tailwind.css";
-
+import { Analytics } from "@vercel/analytics/remix"
 import Footer from "@/components/root/Footer";
 import NavBar from "@/components/root/NavBar";
 
