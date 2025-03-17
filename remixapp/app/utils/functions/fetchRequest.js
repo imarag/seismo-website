@@ -6,7 +6,8 @@ export default async function fetchRequest({
     method = 'GET',
     data = null,
     returnType = 'json',
-    successMessage = null
+    successMessage = null,
+    onError = null
 }) {
 
     const options = {
@@ -19,7 +20,7 @@ export default async function fetchRequest({
     if (method === 'POST') {
         if (data instanceof FormData) {
             options.body = data;
-        } else if (typeof data === 'object' && !Array.isArray(data)) {
+        } else if (typeof data === 'object') {
             options.headers = {
                 'Content-Type': 'application/json',
             };
@@ -33,7 +34,6 @@ export default async function fetchRequest({
 
     try {
         const response = await fetch(endpoint, options);
-
         if (!response.ok) {
             const errorData = await response.json();
             setError(errorData["error_message"]);
@@ -41,6 +41,9 @@ export default async function fetchRequest({
             setTimeout(() => {
                 setError([]); // Clear error message after 8 seconds
             }, 8000);
+            if (onError) {
+                onError(); // <-- Run the onError function if provided
+            }
             throw new Error(errorData["error_message"].join(", "));
         }
 
@@ -62,6 +65,9 @@ export default async function fetchRequest({
         return result;
     } catch (error) {
         console.error(`Fetch request failed: ${error.message}`);
+        if (onError) {
+            onError(); 
+        }
         throw error;
     } finally {
         setLoading(false); 

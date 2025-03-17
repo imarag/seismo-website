@@ -1,13 +1,18 @@
 import Button from "@/components/ui/Button";
 import LineGraph from "@/components/ui/LineGraph"
-import { NumberInputElement, LabelElement, SelectElement, SliderElement } from "@/components/ui/UIElements";
+import {
+    FormElement,
+    LabelElement,
+} from "@/components/ui/UIElements";
 import { taperTypeOptions, taperSideOptions, detrendTypeOptions } from "@/utils/static"
 import { useState, useRef, useEffect } from "react";
 import fetchRequest from "@/utils/functions/fetchRequest"
 import Message from "@/components/ui/Message"
+import Icon from "@/components/utils/Icon"
+import { TbFileDownload } from "react-icons/tb";
 import { getRandomNumber } from "@/utils/functions"
 import { fastapiEndpoints } from "@/utils/static"
-import { FiUpload } from "react-icons/fi";
+import { HiOutlineUpload } from "react-icons/hi";
 import { IoMdClose } from "react-icons/io";
 import { IoCut, IoFilter } from "react-icons/io5";
 import { BsSoundwave } from "react-icons/bs";
@@ -28,7 +33,7 @@ function MenuDropdown({ label, icon, children }) {
             <div tabIndex={0} role="button" className="btn btn-ghost btn-md m-1">
                 { icon }
                 { label }
-                <MdArrowDropDown />
+                <Icon icon={MdArrowDropDown} />
             </div>
             <div tabIndex={0} className="dropdown-content card card-compact bg-white rounded-lg z-[1] w-64 p-2 shadow-lg border">
                 <div className="card-body">
@@ -262,6 +267,7 @@ function MainMenu({ traces, setTraces, loading, setLoading, setError, setSuccess
         const url = window.URL.createObjectURL(blobData);
         downloadURI(url, downloadName + "." + fileType)
     }
+    
 
     return (
         <>
@@ -273,7 +279,7 @@ function MainMenu({ traces, setTraces, loading, setLoading, setError, setSuccess
                         variant="ghost"
                         toolTipText="Upload a seismic file"
                     >
-                        <FiUpload />
+                        <Icon icon={HiOutlineUpload} />
                         Upload file
                     </Button>
                     <Button 
@@ -283,44 +289,47 @@ function MainMenu({ traces, setTraces, loading, setLoading, setError, setSuccess
                         disabled={traces.length===0} 
                         toolTipText="Download the processed seismic file into MiniSEED file format"
                     >
-                        <FiUpload />
+                        <Icon icon={TbFileDownload} />
                         Download To MSEED
                     </Button>
                 </div>
                 <div className="grow">
-                    <MenuDropdown icon={<BsSoundwave />}  label="Taper">
+                    <MenuDropdown icon={<Icon icon={BsSoundwave} />}  label="Taper">
                         <div className="flex flex-col items-stretch gap-3">
                             <div className="flex flex-col gap-2">
-                                <LabelElement label="Type" id="taper-type" />
-                                <SelectElement 
+                                <LabelElement htmlFor="taper-type" label="Type"/>
+                                <FormElement 
+                                    type="select" 
                                     id="taper-type"
                                     name="taper-type"
                                     optionsList={taperTypeOptions}
                                     value={sigProcOptions["taper-type"]} 
-                                    className="select-sm block w-full"
+                                    size="sm"
                                     onChange={(e) => handleSigProcOptions("taper-type", e.target.value)}
                                 />
                             </div>
                             <div className="flex flex-col gap-2">
-                                <LabelElement label="Side" id="taper-side" />
-                                <SelectElement 
+                                <LabelElement htmlFor="taper-side" label="Side"/>
+                                <FormElement 
+                                    type="select" 
                                     id="taper-side"
                                     name="taper-side"
                                     optionsList={taperSideOptions}
                                     value={sigProcOptions["taper-side"]} 
-                                    className="select-sm block w-full"
+                                    size="sm"
                                     onChange={(e) => handleSigProcOptions("taper-side", e.target.value)}
                                 />
                             </div>
                             <div className="flex flex-col gap-2">
-                                <LabelElement label="Length" id="taper-length" />
-                                <NumberInputElement 
+                                <LabelElement htmlFor="taper-length" label="Length"/>
+                                <FormElement 
+                                    type="number" 
                                     id="taper-length"
                                     name="taper-length"
                                     min={0}
                                     max={100} 
                                     step={0.1}
-                                    className="input-sm block w-full"
+                                    size="sm"
                                     value={sigProcOptions["taper-length"]} 
                                     onChange={(e) => handleSigProcOptions("taper-length", e.target.value, "number")}
                                 />
@@ -328,50 +337,54 @@ function MainMenu({ traces, setTraces, loading, setLoading, setError, setSuccess
                             <MenuButton onClick={handleTaperApply} disabled={traces.length === 0} />
                         </div>
                     </MenuDropdown>
-                    <MenuDropdown icon={<IoCut />}  label="Trim">
+                    <MenuDropdown icon={<Icon icon={IoCut} />}  label="Trim">
                         <div className="flex flex-col items-stretch gap-3">
                             <div className="flex flex-col gap-2">
-                                <LabelElement label="Start time (sec)" id="trim-left-side" />
-                                <NumberInputElement 
+                                <LabelElement htmlFor="trim-left-side" label="Start time (sec)"/>
+                                <FormElement 
+                                    type="number" 
                                     id="trim-left-side"
                                     name="trim-left-side"
                                     min={0}
                                     max={duration} 
                                     step={0.1} 
-                                    className="input-sm block w-full"
+                                    size="sm"
                                     value={sigProcOptions["trim-left-side"]} 
                                     onChange={(e) => handleSigProcOptions("trim-left-side", e.target.value, "number")}
                                 />
-                                <SliderElement 
+                                <FormElement 
+                                    type="range" 
                                     id="trim-left-side"
                                     name="trim-left-side"
                                     min={0}
                                     max={duration} 
                                     step={0.1}
-                                    className="range-xs block w-full"
+                                    size="xs"
                                     value={sigProcOptions["trim-left-side"]} 
                                     onChange={(e) => handleSigProcOptions("trim-left-side", e.target.value, "number")}
                                 />
                             </div>
                             <div className="flex flex-col gap-2">
-                                <LabelElement label="End time (sec)" id="trim-right-side" />
-                                <NumberInputElement 
+                                <LabelElement htmlFor="trim-right-side" label="End time (sec)"/>
+                                <FormElement 
+                                    type="number" 
                                     id="trim-right-side"
                                     name="trim-right-side"
                                     min={0}
                                     max={duration} 
                                     step={0.1}
-                                    className="input-sm block w-full"
+                                    size="sm"
                                     value={sigProcOptions["trim-right-side"]} 
                                     onChange={(e) => handleSigProcOptions("trim-right-side", e.target.value, "number")}
                                 />
-                                <SliderElement 
+                                <FormElement 
+                                    type="range" 
                                     id="trim-right-side"
                                     name="trim-right-side"
                                     min={0}
                                     max={duration} 
                                     step={0.1}
-                                    className="range-xs block w-full"
+                                    size="xs"
                                     value={sigProcOptions["trim-right-side"]} 
                                     onChange={(e) => handleSigProcOptions("trim-right-side", e.target.value, "number")}
                                 />
@@ -379,15 +392,16 @@ function MainMenu({ traces, setTraces, loading, setLoading, setError, setSuccess
                             <MenuButton onClick={handleTrimApply} disabled={traces.length === 0} />
                         </div>
                     </MenuDropdown>
-                    <MenuDropdown icon={<MdAlignVerticalCenter />}  label="Detrend">
+                    <MenuDropdown icon={<Icon icon={MdAlignVerticalCenter} />}  label="Detrend">
                         <div className="flex flex-col items-stretch gap-3">
                             <div className="flex flex-col gap-2">
-                                <LabelElement label="Type" id="detrend-type" />
-                                <SelectElement 
+                                <LabelElement htmlFor="detrend-type" label="Type"/>
+                                <FormElement 
+                                    type="select"  
                                     id="detrend-type"
                                     name="detrend-type"
+                                    size="sm"
                                     optionsList={detrendTypeOptions}
-                                    className="select-sm block w-full"
                                     value={sigProcOptions["detrend-type"]} 
                                     onChange={(e) => handleSigProcOptions("detrend-type", e.target.value)}
                                 />
@@ -395,30 +409,32 @@ function MainMenu({ traces, setTraces, loading, setLoading, setError, setSuccess
                             <MenuButton onClick={handleDetrendApply} disabled={traces.length === 0} />
                         </div>
                     </MenuDropdown>
-                    <MenuDropdown icon={<IoFilter />} label="Filter">
+                    <MenuDropdown icon={<Icon icon={IoFilter} />} label="Filter">
                         <div className="flex flex-col items-stretch gap-3">
                             <div className="flex flex-col gap-2">
-                                <LabelElement label="Min frequency" id="filter-min" />
-                                <NumberInputElement 
+                                <LabelElement htmlFor="filter-min" label="Min frequency"/>
+                                <FormElement 
+                                    type="number"
                                     id="filter-min"
                                     name="filter-min"
                                     min={0}
                                     max={duration} 
                                     step={0.1}
-                                    className="input-sm block w-full"
+                                    size="sm"
                                     value={sigProcOptions["filter-min"]} 
                                     onChange={(e) => handleSigProcOptions("filter-min", e.target.value)}
                                 />
                             </div>
                             <div className="flex flex-col gap-2">
-                                <LabelElement label="Max frequency" id="freq-max" />
-                                <NumberInputElement 
+                                <LabelElement htmlFor="freq-max" label="Max frequency"/>
+                                <FormElement 
+                                    type="number"
                                     id="freq-max"
                                     name="freq-max"
                                     min={0}
                                     max={duration} 
                                     step={0.1}
-                                    className="input-sm block w-full"
+                                    size="sm"
                                     value={sigProcOptions["filter-max"]} 
                                     onChange={(e) => handleSigProcOptions("filter-max", e.target.value)}
                                 />
@@ -508,7 +524,7 @@ function ProcessingFilters({appliedProcesses, handleRemoveProcesses}) {
                                     toolTipText="Remove all applied filters"
                                 >
                                     remove all
-                                    <IoMdClose />
+                                    <Icon icon={IoMdClose} />
                                 </Button>
                             </span>
                         </div>
@@ -530,32 +546,32 @@ export default function SignalProcessingPage() {
     const inputRef = useRef();
     const [appliedProcesses, setAppliedProcesses] = useState([])
 
-    useEffect(() => {
-        async function applyProcesses() {
-            setLoading(true);
+    // useEffect(() => {
+    //     async function applyProcesses() {
+    //         setLoading(true);
     
-            const fourierBody = {
-                traces_data: traces.map(tr => ({trace_id: tr.trace_id, component: tr.stats.channel, values: tr.ydata})),
-                sampling_rate: traces.length > 0 ? traces[0].stats.sampling_rate : 100,
-            };
+    //         const fourierBody = {
+    //             traces_data: traces.map(tr => ({trace_id: tr.trace_id, component: tr.stats.channel, values: tr.ydata})),
+    //             sampling_rate: traces.length > 0 ? traces[0].stats.sampling_rate : 100,
+    //         };
 
-            const FourierJsonData = await fetchRequest({
-                endpoint: fastapiEndpoints["COMPUTE-FOURIER"],
-                setError: setError,
-                setSuccess: setSuccess,
-                setLoading: setLoading,
-                method: "POST",
-                data: fourierBody
-            });
+    //         const FourierJsonData = await fetchRequest({
+    //             endpoint: fastapiEndpoints["COMPUTE-FOURIER"],
+    //             setError: setError,
+    //             setSuccess: setSuccess,
+    //             setLoading: setLoading,
+    //             method: "POST",
+    //             data: fourierBody
+    //         });
 
-            setFourierData(FourierJsonData);
-        }
+    //         setFourierData(FourierJsonData);
+    //     }
 
-        if (traces.length !== 0) {
-            applyProcesses();
-        }
+    //     if (traces.length !== 0) {
+    //         applyProcesses();
+    //     }
     
-    }, [traces])
+    // }, [traces])
 
     function handleRemoveProcesses() {
         setTraces(backupTraces)
@@ -622,7 +638,7 @@ export default function SignalProcessingPage() {
                                     loading={loading}
                                     toolTipText="Upload a seismic file"
                                 >
-                                    <FiUpload />
+                                    <Icon icon={HiOutlineUpload} />
                                     Upload file
                                 </Button>
                             </div>

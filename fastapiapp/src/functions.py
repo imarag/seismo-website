@@ -54,7 +54,12 @@ def convert_stream_to_traces_list(stream: Stream) -> list[dict]:
         trace_params = TraceParams(
             ydata = tr.data.tolist(),
             xdata = tr.times().tolist(),
-            stats = TraceStats(**trace_stats, component = trace_stats.component)
+            stats = TraceStats(
+                **trace_stats, 
+                component = trace_stats.component,
+                start_date=trace_stats.starttime.date,
+                start_time=trace_stats.starttime.time,
+                )
         )
         traces_data_list.append(trace_params.model_dump())
     return traces_data_list
@@ -106,8 +111,7 @@ def convert_traces_to_stream(trace_list: list) -> Stream:
     traces = []
     for tr_dict in trace_list:
         trace_header = tr_dict["stats"]
-        trace_header["starttime"] = UTCDateTime(trace_header["starttime"])
-        trace_header["endtime"] = UTCDateTime(trace_header["endtime"])
+        trace_header["starttime"] = UTCDateTime(trace_header["start_date"] + " " + trace_header["start_time"])
         trace = Trace(data=np.array(tr_dict["ydata"]), header=trace_header)
         traces.append(trace)
     return Stream(traces=traces)

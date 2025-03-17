@@ -8,8 +8,10 @@ import { MdDelete } from "react-icons/md";
 import fetchRequest from "@/utils/functions/fetchRequest";
 import { fastapiEndpoints } from "@/utils/static";
 import { IoInformationCircleOutline } from "react-icons/io5";
-import { NumberInputElement, TextInputElement, SelectElement, DateInputElement, TimeInputElement, LabelElement } from "@/components/ui/UIElements";
-
+import {
+    FormElement,
+    LabelElement,
+} from "@/components/ui/UIElements";
 function StatsItemToolTip({ text }) {
     return (
             <IoInformationCircleOutline className="size-5" />
@@ -93,7 +95,7 @@ export default function EditSeismicFile() {
             </Button>
             <p className="text-sm text-center">Supported files: .xlsx, .csv, .txt, .dat</p>
             <div className="flex flex-row items-center justify-center gap-3">
-                <LabelElement id="skip_rows" label="Skip rows" />
+                <LabelElement htmlFor="skip_rows" label="Skip rows" />
                 <NumberInputElement
                     id={"skip_rows"}
                     name={"skip_rows"}
@@ -105,7 +107,7 @@ export default function EditSeismicFile() {
                 <StatsItemToolTip text="Skip a number of rows before reading the data from the file. Use it to skip any header or unwanted data" />
             </div>
             <div className="flex flex-row items-center justify-center gap-3">
-                <LabelElement id="delimiter" label="Delimiter" />
+                <LabelElement htmlFor="delimiter" label="Delimiter" />
                 <SelectElement
                     id={"delimiter"}
                     name={"delimiter"}
@@ -171,7 +173,7 @@ export default function EditSeismicFile() {
                             <div className="flex flex-col gap-4">
                                 <h1 className="text-center font-semibold">Header</h1>
                                 <div className="flex flex-row items-center gap-3">
-                                    <LabelElement id="station" label="Station" />
+                                    <LabelElement htmlFor="station" label="Station" />
                                     <TextInputElement
                                         id={"station"}
                                         name={"station"}
@@ -183,7 +185,7 @@ export default function EditSeismicFile() {
                                     <StatsItemToolTip text="Station code (e.g. SEIS)" />
                                 </div>
                                 <div className="flex flex-row items-center gap-3">
-                                    <LabelElement id="date" label="Start date" />
+                                    <LabelElement htmlFor="date" label="Start date" />
                                     <DateInputElement
                                         id={"date"}
                                         name={"date"}
@@ -194,7 +196,7 @@ export default function EditSeismicFile() {
                                     <StatsItemToolTip text="Date of the first data sample" />
                                 </div>
                                 <div className="flex flex-row items-center gap-3">
-                                    <LabelElement id="time" label="Start Time" />
+                                    <LabelElement htmlFor="time" label="Start Time" />
                                     <TimeInputElement
                                         id={"time"}
                                         name={"time"}
@@ -205,7 +207,7 @@ export default function EditSeismicFile() {
                                     <StatsItemToolTip text="Time of the first data sample" />
                                 </div>
                                 <div className="flex flex-row items-center gap-3">
-                                    <LabelElement id="sampling_rate" label="Sampling rate *" />
+                                    <LabelElement htmlFor="sampling_rate" label="Sampling rate *" />
                                     <NumberInputElement
                                         id={"sampling_rate"}
                                         name={"sampling_rate"}
@@ -217,7 +219,7 @@ export default function EditSeismicFile() {
                                     <StatsItemToolTip text="Sampling rate in hertz" />
                                 </div>
                                 <div className="flex flex-row items-center gap-3">
-                                    <LabelElement id="component" label="Component" />
+                                    <LabelElement htmlFor="component" label="Component" />
                                     <TextInputElement
                                         id={"component"}
                                         name={"component"}

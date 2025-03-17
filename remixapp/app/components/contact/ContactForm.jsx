@@ -1,13 +1,12 @@
 import { useRef, useState } from "react";
 import {
-    TextInputElement,
-    EmailInputElement,
-    TextAreaElement,
+    FormElement,
     LabelElement,
 } from "@/components/ui/UIElements";
 import Message from "@/components/ui/Message";
 import Button from "@/components/ui/Button";
 import emailjs from "@emailjs/browser";
+import { contactFormElements } from "@/utils/static"
 
 export default function ContactForm() {
     const form = useRef();
@@ -15,9 +14,9 @@ export default function ContactForm() {
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
     const [formErrors, setFormErrors] = useState({
-        emailError: null,
         nameError: null,
-        messageError: null,
+        emailError: null,
+        messageError: null
     });
 
     function handleSubmitForm(e) {
@@ -86,45 +85,28 @@ export default function ContactForm() {
             {success && <Message type="success" text={success} />}
             <form method="post" onSubmit={handleSubmitForm} ref={form}>
                 <div className="flex flex-col item-stretch gap-4">
-                    <div className="flex flex-col items-stretch gap-1">
-                        <LabelElement label="Name" id="user_name" />
-                        <TextInputElement
-                            id="user_name"
-                            name="user_name"
-                            placeholder="e.g. Enter your name"
-                            required={true}
-                        />
-                        {formErrors.nameError && (
-                            <p className="text-error my-2 text-sm">{formErrors.nameError}</p>
-                        )}
-                    </div>
-                    <div className="flex flex-col items-stretch gap-1">
-                        <LabelElement label="Email address" id="user_email" />
-                        <EmailInputElement
-                            id="user_email"
-                            name="user_email"
-                            placeholder="e.g. Enter your email"
-                            required={true}
-                        />
-                        {formErrors.emailError && (
-                            <p className="text-error my-2 text-sm">{formErrors.emailError}</p>
-                        )}
-                    </div>
-                    <div className="flex flex-col items-stretch gap-1">
-                        <LabelElement label="Feedback" id="message" />
-                        <TextAreaElement
-                            id="message"
-                            name="message"
-                            placeholder="e.g. Provide a message"
-                            rows="6"
-                            required={true}
-                        />
-                        {formErrors.messageError && (
-                            <p className="text-error my-2 text-sm">
-                                {formErrors.messageError}
-                            </p>
-                        )}
-                    </div>
+                    {
+                        contactFormElements.map(obj => {
+                            const element = (
+                                obj.id == "user_name" ? formErrors.nameError : 
+                                obj.id == "user_email" ? formErrors.emailError : 
+                                formErrors.messageError
+                            )
+                            return (
+                                <div key={obj.id} className="flex flex-col items-stretch gap-1">
+                                    <LabelElement label={obj.label} id={obj.id} />
+                                    <FormElement {...obj}/>
+                                    {
+                                        element && (
+                                            <p className="text-error my-2 text-sm">
+                                                {element}
+                                            </p>
+                                        )
+                                    }
+                                </div>
+                            )
+                        })
+                    }
                     <div className="my-4 flex flex-col items-stretch">
                         <Button type="submit" disabled={loading} loading={loading}>
                             Submit

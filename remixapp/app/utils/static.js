@@ -13,6 +13,7 @@ export const fastapiEndpoints = {
     "CALCULATE-DISTANCE": `${serverUrl}/core/calculate-distance`,
     "UPLOAD-SEISMIC-FILE": `${serverUrl}/core/upload-seismic-file`,
     "ADD-TRACE": `${serverUrl}/handle-seismic-traces/add-trace`,
+    "UPDATE-TRACE-HEADER": `${serverUrl}/handle-seismic-traces/update-trace-header`,
     "UPLOAD-DATA-FILE": `${serverUrl}/core/upload-data-file`,
     "DOWNLOAD-SEISMIC-FILE": `${serverUrl}/core/download-seismic-file`,
     "DOWNLOAD-TEST-FILE": `${serverUrl}/core/download-test-file`,
@@ -107,3 +108,151 @@ export const fourierWindowStyles = {
         fillColor: 'rgba(231, 54, 56, 0.4)'
     }
 }
+
+
+const seismicComponents = [
+    { label: "Vertical (Z)", value: "Z" },
+    { label: "North-South (N)", value: "N" },
+    { label: "East-West (E)", value: "E" },
+    { label: "Generic Horizontal 1 (X)", value: "X" },
+    { label: "Generic Horizontal 2 (Y)", value: "Y" },
+    { label: "Radial (R)", value: "R" },
+    { label: "Transverse (T)", value: "T" },
+    { label: "Alternative Horizontal 1 (1)", value: "1" },
+    { label: "Alternative Horizontal 2 (2)", value: "2" },
+    { label: "Up (U)", value: "U" },
+    { label: "Vertical Alternative (V)", value: "V" },
+    { label: "Horizontal (H)", value: "H" }
+];
+
+export const addTraceParameters = [
+    {
+        type: "number",
+        label: "Skip rows",
+        name: "skip_rows",
+        id: "skip_rows",
+        category: "file parameters"
+    },
+    {
+        type: "number",
+        label: "Select column",
+        name: "column_index",
+        id: "column_index",
+        category: "file parameters"
+    },
+    {
+        type: "text",
+        label: "Station",
+        name: "station",
+        id: "station",
+        placeholder: "e.g. SEIS",
+        category: "seismic parameters"
+    },
+    {
+        type: "select",
+        label: "Component",
+        name: "component",
+        id: "component",
+        optionsList: seismicComponents,
+        category: "seismic parameters"
+    },
+    {
+        type: "date",
+        label: "Start date",
+        name: "start_date",
+        id: "start_date",
+        category: "seismic parameters"
+    },
+    {
+        type: "time",
+        label: "Start time",
+        name: "start_time",
+        id: "start_time",
+        category: "seismic parameters"
+    },
+    {
+        type: "number",
+        label: "Sampling rate",
+        name: "sampling_rate",
+        id: "sampling_rate",
+        category: "seismic parameters"
+    }
+]
+
+
+
+
+export const traceHeaderParams = [
+    {
+        type: "text",
+        label: "Station",
+        name: "station",
+        id: "station",
+        placeholder: "e.g. SEIS",
+        readOnly: false
+    },
+    {
+        type: "date",
+        label: "Start date",
+        name: "start_date",
+        id: "start_date",
+        readOnly: false
+    },
+    {
+        type: "time",
+        label: "Start time",
+        name: "start_time",
+        id: "start_time",
+        readOnly: false
+    },
+    {
+        type: "select",
+        label: "Component",
+        name: "component",
+        id: "component",
+        optionsList: seismicComponents,
+        readOnly: false
+    },
+    {
+        type: "number",
+        label: "Sampling rate *",
+        name: "sampling_rate",
+        id: "sampling_rate",
+        readOnly: true
+    },
+    {
+        type: "number",
+        label: "Total sample points *",
+        name: "npts",
+        id: "npts",
+        readOnly: true
+    },
+]
+
+
+export const contactFormElements = [
+    {
+        type: "text",
+        label: "Name",
+        name: "user_name",
+        id: "user_name",
+        placeholder: "e.g. Enter your name",
+        required: true,
+    },
+    {
+        type: "email",
+        label: "Email Address",
+        name: "user_email",
+        id: "user_email",
+        placeholder: "e.g. Enter your email",
+        required: true,
+    },
+    {
+        type: "textarea",
+        label: "Feedback",
+        name: "message",
+        id: "message",
+        placeholder: "e.g. Provide your message",
+        required: true,
+    }
+]

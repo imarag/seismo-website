@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { SearchInputElement } from "@/components/ui/UIElements"
+import { FormElement } from "@/components/ui/UIElements";
 import LinkTag from "@/components/ui/LinkTag";
 
 import { articles } from "@/utils/topics";
@@ -35,9 +35,10 @@ export default function NavSearchBar({ setShowNavbar }) {
 
     return (
         <section className="relative">
-            <SearchInputElement 
+            <FormElement
+                type="search" 
                 placeholder="search a topic..."
-                className="input input-bordered input-md w-36 md:w-auto"
+                className="input-md w-36 md:w-auto"
                 onChange={handleSearchBarChange}
             />
             {filteredTopics.length !== 0 && (

@@ -1,15 +1,19 @@
 import { useRef, useState } from "react"
 import Message from "@/components/ui/Message";
 import Button from "@/components/ui/Button";
-import { RadioButtonElement, SelectElement, NumberInputElement, LabelElement } from "@/components/ui/UIElements";
+import {
+    FormElement,
+    LabelElement,
+} from "@/components/ui/UIElements";
 import LineGraph from "@/components/ui/LineGraph"
-import { FiUpload } from "react-icons/fi";
+import { HiOutlineUpload } from "react-icons/hi";
 import { fastapiEndpoints, arrivalsStyles } from "@/utils/static";
 import fetchRequest from "@/utils/functions/fetchRequest";
 import { downloadURI } from "@/utils/functions";
 import { MdOutlineFileDownload } from "react-icons/md";
 import { filterOptions } from "@/utils/static"
 import Spinner from "@/components/ui/Spinner"
+import Icon from "@/components/utils/Icon"
 import { IoMdClose } from "react-icons/io";
 
 
@@ -17,9 +21,9 @@ function PSElements({ traces, selectedWave, setSelectedWave, handleDeleteWave, f
     return (
         <div className="flex flex-row items-center gap-4">
             <div className="flex flex-row items-center">
-                <LabelElement label="P" className="text-lg" />
-                <RadioButtonElement 
-                    label="P"
+                <LabelElement htmlFor="p-wave-radio" label="P" className="text-lg" />
+                <FormElement
+                    type="radio" 
                     id="p-wave-radio"
                     name="ps-wave-radio"
                     value="P"
@@ -30,9 +34,9 @@ function PSElements({ traces, selectedWave, setSelectedWave, handleDeleteWave, f
                 />
             </div>
             <div className="flex flex-row items-center">
-                <LabelElement label="S" className="text-lg" />
-                <RadioButtonElement 
-                    label="S"
+                <LabelElement htmlFor="s-wave-radio" label="S" className="text-lg" />
+                <FormElement 
+                    type="radio"
                     id="s-wave-radio"
                     name="ps-wave-radio"
                     value="S"
@@ -52,7 +56,7 @@ function PSElements({ traces, selectedWave, setSelectedWave, handleDeleteWave, f
                         toolTipText="Delete the selected P wave arrival"
                     >
                         P
-                        <IoMdClose className="size-4"/>
+                        <Icon icon={IoMdClose} />
                     </Button> 
                 )
             }
@@ -66,7 +70,7 @@ function PSElements({ traces, selectedWave, setSelectedWave, handleDeleteWave, f
                         toolTipText="Delete the selected S wave arrival"
                     >
                         S
-                        <IoMdClose className="size-4"/>
+                        <Icon icon={IoMdClose} />
                     </Button>
                 )
             }
@@ -76,7 +80,8 @@ function PSElements({ traces, selectedWave, setSelectedWave, handleDeleteWave, f
 
 function FiltersDropdown({ traces, selectedFilter, handleDropdownFilterChange }) {
     return (
-        <SelectElement 
+        <FormElement 
+            type="select"
             id="filters-dropdown"
             name="filters-dropdown"
             value={selectedFilter}
@@ -91,8 +96,8 @@ function FiltersDropdown({ traces, selectedFilter, handleDropdownFilterChange })
 function FiltersInputs({ traces, manualFilter, setManualFilter, handleEnterKey }) {
     return (
         <div className="flex justify-end align-center gap-3 mt-4">
-            <LabelElement text="na" />
-            <NumberInputElement 
+            <FormElement 
+                type="number"
                 id="freq_min" 
                 name="freq_min" 
                 value={manualFilter["freqMin"]} 
@@ -102,7 +107,8 @@ function FiltersInputs({ traces, manualFilter, setManualFilter, handleEnterKey }
                 disabled={traces.length===0}
                 className="input-sm w-40"
             />
-            <NumberInputElement 
+            <FormElement 
+                type="number"
                 id="freq_max" 
                 name="freq_max" 
                 value={manualFilter["freqMax"]} 
@@ -177,7 +183,7 @@ function MainMenu({ traces, setTraces, handleFilterChange, loading, setLoading, 
                         size="small"
                         toolTipText="Upload a seismic file"
                     >
-                        <FiUpload />
+                        <Icon icon={HiOutlineUpload} />
                         Upload file
                     </Button>
                     <Button  
@@ -187,7 +193,7 @@ function MainMenu({ traces, setTraces, handleFilterChange, loading, setLoading, 
                         disabled={traces.length===0 || (formattedArrivals["P"]===null && formattedArrivals["S"]===null)} 
                         toolTipText="Download the selected P & S wave arrivals in a txt file"
                     >
-                        <MdOutlineFileDownload />
+                        <Icon icon={MdOutlineFileDownload} />
                         Download arrivals
                     </Button>
                 </div>
@@ -269,7 +275,7 @@ function Graphs({ traces, arrivals, selectedWave, setArrivals, setSelectedWave, 
                             xData={[tr["xdata"]]} 
                             yData={[tr["ydata"]]} 
                             height="220px"
-                            legendTitle={[`Component: ${tr["stats"]["channel"]}`]}
+                            legendTitle={[`Component: ${tr["stats"]["component"]}`]}
                             showGraphTitle={ind === 0}
                             graphTitle={""}
                             shapes={shapes}
@@ -412,7 +418,7 @@ export default function ArrivalsPickingPage() {
                                         loading={loading}
                                         toolTipText="Upload a seismic file"
                                     >
-                                        <FiUpload />
+                                        <Icon icon={HiOutlineUpload} />
                                         Upload file
                                     </Button>
                                 </div>

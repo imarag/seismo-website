@@ -4,11 +4,15 @@ import { useState } from "react";
 import Button from "@/components/ui/Button";
 import LinkTag from "@/components/ui/LinkTag"
 import Message from "@/components/ui/Message";
-import { NumberInputElement, LabelElement } from "@/components/ui/UIElements"
+import {
+    FormElement,
+    LabelElement,
+} from "@/components/ui/UIElements";
 import { Paragraph } from "@/components/utils/Typography"
 import MockupCode from "@/components/utils/MockupCode";
 import CenterHorizontally from "@/components/utils/CenterHorizontally";
 import HRLine from "@/components/utils/HRLine"
+import Icon from "@/components/utils/Icon"
 
 import { fastapiEndpoints } from "@/utils/static";
 import fetchRequest from "@/utils/functions/fetchRequest";
@@ -24,7 +28,7 @@ function CoordContainer({ children, label }) {
     return (
         <div>
             <h1 className="text-start flex flex-row items-center justify-center md:justify-start gap-2 mb-1">
-                <IoLocationOutline />
+                <Icon icon={IoLocationOutline} />
                 <span>{ label }</span>
             </h1>
             <HRLine />
@@ -40,15 +44,16 @@ function CoordItem({ coordLabel, coordValue, coords, setCoords }) {
     return (
         <div className="flex flex-col items-stretch justify-center gap-2">
             <LabelElement 
-                id={coordValue} 
+                htmlFor={coordValue} 
                 label={coordLabel} 
             />
-            <NumberInputElement 
+            <FormElement 
+                type="number"
                 id={coordValue} 
                 name={coordValue} 
                 value={coords[coordValue]} 
                 onChange={(e) => setCoords({...coords, [coordValue]: e.target.value})}
-                className="input-sm"
+                size="sm"
             />
         </div>
     )
@@ -109,7 +114,7 @@ export default function DistanceBetweenPoints() {
             successMessage: "The distance has been succesfully calculated"
         });
 
-        setDistance(data["result"])
+        setDistance(data["distance_km"])
     }
 
     return (
@@ -132,7 +137,7 @@ export default function DistanceBetweenPoints() {
                     toolTipText="Compute the distance between two geographic points on the WGS84 ellipsoid"
                 >
                     Compute
-                    <LuCalculator />
+                    <Icon icon={LuCalculator} />
                 </Button>
             </CenterHorizontally>
             {distance && (

@@ -2,16 +2,17 @@ from pydantic import BaseModel, Field, model_validator, computed_field
 from typing import Literal
 from typing_extensions import Self
 import uuid
-from internals.static import SupportedDownloadFileTypes
 from typing import Any
 import datetime
+import numpy as np
+from obspy.core import Trace
 
 
 class TraceStats(BaseModel):
-    station: str = ""
-    component: str = ""
-    starttime: datetime.datetime
-    endtime: datetime.datetime
+    station: str = " "
+    component: str = " "
+    start_date: datetime.date
+    start_time: datetime.time
     sampling_rate: float
     npts: int
 
@@ -19,25 +20,21 @@ class TraceStats(BaseModel):
         extra = "ignore"
     
     @computed_field
-    def start_date(self) -> str:
-        """ Extract the date from starttime """
-        return self.starttime.date().isoformat()
-    
-    @computed_field
-    def start_time(self) -> str:
+    def endtime(self) -> datetime.datetime:
         """ Extract the time from starttime """
-        return self.starttime.time().isoformat()
+        start_date_time = datetime.datetime.fromisoformat(f"{self.start_date} {self.start_time}")
+        return start_date_time + datetime.timedelta(seconds=self.npts / self.sampling_rate)
     
     @computed_field
     def duration(self) -> float:
         """ Compute duration in seconds """
-        return (self.endtime - self.starttime).total_seconds()
+        return self.npts / self.sampling_rate
     
     @computed_field
     def record_name(self) -> str:
         """ Extract the record name from starttime """
-        start_date_iso = self.starttime.date().isoformat()
-        start_time_iso = self.starttime.time().isoformat()
+        start_date_iso = self.start_date.isoformat()
+        start_time_iso = self.start_time.isoformat()
         station = self.station
         if station:
             rec_name = f"{start_date_iso}_{start_time_iso}_{self.station}"
@@ -56,6 +53,13 @@ class TraceParams(BaseModel):
     class Config:
         extra = "ignore"
 
+    @model_validator(mode="after")
+    def verify_trace(self) -> Self:
+        try:
+            Trace(data=np.array(self.ydata), header=self.stats.model_dump())
+        except Exception as e:
+            raise ValueError(str(e))
+        return self
 
 class SeismicDataKeys(BaseModel):
     trace_id: str 
@@ -166,10 +170,10 @@ class ArrivalsParams(BaseModel):
         return self
     
 class AddTraceParams(BaseModel):
-    skiprows: int = 0
-    column: int = 1
+    skip_rows: int = 0
+    column_index: int = 1
     station: str
     component: str
-    startdate: datetime.date
-    starttime: datetime.time
-    fs: float
+    start_date: datetime.date
+    start_time: datetime.time
+    sampling_rate: float

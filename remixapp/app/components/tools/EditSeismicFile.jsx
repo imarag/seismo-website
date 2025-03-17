@@ -4,18 +4,25 @@ import { useRef, useState } from "react"
 import LineGraph from "@/components/ui/LineGraph"
 import Button from "@/components/ui/Button";
 import HRLine from "@/components/utils/HRLine";
-import { IoMdClose } from "react-icons/io";
 import Message from "@/components/ui/Message";
+import Icon from "@/components/utils/Icon";
 import { Paragraph } from "@/components/utils/Typography"
-import { NumberInputElement, TextInputElement, DateInputElement, TimeInputElement, LabelElement } from "@/components/ui/UIElements";
-import { FiUpload } from "react-icons/fi";
+import {
+    FormElement,
+    LabelElement,
+} from "@/components/ui/UIElements";
+import { addTraceParameters, traceHeaderParams } from "@/utils/static"
+import { HiOutlineUpload } from "react-icons/hi";
+import { BsDatabaseDown } from "react-icons/bs";
+import { TbFileDownload } from "react-icons/tb";
 import { fastapiEndpoints } from "@/utils/static";
+import { MdEdit } from "react-icons/md";
 import fetchRequest from "@/utils/functions/fetchRequest";
+import { LiaUndoAltSolid } from "react-icons/lia";
 import { downloadURI } from "@/utils/functions";
-
 import { MdOutlineFileDownload, MdDeleteOutline } from "react-icons/md";
 import { PiGearLight } from "react-icons/pi";
-import { RiResetLeftFill } from "react-icons/ri";
+import { IoMdClose } from "react-icons/io";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
 
 function NewTraceMenu({ setActivatedNewTraceMenu, newTraceOptions, setNewTraceOptions, handleFileSelection2 }) {
@@ -34,18 +41,23 @@ function NewTraceMenu({ setActivatedNewTraceMenu, newTraceOptions, setNewTraceOp
         uploadDataInputRef.current.click();
     }
 
+    const fileParams = addTraceParameters.filter(obj => obj.category === "file parameters");
+    const seismicParams = addTraceParameters.filter(obj => obj.category === "seismic parameters");
+
     return (
         <div className="flex flex-col py-6 px-4 items-stretch gap-1 absolute start-0 bg-white border shadow rounded z-50 pt-10 w-72">
             <div className="mb-2 z-50"> 
-                <h1 className="text-start text-sm font-semibold mb-1 flex items-center justify-between">
-                    File parameters
+                <div className="flex items-center justify-between">
+                    <h2 className="text-start text-sm font-semibold mb-1">
+                        File parameters
+                    </h2>
                     <span 
                         className="tooltip tooltip-right"
                         data-tip={fileOptionsTooltip}
                     >
-                        <AiOutlineQuestionCircle />
+                        <Icon icon={AiOutlineQuestionCircle} />
                     </span>
-                </h1>
+                </div>
                 <HRLine />
             </div>
             <div  className="absolute top-1 end-2">
@@ -55,104 +67,54 @@ function NewTraceMenu({ setActivatedNewTraceMenu, newTraceOptions, setNewTraceOp
                     onClick={() => setActivatedNewTraceMenu(false)}
                     toolTipText="Close the menu."
                 >
-                    <IoMdClose />
+                    <Icon icon={IoMdClose} />
                 </Button>
             </div>
-            
-            <div className="flex flex-row items-center gap-2">
-                <div className="flex-grow w-1/2">
-                    <LabelElement id="skiprows" label="Skip rows" />
-                    <NumberInputElement
-                        id="skiprows"
-                        name="skiprows"
-                        className={"input-xs w-full"}
-                        value={newTraceOptions.skiprows}
-                        onChange={(e) => setNewTraceOptions({...newTraceOptions, skiprows: e.target.value})}
-                    />
-                </div>
-                <div className="flex-grow w-1/2">
-                    <LabelElement id="column" label="Select column" />
-                    <NumberInputElement
-                        id="column"
-                        name="column"
-                        className={"input-xs w-full"}
-                        value={newTraceOptions.column}
-                        onChange={(e) => setNewTraceOptions({...newTraceOptions, column: e.target.value})}
-                    />
-                </div>
+            <div className="grid grid-cols-2 gap-2 items-center">
+                {
+                    fileParams.map(obj => (
+                        <div key={obj.id}>
+                            <LabelElement htmlFor={obj.id} label={obj.label} />
+                            <FormElement
+                                className={"input-xs w-full"}
+                                value={newTraceOptions[obj.id]}
+                                onChange={(e) => setNewTraceOptions({ ...newTraceOptions, [obj.id]: e.target.value })}
+                                size="xs"
+                                {...obj}
+                            />
+                        </div>
+                    ))
+                }
             </div>
             <div className="mt-4 mb-2 z-50"> 
-                <h1 className="text-start text-sm font-semibold mb-1 flex items-center justify-between">
-                    Trace header options
+                <div className="flex items-center justify-between">
+                    <h2 className="text-start text-sm font-semibold mb-1 ">
+                        Trace header options
+                    </h2>
                     <span 
                         className="tooltip tooltip-right"
                         data-tip={seismicHeaderTooltip}
                     >
-                        <AiOutlineQuestionCircle />
+                        <Icon icon={AiOutlineQuestionCircle} />
                     </span>
-                </h1>
+                </div>
                 <HRLine />
             </div>
-            <div className="flex flex-row items-center gap-2 my-1">
-                <div className="flex-grow w-1/2">
-                    <LabelElement id="station" label="station" />
-                    <TextInputElement
-                        id={"station"}
-                        name={"station"}
-                        placeholder={"e.g. SEIS"}
-                        className={"input-xs w-full"}
-                        value={newTraceOptions.station}
-                        onChange={(e) => setNewTraceOptions({...newTraceOptions, station: e.target.value})}
-                    />
-                </div>
-                <div className="flex-grow w-1/2">
-                    <LabelElement id="component" label="Component" />
-                    <TextInputElement
-                        id={"component"}
-                        name={"component"}
-                        placeholder={"e.g. E"}
-                        className={"input-xs w-full"}
-                        value={newTraceOptions.component}
-                        onChange={(e) => setNewTraceOptions({...newTraceOptions, component: e.target.value})}
-                    />
-                </div>
-            </div>
-            <div className="flex flex-row items-center gap-2 my-1">
-                <div className="flex-grow w-1/2">
-                    <LabelElement id="startdate" label="Start date" />
-                    <DateInputElement
-                        id={"startdate"}
-                        name={"startdate"}
-                        className={"input-xs block w-full"}
-                        value={newTraceOptions.startdate}
-                        onChange={(e) => setNewTraceOptions({...newTraceOptions, startdate: e.target.value})}
-                    />
-                </div>
-                <div className="flex-grow w-1/2">
-                    <LabelElement id="starttime" label="Start time" />
-                    <TimeInputElement
-                        id={"starttime"}
-                        name={"starttime"}
-                        className={"input-xs block w-full"}
-                        value={newTraceOptions.starttime}
-                        onChange={(e) => setNewTraceOptions({...newTraceOptions, starttime: e.target.value})}
-                    />
-                </div>
-            </div>
-            <div className="flex flex-row items-center gap-2 my-1">
-                <div className="flex-grow w-1/2">
-                    <LabelElement id="fs" label="Sampling rate *" />
-                    <NumberInputElement
-                        id={"fs"}
-                        name={"fs"}
-                        className={"input-xs w-full"}
-                        value={newTraceOptions.fs}
-                        onChange={(e) => setNewTraceOptions({...newTraceOptions, fs: e.target.value})}
-                    />
-                </div>
-                <div className="flex-grow w-1/2">
-                    
-                </div>
+            <div className="grid grid-cols-2 gap-2 items-center">
+                {
+                    seismicParams.map(obj => (
+                        <div key={obj.id}>
+                            <LabelElement htmlFor={obj.id} label={obj.label} />
+                            <FormElement
+                                className={"input-xs w-full"}
+                                value={newTraceOptions[obj.id]}
+                                onChange={(e) => setNewTraceOptions({ ...newTraceOptions, [obj.id]: e.target.value })}
+                                size="xs"
+                                {...obj}
+                            />
+                        </div>
+                    ))
+                }
             </div>
             <HRLine />
             <div className="flex flex-row items-center justify-center gap-2 mt-4">
@@ -164,7 +126,7 @@ function NewTraceMenu({ setActivatedNewTraceMenu, newTraceOptions, setNewTraceOp
                     toolTipText="Upload trace data"
                     onClick={handleDataUpload}
                 >
-                    <FiUpload />
+                    <Icon icon={HiOutlineUpload} />
                     Upload data
                 </Button>
             </div>
@@ -173,118 +135,92 @@ function NewTraceMenu({ setActivatedNewTraceMenu, newTraceOptions, setNewTraceOp
     )
 }
 
-function TraceInfoMenu({ setActivatedMenuIndex, traces, setTraces, ind, trace }) {
-
-    function handleInputChange(traceId, parameter, value) {
-        console.log(traceId, parameter, value)
-        let newTraces = traces.map((trace, i) => {
-            if (trace.trace_id === traceId) {
-                let newTrace = {...trace, stats: {...trace.stats, [parameter]: value}}
-                return newTrace
+function TraceInfoMenu({ setActivatedMenuIndex, traces, backupTraces, setTraces, setBackupTraces, setError, setSuccess, setLoading, traceId }) {
+    const [currentUpdateIndex, setCurrentUpdateIndex] = useState(null)
+    async function handleFormInputChange(curr_trace_id, param, value) {
+        let newTraces = traces.map((tr, i) => {
+            if (tr.trace_id === curr_trace_id) {
+                return {...tr, stats: {...tr.stats, [param]: value}}
             } else {
-                return trace
+                return tr
             }
         })
-       setTraces(newTraces)
+        setTraces(newTraces)
     }
 
+    const trace = traces.find(tr => tr.trace_id === traceId);
+
     return (
-        <div className="flex flex-col py-6 px-4 items-stretch gap-1 absolute top-100 end-0 bg-white border shadow rounded z-50">
-            <div  className="absolute top-1 end-2">
-                <Button 
-                    variant="ghost" 
-                    size="small"
-                    onClick={() => setActivatedMenuIndex(null)}
-                    toolTipText="Close the menu."
-                >
-                    <IoMdClose />
-                </Button>
+        <form onSubmit={(e) => handleUpdateHeader(e)}>
+            <div className="flex flex-col p-4 items-stretch gap-1 absolute top-100 end-0 bg-white border shadow rounded z-50">
+                <div  className="absolute top-1 end-2">
+                    <Button 
+                        variant="ghost" 
+                        size="small"
+                        onClick={() => setActivatedMenuIndex(null)}
+                        toolTipText="Close the menu."
+                        type="button"
+                    >
+                        <Icon icon={IoMdClose} />
+                    </Button>
+                </div>
+                <div className="flex flex-col items-stretch">
+                    {
+                        traceHeaderParams.map(obj => (
+                            <>
+                                <div key={obj.id} className="my-1">
+                                    <LabelElement htmlFor={obj.id} label={obj.label} className=" font-semibold" />
+                                    <div className="grid grid-cols-2 items-center">
+                                        {
+                                            currentUpdateIndex === obj.id ? (
+                                                <FormElement
+                                                    value={trace.stats[obj.id]}
+                                                    onChange={(e) => handleFormInputChange(trace.trace_id, obj.id, e.target.value)}
+                                                    size="xs"
+                                                    className="w-40"
+                                                    {...obj}
+                                                />
+                                            ) : (
+                                                <p className="text-sm w-40  font-light">{trace.stats[obj.id]}</p>
+                                            )
+                                        }
+                                        {
+                                            !obj.readOnly && (
+                                                currentUpdateIndex === obj.id ? (
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="extra-small"
+                                                        onClick={() => setCurrentUpdateIndex(null)}
+                                                    >
+                                                        <Icon icon={LiaUndoAltSolid} />
+                                                    </Button>
+                                                ) : (
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="extra-small"
+                                                        onClick={() => setCurrentUpdateIndex(obj.id)}
+                                                        toolTipText={`Update ${obj.label}`}
+                                                    >
+                                                        <Icon icon={MdEdit} />
+                                                    </Button>
+                                                )
+                                            )
+                                        }
+                                    </div>
+                                    
+                                </div>
+                                <HRLine />
+                            </>
+                        ))
+                    }
+                </div>
+                <p className="text-sm text-center my-1">Elements with "*" are readonly</p>
             </div>
-            <div>
-                <LabelElement id="station" label="station" />
-                <TextInputElement
-                    id={"station"}
-                    name={"station"}
-                    value={trace.stats.station}
-                    onChange={(e) => handleInputChange(trace.trace_id, "station", e.target.value)}
-                    placeholder={"e.g. SEIS"}
-                    className={"input-sm"}
-                />
-            </div>
-            <div>
-                <LabelElement id="start_date" label="Start date" />
-                <DateInputElement
-                    id={"start_date"}
-                    name={"start_date"}
-                    value={trace.stats.start_date}
-                    onChange={(e) => handleInputChange(trace.trace_id, "start_date", e.target.value)}
-                    className={"input-sm block w-full"}
-                />
-            </div>
-            <div>
-                <LabelElement id="start_time" label="Start time" />
-                <TimeInputElement
-                    id={"start_time"}
-                    name={"start_time"}
-                    value={trace.stats.start_time}
-                    onChange={(e) => handleInputChange(trace.trace_id, "start_time", e.target.value)}
-                    className={"input-sm block w-full"}
-                />
-            </div>
-            <div>
-                <LabelElement id="fs" label="Sampling rate *" />
-                <NumberInputElement
-                    id={"fs"}
-                    name={"fs"}
-                    value={trace.stats.sampling_rate}
-                    onChange={(e) => handleInputChange(trace.trace_id, "sampling_rate", e.target.value)}
-                    className={"input-sm"}
-                    readOnly={true}
-                />
-            </div>
-            <div>
-                <LabelElement id="npts" label="Total sample points *" />
-                <NumberInputElement
-                    id={"npts"}
-                    name={"npts"}
-                    value={trace.stats.npts}
-                    onChange={(e) => handleInputChange(trace.trace_id, "npts", e.target.value)}
-                    className={"input-sm"}
-                    readOnly={true}
-                />
-            </div>
-            <div>
-                <LabelElement id="component" label="Component" />
-                <TextInputElement
-                    id={"component"}
-                    name={"component"}
-                    value={trace.stats.component}
-                    onChange={(e) => handleInputChange(trace.trace_id, "component", e.target.value)}
-                    placeholder={"e.g. E"}
-                    className={"input-sm"}
-                />
-            </div>
-            <p className="text-sm text-center my-1">Elements with "*" are readonly</p>
-        </div>
+        </form>
     )
 }
 
-function MainMenu({ traces, setLoading, setError, setSuccess, handleFileUpload }) {
-    
-    async function handleDownloadFile(fileType, data, downloadName) {
-        const blobData = await fetchRequest({
-            endpoint: fastapiEndpoints["DOWNLOAD-FILE"],
-            setError: setError,
-            setSuccess: setSuccess,
-            setLoading: setLoading,
-            method: "POST",
-            data: {data: data, file_type: fileType},
-            returnType: "blob",
-        });
-
-        const url = window.URL.createObjectURL(blobData);
-        downloadURI(url, downloadName + "." + fileType)
-    }
+function MainMenu({ traces, handleFileUpload, handleDownloadFile }) {
 
     return (
         <>
@@ -294,44 +230,24 @@ function MainMenu({ traces, setLoading, setError, setSuccess, handleFileUpload }
                 size="small"
                 toolTipText="Upload a seismic file"
             >
-                <FiUpload />
+                <Icon icon={HiOutlineUpload} />
                 Upload file
             </Button>
             <Button 
                 variant="ghost"
                 size="small"
                 onClick={() => handleDownloadFile("mseed", traces, traces[0].stats.record_name + "_download")} 
-                disabled={traces.length===0} 
+                disabled={traces ? traces.length===0 : false} 
                 toolTipText="Download the updated traces to MiniSEED file format"
             >
                 Download to MSEED
-                <MdOutlineFileDownload />
-            </Button>
-            <Button 
-                variant="ghost"
-                size="small"
-                onClick={() => handleDownloadFile("json", traces.map(tr => tr.stats), traces[0].stats.record_name + "_header")} 
-                disabled={traces.length===0} 
-                toolTipText="Download the header information of updated traces in a json format"
-            >
-                Download header
-                <MdOutlineFileDownload />
-            </Button>
-            <Button 
-                variant="ghost"
-                size="small"
-                onClick={() => handleDownloadFile("json", traces.map(tr => ({"component": tr.stats.component, "data": tr.ydata})), traces[0].stats.record_name + "_data")}
-                disabled={traces.length===0} 
-                toolTipText="Download the data values of the traces in a json file format"
-            >
-                Download Data samples
-                <MdOutlineFileDownload />
+                <Icon icon={MdOutlineFileDownload} />
             </Button>
         </>
     )
 }
 
-function Graphs({ traces, setTraces }) {
+function Graphs({ traces, backupTraces, setTraces, setBackupTraces, setError, setSuccess, setLoading, handleDownloadFile }) {
 
     const [activatedMenuIndex, setActivatedMenuIndex] = useState(null)
 
@@ -347,6 +263,7 @@ function Graphs({ traces, setTraces }) {
     function handleDeleteTrace(traceId) {
         const newTraces = traces.filter(tr => tr.trace_id !== traceId)
         setTraces(newTraces)
+        setBackupTraces(newTraces)
     }
 
     return (
@@ -354,33 +271,53 @@ function Graphs({ traces, setTraces }) {
             {
                 traces.map((tr, ind) => (
                     <div key={tr.trace_id} className="h-1/3">
-                        <div className="flex flex-row justify-end gap-2">
-                            <Button 
-                                onClick={() => handleOptionsMenuButtonClick(ind)}
+                        <div className="flex flex-row justify-end items-center gap-2">
+                            <Button
                                 variant="ghost"
                                 size="small"
+                                onClick={() => handleOptionsMenuButtonClick(ind)}
                                 toolTipText="Open the trace header menu. Feel free to update the fields."
                             >
-                                <PiGearLight />
+                                <Icon icon={PiGearLight} />
                             </Button>
-                            <Button 
-                                onClick={() => handleDeleteTrace(tr.trace_id)}
+                            <Button
                                 variant="ghost"
                                 size="small"
-                                toolTipText="Remove the respective trace."
+                                onClick={() => handleDownloadFile("json", tr.stats, tr.stats.record_name + "_header")}
+                                toolTipText="Download the header information of updated traces in a json format"
                             >
-                                <MdDeleteOutline />
+                                <Icon icon={TbFileDownload} />
+                            </Button>
+                            <Button
+                                variant="ghost"
+                                size="small"
+                                onClick={() => handleDownloadFile("json", {"record": tr.stats.record_name, "component": tr.stats.component, "data": tr.ydata}, tr.stats.record_name + "_data")}
+                                toolTipText="Download the data values of the traces in a json file format"
+                            >
+                                <Icon icon={BsDatabaseDown} />
+                            </Button>
+                            <Button
+                                variant="ghost"
+                                size="small"
+                                onClick={() => handleDeleteTrace(tr.trace_id)}
+                                toolTipText="Remove trace."
+                                className="text-error"
+                            >
+                                <Icon icon={MdDeleteOutline} />
                             </Button>
                         </div>
                         {
                             activatedMenuIndex === ind && (
                                 <TraceInfoMenu 
-                                    activatedMenuIndex = {activatedMenuIndex}
                                     setActivatedMenuIndex = {setActivatedMenuIndex}
                                     traces = {traces} 
+                                    backupTraces={backupTraces}
                                     setTraces = {setTraces}
-                                    ind = {ind}
-                                    trace = {tr}
+                                    setBackupTraces = {setBackupTraces}
+                                    setError = {setError}
+                                    setSuccess = {setSuccess} 
+                                    setLoading = {setLoading}
+                                    traceId={tr.trace_id}
                                 />
                             )
                         }
@@ -405,15 +342,16 @@ export default function EditSeismicFile() {
     const [success, setSuccess] = useState(null)
     const [loading, setLoading] = useState(false)
     const [traces, setTraces] = useState([]);
+    const [backupTraces, setBackupTraces] = useState([]);
     const [activatedNewTraceMenu, setActivatedNewTraceMenu] = useState(false)
     const [newTraceOptions, setNewTraceOptions] = useState({
-        skiprows: 0,
-        column: 1,
+        skip_rows: 0,
+        column_index: 1,
         station: "",
         component: "",
-        startdate: "1970-01-01",
-        starttime: "00:00:00",
-        fs: 2
+        start_date: "1970-01-01",
+        start_time: "00:00:00",
+        sampling_rate: 2
     })
     const uploadFileInputRef = useRef();
     
@@ -433,6 +371,7 @@ export default function EditSeismicFile() {
             successMessage: "The file has been succesfully uploaded!"
         });
         setTraces(traces);
+        setBackupTraces(traces);
     }
 
     async function handleFileSelection2(e, endpoint) {
@@ -454,7 +393,8 @@ export default function EditSeismicFile() {
             data: formData,
             successMessage: "The file has been succesfully uploaded!"
         });
-        setTraces([...traces, traceDict]);
+        setTraces([traceDict, ...traces]);
+        setBackupTraces([traceDict, ...traces]);
     }
 
     function handleFileUpload(e) {
@@ -462,6 +402,20 @@ export default function EditSeismicFile() {
         uploadFileInputRef.current.click();
     }
 
+    async function handleDownloadFile(fileType, data, downloadName) {
+        const blobData = await fetchRequest({
+            endpoint: fastapiEndpoints["DOWNLOAD-FILE"],
+            setError: setError,
+            setSuccess: setSuccess,
+            setLoading: setLoading,
+            method: "POST",
+            data: {data: data, file_type: fileType},
+            returnType: "blob",
+        });
+
+        const url = window.URL.createObjectURL(blobData);
+        downloadURI(url, downloadName + "." + fileType)
+    }
 
     return (
         <>
@@ -476,11 +430,8 @@ export default function EditSeismicFile() {
                 <div className="border rounded-t-lg bg-base-100 p-3 flex flex-row items-center justify-start">
                     <MainMenu 
                         traces={traces} 
-                        setTraces={setTraces} 
-                        setLoading={setLoading} 
-                        setError={setError} 
-                        setSuccess={setSuccess} 
                         handleFileUpload={handleFileUpload} 
+                        handleDownloadFile={handleDownloadFile}
                     />
                 </div>
                 <div className="border h-2/3 overflow-y-scroll p-4 relative">
@@ -494,7 +445,7 @@ export default function EditSeismicFile() {
                                     toolTipText="Upload a seismic file"
                                     loading={loading}
                                 >
-                                    <FiUpload />
+                                    <Icon icon={HiOutlineUpload} />
                                     Upload file
                                 </Button>
                             </div>
@@ -522,7 +473,13 @@ export default function EditSeismicFile() {
                                 </div>
                                 <Graphs 
                                     traces={traces} 
+                                    backupTraces={backupTraces}
                                     setTraces={setTraces}
+                                    setBackupTraces={setBackupTraces}
+                                    setError = {setError}
+                                    setSuccess = {setSuccess} 
+                                    setLoading = {setLoading}
+                                    handleDownloadFile={handleDownloadFile}
                                 />
                             </>
                         )

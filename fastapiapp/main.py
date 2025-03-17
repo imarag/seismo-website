@@ -15,11 +15,31 @@ app.include_router(core.router)
 # this is for raising httpexception errors
 @app.exception_handler(StarletteHTTPException)
 async def http_exception_handler(Request, exc):
-    print(exc, "****")
     return JSONResponse(
         status_code=404,
         content={"error_message": [str(exc.detail)]},
     )
+
+origins = [
+    "https://seismo-website.onrender.com",
+    "http://seismo-website.onrender.com",
+    "https://seismo-website.vercel.app",
+    "http://seismo-website.vercel.app",
+    "https://127.0.0.1:8000",
+    "http://127.0.0.1:8000",
+    "https://127.0.0.1:5000",
+    "http://127.0.0.1:5000",
+    "https://127.0.0.1:3000",
+    "http://127.0.0.1:3000",
+    "https://localhost:8000",
+    "http://localhost:8000",
+    "https://localhost:3000",
+    "http://localhost:3000",
+    "https://localhost:5000",
+    "http://localhost:5000",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
 
 # this is for errors related to validations of pydantic
 # return the errors are comma separated strings
@@ -28,12 +48,12 @@ async def validation_exception_handler(Request, exc):
     errors = exc.errors()
     return JSONResponse(
         status_code=400,
-        content={"error_message": [f'{err["msg"]}: {",".join(err["loc"][1:])}' for err in errors]}
+        content={"error_message": [f'{err["msg"]}' for err in errors]}
     )
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

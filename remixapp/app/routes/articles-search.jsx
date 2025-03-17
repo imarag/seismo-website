@@ -1,5 +1,5 @@
 import { Title, SubTitle } from "@/components/utils/Typography"
-import { SearchInputElement } from "@/components/ui/UIElements"
+import { FormElement } from "@/components/ui/UIElements";
 import Section from "@/components/utils/Section";
 import Container from "@/components/utils/Container"
 import Image from "@/components/utils/Image"
@@ -37,12 +37,13 @@ export default function ArticlesPage() {
                 <Title text="Seismic Articles" />
                 <SubTitle text="Search through the available articles to delve into seismological concepts" className="mt-4" />
                 <div className="max-w-3xl mx-auto mb-24 mt-8">
-                    <SearchInputElement 
+                    <FormElement
+                        type="search" 
                         id="q"
                         name="q"
-                        block={true}
                         placeholder="Search"
                         onChange={handleSearchInputChange}
+                        className="w-full"
                     />
                 </div>
                 <div>
