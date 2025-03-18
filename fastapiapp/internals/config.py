@@ -22,3 +22,13 @@ class Settings:
     @property
     def sample_mseed_file_path(self) -> Path:
         return self.resources_folder_path / self.sample_mseed_file_name
+
+    def initialize_folders(self):
+        """Create required folders if they don't exist."""
+        self.temp_folder_path.mkdir(parents=True, exist_ok=True)
+        self.resources_folder_path.mkdir(parents=True, exist_ok=True)
+        self.logger.info("Initialized required folders.")
+
+# Initialize settings and folders
+settings = Settings()
+settings.initialize_folders()
