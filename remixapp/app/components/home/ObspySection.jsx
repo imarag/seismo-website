@@ -12,7 +12,7 @@ export default function ObspySection() {
             <SubTitle
                 text="Process seismic data using the various ObsPy functions, manipulate date and time, and plot earthquake recordings."
             />
-            <LinkTag variant="button" href="/articles-search/obspy">
+            <LinkTag variant="button" href="/article/obspy">
                 Learn More
             </LinkTag>
             <div className="max-w-4xl mx-auto">

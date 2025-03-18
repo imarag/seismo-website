@@ -17,13 +17,13 @@ export default function ArticlesCardsSection() {
                     <CardImage src={ArrivalPickIcon} alt="seismological concepts about the creation of the earthquakes, the various seismic waves generated" />
                     <CardTitle text="Introduction to Seismology" />
                     <CardParagraph text="Delve into the various seismological concepts about the creation of the earthquakes, the various seismic waves generated, the mechanisms that trigger the seismic faults and the effects of the seismic waves on the surface." />
-                    <CardLink text="Go to page" href="/articles-search/introduction-to-seismology" />
+                    <CardLink text="Go to page" href="/article/introduction-to-seismology" />
                 </CardContainer>
                 <CardContainer>
                     <CardImage src={SiteEffectIcon} alt="influence of the underground geology on the incoming ground motion" />
                     <CardTitle text="Seismic Site Effect" />
                     <CardParagraph text="Learn about the influence of the underground geology on the incoming ground motion. Discover the local conditions that cause the site effect and whether we can estimate it or not. Lastly, explore a research that took place to understand it." />
-                    <CardLink text="Go to page" href="/articles-search/site-effect" />
+                    <CardLink text="Go to page" href="/article/site-effect" />
                 </CardContainer>
             </div>
             <LinkTag href="/articles-search">
