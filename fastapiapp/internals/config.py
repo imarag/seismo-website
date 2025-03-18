@@ -11,6 +11,7 @@ class Settings:
     temp_folder_path: Path = Path(tempfile.gettempdir()) / "temp_data"
     resources_folder_path: Path = app_dir / "resources_data"
     sample_mseed_file_name: str = "seismic-record.mseed"
+    mseed_max_npts_allowed: int = 500000
 
     @property
     def sample_mseed_file_path(self) -> Path:
@@ -24,3 +25,4 @@ class Settings:
 # Initialize settings and folders
 settings = Settings()
 settings.initialize_folders()
+
