@@ -101,7 +101,11 @@ export default function DistanceBetweenPoints() {
     const [success, setSuccess] = useState(null)
     const [loading, setLoading] = useState(false);
     const [coords, setCoords] = useState({lat1: 34, lon1: 22, lat2: 32, lon2: 24});
-    const [distance, setDistance] = useState(null);
+    const [gps2azimuth, setGps2azimuth] = useState({
+        distance_km: null, 
+        azimuth_a_b: null, 
+        azimuth_b_a: null
+    });
 
     async function handleComputeButton() {
         let queryParams = `?lat1=${coords["lat1"]}&lon1=${coords["lon1"]}&lat2=${coords["lat2"]}&lon2=${coords["lon2"]}`
@@ -114,7 +118,7 @@ export default function DistanceBetweenPoints() {
             successMessage: "The distance has been succesfully calculated"
         });
 
-        setDistance(data["distance_km"])
+        setGps2azimuth(data)
     }
 
     return (
@@ -140,11 +144,13 @@ export default function DistanceBetweenPoints() {
                     <Icon icon={LuCalculator} />
                 </Button>
             </CenterHorizontally>
-            {distance && (
+            {gps2azimuth["distance_km"] && (
                 <CenterHorizontally>
                     <Paragraph>
-                        The distance between point 1 (lat: {coords["lat1"]}, lon: {coords["lon1"]}) and point 2 (lat: {coords["lat2"]}, lon: {coords["lon2"]}) is:{" "}
-                        <span className="font-bold">{distance} km</span>
+                        The distance between point 1 and point 2 is {" "}
+                        <span className="font-bold">{gps2azimuth.distance_km} km</span> with azimuth of {" "}
+                        point 1 to point 2, <span className="font-bold">{gps2azimuth.azimuth_a_b}</span> degrees, {" "}
+                        and of point 2 to point 1, <span className="font-bold">{gps2azimuth.azimuth_b_a}</span> degrees
                     </Paragraph>
                 </CenterHorizontally>
             )}

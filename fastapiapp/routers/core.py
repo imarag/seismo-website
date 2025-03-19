@@ -42,7 +42,10 @@ def calculate_distance(
     """Calculates the distance between two coordinates."""
     logger.info(f"Calculating distance between ({lat1}, {lon1}) and ({lat2}, {lon2}) in km")
     result = compute_distance_km(lat1, lon1, lat2, lon2)
-    return {"distance_km": result}
+    distance_km = round(result[0] / 1000, 3) 
+    azimuth_a_b = round(result[1], 3)
+    azimuth_b_a = round(result[2], 3)
+    return {"distance_km": distance_km, "azimuth_a_b": azimuth_a_b, "azimuth_b_a": azimuth_b_a}
     
     
 @router.get("/save-arrivals")

@@ -21,35 +21,66 @@ export default function Footer() {
         </aside>
         <nav>
             <FooterTitle text="Sitemap" />
-            {
-                navLinks.map(item => (
-                    <a key={item.label} href={item.href} className="link link-hover">{item.label}</a>
-                ))
-            }
+            <ul className="flex flex-col gap-2">
+                {
+                    navLinks.map(item => (
+                        <li key={item.label}>
+                            <NavLink 
+                                to={item.href} 
+                                className={`link link-hover`} 
+                            >
+                                {item.label}
+                            </NavLink>
+                        </li>
+                    ))
+                }
+            </ul>
         </nav>
         <nav>
             <FooterTitle text="Articles" />
-            {
-                completedArticles.map(el => (
-                    <NavLink key={el.title} to={`/article/${el.slug}`} className="link link-hover">{el.title}</NavLink>
-                ))
-            }
-            <NavLink to="/articles-search" className="link link-hover flex flex-row items-center gap-2 underline mt-3">
-                All articles
-                <IoIosArrowRoundForward />
-            </NavLink>
+            <ul className="flex flex-col gap-2">
+                {
+                    completedArticles.map(item => (
+                        <li key={item.title}>
+                            <NavLink 
+                                to={`/article/${item.slug}`} 
+                                className={`link link-hover`} 
+                            >
+                                {item.title}
+                            </NavLink>
+                        </li>
+                    ))
+                }
+                <li>
+                    <NavLink to="/articles-search" className="link link-hover flex flex-row items-center gap-2 underline mt-3">
+                        All articles
+                        <IoIosArrowRoundForward />
+                    </NavLink>
+                </li>
+            </ul>
         </nav>
         <nav>
             <FooterTitle text="Tools" />
-            {
-                completedTools.map(el => (
-                    <NavLink key={el.title} to={`/tool/${el.slug}`} className="link link-hover">{el.title}</NavLink>
-                ))
-            }
-            <NavLink to="/tools-search" className="link link-hover flex flex-row items-center gap-2 underline mt-3">
-                All tools
-                <IoIosArrowRoundForward />
-            </NavLink>
+            <ul className="flex flex-col gap-2">
+                {
+                    completedTools.map(item => (
+                        <li key={item.title}>
+                            <NavLink 
+                                to={`/tool/${item.slug}`} 
+                                className={`link link-hover`} 
+                            >
+                                {item.title}
+                            </NavLink>
+                        </li>
+                    ))
+                }
+                <li>
+                <NavLink to="/tools-search" className="link link-hover flex flex-row items-center gap-2 underline mt-3">
+                    All tools
+                    <IoIosArrowRoundForward />
+                </NavLink>
+                </li>
+            </ul>
         </nav>
     </div>
   )

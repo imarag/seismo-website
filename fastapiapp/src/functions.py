@@ -65,11 +65,10 @@ def convert_stream_to_traces_list(stream: Stream) -> list[dict]:
     return traces_data_list
 
 
-def compute_distance_km(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
+def compute_distance_km(lat1: float, lon1: float, lat2: float, lon2: float) -> tuple:
     """Calculates the distance in kilometers between two geographic points."""
     try:
-        result = gps2dist_azimuth(lat1, lon1, lat2, lon2)[0] / 1000
-        result = round(result, 3)
+        result = gps2dist_azimuth(lat1, lon1, lat2, lon2)
         return result
     except Exception as e:
         error_message = f"Distance calculation failed: {e}"

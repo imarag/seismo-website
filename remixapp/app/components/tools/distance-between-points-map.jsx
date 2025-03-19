@@ -1,21 +1,23 @@
-import { MapContainer, TileLayer, useMap, Marker } from "react-leaflet";
+// import { TileLayer, Marker } from "react-leaflet";
+import { useMap } from 'react-leaflet/hooks'
+import { MapContainer } from 'react-leaflet/MapContainer'
 import { useEffect } from "react";
-import L from 'leaflet';
+// import L from 'leaflet';
 
 // Import the default Leaflet marker images
-import markerIcon from 'leaflet/dist/images/marker-icon.png';
-import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
-import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+// import markerIcon from 'leaflet/dist/images/marker-icon.png';
+// import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
+// import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
-// Set up default icon configuration
-const DefaultIcon = L.icon({
-  iconUrl: markerIcon,
-  iconRetinaUrl: markerIcon2x,
-  shadowUrl: markerShadow,
-});
+// // Set up default icon configuration
+// const DefaultIcon = L.icon({
+//   iconUrl: markerIcon,
+//   iconRetinaUrl: markerIcon2x,
+//   shadowUrl: markerShadow,
+// });
 
 // Apply the default icon globally
-L.Marker.prototype.options.icon = DefaultIcon;
+// L.Marker.prototype.options.icon = DefaultIcon;
 
 function MapComponent({ coords }) {
     let lat1 = coords["lat1"];
@@ -37,7 +39,7 @@ function MapComponent({ coords }) {
     return null;
 }
 
-export default function Map({ coords }) {
+export default function DistanceMap({ coords }) {
     let lat1 = coords["lat1"];
     let lon1 = coords["lon1"];
     let lat2 = coords["lat2"];
@@ -50,12 +52,12 @@ export default function Map({ coords }) {
             scrollWheelZoom={true}
             style={{height: "500px"}}
         >
-            <TileLayer
+            {/* <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
             <Marker position={[lat1, lon1]}></Marker>
-            <Marker position={[lat2, lon2]}></Marker>
+            <Marker position={[lat2, lon2]}></Marker> */}
             <MapComponent coords={coords} />
         </MapContainer>
     );

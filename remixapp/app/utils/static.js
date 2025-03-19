@@ -1,7 +1,7 @@
 import { FaFacebook, FaInstagram, FaLinkedin } from "react-icons/fa";
 
-// export const serverUrl = "http://127.0.0.1:5000"
-export const serverUrl = "https://seismo-website.onrender.com"
+export const serverUrl = "http://127.0.0.1:5000"
+// export const serverUrl = "https://seismo-website.onrender.com"
 
 export const socialMediaInfo = [
     {app: "facebook", url: "https://www.facebook.com/giannis.mar.5/", icon: FaFacebook},
@@ -12,27 +12,17 @@ export const socialMediaInfo = [
 export const fastapiEndpoints = {
     "CALCULATE-DISTANCE": `${serverUrl}/core/calculate-distance`,
     "UPLOAD-SEISMIC-FILE": `${serverUrl}/core/upload-seismic-file`,
-    "ADD-TRACE": `${serverUrl}/handle-seismic-traces/add-trace`,
-    "UPDATE-TRACE-HEADER": `${serverUrl}/handle-seismic-traces/update-trace-header`,
-    "UPLOAD-DATA-FILE": `${serverUrl}/core/upload-data-file`,
-    "DOWNLOAD-SEISMIC-FILE": `${serverUrl}/core/download-seismic-file`,
     "DOWNLOAD-TEST-FILE": `${serverUrl}/core/download-test-file`,
     "DOWNLOAD-FILE": `${serverUrl}/core/download-file`,
     "SAVE-ARRIVALS": `${serverUrl}/core/save-arrivals`,
-    "CONVERT-TO-MSEED": `${serverUrl}/core/convert-to-mseed`,   
+    "ADD-TRACE": `${serverUrl}/handle-seismic-traces/add-trace`,
+    "UPDATE-TRACE-HEADER": `${serverUrl}/handle-seismic-traces/update-trace-header`,
     "TRIM-WAVEFORM": `${serverUrl}/signal-processing/trim`,
     "TAPER-WAVEFORM": `${serverUrl}/signal-processing/taper`,
     "DETREND-WAVEFORM": `${serverUrl}/signal-processing/detrend`,
     "FILTER-WAVEFORM": `${serverUrl}/signal-processing/filter`,
     "COMPUTE-FOURIER": `${serverUrl}/signal-processing/compute-fourier`,
     "COMPUTE-HVSR": `${serverUrl}/signal-processing/compute-hvsr`,
-    "TAPER-TYPE-OPTIONS": `${serverUrl}/static-data/get-taper-type-options`,   
-    "TAPER-SIDE-OPTIONS": `${serverUrl}/static-data/get-taper-side-options`,   
-    "DETREND-TYPE-OPTIONS": `${serverUrl}/static-data/get-detrend-type-options`,   
-    "FILTER-OPTIONS": `${serverUrl}/static-data/get-filter-options`,   
-    "DELIMITER-OPTIONS": `${serverUrl}/static-data/get-delimiter-options`,
-    "GET-ARTICLES" : `${serverUrl}/static-data/get-articles`, 
-    "GET-ARTICLE" : `${serverUrl}/static-data/get-article`, 
 }
 
 export const navLinks = [
