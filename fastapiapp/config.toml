@@ -1,0 +1,20 @@
+[project-info]
+name = "SeismoApp"
+version = "1.0.0"
+summary = "A website for exploring and analyzing seismic data."
+description = """
+SeismoApp is a website dedicated to seismology, offering tools to explore and analyze seismic data.
+Explore earthquake information, download sample seismic data, and learn more about seismology with interactive tools.
+"""
+authors = ["Ioannis Maragkakis (giannis.marar@hotmail.com)"]
+homepage = "https://seismo-website.vercel.app/"
+repository = "https://github.com/imarag"
+
+[contact]
+name = "Ioannis Maragkakis"
+url = "https://seismo-website.vercel.app/"
+email = "giannis.marar@hotmail.com"
+
+[licence]
+name = "MIT"
+url = "https://opensource.org/licenses/MIT"

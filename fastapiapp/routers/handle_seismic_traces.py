@@ -3,13 +3,13 @@ from fastapi import APIRouter, Form, UploadFile
 import pandas as pd
 from pathlib import Path
 import datetime
-from internals.models import TraceParams, TraceStats
+from internal.models import TraceParams, TraceStats
 from src.utils import RequestHandler
 import numpy as np
 from obspy.core import Stream, Trace
 from typing import Annotated
-from internals.config import Settings
-from internals.static import SupportedUploadFileTypes
+from internal.config import Settings
+from internal.static import SupportedUploadFileTypes
 
 router = APIRouter(
     prefix="/handle-seismic-traces",

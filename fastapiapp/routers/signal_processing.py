@@ -3,7 +3,7 @@ from src.functions import (
     trim_trace, taper_trace, detrend_trace, 
     filter_trace, compute_fourier_spectra, compute_hvsr_spectra
     )
-from internals.models import (
+from internal.models import (
     TrimParams, TaperParams, DetrendParams, 
     FilterParams, FourierParams, HVSRParams
 )

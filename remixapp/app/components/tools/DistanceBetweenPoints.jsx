@@ -147,7 +147,7 @@ export default function DistanceBetweenPoints() {
             {gps2azimuth["distance_km"] && (
                 <CenterHorizontally>
                     <Paragraph>
-                        The distancee between point 1 and point 2 is {" "}
+                        The distance between point 1 and point 2 is {" "}
                         <span className="font-bold">{gps2azimuth.distance_km} km</span> with azimuth of {" "}
                         point 1 to point 2, <span className="font-bold">{gps2azimuth.azimuth_a_b}</span> degrees, {" "}
                         and of point 2 to point 1, <span className="font-bold">{gps2azimuth.azimuth_b_a}</span> degrees

@@ -18,6 +18,7 @@ httpcore==1.0.7
 httptools==0.6.4
 httpx==0.28.1
 idna==3.10
+iniconfig==2.1.0
 Jinja2==3.1.4
 kiwisolver==1.4.7
 lxml==5.3.0
@@ -30,11 +31,13 @@ obspy==1.4.1
 packaging==24.2
 pandas==2.2.3
 pillow==11.0.0
+pluggy==1.5.0
 pydantic==2.10.3
 pydantic-extra-types==2.10.1
 pydantic_core==2.27.1
 Pygments==2.18.0
 pyparsing==3.2.0
+pytest==8.3.5
 python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
 python-multipart==0.0.19

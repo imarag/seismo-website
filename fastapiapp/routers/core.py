@@ -7,9 +7,9 @@ from src.functions import (
     write_mseed_to_file
 )
 from src.utils import RequestHandler, delete_file
-from internals.config import Settings
-from internals.models import DownloadFileParams, ArrivalsParams
-from internals.static import SupportedDownloadFileTypes
+from internal.config import Settings
+from internal.models import DownloadFileParams, ArrivalsParams
+from internal.static import SupportedDownloadFileTypes
 
 router = APIRouter(
     prefix="/core",
@@ -89,19 +89,20 @@ async def download_file(
     temp_file_name = f"temp-file.{download_file_params.file_type}"
     temp_file_path = settings.temp_folder_path / temp_file_name
 
-    
-    if download_file_params.file_type == SupportedDownloadFileTypes.MSEED.value:
-        write_file_function = write_mseed_to_file
-    elif download_file_params.file_type == SupportedDownloadFileTypes.JSON.value:
-        write_file_function = write_json_to_file
-    elif download_file_params.file_type == SupportedDownloadFileTypes.TXT.value:
-        write_file_function = write_txt_to_file
-    
     try:
-        write_file_function(download_file_params.data, temp_file_path)
+        if download_file_params.file_type == SupportedDownloadFileTypes.MSEED.value and isinstance(download_file_params.data, list):
+            write_mseed_to_file(download_file_params.data, temp_file_path)
+        elif download_file_params.file_type == SupportedDownloadFileTypes.JSON.value:
+            write_json_to_file(download_file_params.data, temp_file_path)
+        elif download_file_params.file_type == SupportedDownloadFileTypes.TXT.value:
+            write_txt_to_file(download_file_params.data, temp_file_path)
+        else:
+            error_message = f"Invalid input data structure for MSEED file type. A list is expected!"
+            RequestHandler.send_error(error_message, status_code=500)
+
     except Exception as e:
         error_message = f"Cannot download the file: {str(e)}"
         RequestHandler.send_error(error_message, status_code=500)
-
+    
     background_tasks.add_task(delete_file, temp_file_path)
     return RequestHandler.send_file_response(temp_file_path, temp_file_name)

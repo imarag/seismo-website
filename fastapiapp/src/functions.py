@@ -1,11 +1,11 @@
 from obspy.core import read, UTCDateTime, Trace, Stream
-from internals.config import Settings
+from internal.config import Settings
 import numpy as np
 from pathlib import Path
 import json
 from src.utils import RequestHandler
 from obspy.geodetics import gps2dist_azimuth
-from internals.models import (
+from internal.models import (
     TraceStats, TraceParams, TrimParams, TaperParams, 
     DetrendParams, FilterParams, FourierParams, HVSRParams
 )

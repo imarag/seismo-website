@@ -1,4 +1,4 @@
-from internals.config import Settings
+from internal.config import Settings
 from obspy.core import Trace, Stream
 import numpy as np
 import re

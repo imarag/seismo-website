@@ -21,8 +21,3 @@ class Settings:
         """Create required folders if they don't exist."""
         self.temp_folder_path.mkdir(parents=True, exist_ok=True)
         self.logger.info(f"Initialized temp folder: {self.temp_folder_path}")
-
-# Initialize settings and folders
-settings = Settings()
-settings.initialize_folders()
-

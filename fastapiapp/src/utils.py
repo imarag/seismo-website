@@ -1,14 +1,15 @@
 from pathlib import Path
 from fastapi import HTTPException, Response
 from fastapi.responses import FileResponse
-from internals.config import Settings
+from internal.config import Settings
+from typing import NoReturn
 
 settings = Settings()
 logger = settings.logger
 
 class RequestHandler:
     @staticmethod
-    def send_error(error_message: str, status_code: int = 500) -> None:
+    def send_error(error_message: str, status_code: int = 500) -> NoReturn:
         """Raises an HTTPException with a given error message and status code."""
         logger.error(error_message)
         raise HTTPException(detail=error_message, status_code=status_code)
@@ -30,12 +31,12 @@ class RequestHandler:
 
 def delete_file(file_path: Path) -> None:
     """Delete a file from the server."""
-    try:
-        if file_path.exists():
+    if file_path.exists():
+        try:
             file_path.unlink()
             logger.info(f"Removed file: {file_path}")
-        else:
-            logger.warning(f"File not found: {file_path}")
-    except Exception as e:
-        error_message = f"Error deleting file: {e}"
-        RequestHandler.send_error(error_message, status_code=500)
+        except Exception as e:
+            logger.error(f"Error deleting file: {e}")
+            raise HTTPException(status_code=500, detail=f"Error deleting file: {e}")
+    else:
+        logger.warning(f"File not found: {file_path}")
