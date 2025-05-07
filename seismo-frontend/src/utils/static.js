@@ -1,6 +1,6 @@
 import { FaFacebook, FaInstagram, FaLinkedin } from "react-icons/fa";
 
-export const serverUrl = "http://127.0.0.1:5000"
+export const serverUrl = "http://127.0.0.1:5000/api/"
 // export const serverUrl = "https://seismo-website.onrender.com"
 
 export const socialMediaInfo = [

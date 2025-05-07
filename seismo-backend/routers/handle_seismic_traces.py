@@ -12,7 +12,7 @@ from internals.config import Settings
 from internals.static import SupportedUploadFileTypes
 
 router = APIRouter(
-    prefix="/handle-seismic-traces",
+    prefix="/api/handle-seismic-traces",
     tags=["handle seismic traces"],
 )
 

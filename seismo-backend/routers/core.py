@@ -19,7 +19,7 @@ router = APIRouter(
 settings = Settings()
 logger = settings.logger 
 
-@router.post("/upload-seismic-file")
+@router.post("/api/upload-seismic-file")
 async def upload_seismic_file(file: UploadFile) -> list:
     """Uploads a seismic file and returns a list of Obspy Traces as a dictionary."""
     logger.info("Reading the input seismic file")

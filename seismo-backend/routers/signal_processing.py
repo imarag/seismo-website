@@ -9,7 +9,7 @@ from internals.models import (
 )
 
 router = APIRouter(
-    prefix="/signal-processing",
+    prefix="/api/signal-processing",
     tags=["signal processing"],
 )
 
