@@ -9,7 +9,8 @@ import AlignVertical from "@/components/utils/AlignVertical";
 export default function HomePage() {
   return (
     <>
-      <HeroSection />
+      <Container><HeroSection /></Container>
+
       <Section>
         <Container>
           <AlignVertical>

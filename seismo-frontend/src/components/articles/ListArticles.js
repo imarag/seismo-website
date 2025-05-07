@@ -24,8 +24,8 @@ export default function ListArticles({ allArticles }) {
             />
           </div>
           <div className="flex-shrink flex-grow">
-            <CardTitle text={article.title} center={false} />
-            <CardParagraph text={article.description} center={false} />
+            <CardTitle text={article.title} />
+            <CardParagraph text={article.description} />
             {article.completed ? (
               <LinkTag href={`/articles/${article.slug}`}>Go to page</LinkTag>
             ) : (

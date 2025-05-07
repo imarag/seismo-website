@@ -4,6 +4,11 @@ import Section from "@/components/utils/Section"
 import Container from "@/components/utils/Container"
 import { articles } from "@/utils/topics"
 
+export function generateStaticParams() {
+    return articles.map((article) => ({
+        slug: article.slug,
+    }))
+}
 
 export default async function ArticleSlugPage({ params }) {
     const { slug } = await params

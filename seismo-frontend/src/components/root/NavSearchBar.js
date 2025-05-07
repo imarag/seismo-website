@@ -13,7 +13,16 @@ import { IoMdClose } from "react-icons/io";
 export default function NavSearchBar({ setShowNavbar }) {
 
     const [filteredTopics, setFilteredTopics] = useState([]);
-    const [showSearchMenu, setShowSearchMenu] = useState(false)
+    const [showSearchMenu, setShowSearchMenu] = useState(false);
+    const [searchValue, setSearchValue] = useState("")
+
+    useEffect(() => {
+        const topics = [...articles, ...tools];
+        const newFilteredTopics = topics.filter(el => (
+            el.description.toLowerCase().includes(searchValue.toLowerCase()) || el.title.toLowerCase().includes(searchValue.toLowerCase())
+        ))
+        setFilteredTopics(newFilteredTopics)
+    }, [searchValue])
 
     useEffect(() => {
         const handleEsc = (event) => {
@@ -39,24 +48,9 @@ export default function NavSearchBar({ setShowNavbar }) {
         };
     }, [showSearchMenu]);
 
-    function handleSearchBarChange(e) {
-        const searchValue = e.target.value.toLowerCase();
-        const topics = [...articles, ...tools];
-
-        searchValue ? (
-            setFilteredTopics(
-                topics.filter(el => (
-                    el.description.toLowerCase().includes(searchValue) || el.title.toLowerCase().includes(searchValue)
-                ))
-            )
-        ) : (
-            setFilteredTopics([])
-        )
-    }
 
     function handleShowSearchMenu() {
         setShowSearchMenu(!showSearchMenu)
-        setFilteredTopics([])
     }
 
     function handleLinkClick() {
@@ -65,12 +59,13 @@ export default function NavSearchBar({ setShowNavbar }) {
 
     return (
         <section>
-            <button onClick={handleShowSearchMenu} data-bs-toggle="modal" data-bs-target="#seismic-topics-modal">
+            <button className="block w-full" onClick={handleShowSearchMenu} data-bs-toggle="modal" data-bs-target="#seismic-topics-modal">
                 <FormElement
                     type="search"
                     placeholder="search a topic..."
                     className="input-md w-full"
-                    onChange={handleSearchBarChange}
+                    onChange={(e) => setSearchValue(e.target.value)}
+                    value={searchValue}
                     readOnly={true}
                 />
             </button>
@@ -83,7 +78,8 @@ export default function NavSearchBar({ setShowNavbar }) {
                                 type="search"
                                 placeholder="search a topic..."
                                 className="input-md w-full"
-                                onChange={handleSearchBarChange}
+                                onChange={(e) => setSearchValue(e.target.value)}
+                                value={searchValue}
                             />
                         </div>
                         <button className="btn btn-sm btn-ghost absolute top-2 end-2" onClick={() => setShowSearchMenu(false)}>
@@ -92,9 +88,10 @@ export default function NavSearchBar({ setShowNavbar }) {
                         <div className="grow overflow-scroll">
                             {
                                 filteredTopics.length === 0 ? (
-                                    <p className="text-center mt-8 italic">No topics found...</p>
+                                    <p className="text-center mt-8 italic">No search results for &quot;{searchValue}&quot;</p>
                                 ) : (
                                     <>
+                                        <p className="text-xs text-base-content/50 italic">{filteredTopics.length} {filteredTopics.length === 1 ? "topic " : "topics "} found</p>
                                         <ul>
                                             {
                                                 filteredTopics.map(tp => (

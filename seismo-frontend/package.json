@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "deploy": "npm run build && rm -rf ../seismo-backend/dist && cp -r dist ../seismo-backend/dist && cd .. && git add . && git commit -m \"Deploy static site\" && git push"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",

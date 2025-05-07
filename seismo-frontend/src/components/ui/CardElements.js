@@ -1,46 +1,46 @@
 import Img from "@/components/utils/Img";
 import LinkTag from "@/components/ui/LinkTag";
 
-export function CardTitle({ text, center = true, className = "" }) {
+export function CardTitle({ text, center = true, className = null }) {
   return (
-    <h1
-      className={`text-primary ${center ? "text-center" : "text-start"
-        } font-semibold text-2xl mb-1 ${className}`}
+    <h2
+      className={`text-primary font-semibold text-lg ${className || ""}`}
     >
       {text}
-    </h1>
+    </h2>
   );
 }
 
-export function CardImage({ src, alt, className = "" }) {
+export function CardImage({ src, alt, className = null }) {
   return (
-    <Img src={src} alt={alt} className={`w-32 block mx-auto ${className}`} />
+    <Img src={src} alt={alt} className={`w-32 block mx-auto ${className || ""}`} />
   );
 }
 
-export function CardParagraph({ text, center = true, className = "" }) {
+export function CardParagraph({ text, center = true, className = null }) {
   return (
     <p
-      className={`${center ? "text-center" : "text-start"
-        } font-light text-lg ${className}`}
+      className={`font-light ${className || ""}`}
     >
       {text}
     </p>
   );
 }
 
-export function CardLink({ text = "Go to page", href, className = "" }) {
+export function CardLink({ text = "Go to page", href, className = null }) {
   return (
-    <LinkTag href={href} variant="button" className={className}>
-      {text}
-    </LinkTag>
+    <div className="text-center">
+      <LinkTag href={href} variant="button" className={className}>
+        {text}
+      </LinkTag>
+    </div>
   );
 }
 
 export function CardContainer({ children, className = "" }) {
   return (
     <div
-      className={`flex flex-col items-center p-4 gap-4 rounded-lg  ${className}`}
+      className={`space-y-4 p-8 rounded-lg bg-base-200 ${className}`}
     >
       {children}
     </div>

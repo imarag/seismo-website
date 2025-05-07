@@ -6,6 +6,11 @@ import { tools } from "@/utils/topics"
 import Container from "@/components/utils/Container"
 import AlignVertical from "@/components/utils/AlignVertical"
 
+export function generateStaticParams() {
+    return tools.map((tool) => ({
+        slug: tool.slug,
+    }))
+}
 
 export default async function ToolsSlugPage({ params }) {
     const { slug } = await params

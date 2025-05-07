@@ -11,7 +11,7 @@ export function Title({ text, styledText = null, className = null }) {
 
 export function SubTitle({ text, className = null }) {
     return (
-        <h2 className={`text-lg lg:text-2xl text-center font-extralight max-w-5xl mx-auto ${className || ""}`}>
+        <h2 className={`text-lg lg:text-xl text-center font-extralight max-w-5xl mx-auto ${className || ""}`}>
             {text}
         </h2>
     );

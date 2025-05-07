@@ -1,9 +1,9 @@
 "use client";
 
-import FourierGraphIcon from "@/images/fourier-graph-icon.png";
-import AsciiToMseed from "@/images/ascii-to-mseed-icon.png";
-import PickingIcon from "@/images/picking-icon.png";
-import SignalProcessIcon from "@/images/signal-process-icon.png";
+import FourierGraphIcon from "@/icons/fourier-graph-icon.svg?url";
+import AsciiToMseed from "@/icons/ascii-to-mseed-icon.svg?url";
+import PickingIcon from "@/icons/picking-icon.svg?url";
+import SignalProcessIcon from "@/icons/signal-process-icon.svg?url";
 
 import FourierGif from "@/images/fourier-gif.gif";
 import PickGif from "@/images/pick-gif.gif";

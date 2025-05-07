@@ -1,4 +1,4 @@
-# Task Description
+## Task Description
 
 In this tutorial, our aim is to compute the Fourier spectra within the signal and the noise windows on the waveforms. This process involves a series of crucial pre-processing steps which enhance the quality of the data and ensure that the subsequent Fourier spectra analysis is applied at a specific portion of the seismic recordings. The pre-processing steps can be summarized as follows:
 
@@ -9,14 +9,14 @@ In this tutorial, our aim is to compute the Fourier spectra within the signal an
 - Apply a smoothing algorithm (tapering) on the waveforms in order to ensure zero acceleration values at the edges.
 - Compute the fourier spectra on the processed waveforms
 
-# Getting data
+## Getting data
 
-In this article we will make use of the  [ObsPy Python library](https://docs.obspy.org/) to apply the seismological computations and the [Python Matplotlib library](https://matplotlib.org/) to plot the results. For this reason, we will start by initializing the libraries that we will use throughout the rest of the article:
+In this article we will make use of the [ObsPy Python library](https://docs.obspy.org/) to apply the seismological computations and the [Python Matplotlib library](https://matplotlib.org/) to plot the results. For this reason, we will start by initializing the libraries that we will use throughout the rest of the article:
 
 ```py
     import matplotlib.pyplot as plt
-    from obspy.core import read, UTCDateTime   
-    import numpy as np 
+    from obspy.core import read, UTCDateTime
+    import numpy as np
 ```
 
 To proceed, start by reading a seismic file which has a [MiniSEED](https://ds.iris.edu/ds/nodes/dmc/data/formats/miniseed/) file format:
@@ -40,12 +40,9 @@ To illustrate the waveforms, we will use the `plot()` method of the `Stream` obj
     st.plot()
 ```
 
-![A graph of Acceleration data read by a miniseed file](/img/seismic-waveform.png)
-*Graph showing three components of time-series data: time on the x-axis and acceleration on the y-axis*
+## Application of the pre-processing steps
 
-# Application of the pre-processing steps
-
-## Applying a bandpass filter
+### Applying a bandpass filter
 
 Initiate the process by applying a bandpass filter to the records within the frequency range of 1 to 3 Hz. This step aims to eliminate surrounding noise and facilitate the arrival selection. Utilize the ObsPy `filter()` function for this purpose:
 
@@ -58,9 +55,9 @@ Initiate the process by applying a bandpass filter to the records within the fre
 ```
 
 ![Recordings of a record after applying a bandpass filter of 1-3 Hz](/img/obspy-stream-filtered.png)
-*Recordings after applying a 1-3 Hz bandpass filter, showing time (x-axis) and acceleration (y-axis) for three components.*
+_Recordings after applying a 1-3 Hz bandpass filter, showing time (x-axis) and acceleration (y-axis) for three components._
 
-## Selection of the P and S wave arrivals
+### Selection of the P and S wave arrivals
 
 It's clear from the vertical filtered component (Z), that the P wave arrival occurs roughly at 09:59:03 and the S wave arrival at 09:59:21. Convert these into ObsPy [`UTCDateTime`](https://docs.obspy.org/packages/autogen/obspy.core.utcdatetime.UTCDateTime.html) objects and convert the arrival values as total seconds from the starting date:
 
@@ -69,7 +66,7 @@ It's clear from the vertical filtered component (Z), that the P wave arrival occ
     Parr = UTCDateTime('2015-07-24 09:59:03')
     Sarr = UTCDateTime('2015-07-24 09:59:21')
 
-    # get the first trace 
+    # get the first trace
     first_trace = st.traces[0]
 
     # Get the starting date of the records from the first trace of the stream object
@@ -91,17 +88,17 @@ To plot the P-wave and S-wave arrivals on the waveforms, we use Matplotlib's [`a
     for n, tr in enumerate(st):
         # get the time series time information of the current trace
         xdata = tr.times()
-        
+
         # get the acceleration data of the current trace
         ydata = tr.data
-        
+
         # plot the graph with legend, the trace component or channel
         ax[n].plot(xdata, ydata, label=tr.stats.channel, lw=1)
-        
+
         # add two vertical lines that represent the arrivals
         ax[n].axvline(x=Parr_sec, ymin=0, ymax=1, lw=2, ls='--', color='red', label='P arrival')
         ax[n].axvline(x=Sarr_sec, ymin=0, ymax=1, lw=2, ls='--', color='black', label='S arrival')
-        
+
         # add the legend on the plot
         ax[n].legend(loc='upper right')
 
@@ -110,9 +107,9 @@ To plot the P-wave and S-wave arrivals on the waveforms, we use Matplotlib's [`a
 ```
 
 ![Arrivals of the P and the S waves](/img/arrivals.png)
-*Arrivals of the P (red dashed line) and the S (black dashed line) waves represented by two vertical lines*
+_Arrivals of the P (red dashed line) and the S (black dashed line) waves represented by two vertical lines_
 
-## Initializing the signal and noise windows
+### Initializing the signal and noise windows
 
 At this stage we draw two windows using Matplotlib's [`fill_betweenx()`](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.fill_betweenx.html) function. We utilize these windows, to calculate the Fourier Spectra, for the signal part of the waveform and for the noise part. Both windows will share the same duration or length of 10 seconds. The first window will start from the S wave arrival and it will end 10 seconds later and the second one (noise) will begin 10 seconds before the P wave arrival and it will end at the P arrival. Let's illustrate these windows:
 
@@ -128,10 +125,10 @@ At this stage we draw two windows using Matplotlib's [`fill_betweenx()`](https:/
     for n, tr in enumerate(st):
         # get the time series time information of the current trace
         xdata = tr.times()
-        
+
         # get the acceleration data of the current trace
         ydata = tr.data
-        
+
         # plot the graph with legend, the trace component or channel
         ax[n].plot(xdata, ydata, label=tr.stats.channel)
 
@@ -156,9 +153,9 @@ At this stage we draw two windows using Matplotlib's [`fill_betweenx()`](https:/
 ```
 
 ![generation of signal and noise windows to calculate the fourier spectra](/img/windows.png)
-*Define the signal and the noise windows to calculate the Fourier Spectra. Both will have the same duration of 10 seconds. The signal window starts at the S wave arrival and ends 10 seconds later. Similarly, the noise window initiates 10 seconds prior the P wave arrival and ends at the P wave arrival.*
+_Define the signal and the noise windows to calculate the Fourier Spectra. Both will have the same duration of 10 seconds. The signal window starts at the S wave arrival and ends 10 seconds later. Similarly, the noise window initiates 10 seconds prior the P wave arrival and ends at the P wave arrival._
 
-## Trimming the waveforms
+### Trimming the waveforms
 
 To continue, we trim the waveforms between the previously defined, windows using the ObsPy [`trim()`](https://docs.obspy.org/packages/autogen/obspy.core.stream.Stream.trim.html) function. Because the trimming happens inplace, create copies of the orginal stream using the [`copy()`](https://docs.obspy.org/packages/autogen/obspy.core.stream.Stream.copy.html) method:
 
@@ -173,7 +170,7 @@ To continue, we trim the waveforms between the previously defined, windows using
 Then plot the trimmed waveforms for each window and for each component (3 components for the signal part and 3 for the noise part):
 
 ```py
-    # Initialize a matplotlib figure and set the total number of rows equal to 
+    # Initialize a matplotlib figure and set the total number of rows equal to
     # the number of traces plus 3 (3 signal components and 3 noise components)
     fig, ax = plt.subplots(len(st)+3, 1, figsize=(8,10))
 
@@ -182,13 +179,13 @@ Then plot the trimmed waveforms for each window and for each component (3 compon
     for n, tr_noise in enumerate(st_noise):
         # get the time series time information as seconds from the starting date
         xdata = tr_noise.times()
-        
+
         # get the acceleration data of the current trace
         ydata = tr_noise.data
-        
+
         # plot the graph
         ax[n].plot(xdata, ydata, label=f'noise window, channel: {tr_noise.stats.channel}')
-        
+
         # add the legend
         ax[n].legend(loc='upper left')
 
@@ -197,13 +194,13 @@ Then plot the trimmed waveforms for each window and for each component (3 compon
     for n, tr_signal in enumerate(st_signal, start=3):
         # get the time series time information as seconds from the starting date
         xdata = tr_signal.times()
-        
+
         # get the acceleration data of the current trace
         ydata = tr_signal.data
-        
+
         # plot the graph
         ax[n].plot(xdata, ydata, label=f'signal window, channel: {tr_signal.stats.channel}')
-        
+
         # add the legend
         ax[n].legend(loc='upper left')
 
@@ -212,9 +209,9 @@ Then plot the trimmed waveforms for each window and for each component (3 compon
 ```
 
 ![Trimmed waveforms at the noise and the signal windows for all the components](/img/trimmed.png)
-*Trimmed waveforms at the two windows (signal, noise), for each component (E, N, Z)*
+_Trimmed waveforms at the two windows (signal, noise), for each component (E, N, Z)_
 
-## Applying a smoothing algorithm
+### Applying a smoothing algorithm
 
 At the last step, generate another copy of two obects from the previous trimmed recordings and smooth the left and the right side of the waveforms, using the obspy [`taper()`](https://docs.obspy.org/packages/autogen/obspy.core.trace.Trace.taper.html) function:
 
@@ -228,7 +225,7 @@ At the last step, generate another copy of two obects from the previous trimmed 
 Lastly, show the results:
 
 ```py
-    # Initialize a matplotlib figure and axes with the total  number of rows equal to 
+    # Initialize a matplotlib figure and axes with the total  number of rows equal to
     # the number of traces plus 3 (3 signal traces and 3 noise traces)
     fig, ax = plt.subplots(len(st)+3, 1, figsize=(8,10))
 
@@ -236,10 +233,10 @@ Lastly, show the results:
     for i in range(len(st_noise)):
         # plot the trimmed waveforms with blue color
         ax[i].plot(st_noise[i].times(), st_noise[i].data, label=f'trimmed noise window, channel: {st_noise[i].stats.channel}', color="blue")
-        
+
         # plot the tapered waveforms with orange color
         ax[i].plot(st_noise_taper[i].times(), st_noise_taper[i].data, label='tapered', lw=3, color="orange")
-        
+
         # add the legend
         ax[i].legend(loc='upper center')
 
@@ -247,10 +244,10 @@ Lastly, show the results:
     for i in range(len(st_signal)):
         # plot the trimmed waveforms with blue color
         ax[i+3].plot(st_signal[i].times(), st_signal[i].data, label=f'trimmed signal window, channel: {st_signal[i].stats.channel}', color="blue")
-        
+
         # plot the tapered waveforms with orange color
         ax[i+3].plot(st_signal_taper[i].times(), st_signal_taper[i].data, label='tapered', lw=3, color="orange")
-        
+
         # add the legend
         ax[i+3].legend(loc='upper center')
 
@@ -259,10 +256,9 @@ Lastly, show the results:
 ```
 
 ![Trimmed and tappered waveforms at the noise and the signal window for all the components](/img/taper.png)
-*Trimmed (blue) and tappered (orange) waveforms at the noise and the signal window for all the components*
+_Trimmed (blue) and tappered (orange) waveforms at the noise and the signal window for all the components_
 
-
-## Computation of the fourier spectra
+### Computation of the fourier spectra
 
 Finally, we can calculate the Fourier Spectra at the noise and the signal window:
 
@@ -287,7 +283,7 @@ Finally, we can calculate the Fourier Spectra at the noise and the signal window
     for i in range(len(st_signal_taper)):
         # get a copy of the trace for the singal
         df_s = st_signal_taper[i].copy()
-        
+
         # get the current trace channel
         channel = df_s.stats.channel
 
@@ -299,12 +295,12 @@ Finally, we can calculate the Fourier Spectra at the noise and the signal window
 
         # calculate the frequnecy array to plot the fourier
         freq_x = np.linspace(0 , fnyq , sl)
-        
+
         # save the frequencies in a variable to use it later at the plotting
         xdata = freq_x
 
         # compute the fft of the signal
-        yf_s = np.fft.fft(df_s.data[:npts]) 
+        yf_s = np.fft.fft(df_s.data[:npts])
         y_write_s = delta * np.abs(yf_s)[0:sl]
 
         # do the same also for the noise part
@@ -312,9 +308,9 @@ Finally, we can calculate the Fourier Spectra at the noise and the signal window
         df_p = st_noise_taper[i].copy()
 
         # calculate the fft
-        yf_p = np.fft.fft(df_p.data[:npts]) 
+        yf_p = np.fft.fft(df_p.data[:npts])
         y_write_p = delta * np.abs(yf_p)[0:sl]
-        
+
         # add the fft of the signal and noise part to the dictionary for the current trace
         fourier_data_dict[channel] = {"signal": y_write_s, "noise": y_write_p}
 ```
@@ -335,15 +331,15 @@ And we present the results:
         for s_n in fourier_data_dict[compo]:
             # define the ydata with data located in the dictionary created earlier
             ydata = fourier_data_dict[compo][s_n]
-            
+
             # create a variable to save the legend name of the curves
             label_name = f"{compo}-{s_n}"
-            
+
             # plot the frequencies and the data
             axfourier[n].plot(xdata, ydata, color=colors[color_i], lw=1, label=label_name)
             color_i += 1
-        
-        # style the graphs 
+
+        # style the graphs
         axfourier[n].legend(loc='upper left', fontsize=11, facecolor='w')
         axfourier[n].set_xscale('log')
         axfourier[n].set_yscale('log')
@@ -355,4 +351,4 @@ And we present the results:
 ```
 
 ![Fourier Spectra of the signal (bold curve) and the noise (muted curve) window for each component of the tappered Stream object](/img/fourier-plot.png)
-*Fourier Spectra of the signal (bold curve) and the noise (muted curve) window for each component of the tappered Stream object*
+_Fourier Spectra of the signal (bold curve) and the noise (muted curve) window for each component of the tappered Stream object_

@@ -3,11 +3,11 @@ import { dracula } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 export function useMDXComponents(components) {
     return {
-        h1: ({ children }) => (
+        h2: ({ children }) => (
             <h1 className="text-4xl text-start font-normal mb-10 mt-20">{children}</h1>
         ),
-        h2: ({ children }) => (
-            <h2 className="text-3xl text-start font-normal mt-10 mb-5" >{children}</h2>
+        h3: ({ children }) => (
+            <h2 className="text-xl text-start font-normal mt-10 mb-5" >{children}</h2>
         ),
         p: ({ children }) => (
             <p className="font-light text-xl my-5" >{children}</p>
@@ -38,8 +38,9 @@ export function useMDXComponents(components) {
                     PreTag="div"
                     showLineNumbers={true}
                     style={dracula}
-
-                />
+                >
+                    {String(children).replace(/\n$/, '')}
+                </SyntaxHighlighter>
             ) : (
                 <code {...rest} className="bg-base-200 px-2 py-1 rounded text-light font-light fs-6">
                     {children}

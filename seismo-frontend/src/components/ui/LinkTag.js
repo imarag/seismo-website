@@ -10,7 +10,7 @@ export default function LinkTag({
   className = "",
   ...props
 }) {
-  const baseStyles = "z-30 inline-flex items-center gap-2 transition-all";
+  const baseStyles = "group z-30 inline-flex items-center gap-2 transition-all";
 
   const sizes = {
     small: "btn-sm",
