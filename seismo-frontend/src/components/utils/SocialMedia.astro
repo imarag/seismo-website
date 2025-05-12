@@ -1,0 +1,18 @@
+---
+import Symbol from "./Symbol.astro";
+import { socialMediaInfo } from "../../assets/data/static";
+---
+
+<div class="flex flex-row justify-center gap-2">
+  {
+    socialMediaInfo.map((el) => (
+      <a
+        href={el.url}
+        target="_blank"
+        class={`btn btn-circle p-3 border bg-base-300 hover:bg-primary`}
+      >
+        {<Symbol name={el.iconName} class="size-5" />}
+      </a>
+    ))
+  }
+</div>

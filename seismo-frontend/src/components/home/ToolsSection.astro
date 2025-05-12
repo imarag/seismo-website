@@ -1,0 +1,20 @@
+---
+import ToolsGallery from "./ToolsGallery.jsx";
+import LinkTag from "../ui/LinkTag.astro";
+import PageTitle from "../utils/PageTitle.astro";
+import PageSubTitle from "../utils/PageSubTitle.astro";
+---
+
+<div class="space-y-8">
+  <PageTitle class="text-center" text="Utilize the interactive tools" />
+  <PageSubTitle
+    class="text-center"
+    text="Explore a range of seismic articles designed to deepen your understanding of the mechanisms behind earthquakes and the advanced technologies used to analyze them."
+  />
+  <div class="text-center">
+    <LinkTag href="/tools" variant="button"> Learn More </LinkTag>
+  </div>
+  <div class="max-w-2xl mx-auto">
+    <ToolsGallery client:idle />
+  </div>
+</div>

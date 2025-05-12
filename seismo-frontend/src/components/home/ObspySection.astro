@@ -1,0 +1,27 @@
+---
+import Img from "../utils/Img.astro";
+import LinkTag from "../ui/LinkTag.astro";
+import PageTitle from "../utils/PageTitle.astro";
+import PageSubTitle from "../utils/PageSubTitle.astro";
+import ObspyIcon from "../../assets/images/pages/obspy-icon.png";
+import PythonScript from "../../assets/images/pages/obspy-script-example.gif";
+---
+
+<div class="space-y-8">
+  <Img src={ObspyIcon} class="w-20 block mx-auto" alt="ObsPy Logo" />
+  <PageTitle class="text-center" text="Learn about the Python ObsPy" />
+  <PageSubTitle
+    class="text-center"
+    text="Process seismic data using the various ObsPy functions, manipulate date and time, and plot earthquake recordings."
+  />
+  <div class="text-center">
+    <LinkTag variant="button" href="/articles/obspy"> Learn More </LinkTag>
+  </div>
+  <div class="max-w-2xl mx-auto">
+    <Img
+      src={PythonScript}
+      alt="python script example"
+      class="block mx-auto size-full"
+    />
+  </div>
+</div>

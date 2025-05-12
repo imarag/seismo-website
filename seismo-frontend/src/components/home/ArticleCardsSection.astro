@@ -1,0 +1,61 @@
+---
+import CardTitle from "../ui/CardTitle.astro";
+import CardParagraph from "../ui/CardParagraph.astro";
+import CardLink from "../ui/CardLink.astro";
+import CardImage from "../ui/CardImage.astro";
+import CardContainer from "../ui/CardContainer.astro";
+import LinkTag from "../ui/LinkTag.astro";
+import ArrivalPickIcon from "../../assets/images/pages/arrival-pick-icon.png";
+import SiteEffectIcon from "../../assets/images/pages/site-effect-icon.png";
+import Symbol from "../utils/Symbol.astro";
+import PageTitle from "../utils/PageTitle.astro";
+import PageSubTitle from "../utils/PageSubTitle.astro";
+---
+
+<div class="space-y-8">
+  <PageTitle class="text-center" text="Discover the seismic articles" />
+  <PageSubTitle
+    class="text-center"
+    text="Explore a range of seismic articles designed to deepen your understanding of the mechanisms behind earthquakes and the advanced technologies used to analyze them."
+  />
+  <div class="flex flex-col md:flex-row justify-center gap-8">
+    <CardContainer class="lg:max-w-96 flex-grow-0 bg-base-100 pb-12">
+      <CardImage
+        src={ArrivalPickIcon}
+        alt="seismological concepts about the creation of the earthquakes, the various seismic waves generated"
+      />
+      <CardTitle class="text-center" text="Introduction to Seismology" />
+      <CardParagraph
+        class="text-center"
+        text="Delve into the various seismological concepts about the creation of the earthquakes, the various seismic waves generated, the mechanisms that trigger the seismic faults and the effects of the seismic waves on the surface."
+      />
+      <CardLink
+        class="absolute bottom-0 start-1/2 -translate-x-1/2"
+        text="Go to page"
+        href="/articles/introduction-to-seismology"
+      />
+    </CardContainer>
+    <CardContainer class="lg:max-w-96 flex-grow-0 bg-base-100 pb-12">
+      <CardImage
+        src={SiteEffectIcon}
+        alt="influence of the underground geology on the incoming ground motion"
+      />
+      <CardTitle class="text-center" text="Seismic Site Effect" />
+      <CardParagraph
+        class="text-center"
+        text="Learn about the influence of the underground geology on the incoming ground motion. Discover the local conditions that cause the site effect and whether we can estimate it or not. Lastly, explore a research that took place to understand it."
+      />
+      <CardLink
+        class="absolute bottom-0 start-1/2 -translate-x-1/2"
+        text="Go to page"
+        href="/articles/site-effect"
+      />
+    </CardContainer>
+  </div>
+  <div class="text-center">
+    <LinkTag href="/articles">
+      Learn about the seismic articles
+      <Symbol name="arrow-right" />
+    </LinkTag>
+  </div>
+</div>

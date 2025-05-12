@@ -1,0 +1,56 @@
+---
+import MainLayout from "../../layouts/MainLayout.astro";
+import Img from "../../components/utils/Img.astro";
+import PageTitle from "../../components/utils/PageTitle.astro";
+import Section from "../../components/utils/Section.astro";
+import { articles } from "../../assets/data/topics";
+import Container from "../../components/utils/Container.astro";
+
+export function getStaticPaths() {
+  return articles.map((tool) => ({
+    params: { slug: tool.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+const selectedArticle = articles.find((el) => el.slug === slug);
+if (!selectedArticle) {
+  throw new Error(`Tool not found: ${slug}`);
+}
+import H2 from "../../components/markdowns/H2.astro";
+import H3 from "../../components/markdowns/H3.astro";
+import P from "../../components/markdowns/Paragraph.astro";
+import UL from "../../components/markdowns/UnorderedList.astro";
+import LI from "../../components/markdowns/ListItem.astro";
+import A from "../../components/markdowns/Anchor.astro";
+import CodeBlock from "../../components/markdowns/CodeBlock.astro";
+import CustomImage from "../../components/markdowns/CustomImage.astro";
+---
+
+<MainLayout pageTitle="Tool">
+  <Section>
+    <Container>
+      <Img
+        src={selectedArticle.image_src}
+        alt={selectedArticle.image_alt}
+        class="block w-20 mx-auto"
+      />
+      <PageTitle class="text-center" text={selectedArticle.title} />
+      <div class="mt-24">
+        <selectedArticle.markdown.Content
+          components={{
+            ...selectedArticle.markdown.components,
+            h2: H2,
+            h3: H3,
+            p: P,
+            ul: UL,
+            li: LI,
+            a: A,
+            code: CodeBlock,
+            img: CustomImage,
+          }}
+        />
+      </div>
+    </Container>
+  </Section>
+</MainLayout>

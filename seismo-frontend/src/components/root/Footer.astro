@@ -1,0 +1,91 @@
+---
+import Container from "../utils/Container.astro";
+import SocialMedia from "../utils/SocialMedia.astro";
+import { navLinks } from "../../assets/data/static";
+import { articles, tools } from "../../assets/data/topics";
+import Symbol from "../utils/Symbol.astro";
+import Logo from "../utils/Logo.astro";
+const completedTools = tools.filter((el) => el.completed);
+const completedArticles = articles.filter((el) => el.completed);
+---
+
+<footer class="text-sm text-base-content/60 bg-base-200 py-12">
+  <Container
+    class="flex flex-wrap flex-col items-start md:flex-row md:justify-around md:items-start gap-y-8"
+  >
+    <aside
+      class="self-center md:self-auto md:w-full lg:w-auto flex flex-col items-center justify-center gap-3 text-center"
+    >
+      <Logo />
+      <p class="text-lg font-semibold text-primary">
+        A JOURNEY INTO SEISMOLOGY
+      </p>
+      <p class="text-base max-w-md mx-auto">Read, explore and interact</p>
+      <SocialMedia />
+    </aside>
+    <nav>
+      <h6 class="uppercase text-primary font-bold mb-2">Sitemap</h6>
+      <ul class="space-y-2">
+        {
+          navLinks.map((item) => (
+            <li>
+              <a href={item.href} class={`link link-hover`}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+    <nav>
+      <h6 class="uppercase text-primary font-bold mb-2">Articles</h6>
+      <ul class="space-y-2">
+        {
+          completedArticles.map((item) => (
+            <li>
+              <a href={`/articles/${item.slug}`} class={`link link-hover`}>
+                {item.title}
+              </a>
+            </li>
+          ))
+        }
+        <li>
+          <a
+            href="/articles"
+            class="underline group inline-flex items-center gap-2 mt-3"
+          >
+            <span>All articles</span>
+            <span class="group-hover:translate-x-2 transition-all"
+              ><Symbol name="arrow-right" /></span
+            >
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <nav>
+      <h6 class="uppercase text-primary font-bold mb-2">Tools</h6>
+      <ul class="space-y-2">
+        {
+          completedTools.map((item) => (
+            <li>
+              <a href={`/tools/${item.slug}`} class={`link link-hover`}>
+                {item.title}
+              </a>
+            </li>
+          ))
+        }
+        <li>
+          <a
+            href="/tools"
+            class="underline group inline-flex items-center gap-2 mt-3"
+          >
+            <span>All tools</span>
+            <span class="group-hover:translate-x-2 transition-all"
+              ><Symbol name="arrow-right" /></span
+            >
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </Container>
+</footer>

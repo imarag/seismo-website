@@ -1,0 +1,21 @@
+---
+const {
+  href = "#",
+  variant = "default",
+  class: className,
+  ...props
+} = Astro.props;
+
+const baseStyles = "group z-30 inline-flex items-center gap-2 transition-all";
+const variants = {
+  default: "text-info hover:underline",
+  button: "btn btn-primary rounded-md",
+};
+
+const selectedVariant = variants[variant] || variants.default;
+const globalClass = `${baseStyles} ${selectedVariant} ${className || ""}`;
+---
+
+<a href={href} class={globalClass} {...props}>
+  <slot />
+</a>

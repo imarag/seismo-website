@@ -1,0 +1,13 @@
+---
+const { bgColor = "primary", codeItems = [] } = Astro.props;
+---
+
+<div class="mockup-code my-4">
+  {
+    codeItems.map((codeElement, ind) => (
+      <pre data-prefix={ind + 1}>
+        <code>{codeElement}</code>
+      </pre>
+    ))
+  }
+</div>

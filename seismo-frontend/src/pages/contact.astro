@@ -1,0 +1,39 @@
+---
+import SocialMedia from "../components/utils/SocialMedia.astro";
+import Section from "../components/utils/Section.astro";
+import PageTitle from "../components/utils/PageTitle.astro";
+import PageSubTitle from "../components/utils/PageSubTitle.astro";
+import EyeBrowText from "../components/utils/EyeBrowText.astro";
+import Container from "../components/utils/Container.astro";
+import ContactForm from "../components/contact/ContactForm.jsx";
+import MainLayout from "../layouts/MainLayout.astro";
+import SeismicRecordSVG from "../assets/images/pages/seismic-record.svg";
+const pageTitle = "Contact Us";
+---
+
+<MainLayout pageTitle={pageTitle}>
+  <Section>
+    <Container>
+      <div class="grid grid-cols-1 lg:grid-cols-2 justify-center gap-8">
+        <div class="flex flex-col gap-4 items-stretch">
+          <EyeBrowText text="GET IN TOUCH" class="self-center lg:self-start" />
+          <PageTitle
+            class="text-center lg:text-start"
+            text="We’d Love to Hear From You"
+          />
+          <PageSubTitle
+            class="text-center lg:text-start"
+            text="Connect with us and share your suggestions and improvements. Your feedback matters."
+          />
+          <SocialMedia />
+          <ContactForm client:load />
+        </div>
+        <div>
+          <SeismicRecordSVG
+            class="h-full max-w-full object-contain hidden lg:grid"
+          />
+        </div>
+      </div>
+    </Container>
+  </Section>
+</MainLayout>

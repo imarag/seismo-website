@@ -1,0 +1,9 @@
+---
+const { type = "neutral", outline = false } = Astro.props;
+---
+
+<div
+  class={`badge badge-${type} ${outline && "badge-outline"} badge-sm hover:scale-110`}
+>
+  <slot />
+</div>

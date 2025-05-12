@@ -1,0 +1,72 @@
+---
+import PageTitle from "../../components/utils/PageTitle.astro";
+import PageSubTitle from "../../components/utils/PageSubTitle.astro";
+import EyeBrowText from "../../components/utils/EyeBrowText.astro";
+import LinkTag from "../../components/ui/LinkTag.astro";
+import { fastapiEndpoints } from "../../assets/data/static.js";
+import Symbol from "../../components/utils/Symbol.astro";
+import CardTitle from "../../components/ui/CardTitle.astro";
+import CardParagraph from "../../components/ui/CardParagraph.astro";
+import CardContainer from "../../components/ui/CardContainer.astro";
+import CardLink from "../../components/ui/CardLink.astro";
+import Section from "../../components/utils/Section.astro";
+import Container from "../../components/utils/Container.astro";
+import { tools } from "../../assets/data/topics";
+import Img from "../../components/utils/Img.astro";
+import MainLayout from "../../layouts/MainLayout.astro";
+const pageTitle = "Seismic Tools";
+---
+
+<MainLayout pageTitle={pageTitle}>
+  <Section>
+    <Container>
+      <div class="text-center">
+        <EyeBrowText text="EXPLORE OUR TOOLS" />
+      </div>
+      <PageTitle
+        class="text-center mt-2 mb-4"
+        text="Your Seismological Toolbox"
+      />
+      <PageSubTitle
+        class="text-center"
+        text="Contribute to our cause and help us make a positive impact with your donation. Your support makes all the difference."
+      />
+      <div
+        class="mt-24 mb-16 max-w-3/4 lg:max-w-1/2 mx-auto text-center text-sm"
+      >
+        <p>
+          Don&apos;t have a seismic data file ? Click below to download a
+          miniseed sample file, to experiment with the tools.
+        </p>
+        <div class="flex gap-2 items-center justify-center mt-4">
+          <Symbol name="file-download" class="flex-shrink-0" />
+          <LinkTag href={fastapiEndpoints["DOWNLOAD-TEST-FILE"]}>
+            Download Sample MSEED File
+          </LinkTag>
+        </div>
+      </div>
+      <div
+        class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 justify-center gap-8"
+      >
+        {
+          tools.map((tool) => (
+            <CardContainer class="flex-grow-0 bg-base-200 hover:scale-110 transition-all">
+              <Img
+                src={tool.image_src}
+                alt={tool.image_alt}
+                class="w-32 block mx-auto"
+              />
+              <CardTitle class="text-center" text={tool.title} />
+              <CardParagraph class="text-center" text={tool.smallDescription} />
+              {tool.completed ? (
+                <CardLink href={`/tools/${tool.slug}`} />
+              ) : (
+                <p class="font-bold text-center">Work in Progress</p>
+              )}
+            </CardContainer>
+          ))
+        }
+      </div>
+    </Container>
+  </Section>
+</MainLayout>

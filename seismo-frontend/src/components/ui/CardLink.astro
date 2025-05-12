@@ -1,0 +1,10 @@
+---
+import LinkTag from "./LinkTag.astro";
+const { text = "Go to page", href, class: className } = Astro.props;
+---
+
+<div class="text-center">
+  <LinkTag href={href} variant="button" class={className}>
+    {text}
+  </LinkTag>
+</div>

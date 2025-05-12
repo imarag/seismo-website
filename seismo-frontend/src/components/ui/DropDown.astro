@@ -1,0 +1,17 @@
+---
+const { label, position = "start", items } = Astro.props;
+import Symbol from "../utils/Symbol.astro";
+---
+
+<div class={`dropdown dropdown-${position}`}>
+  <div tab-index={0} role="button" class="btn btn-ghost m-1">
+    {label}
+    <Symbol name="arrow-head-down" />
+  </div>
+  <ul
+    tab-index={0}
+    class="dropdown-content menu bg-white rounded-box z-[1] w-52 p-2 shadow"
+  >
+    {items.map((item) => <li>{item}</li>)}
+  </ul>
+</div>

@@ -1,0 +1,45 @@
+---
+import Img from "../components/utils/Img.astro";
+import PageTitle from "../components/utils/PageTitle.astro";
+import PageSubTitle from "../components/utils/PageSubTitle.astro";
+import EyeBrowText from "../components/utils/EyeBrowText.astro";
+import Section from "../components/utils/Section.astro";
+import DonateButton from "../components/donate/DonateButton.astro";
+import Container from "../components/utils/Container.astro";
+import MainLayout from "../layouts/MainLayout.astro";
+import SeismologicalStation from "../assets/images/pages/seismological-station.jpg";
+const pageTitle = "Support Us";
+---
+
+<MainLayout pageTitle={pageTitle}>
+  <Section>
+    <Container>
+      <div class="grid grid-cols-1 lg:grid-cols-2 justify-center gap-8">
+        <div class="flex flex-col gap-4 items-center lg:items-start">
+          <EyeBrowText
+            text="seismology for everyone"
+            class="self-center lg:self-start"
+          />
+          <PageTitle
+            class="text-center lg:text-start"
+            text="Support Our Mission"
+          />
+          <PageSubTitle
+            class="text-center lg:text-start"
+            text="Contribute to our cause and help us make a positive impact with your donation. Your support makes all the difference."
+          />
+          <div class="mt-8">
+            <DonateButton />
+          </div>
+        </div>
+        <div>
+          <Img
+            src={SeismologicalStation}
+            class="size-full object-contain"
+            alt="An old seismological station"
+          />
+        </div>
+      </div>
+    </Container>
+  </Section>
+</MainLayout>

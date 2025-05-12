@@ -1,0 +1,6 @@
+---
+import Img from "../utils/Img.astro";
+const { src, alt, class: className } = Astro.props;
+---
+
+<Img src={src} alt={alt} class={`w-32 block mx-auto ${className || ""}`} />
