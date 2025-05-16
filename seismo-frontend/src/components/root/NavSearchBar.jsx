@@ -7,7 +7,7 @@ import { articles, tools } from "../../assets/data/topics";
 import { FaArrowRight } from "react-icons/fa6";
 import { IoMdClose } from "react-icons/io";
 
-export default function NavSearchBar({ setShowNavbar }) {
+export default function NavSearchBar() {
   const [filteredTopics, setFilteredTopics] = useState([]);
   const [showSearchMenu, setShowSearchMenu] = useState(false);
   const [searchValue, setSearchValue] = useState("");

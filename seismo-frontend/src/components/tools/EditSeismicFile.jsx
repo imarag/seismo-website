@@ -60,7 +60,7 @@ function NewTraceMenu({
             <AiOutlineQuestionCircle />
           </span>
         </div>
-        <hr class="border-neutral-500/50 my-2 w-full" />
+        <hr className="border-neutral-500/50 my-2 w-full" />
       </div>
       <div className="absolute top-1 end-2">
         <Button
@@ -103,7 +103,7 @@ function NewTraceMenu({
             <AiOutlineQuestionCircle />
           </span>
         </div>
-        <hr class="border-neutral-500/50 my-2 w-full" />
+        <hr className="border-neutral-500/50 my-2 w-full" />
       </div>
       <div className="grid grid-cols-2 gap-2 items-center">
         {seismicParams.map((obj) => (
@@ -124,7 +124,7 @@ function NewTraceMenu({
           </div>
         ))}
       </div>
-      <hr class="border-neutral-500/50 my-2 w-full" />
+      <hr className="border-neutral-500/50 my-2 w-full" />
       <div className="flex flex-row items-center justify-center gap-2 mt-4">
         <input
           ref={uploadDataInputRef}
@@ -241,7 +241,7 @@ function TraceInfoMenu({
                     ))}
                 </div>
               </div>
-              <hr class="border-neutral-500/50 my-2 w-full" />
+              <hr className="border-neutral-500/50 my-2 w-full" />
             </>
           ))}
         </div>

@@ -1,0 +1,14 @@
+---
+import MainLayout from "./MainLayout.astro";
+import Section from "../components/utils/Section.astro";
+import Container from "../components/utils/Container.astro";
+const { pageTitle } = Astro.props;
+---
+
+<MainLayout pageTitle={`${pageTitle} | seismic articles`}>
+  <Section>
+    <Container>
+      <slot />
+    </Container>
+  </Section>
+</MainLayout>

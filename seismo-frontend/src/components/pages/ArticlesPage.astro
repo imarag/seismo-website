@@ -1,0 +1,61 @@
+---
+import PageTitle from "../utils/PageTitle.astro";
+import PageSubTitle from "../utils/PageSubTitle.astro";
+import EyeBrowText from "../utils/EyeBrowText.astro";
+import Img from "../utils/Img.astro";
+import LinkTag from "../ui/LinkTag.astro";
+import Badge from "../utils/Badge.astro";
+import CardTitle from "../ui/CardTitle.astro";
+import CardParagraph from "../ui/CardParagraph.astro";
+import Symbol from "../utils/Symbol.astro";
+import { articles } from "../../assets/data/topics";
+---
+
+<div class="text-center">
+  <EyeBrowText class="text-center" text="READ OUR SEISMIC ARTICLES" />
+</div>
+<PageTitle
+  class="text-center mt-2 mb-4"
+  text="Articles on Earthquakes and Science"
+/>
+<PageSubTitle
+  class="text-center"
+  text="Take a deep dive into the available articles to gain a deeper understanding of key seismological concepts and their real-world applications."
+/>
+<div class="mt-24">
+  {
+    articles?.map((article) => (
+      <div class="flex items-center gap-4 md:gap-8 flex-wrap md:flex-nowrap my-8">
+        <div class="shrink-0 grow-0">
+          <Img
+            src={article.image_src}
+            alt={article.image_alt}
+            class="w-20 md:w-28"
+          />
+        </div>
+        <div class="flex-shrink flex-grow space-y-2">
+          <CardTitle text={article.title} />
+          <div class="flex items-center gap-2 my-2">
+            {article.keywords.map((keyword) => (
+              <Badge type="neutral" outline={true} size="extra-small">
+                {keyword}
+              </Badge>
+            ))}
+          </div>
+          <CardParagraph text={article.description} />
+          {article.completed ? (
+            <LinkTag
+              href={`/articles/${article.slug}`}
+              class="flex items-center gap-2"
+            >
+              Go to page
+              <Symbol name="arrow-right" class="group-hover:translate-x-2" />
+            </LinkTag>
+          ) : (
+            <span class="font-bold">Work in Progress</span>
+          )}
+        </div>
+      </div>
+    ))
+  }
+</div>

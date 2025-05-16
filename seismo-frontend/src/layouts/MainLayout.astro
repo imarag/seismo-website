@@ -3,23 +3,18 @@ import "../styles/global.css";
 import Head from "../components/root/Head.astro";
 import Header from "../components/root/Header.astro";
 import Footer from "../components/root/Footer.astro";
-import Container from "../components/utils/Container.astro";
+import "@fontsource-variable/roboto";
 const { pageTitle } = Astro.props;
 ---
 
-<html lang="en" data-theme="forest">
+<html lang="en" data-theme="forest" class="font-display">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <Head />
+    <Head pageTitle={pageTitle} />
   </head>
   <body>
     <Header />
     <main>
-      <Container>
-        <slot />
-      </Container>
+      <slot />
     </main>
     <Footer />
   </body>

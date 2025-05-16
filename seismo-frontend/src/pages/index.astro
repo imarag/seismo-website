@@ -1,31 +1,12 @@
 ---
-import HeroSection from "../components/home/HeroSection.astro";
-import ArticleCardsSection from "../components/home/ArticleCardsSection.astro";
-import ObspySection from "../components/home/ObspySection.astro";
-import ToolsSection from "../components/home/ToolsSection.astro";
-import Section from "../components/utils/Section.astro";
 import Container from "../components/utils/Container.astro";
 import MainLayout from "../layouts/MainLayout.astro";
+import HomePage from "../components/pages/HomePage.astro";
 const pageTitle = "Home Page";
 ---
 
 <MainLayout pageTitle={pageTitle}>
   <Container>
-    <HeroSection />
+    <HomePage />
   </Container>
-  <Section>
-    <Container>
-      <ArticleCardsSection />
-    </Container>
-  </Section>
-  <Section>
-    <Container>
-      <ObspySection />
-    </Container>
-  </Section>
-  <Section>
-    <Container>
-      <ToolsSection />
-    </Container>
-  </Section>
 </MainLayout>

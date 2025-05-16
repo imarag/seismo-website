@@ -15,7 +15,7 @@ function CoordContainer({ children, label }) {
         <IoLocationOutline />
         <span>{label}</span>
       </h1>
-      <hr class="border-neutral-500/50 my-2 w-full" />
+      <hr className="border-neutral-500/50 my-2 w-full" />
 
       <div className="flex flex-row flex-wrap md:flex-nowrap justify-center gap-2 mt-4">
         {children}
@@ -93,6 +93,7 @@ export default function DistanceBetweenPoints() {
 
   async function handleComputeButton() {
     let queryParams = `?lat1=${coords["lat1"]}&lon1=${coords["lon1"]}&lat2=${coords["lat2"]}&lon2=${coords["lon2"]}`;
+    console.log(fastapiEndpoints["CALCULATE-DISTANCE"] + queryParams, "***");
     const data = await fetchRequest({
       endpoint: fastapiEndpoints["CALCULATE-DISTANCE"] + queryParams,
       setError: setError,
@@ -101,7 +102,7 @@ export default function DistanceBetweenPoints() {
       method: "GET",
       successMessage: "The distance has been succesfully calculated",
     });
-
+    console.log(queryParams, "**");
     setGps2azimuth(data);
   }
 
@@ -124,7 +125,7 @@ export default function DistanceBetweenPoints() {
         />
       )}
       <CoordinatesFields coords={coords} setCoords={setCoords} />
-      <div className="my-8">
+      <div className="my-8 text-center">
         <Button
           onClick={handleComputeButton}
           disabled={
@@ -161,7 +162,7 @@ export default function DistanceBetweenPoints() {
           </a>{" "}
           function to do the calculation.
         </p>
-        <div class="mockup-code my-4">
+        <div className="mockup-code my-4">
           <pre data-prefix={1}>
             <code>from obspy.geodetics.base import gps2dist_azimuth</code>
           </pre>

@@ -1,12 +1,7 @@
 ---
-import MainLayout from "../../layouts/MainLayout.astro";
-import Img from "../../components/utils/Img.astro";
-import PageTitle from "../../components/utils/PageTitle.astro";
-import PageSubTitle from "../../components/utils/PageSubTitle.astro";
-import Section from "../../components/utils/Section.astro";
-import Collapse from "../../components/ui/Collapse.astro";
+import ToolsLayout from "../../layouts/ToolsLayout.astro";
+import ToolPage from "../../components/pages/ToolPage.astro";
 import { tools } from "../../assets/data/topics";
-import Container from "../../components/utils/Container.astro";
 
 export function getStaticPaths() {
   return tools.map((tool) => ({
@@ -19,28 +14,9 @@ const selectedTool = tools.find((el) => el.slug === slug);
 if (!selectedTool) {
   throw new Error(`Tool not found: ${slug}`);
 }
-const Component = selectedTool.component;
+const pageTitle = selectedTool.title;
 ---
 
-<MainLayout pageTitle="Tool">
-  <Section>
-    <Container>
-      <Img
-        src={selectedTool.image_src}
-        alt={selectedTool.image_alt}
-        class="block w-20 mx-auto"
-      />
-      <PageTitle class="text-center" text={selectedTool.title} />
-      <PageSubTitle class="text-center" text={selectedTool.subtitle} />
-      <div class="max-w-5xl mx-auto mt-20 mb-8">
-        <p>{selectedTool.description}</p>
-        <Collapse label="User guide">
-          <p>{selectedTool.userGuide}</p>
-        </Collapse>
-      </div>
-      <div class="mt-24">
-        <Component />
-      </div>
-    </Container>
-  </Section>
-</MainLayout>
+<ToolsLayout pageTitle={pageTitle}>
+  <ToolPage selectedTool={selectedTool} />
+</ToolsLayout>

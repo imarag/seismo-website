@@ -1,10 +1,40 @@
 ---
-const { pageTitle = "My Astro Website", ...props } = Astro.props;
+const { pageTitle } = Astro.props;
 ---
 
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="generator" content={Astro.generator} />
 <title>{pageTitle}</title>
+
 <meta
   name="description"
-  content="A website about earthquakes. Delve into the various seismic articles and utilize the interactive tools "
+  content="A website about earthquakes. Delve into the various seismic articles and utilize the interactive tools."
 />
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<meta
+  name="keywords"
+  content="earthquakes, seismology, seismic tools, tectonics, P waves, S waves, geology, seismograph"
+/>
+<meta name="author" content="Ioannis Maragkakis" />
+<meta name="language" content="en" />
+
+<!-- Open Graph for social media -->
+<meta property="og:title" content={pageTitle} />
+<meta
+  property="og:description"
+  content="A website about earthquakes. Delve into the various seismic articles and utilize the interactive tools."
+/>
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://yourdomain.com" />
+<meta property="og:image" content="https://yourdomain.com/og-image.png" />
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={pageTitle} />
+<meta
+  name="twitter:description"
+  content="A website about earthquakes. Delve into the various seismic articles and utilize the interactive tools."
+/>
+<meta name="twitter:image" content="https://yourdomain.com/twitter-image.png" />
+
+<link rel="icon" type="image/svg+xml" href="/favicon.ico" />

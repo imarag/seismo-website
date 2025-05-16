@@ -11,7 +11,7 @@ function CoordContainer({ label, children }) {
       <h1 className="text-start flex flex-row items-center justify-center md:justify-start gap-2 mb-1">
         <span>{label}</span>
       </h1>
-      <hr class="border-neutral-500/50 my-2 w-full" />
+      <hr className="border-neutral-500/50 my-2 w-full" />
       <div className="flex flex-row flex-wrap md:flex-nowrap justify-center gap-2 mt-4">
         {children}
       </div>
@@ -65,7 +65,7 @@ export default function DistanceCalculator() {
 
   return (
     <>
-      <div class="flex flex-row flex-wrap lg:flex-nowrap justify-center items-center gap-8">
+      <div className="flex flex-row flex-wrap lg:flex-nowrap justify-center items-center gap-8">
         <CoordContainer label="Point 1">
           <CoordItem
             coordLabel="Latitude"

@@ -1,0 +1,129 @@
+---
+import { navLinks } from "../../assets/data/static";
+import Symbol from "../utils/Symbol.astro";
+import Logo from "../utils/Logo.astro";
+import NavSearchBar from "./NavSearchBar";
+const currentPath = Astro.url.pathname;
+console.log(currentPath, "***");
+---
+
+<nav
+  id="main-nav"
+  class="lg:bg-transparent transition-all duration-250 ease z-50"
+>
+  <div
+    class={`container flex flex-col lg:flex-row items-stretch lg:items-center gap-4 py-8  relative`}
+  >
+    <div class="me-8 shrink-0">
+      <a
+        href="index.html"
+        class="text-xl font-bold"
+        aria-label="Go to homepage"
+      >
+        <Logo />
+      </a>
+    </div>
+    <ul
+      id="main-nav-list"
+      class={`max-h-0 lg:max-h-20 flex flex-col lg:flex-row items-start lg:items-center overflow-hidden gap-2 relative size-full transition-all duration-250 ease`}
+    >
+      {
+        navLinks.map((el) => (
+          <li
+            class={`w-full lg:w-auto rounded-md hover:bg-primary/80 ${currentPath == el.href && "bg-primary/80"}`}
+          >
+            <a href={el.href} class="text-sm font-medium block size-full p-2">
+              {el.label}
+            </a>
+            <hr class="w-full lg:border-transparent border-0.5 border-gray-100/5" />
+          </li>
+        ))
+      }
+      <li class={`w-full lg:w-auto lg:ms-auto mt-4 lg:mt-0`}>
+        <NavSearchBar client:load />
+      </li>
+    </ul>
+    <button
+      id="toggle-menu-button"
+      class="lg:hidden btn btn-md rounded-md text-xl btn-ghost absolute end-4"
+      data-bs-toggle="collapse"
+      data-bs-target="#main-nav-list"
+      aria-controls="main-nav-list"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <Symbol name="menu" class="text-white size-5" />
+    </button>
+  </div>
+</nav>
+
+<script>
+  const mainNav = document.querySelector("#main-nav");
+  const mainNavList = document.querySelector("#main-nav-list");
+  const toggleMenuButton = document.querySelector("#toggle-menu-button");
+  toggleMenuButton?.addEventListener("click", () => {
+    mainNav?.classList.toggle("bg-base-300");
+    mainNavList?.classList.toggle("max-h-0");
+    mainNavList?.classList.toggle("max-h-96");
+    if (mainNavList?.classList.contains("max-h-96")) {
+      toggleMenuButton.setAttribute("aria-expanded", "true");
+    } else {
+      toggleMenuButton.setAttribute("aria-expanded", "false");
+    }
+  });
+</script>
+
+<!-- 
+
+
+<nav class={`md:bg-transparent}`}>
+  <div
+    class={`container flex flex-col md:flex-row items-stretch md:items-center gap-4 py-8 max-h-25 overflow-hidden transition-all duration-150 relative ${
+      showNavBar && "max-h-96"
+    }`}
+  >
+    <div class="me-8 shrink-0">
+      <a href="/">
+        <img src={LogoSVG.src} alt="logo of the website" class="w-24" />
+      </a>
+    </div>
+    <ul
+      class={`flex flex-col md:flex-row items-start md:items-center gap-2 size-full`}
+    >
+      {
+        navLinks.map((item) => (
+          <li key={item.label} class="w-full md:w-auto">
+            <a
+              href={item.href}
+              class={`text-sm rounded-lg font-medium btn btn-sm btn-ghost hover:bg-base-300`}
+              onClick={() => setShowNavbar(false)}
+            >
+              {item.label}
+            </a>
+            <hr class="w-full md:border-transparent border-0.5 border-gray-100/5" />
+          </li>
+        ))
+      }
+    </ul>
+    <div>
+      <NavSearchBar setShowNavbar={setShowNavbar} />
+    </div>
+    {
+      showNavBar ? (
+        <button
+          class="md:hidden btn btn-md rounded-md text-xl btn-ghost absolute end-4"
+          onClick={() => setShowNavbar(false)}
+        >
+          <IoMdClose />
+        </button>
+      ) : (
+        <button
+          class="md:hidden ms-auto btn btn-md rounded-md text-xl btn-ghost absolute end-4"
+          onClick={() => setShowNavbar(!showNavBar)}
+        >
+          <AiOutlineMenu />
+        </button>
+      )
+    }
+  </div>
+</nav> -->

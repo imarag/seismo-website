@@ -1,0 +1,43 @@
+---
+import Img from "../utils/Img.astro";
+import PageTitle from "../utils/PageTitle.astro";
+import PageSubTitle from "../utils/PageSubTitle.astro";
+import Collapse from "../ui/Collapse.astro";
+
+import EditSeismicFile from "../tools/EditSeismicFile";
+import DistanceBetweenPoints from "../tools/DistanceBetweenPoints";
+import FileToMseed from "../tools/FileToMseed";
+import PickArrivals from "../tools/PickArrivals";
+import SignalProcessing from "../tools/SignalProcessing";
+
+const { selectedTool } = Astro.props;
+---
+
+<Img
+  src={selectedTool.image_src}
+  alt={selectedTool.image_alt}
+  class="block w-20 mx-auto"
+/>
+<PageTitle class="text-center" text={selectedTool.title} />
+<PageSubTitle class="text-center" text={selectedTool.subtitle} />
+<div class="max-w-5xl mx-auto mt-20 mb-8">
+  <p>{selectedTool.description}</p>
+  <Collapse label="User guide">
+    <p>{selectedTool.userGuide}</p>
+  </Collapse>
+</div>
+<div class="mt-24">
+  {selectedTool.slug === "edit-seismic-file" && <EditSeismicFile client:load />}
+  {
+    selectedTool.slug === "distance-between-points" && (
+      <DistanceBetweenPoints client:load />
+    )
+  }
+  {selectedTool.slug === "file-to-mseed" && <FileToMseed client:load />}
+  {selectedTool.slug === "pick-arrivals" && <PickArrivals client:load />}
+  {
+    selectedTool.slug === "signal-processing" && (
+      <SignalProcessing client:load />
+    )
+  }
+</div>

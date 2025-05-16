@@ -5,12 +5,6 @@ import * as MatplotlibMarkdown from '../markdowns/matplotlib.mdx';
 import * as ComputeFourierOnWindowMarkdown from '../markdowns/compute-fourier-on-window.mdx';
 import * as FileManipulationMarkdown from '../markdowns/file-manipulation.mdx';
 
-import EditSeismicFile from "../../components/tools/EditSeismicFile"
-import DistanceBetweenPoints from "../../components/tools/DistanceBetweenPoints"
-import FileToMseed from "../../components/tools/FileToMseed"
-import PickArrivals from "../../components/tools/PickArrivals"
-import SignalProcessing from "../../components/tools/SignalProcessing"
-
 import ObspyIcon from "../../assets/images/topics-icons/obspy-icon.png"
 import SiteEffectIcon from "../../assets/images/topics-icons/site-effect-icon.png"
 import IntroToSeismologyIcon from "../../assets/images/topics-icons/introduction-to-seismology-icon.png"
@@ -110,7 +104,6 @@ export const tools = [
     image_alt: "Interactive Seismic File Editor Icon",
     type: "tool",
     slug: "edit-seismic-file",
-    component: EditSeismicFile,
     completed: true,
     userGuide: "This editor allows you to inspect and update seismic file headers and metadata. Load your seismic file to view detailed information, including station, channel, and timing data. Use the editing interface to correct errors, fill missing fields, or update values as required. After editing, save and download the updated file for integration into your workflows."
   },
@@ -124,7 +117,6 @@ export const tools = [
     image_alt: "Geodesic Distance Calculator Icon",
     type: "tool",
     slug: "distance-between-points",
-    component: DistanceBetweenPoints,
     completed: true,
     userGuide: "Calculate accurate distances between two points on Earth using geodesic algorithms. Input the latitude and longitude for each point, and the tool will compute the distance based on the WGS84 ellipsoid. Use the interactive map to verify and adjust the points visually. This tool is ideal for geophysical applications requiring precise location measurements."
   },
@@ -138,7 +130,6 @@ export const tools = [
     image_alt: "P & S Wave Arrival Picker Icon",
     type: "tool",
     slug: "pick-arrivals",
-    component: PickArrivals,
     completed: true,
     userGuide: "This tool is designed to help you identify P and S wave arrivals on seismic waveforms. Upload your data, and use the interactive waveform display to zoom into areas of interest. Apply filters to remove noise and highlight critical wave patterns. Manually mark arrival times for P and S waves, and export your selections for further analysis."
   },
@@ -152,7 +143,6 @@ export const tools = [
     image_alt: "Convert Data Files to MiniSEED Icon",
     type: "tool",
     slug: "file-to-mseed",
-    component: FileToMseed,
     completed: false,
     userGuide: "This tool simplifies the process of converting various seismic file formats into MiniSEED. Upload your file and specify conversion settings, such as station codes and sample rates. The tool validates input data to ensure compatibility and generates standardized MiniSEED files. Download the converted files for seamless integration with analysis software."
   },
@@ -166,7 +156,6 @@ export const tools = [
     image_alt: "Signal Processing Toolkit Icon",
     type: "tool",
     slug: "signal-processing",
-    component: SignalProcessing,
     completed: true,
     userGuide: "This toolkit provides advanced signal processing capabilities for seismic waveforms. Load your data, and use tools to cut waveforms, apply filters, or smooth noisy signals. Additional features allow you to remove trends and perform baseline corrections. Export processed data for detailed seismic analysis or visualization."
   }
