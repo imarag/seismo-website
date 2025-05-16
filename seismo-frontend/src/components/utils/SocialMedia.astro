@@ -3,16 +3,18 @@ import Symbol from "./Symbol.astro";
 import { socialMediaInfo } from "../../assets/data/static";
 ---
 
-<div class="flex flex-row justify-center gap-2">
+<ul class="flex flex-row justify-center items-center gap-2">
   {
-    socialMediaInfo.map((el) => (
-      <a
-        href={el.url}
-        target="_blank"
-        class={`btn btn-circle p-3 border bg-base-300 hover:bg-primary`}
-      >
-        {<Symbol name={el.iconName} class="size-5" />}
-      </a>
+    socialMediaInfo.map((app) => (
+      <li>
+        <a
+          href={app.url}
+          target="_blank"
+          class={`btn btn-circle p-3 text-white/50 border bg-base-300 hover:text-white hover:bg-primary`}
+        >
+          <Symbol name={app.icon} class="size-5" />
+        </a>
+      </li>
     ))
   }
-</div>
+</ul>

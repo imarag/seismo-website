@@ -1,9 +1,7 @@
 ---
-const { text, class: className } = Astro.props;
+const { text, class: className = "" } = Astro.props;
 ---
 
-<h2
-  class={`text-primary text-3xl md:text-5xl font-semibold ${className || ""}`}
->
+<h2 class={`text-primary text-3xl md:text-5xl font-semibold ${className}`}>
   {text}
 </h2>

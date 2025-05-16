@@ -2,9 +2,9 @@ export const serverUrl = "/api"
 // export const serverUrl = "https://seismo-website.onrender.com"
 
 export const socialMediaInfo = [
-    { app: "facebook", url: "https://www.facebook.com/giannis.mar.5/", iconName: "facebook" },
-    { app: "instagram", url: "https://www.instagram.com/giannis_mar95/", iconName: "instagram" },
-    { app: "linkedin", url: "https://www.linkedin.com/in/ioannis-maragkakis-1ba2851a9/", iconName: "linkedin" },
+    { name: "Facebook", url: "https://www.facebook.com/giannis.mar.5/", icon: "facebook" },
+    { name: "Instagram", url: "https://www.instagram.com/giannis_mar95/", icon: "instagram" },
+    { name: "LinkedIn", url: "https://www.linkedin.com/in/ioannis-maragkakis-1ba2851a9/", icon: "linkedin" },
 ]
 
 export const fastapiEndpoints = {

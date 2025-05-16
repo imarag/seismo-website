@@ -79,7 +79,7 @@ export default function ContactForm() {
   }
 
   return (
-    <section>
+    <>
       {error && <Message type="error" text={error} />}
       {success && <Message type="success" text={success} />}
       <form method="post" onSubmit={handleSubmitForm} ref={form}>
@@ -110,17 +110,12 @@ export default function ContactForm() {
             );
           })}
           <div className="my-4 flex flex-col items-stretch">
-            <Button
-              type="submit"
-              block={true}
-              disabled={loading}
-              loading={loading}
-            >
+            <Button type="submit" disabled={loading} loading={loading}>
               Submit
             </Button>
           </div>
         </div>
       </form>
-    </section>
+    </>
   );
 }
