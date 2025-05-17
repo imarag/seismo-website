@@ -10,6 +10,7 @@ const { pageTitle } = Astro.props;
 
 <html lang="en" data-theme="forest" class="font-display text-lg font-light">
   <head>
+    <script id="gtag-base" async></script>
     <Head pageTitle={pageTitle} />
   </head>
   <body>
@@ -34,16 +35,29 @@ const { pageTitle } = Astro.props;
   }
 
   function loadGoogleAnalytics() {
-    const script = document.createElement("script");
-    script.src = "https://www.googletagmanager.com/gtag/js?id=G-YNYD1NBR7E";
-    script.async = true;
-    document.head.appendChild(script);
+    // Only load once
+    if (window.gtagLoaded) return;
+    window.gtagLoaded = true;
 
-    script.onload = function () {
+    // Set src attribute on existing script tag for better SEO
+    const gtagScript = document.getElementById("gtag-base");
+    if (gtagScript) {
+      gtagScript.src =
+        "https://www.googletagmanager.com/gtag/js?id=G-YNYD1NBR7E";
+    } else {
+      // fallback if not found
+      const script = document.createElement("script");
+      script.src = "https://www.googletagmanager.com/gtag/js?id=G-YNYD1NBR7E";
+      script.async = true;
+      document.head.appendChild(script);
+    }
+
+    gtagScript.onload = function () {
       window.dataLayer = window.dataLayer || [];
       function gtag() {
         dataLayer.push(arguments);
       }
+      window.gtag = gtag;
       gtag("js", new Date());
       gtag("config", "G-YNYD1NBR7E");
     };

@@ -5,7 +5,6 @@ from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from fastapi.staticfiles import StaticFiles
 import os
-import uvicorn
 
 app = FastAPI()
 
@@ -50,4 +49,7 @@ async def validation_exception_handler(request, exc):
 HOST = os.getenv("HOST", "0.0.0.0")
 PORT = int(os.getenv("PORT", 8000))
 
-uvicorn.run("main:app", host=HOST, port=PORT, log_level="info")
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run("main:app", host=HOST, port=PORT, log_level="info")
