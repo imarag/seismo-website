@@ -4,6 +4,8 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from fastapi.staticfiles import StaticFiles
+import os
+import uvicorn
 
 app = FastAPI()
 
@@ -28,7 +30,7 @@ app.mount("/", StaticFiles(directory="dist", html=True), name="frontend")
 
 # this is for raising httpexception errors
 @app.exception_handler(StarletteHTTPException)
-async def http_exception_handler(Request, exc):
+async def http_exception_handler(request, exc):
     return JSONResponse(
         status_code=404,
         content={"error_message": [str(exc.detail)]},
@@ -38,14 +40,14 @@ async def http_exception_handler(Request, exc):
 # this is for errors related to validations of pydantic
 # return the errors are comma separated strings
 @app.exception_handler(RequestValidationError)
-async def validation_exception_handler(Request, exc):
+async def validation_exception_handler(request, exc):
     errors = exc.errors()
     return JSONResponse(
         status_code=400, content={"error_message": [f'{err["msg"]}' for err in errors]}
     )
 
 
-if __name__ == "__main__":
-    import uvicorn
+HOST = os.getenv("HOST", "0.0.0.0")
+PORT = int(os.getenv("PORT", 8000))
 
-    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True, log_level="info")
+uvicorn.run("main:app", host=HOST, port=PORT, log_level="info")
