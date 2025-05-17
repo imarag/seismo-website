@@ -10,7 +10,27 @@ const { pageTitle } = Astro.props;
 
 <html lang="en" data-theme="forest" class="font-display text-lg font-light">
   <head>
-    <script id="gtag-base" async></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@3.0.1/dist/cookieconsent.css"
+    />
+    <!-- Google tag (gtag.js) -->
+    <script
+      data-category="analytics"
+      is:inline
+      type="text/partytown"
+      src="https://www.googletagmanager.com/gtag/js?id=G-YNYD1NBR7E"></script>
+
+    <script data-category="analytics" is:inline type="text/partytown">
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-YNYD1NBR7E");
+    </script>
+
     <Head pageTitle={pageTitle} />
   </head>
   <body>
@@ -19,63 +39,54 @@ const { pageTitle } = Astro.props;
       <slot />
     </main>
     <Footer />
-    <ConsentBanner />
+    <script type="module" src="/src/scripts/cookieconsent-config.js"></script>
   </body>
 </html>
-
+<!-- 
 <script>
-  const CONSENT_KEY = "ga_consent";
+  const acceptBtn = document.getElementById("consent-accept");
+  const declineBtn = document.getElementById("consent-decline");
+  const banner = document.getElementById("cookie-consent-banner");
+  const consentStorageKey = "consentGranted";
+  const consent = localStorage.getItem(consentStorageKey);
 
-  function handleConsent(accepted) {
-    localStorage.setItem(CONSENT_KEY, accepted ? "granted" : "denied");
-    document.getElementById("cookie-consent-banner").style.display = "none";
-    if (accepted) {
-      loadGoogleAnalytics();
-    }
+  if (!consent) {
+    banner?.classList.remove("hidden");
+  } else if (consent === "true") {
+    acceptConsent();
   }
 
-  function loadGoogleAnalytics() {
-    // Only load once
-    if (window.gtagLoaded) return;
-    window.gtagLoaded = true;
-
-    // Set src attribute on existing script tag for better SEO
-    const gtagScript = document.getElementById("gtag-base");
-    if (gtagScript) {
-      gtagScript.src =
-        "https://www.googletagmanager.com/gtag/js?id=G-YNYD1NBR7E";
-    } else {
-      // fallback if not found
-      const script = document.createElement("script");
-      script.src = "https://www.googletagmanager.com/gtag/js?id=G-YNYD1NBR7E";
-      script.async = true;
-      document.head.appendChild(script);
+  function acceptConsent() {
+    localStorage.setItem(consentStorageKey, "true");
+    hideBanner();
+    function gtag() {
+      dataLayer.push(arguments);
     }
 
-    gtagScript.onload = function () {
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      window.gtag = gtag;
-      gtag("js", new Date());
-      gtag("config", "G-YNYD1NBR7E");
-    };
+    gtag("consent", "update", {
+      ad_user_data: "granted",
+      ad_personalization: "granted",
+      ad_storage: "granted",
+      analytics_storage: "granted",
+    });
   }
 
-  window.addEventListener("DOMContentLoaded", () => {
-    const consent = localStorage.getItem(CONSENT_KEY);
-    const banner = document.getElementById("cookie-consent-banner");
-    const acceptBtn = document.getElementById("consent-accept");
-    const declineBtn = document.getElementById("consent-decline");
+  function declineConsent() {
+    localStorage.setItem(consentStorageKey, "false");
+    hideBanner();
+  }
 
-    if (consent === "granted") {
-      loadGoogleAnalytics();
-    } else if (consent === null) {
-      banner.style.display = "block";
-    }
+  function hideBanner() {
+    banner?.classList.add("hidden");
+  }
 
-    acceptBtn?.addEventListener("click", () => handleConsent(true));
-    declineBtn?.addEventListener("click", () => handleConsent(false));
-  });
-</script>
+  acceptBtn?.addEventListener("click", acceptConsent);
+  declineBtn?.addEventListener("click", declineConsent);
+
+  var gtagScript = document.createElement("script");
+  gtagScript.async = true;
+  gtagScript.src = "https://www.googletagmanager.com/gtag/js?id=G-YNYD1NBR7E";
+
+  var firstScript = document.getElementsByTagName("script")[0];
+  firstScript.parentNode.insertBefore(gtagScript, firstScript);
+</script> -->
