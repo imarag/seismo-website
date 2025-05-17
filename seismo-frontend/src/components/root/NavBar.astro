@@ -4,7 +4,6 @@ import Symbol from "../utils/Symbol.astro";
 import Logo from "../utils/Logo.astro";
 import NavSearchBar from "./NavSearchBar";
 const currentPath = Astro.url.pathname;
-console.log(currentPath, "***");
 ---
 
 <nav
@@ -15,11 +14,7 @@ console.log(currentPath, "***");
     class={`container flex flex-col lg:flex-row items-stretch lg:items-center gap-4 py-8  relative`}
   >
     <div class="me-8 shrink-0">
-      <a
-        href="index.html"
-        class="text-xl font-bold"
-        aria-label="Go to homepage"
-      >
+      <a href="/" class="text-xl font-bold" aria-label="Go to homepage">
         <Logo />
       </a>
     </div>

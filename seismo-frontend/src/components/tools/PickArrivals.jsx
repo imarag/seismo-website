@@ -446,9 +446,7 @@ export default function ArrivalsPickingPage() {
         </div>
         <div className="border border-neutral-500/20 h-2/3 overflow-y-scroll p-4 relative">
           <>
-            <div className="absolute start-1/2 ">
-              <Spinner visible={loading} />
-            </div>
+            <div className="absolute start-1/2 ">{loading && <Spinner />}</div>
             {traces.length === 0 ? (
               <div className="flex flex-col items-center justify-center gap-3 absolute top-1/2 start-1/2 -translate-x-1/2 -translate-y-1/2">
                 <h1 className="font-semibold text-3xl">

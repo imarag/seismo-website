@@ -5,6 +5,7 @@ import Label from "../ui/Label";
 import Message from "../ui/Message";
 import Button from "../ui/Button";
 import emailjs from "@emailjs/browser";
+import Spinner from "../ui/Spinner";
 import { contactFormElements } from "../../assets/data/static";
 
 export default function ContactForm() {
@@ -57,9 +58,13 @@ export default function ContactForm() {
 
     setFormErrors({ emailError: null, nameError: null, messageError: null });
 
+    const publicKey = import.meta.env.PUBLIC_EMAILJS_PUBLIC_KEY;
+    const serviceId = import.meta.env.PUBLIC_EMAILJS_SERVICE_ID;
+    const templateId = import.meta.env.PUBLIC_EMAILJS_TEMPLATE_ID;
+
     emailjs
-      .sendForm("service_ak5azqh", "template_e9aalni", form.current, {
-        publicKey: "ux8hQOzLCp6f8Utvu",
+      .sendForm(serviceId, templateId, form.current, {
+        publicKey: publicKey,
       })
       .then(
         () => {
@@ -80,8 +85,22 @@ export default function ContactForm() {
 
   return (
     <>
-      {error && <Message type="error" text={error} />}
-      {success && <Message type="success" text={success} />}
+      {error && (
+        <Message
+          type="error"
+          text={error}
+          setError={setError}
+          setSuccess={setSuccess}
+        />
+      )}
+      {success && (
+        <Message
+          type="success"
+          text={success}
+          setError={setError}
+          setSuccess={setSuccess}
+        />
+      )}
       <form method="post" onSubmit={handleSubmitForm} ref={form}>
         <div className="flex flex-col item-center gap-4">
           {contactFormElements.map((obj) => {
@@ -110,8 +129,9 @@ export default function ContactForm() {
             );
           })}
           <div className="my-4 flex flex-col items-stretch">
-            <Button type="submit" disabled={loading} loading={loading}>
+            <Button type="submit" disabled={loading}>
               Submit
+              {loading && <Spinner />}
             </Button>
           </div>
         </div>

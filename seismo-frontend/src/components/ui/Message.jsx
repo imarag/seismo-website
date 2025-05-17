@@ -15,7 +15,7 @@ export default function Message({ type, text, setError, setSuccess }) {
       <button
         className="btn btn-ghost btn-sm absolute end-1 top-1"
         onClick={() => {
-          setError([]);
+          setError(null);
           setSuccess(null);
         }}
       >

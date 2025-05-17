@@ -1,7 +1,7 @@
-export default function Spinner({ visible = false }) {
+export default function Spinner() {
   return (
-    <p class={`text-center ${visible ? "visible" : "invisible"}`}>
-      <span class="loading loading-ring loading-lg"></span>
+    <p className="text-center">
+      <span className="loading loading-ring loading-lg"></span>
     </p>
   );
 }
