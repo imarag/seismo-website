@@ -8,7 +8,7 @@ export default function Message({
   setError = () => {},
   setSuccess = () => {},
 }) {
-  const messageBase = "flex flex-row items-center gap-4 relative";
+  const messageBase = "flex flex-row items-center gap-4";
   const messagePosition = "fixed end-8 bottom-8 z-40";
   const messageText = "text-sm text-start font-semibold";
   const messageSize = "w-80 p-6";
@@ -21,7 +21,7 @@ export default function Message({
       <button
         className="btn btn-ghost btn-sm absolute end-1 top-1"
         onClick={() => {
-          setError(null);
+          setError([]);
           setSuccess(null);
         }}
         aria-label="Close message"
