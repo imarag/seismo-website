@@ -7,7 +7,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "deploy": "npm run build && rm -rf ../seismo-backend/dist && cp -r dist ../seismo-backend/dist && cd ../seismo-backend && python main.py"
+    "deploy": "npm run build && rm -rf ../seismo-backend/dist && cp -r dist ../seismo-backend/dist && cd .. && git add . && git commit -m 'changes...' && git push "
   },
   "dependencies": {
     "@astrojs/mdx": "^4.2.6",

@@ -1,1 +1,0 @@
-import{j as s}from"./jsx-runtime.D_zvdyIk.js";function o({className:t="",size:l="md",optionsList:r=[],...a}){return s.jsx("select",{className:`select select-${l} select-bordered ${t}`,...a,children:r.map(e=>s.jsx("option",{value:e.value,children:e.label},e.value))})}export{o as S};
