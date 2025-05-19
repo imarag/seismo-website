@@ -1,9 +1,9 @@
-export default function Label({ label, className = "", ...props }) {
-  const labelElementClass = `label label-text ${className} px-0 py-1`.trim();
+export default function Label({ className = "", children, ...attrs }) {
+  const baseClass = `label label-text px-0 py-1 ${className}`;
 
   return (
-    <label className={labelElementClass} {...props}>
-      {label}
+    <label className={baseClass} {...attrs}>
+      {children}
     </label>
   );
 }

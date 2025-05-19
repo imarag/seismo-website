@@ -1,7 +1,8 @@
 ---
-const { text, class: className } = Astro.props;
+const { class: className = "", ...attrs } = Astro.props;
+const globalClass = `text-primary font-semibold text-lg ${className}`;
 ---
 
-<h2 class={`text-primary font-semibold text-lg ${className || ""}`}>
-  {text}
-</h2>
+<h3 class={globalClass} {...attrs}>
+  <slot />
+</h3>

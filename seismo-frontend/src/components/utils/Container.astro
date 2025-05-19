@@ -1,7 +1,7 @@
 ---
-const { class: className = "" } = Astro.props;
+const { class: className = "", ...attrs } = Astro.props;
 ---
 
-<div class={`container mx-auto ${className}`}>
+<div class={`container mx-auto ${className}`} {...attrs}>
   <slot />
 </div>

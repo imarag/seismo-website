@@ -52,10 +52,10 @@ function PSElements({
       {formattedArrivals["P"] !== null && (
         <Button
           onClick={(e) => handleDeleteWave("P")}
-          variant="error"
+          style="error"
           size="extra-small"
           outline={true}
-          toolTipText="Delete the selected P wave arrival"
+          tooltiptext="Delete the selected P wave arrival"
         >
           P
           <IoMdClose />
@@ -64,10 +64,10 @@ function PSElements({
       {formattedArrivals["S"] !== null && (
         <Button
           onClick={(e) => handleDeleteWave("S")}
-          variant="error"
+          style="error"
           size="extra-small"
           outline={true}
-          toolTipText="Delete the selected S wave arrival"
+          tooltiptext="Delete the selected S wave arrival"
         >
           S
           <IoMdClose />
@@ -200,15 +200,15 @@ function MainMenu({
         <div className="grow-0 border-r border-neutral-500/20">
           <Button
             onClick={handleFileUpload}
-            variant="ghost"
+            style="ghost"
             size="small"
-            toolTipText="Upload a seismic file"
+            tooltiptext="Upload a seismic file"
           >
             <HiOutlineUpload />
             Upload file
           </Button>
           <Button
-            variant="ghost"
+            style="ghost"
             size="small"
             onClick={handleSaveArrivals}
             disabled={
@@ -216,7 +216,7 @@ function MainMenu({
               (formattedArrivals["P"] === null &&
                 formattedArrivals["S"] === null)
             }
-            toolTipText="Download the selected P & S wave arrivals in a txt file"
+            tooltiptext="Download the selected P & S wave arrivals in a txt file"
           >
             <MdOutlineFileDownload />
             Download arrivals
@@ -458,7 +458,7 @@ export default function ArrivalsPickingPage() {
                 <Button
                   onClick={handleFileUpload}
                   loading={loading}
-                  toolTipText="Upload a seismic file"
+                  tooltiptext="Upload a seismic file"
                 >
                   <HiOutlineUpload />
                   Upload file

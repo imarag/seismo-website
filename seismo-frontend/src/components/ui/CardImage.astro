@@ -1,6 +1,7 @@
 ---
-import Img from "../utils/Img.astro";
-const { src, alt, class: className } = Astro.props;
+import Img from "../ui/Img.astro";
+const { src, alt, class: className = "", ...attrs } = Astro.props;
+const globalClass = `w-32 block mx-auto ${className}`;
 ---
 
-<Img src={src} alt={alt} class={`w-32 block mx-auto ${className || ""}`} />
+<Img src={src} alt={alt} class={globalClass} {...attrs} />

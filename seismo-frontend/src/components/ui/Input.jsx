@@ -1,22 +1,30 @@
 export default function Input({
   type = "text",
-  size = "md",
+  size = "medium",
   className = "",
-  ...props
+  ...attrs
 }) {
-  let baseClass = "";
+  const sizeMapping = {
+    "extra-small": "xs",
+    small: "sm",
+    medium: "md",
+    large: "lg",
+  };
+
+  const sizeClass = sizeMapping[size] || sizeMapping["medium"];
+  let baseClass;
 
   if (type === "range") {
-    baseClass = `range range-${size}`;
+    baseClass = `range range-${sizeClass}`;
   } else if (type === "radio") {
-    baseClass = `radio radio-${size}`;
+    baseClass = `radio radio-${sizeClass}`;
   } else if (type === "checkbox") {
-    baseClass = `checkbox checkbox-${size}`;
+    baseClass = `checkbox checkbox-${sizeClass}`;
   } else {
-    baseClass = `input rounded-md input-${size}`;
+    baseClass = `input input-bordered rounded-md input-${sizeClass}`;
   }
 
-  const globalClass = `${baseClass} input-bordered ${className}`.trim();
+  const globalClass = `${baseClass} ${className}`;
 
-  return <input type={type} className={globalClass} {...props} />;
+  return <input type={type} className={globalClass} {...attrs} />;
 }

@@ -2,12 +2,12 @@
 import PageTitle from "../utils/PageTitle.astro";
 import PageSubTitle from "../utils/PageSubTitle.astro";
 import EyeBrowText from "../utils/EyeBrowText.astro";
-import Img from "../utils/Img.astro";
+import Img from "../ui/Img.astro";
 import LinkTag from "../ui/LinkTag.astro";
-import Badge from "../utils/Badge.astro";
+import Badge from "../ui/Badge.astro";
 import CardTitle from "../ui/CardTitle.astro";
 import CardParagraph from "../ui/CardParagraph.astro";
-import Symbol from "../utils/Symbol.astro";
+import Symbol from "../ui/Symbol.astro";
 import { articles } from "../../assets/data/topics";
 ---
 
@@ -34,20 +34,17 @@ import { articles } from "../../assets/data/topics";
           />
         </div>
         <div class="flex-shrink flex-grow space-y-2">
-          <CardTitle text={article.title} />
+          <CardTitle>{article.title}</CardTitle>
           <div class="flex items-center gap-2 my-2">
             {article.keywords.map((keyword) => (
-              <Badge type="neutral" outline={true} size="extra-small">
+              <Badge style="accent" outline={true} size="extra-small">
                 {keyword}
               </Badge>
             ))}
           </div>
-          <CardParagraph text={article.description} />
+          <CardParagraph>{article.description}</CardParagraph>
           {article.completed ? (
-            <LinkTag
-              href={`/articles/${article.slug}`}
-              class="flex items-center gap-2"
-            >
+            <LinkTag href={`/articles/${article.slug}`} style="info">
               Go to page
               <Symbol name="arrow-right" class="group-hover:translate-x-2" />
             </LinkTag>

@@ -1,7 +1,8 @@
 ---
-const { class: className } = Astro.props;
+const { class: className = "", ...attrs } = Astro.props;
+const globalClass = `space-y-4 p-8 relative rounded-md bg-base-200 ${className}`;
 ---
 
-<div class={`space-y-4 p-8 relative ${className}`}>
+<div class={globalClass} {...attrs}>
   <slot />
 </div>

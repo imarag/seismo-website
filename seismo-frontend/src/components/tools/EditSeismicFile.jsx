@@ -64,10 +64,10 @@ function NewTraceMenu({
       </div>
       <div className="absolute top-1 end-2">
         <Button
-          variant="ghost"
+          style="ghost"
           size="small"
           onClick={() => setActivatedNewTraceMenu(false)}
-          toolTipText={`Close the menu.`}
+          tooltiptext={`Close the menu.`}
         >
           <IoMdClose />
         </Button>
@@ -137,8 +137,8 @@ function NewTraceMenu({
         <Button
           size="extra-small"
           outline={true}
-          variant="neutral"
-          toolTipText={`Upload trace data`}
+          style="neutral"
+          tooltiptext={`Upload trace data`}
           onClick={handleDataUpload}
         >
           <HiOutlineUpload />
@@ -182,10 +182,10 @@ function TraceInfoMenu({
       <div className="flex flex-col p-4 items-stretch gap-1 absolute top-0 end-0 bg-base-200 border border-neutral-500/20 shadow rounded z-50">
         <div className="absolute top-1 end-2">
           <Button
-            variant="ghost"
+            style="ghost"
             size="small"
             onClick={() => setActivatedMenuIndex(null)}
-            toolTipText={`Close the menu.`}
+            tooltiptext={`Close the menu.`}
             type="button"
           >
             <IoMdClose />
@@ -223,7 +223,7 @@ function TraceInfoMenu({
                   {!obj.readOnly &&
                     (currentUpdateIndex === obj.id ? (
                       <Button
-                        variant="ghost"
+                        style="ghost"
                         size="extra-small"
                         onClick={() => setCurrentUpdateIndex(null)}
                       >
@@ -231,10 +231,10 @@ function TraceInfoMenu({
                       </Button>
                     ) : (
                       <Button
-                        variant="ghost"
+                        style="ghost"
                         size="extra-small"
                         onClick={() => setCurrentUpdateIndex(obj.id)}
-                        toolTipText={`Update ${obj.label}`}
+                        tooltiptext={`Update ${obj.label}`}
                       >
                         <MdEdit />
                       </Button>
@@ -258,15 +258,15 @@ function MainMenu({ traces, handleFileUpload, handleDownloadFile }) {
     <>
       <Button
         onClick={handleFileUpload}
-        variant="ghost"
+        style="ghost"
         size="small"
-        toolTipText={`Upload a seismic file`}
+        tooltiptext={`Upload a seismic file`}
       >
         <HiOutlineUpload />
         Upload file
       </Button>
       <Button
-        variant="ghost"
+        style="ghost"
         size="small"
         onClick={() =>
           handleDownloadFile(
@@ -276,7 +276,7 @@ function MainMenu({ traces, handleFileUpload, handleDownloadFile }) {
           )
         }
         disabled={traces ? traces.length === 0 : false}
-        toolTipText={`Download the updated traces to MiniSEED file format`}
+        tooltiptext={`Download the updated traces to MiniSEED file format`}
       >
         Download to MSEED
         <MdOutlineFileDownload />
@@ -317,15 +317,15 @@ function Graphs({
         <div key={tr.trace_id} className="h-1/3 relative">
           <div className="flex flex-row justify-end items-center gap-2">
             <Button
-              variant="ghost"
+              style="ghost"
               size="small"
               onClick={() => handleOptionsMenuButtonClick(ind)}
-              toolTipText={`Open the trace header menu. Feel free to update the fields.`}
+              tooltiptext={`Open the trace header menu. Feel free to update the fields.`}
             >
               <PiGearLight />
             </Button>
             <Button
-              variant="ghost"
+              style="ghost"
               size="small"
               onClick={() =>
                 handleDownloadFile(
@@ -334,12 +334,12 @@ function Graphs({
                   tr.stats.record_name + "_header"
                 )
               }
-              toolTipText={`Download the header information of updated traces in a json format`}
+              tooltiptext={`Download the header information of updated traces in a json format`}
             >
               <TbFileDownload />
             </Button>
             <Button
-              variant="ghost"
+              style="ghost"
               size="small"
               onClick={() =>
                 handleDownloadFile(
@@ -352,15 +352,15 @@ function Graphs({
                   tr.stats.record_name + "_data"
                 )
               }
-              toolTipText={`Download the data values of the traces in a json file format`}
+              tooltiptext={`Download the data values of the traces in a json file format`}
             >
               <BsDatabaseDown />
             </Button>
             <Button
-              variant="ghost"
+              style="ghost"
               size="small"
               onClick={() => handleDeleteTrace(tr.trace_id)}
-              toolTipText={`Remove trace.`}
+              tooltiptext={`Remove trace.`}
               className="text-error"
             >
               <MdDeleteOutline />
@@ -515,7 +515,7 @@ export default function EditSeismicFile() {
               </p>
               <Button
                 onClick={handleFileUpload}
-                toolTipText={`Upload a seismic file`}
+                tooltiptext={`Upload a seismic file`}
                 loading={loading}
               >
                 <HiOutlineUpload />
@@ -530,8 +530,8 @@ export default function EditSeismicFile() {
                     setActivatedNewTraceMenu(!activatedNewTraceMenu)
                   }
                   size="extra-small"
-                  variant="ghost"
-                  toolTipText={`Upload a seismic file`}
+                  style="ghost"
+                  tooltiptext={`Upload a seismic file`}
                 >
                   Add trace +
                 </Button>

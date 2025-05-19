@@ -1,0 +1,35 @@
+---
+const {
+  style = "primary",
+  size = "small",
+  outline = false,
+  class: className = "",
+  ...attrs
+} = Astro.props;
+
+const baseClass = "badge hover:scale-110";
+const sizeMapping = {
+  "extra-small": "badge-xs",
+  small: "badge-sm",
+  medium: "badge-md",
+  large: "badge-lg",
+};
+const styleMapping = {
+  primary: "badge-primary",
+  secondary: "badge-secondary",
+  accent: "badge-accent",
+  neutral: "badge-neutral",
+  info: "badge-info",
+  success: "badge-success",
+  warning: "badge-warning",
+  error: "badge-error",
+};
+const sizeClass = sizeMapping[size] || sizeMapping["small"];
+const styleClass = styleMapping[style] || styleMapping["primary"];
+const outlineClass = outline ? "badge-outline" : "";
+const globalClass = `${baseClass} ${sizeClass} ${styleClass} ${outlineClass} ${className}`;
+---
+
+<div class={globalClass} {...attrs}>
+  <slot />
+</div>

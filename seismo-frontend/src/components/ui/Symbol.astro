@@ -1,0 +1,7 @@
+---
+import { Icon } from "astro-icon/components";
+const { name, class: className = "", ...attrs } = Astro.props;
+const globalClass = `transition-all ${className}`;
+---
+
+<Icon name={name} class={globalClass} {...attrs} />

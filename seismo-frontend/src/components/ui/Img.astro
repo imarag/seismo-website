@@ -1,0 +1,7 @@
+---
+import { Image } from "astro:assets";
+const { src, alt, class: className = "", ...attrs } = Astro.props;
+const globalClass = `${className} max-w-full h-auto`;
+---
+
+<Image src={src} alt={alt} class={globalClass} {...attrs} />

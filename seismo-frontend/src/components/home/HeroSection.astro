@@ -2,7 +2,7 @@
 import HeroTitle from "../home/HeroTitle.astro";
 import HeroSubTitle from "../home/HeroSubTitle.astro";
 import LinkTag from "../ui/LinkTag.astro";
-import Img from "../utils/Img.astro";
+import Img from "../ui/Img.astro";
 import SeismicRecordSVG from "../../assets/images/pages/seismic-record.svg";
 ---
 
@@ -21,7 +21,7 @@ import SeismicRecordSVG from "../../assets/images/pages/seismic-record.svg";
       class="text-center py-6 font-normal text-lg md:text-3xl"
     />
     <div class="text-center mt-8">
-      <LinkTag variant="button" href="/articles">Get started</LinkTag>
+      <LinkTag button={true} href="/articles">Get started</LinkTag>
     </div>
   </div>
 </div>

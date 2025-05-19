@@ -4,13 +4,14 @@ import PageSubTitle from "../utils/PageSubTitle.astro";
 import EyeBrowText from "../utils/EyeBrowText.astro";
 import LinkTag from "../ui/LinkTag.astro";
 import { fastapiEndpoints } from "../../assets/data/static.js";
-import Symbol from "../utils/Symbol.astro";
+import Symbol from "../ui/Symbol.astro";
 import CardTitle from "../ui/CardTitle.astro";
 import CardParagraph from "../ui/CardParagraph.astro";
 import CardContainer from "../ui/CardContainer.astro";
 import CardLink from "../ui/CardLink.astro";
 import { tools } from "../../assets/data/topics";
-import Img from "../utils/Img.astro";
+import Img from "../ui/Img.astro";
+import Alert from "../ui/Alert.astro";
 ---
 
 <div class="text-center">
@@ -28,11 +29,19 @@ import Img from "../utils/Img.astro";
   </p>
   <div class="flex gap-2 items-center justify-center mt-4">
     <Symbol name="file-download" class="flex-shrink-0" />
-    <LinkTag href={fastapiEndpoints["DOWNLOAD-TEST-FILE"]}>
+    <LinkTag href={fastapiEndpoints["DOWNLOAD-TEST-FILE"]} style="info">
       Download Sample MSEED File
     </LinkTag>
   </div>
 </div>
+<Alert class="my-8">
+  Note: This toolset is part of a personal seismology project currently
+  maintained by a single developer. It's hosted on a free-tier server, so you
+  might occasionally experience delays or temporary issues. If you spot any
+  bugs, please feel free to <LinkTag style="info" href="/contact"
+    >contact me</LinkTag
+  >. Your feedback helps improve the tools listed — thank you for using them!
+</Alert>
 <div
   class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 justify-center gap-8"
 >
@@ -44,10 +53,12 @@ import Img from "../utils/Img.astro";
           alt={tool.image_alt}
           class="w-32 block mx-auto"
         />
-        <CardTitle class="text-center" text={tool.title} />
-        <CardParagraph class="text-center" text={tool.smallDescription} />
+        <CardTitle class="text-center">{tool.title}</CardTitle>
+        <CardParagraph class="text-center">
+          {tool.smallDescription}
+        </CardParagraph>
         {tool.completed ? (
-          <CardLink href={`/tools/${tool.slug}`} />
+          <CardLink href={`/tools/${tool.slug}`}>Go to page</CardLink>
         ) : (
           <p class="font-bold text-center">Work in Progress</p>
         )}

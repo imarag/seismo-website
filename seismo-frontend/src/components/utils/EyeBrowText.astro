@@ -1,9 +1,8 @@
 ---
-const { text, class: className } = Astro.props;
+const { text, class: className = "", ...attrs } = Astro.props;
+const globalClass = `inline-block px-4 py-2 bg-base-200 rounded-full text-xs text-base-content/80 uppercase ${className}`;
 ---
 
-<p
-  class={`inline-block px-4 py-2 bg-base-200 rounded-full span-2 text-xs text-base-content/80 uppercase ${className || ""}`}
->
+<p class={globalClass} {...attrs}>
   {text}
 </p>

@@ -1,14 +1,21 @@
 export default function Select({
   className = "",
-  size = "md",
+  size = "medium",
   optionsList = [],
-  ...props
+  ...attrs
 }) {
+  const baseClass = "select select-bordered";
+  const sizeMapping = {
+    "extra-small": "select-xs",
+    small: "select-sm",
+    medium: "select-md",
+    large: "select-lg",
+  };
+  const globalClass = `${baseClass} ${
+    sizeMapping[size] || sizeMapping["medium"]
+  } ${className}`;
   return (
-    <select
-      className={`select select-${size} select-bordered ${className}`}
-      {...props}
-    >
+    <select className={globalClass} {...attrs}>
       {optionsList.map((el) => (
         <option key={el.value} value={el.value}>
           {el.label}

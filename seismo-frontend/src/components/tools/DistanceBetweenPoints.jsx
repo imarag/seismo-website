@@ -135,7 +135,7 @@ export default function DistanceBetweenPoints() {
             !coords["lon2"]
           }
           loading={loading}
-          toolTipText="Compute the distance between two geographic points on the WGS84 ellipsoid"
+          tooltiptext="Compute the distance between two geographic points on the WGS84 ellipsoid"
         >
           Compute
           <LuCalculator />

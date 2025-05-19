@@ -112,11 +112,9 @@ export default function ContactForm() {
                 : formErrors.messageError;
             return (
               <div key={obj.id} className="flex flex-col gap-1">
-                <Label
-                  label={obj.label}
-                  id={obj.id}
-                  className="w-full mx-auto"
-                />
+                <Label id={obj.id} className="w-full mx-auto">
+                  {obj.label}
+                </Label>
                 {obj.type === "textarea" ? (
                   <TextArea {...obj} className="w-full mx-auto" />
                 ) : (

@@ -1,21 +1,37 @@
 ---
 const {
   href = "#",
-  variant = "default",
-  class: className,
-  ...props
+  style = "primary",
+  button = false,
+  outline = false,
+  size = "medium",
+  class: className = "",
+  ...attrs
 } = Astro.props;
 
-const baseStyles = "group z-30 inline-flex items-center gap-2 transition-all";
-const variants = {
-  default: "text-info hover:underline",
-  button: "btn btn-primary rounded-md",
+const baseClass = `${button ? "btn" : "link"} group z-30 inline-flex items-center gap-2 transition-all`;
+const styleMapping = {
+  primary: button ? "btn-primary" : "link-primary",
+  secondary: button ? "btn-secondary" : "link-secondary",
+  accent: button ? "btn-accent" : "link-accent",
+  neutral: button ? "btn-neutral" : "link-neutral",
+  info: button ? "btn-info" : "link-info",
+  success: button ? "btn-success" : "link-success",
+  warning: button ? "btn-warning" : "link-warning",
+  error: button ? "btn-error" : "link-error",
 };
-
-const selectedVariant = variants[variant] || variants.default;
-const globalClass = `${baseStyles} ${selectedVariant} ${className || ""}`;
+const sizeMapping = {
+  "extra-small": "btn-xs",
+  small: "btn-sm",
+  medium: "btn-md",
+  large: "btn-lg",
+};
+const sizeClass = sizeMapping[size] || sizeMapping["medium"];
+const styleClass = styleMapping[style] || styleMapping["primary"];
+const outlineClass = outline ? "btn-outline" : "";
+const globalClass = `${baseClass} ${button ? sizeClass : ""} ${styleClass} ${button && outline ? outlineClass : ""} ${className}`;
 ---
 
-<a href={href} class={globalClass} {...props}>
+<a href={href} class={globalClass} {...attrs}>
   <slot />
 </a>

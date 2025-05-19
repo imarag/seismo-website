@@ -1,7 +1,8 @@
 ---
-const { class: className = "" } = Astro.props;
+const { class: className = "", ...attrs } = Astro.props;
+const globalClass = `py-14 ${className}`;
 ---
 
-<section class={`py-14 ${className}`}>
+<section class={globalClass} {...attrs}>
   <slot />
 </section>

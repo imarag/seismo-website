@@ -1,5 +1,5 @@
 ---
-import Img from "../utils/Img.astro";
+import Img from "../ui/Img.astro";
 import LinkTag from "../ui/LinkTag.astro";
 import PageTitle from "../utils/PageTitle.astro";
 import PageSubTitle from "../utils/PageSubTitle.astro";
@@ -15,7 +15,7 @@ import PythonScript from "../../assets/images/pages/obspy-script-example.gif";
     text="Process seismic data using the various ObsPy functions, manipulate date and time, and plot earthquake recordings."
   />
   <div class="text-center">
-    <LinkTag variant="button" href="/articles/obspy"> Learn More </LinkTag>
+    <LinkTag button={true} href="/articles/obspy">Learn More</LinkTag>
   </div>
   <div class="max-w-2xl mx-auto">
     <Img

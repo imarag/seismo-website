@@ -27,7 +27,7 @@ function MenuButton({ onClick, disabled = false }) {
       <Button
         onClick={onClick}
         size="small"
-        variant="primary"
+        style="primary"
         disabled={disabled}
       >
         apply
@@ -314,15 +314,15 @@ function MainMenu({
           <Button
             onClick={handleFileUpload}
             loading={loading}
-            variant="ghost"
-            toolTipText="Upload a seismic file"
+            style="ghost"
+            tooltiptext="Upload a seismic file"
           >
             <HiOutlineUpload />
             Upload file
           </Button>
           <Button
             loading={loading}
-            variant="ghost"
+            style="ghost"
             onClick={() =>
               handleDownloadFile(
                 "mseed",
@@ -331,7 +331,7 @@ function MainMenu({
               )
             }
             disabled={traces.length === 0}
-            toolTipText="Download the processed seismic file into MiniSEED file format"
+            tooltiptext="Download the processed seismic file into MiniSEED file format"
           >
             <TbFileDownload />
             Download To MSEED
@@ -606,10 +606,10 @@ function ProcessingFilters({ appliedProcesses, handleRemoveProcesses }) {
             ))}
             <span className="ms-5">
               <Button
-                variant="error"
+                style="error"
                 size="extra-small"
                 onClick={handleRemoveProcesses}
-                toolTipText="Remove all applied filters"
+                tooltiptext="Remove all applied filters"
               >
                 remove all
                 <IoMdClose />
@@ -738,7 +738,7 @@ export default function SignalProcessingPage() {
               <Button
                 onClick={handleFileUpload}
                 loading={loading}
-                toolTipText="Upload a seismic file"
+                tooltiptext="Upload a seismic file"
               >
                 <HiOutlineUpload />
                 Upload file
