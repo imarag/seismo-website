@@ -341,7 +341,7 @@ function MainMenu({
           <MenuDropdown icon={<BsSoundwave />} label="Taper">
             <div className="flex flex-col items-stretch gap-3">
               <div className="flex flex-col gap-2">
-                <Label htmlFor="taper-type" label="Type" />
+                <Label htmlFor="taper-type">Type</Label>
                 <Select
                   id="taper-type"
                   name="taper-type"
@@ -354,7 +354,7 @@ function MainMenu({
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <Label htmlFor="taper-side" label="Side" />
+                <Label htmlFor="taper-side">Side</Label>
                 <Select
                   id="taper-side"
                   name="taper-side"
@@ -367,7 +367,7 @@ function MainMenu({
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <Label htmlFor="taper-length" label="Length" />
+                <Label htmlFor="taper-length">Length</Label>
                 <Input
                   type="number"
                   id="taper-length"
@@ -395,7 +395,7 @@ function MainMenu({
           <MenuDropdown icon={<IoCut />} label="Trim">
             <div className="flex flex-col items-stretch gap-3">
               <div className="flex flex-col gap-2">
-                <Label htmlFor="trim-left-side" label="Start time (sec)" />
+                <Label htmlFor="trim-left-side">Start time (sec)</Label>
                 <Input
                   type="number"
                   id="trim-left-side"
@@ -432,7 +432,7 @@ function MainMenu({
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <Label htmlFor="trim-right-side" label="End time (sec)" />
+                <Label htmlFor="trim-right-side">End time (sec)</Label>
                 <Input
                   type="number"
                   id="trim-right-side"
@@ -477,7 +477,7 @@ function MainMenu({
           <MenuDropdown icon={<MdAlignVerticalCenter />} label="Detrend">
             <div className="flex flex-col items-stretch gap-3">
               <div className="flex flex-col gap-2">
-                <Label htmlFor="detrend-type" label="Type" />
+                <Label htmlFor="detrend-type">Type</Label>
                 <Select
                   id="detrend-type"
                   name="detrend-type"
@@ -498,7 +498,7 @@ function MainMenu({
           <MenuDropdown icon={<IoFilter />} label="Filter">
             <div className="flex flex-col items-stretch gap-3">
               <div className="flex flex-col gap-2">
-                <Label htmlFor="filter-min" label="Min frequency" />
+                <Label htmlFor="filter-min">Min frequency</Label>
                 <Input
                   type="number"
                   id="filter-min"
@@ -514,7 +514,7 @@ function MainMenu({
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <Label htmlFor="freq-max" label="Max frequency" />
+                <Label htmlFor="freq-max">Max frequency</Label>
                 <Input
                   type="number"
                   id="freq-max"

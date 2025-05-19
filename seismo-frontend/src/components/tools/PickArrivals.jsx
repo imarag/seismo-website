@@ -24,7 +24,9 @@ function PSElements({
   return (
     <div className="flex flex-row items-center gap-4">
       <div className="flex flex-row items-center">
-        <Label htmlFor="p-wave-radio" label="P" className="text-lg" />
+        <Label htmlFor="p-wave-radio" className="text-lg mx-2">
+          P
+        </Label>
         <Input
           type="radio"
           id="p-wave-radio"
@@ -37,7 +39,9 @@ function PSElements({
         />
       </div>
       <div className="flex flex-row items-center">
-        <Label htmlFor="s-wave-radio" label="S" className="text-lg" />
+        <Label htmlFor="s-wave-radio" className="text-lg mx-2">
+          S
+        </Label>
         <Input
           type="radio"
           id="s-wave-radio"

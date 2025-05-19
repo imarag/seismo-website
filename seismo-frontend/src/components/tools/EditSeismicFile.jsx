@@ -75,7 +75,7 @@ function NewTraceMenu({
       <div className="grid grid-cols-2 gap-2 items-center">
         {fileParams.map((obj) => (
           <div key={obj.id}>
-            <Label htmlFor={obj.id} label={obj.label} />
+            <Label htmlFor={obj.id}>{obj.label}</Label>
             <Input
               className={"input-xs w-full"}
               value={newTraceOptions[obj.id]}
@@ -108,7 +108,7 @@ function NewTraceMenu({
       <div className="grid grid-cols-2 gap-2 items-center">
         {seismicParams.map((obj) => (
           <div key={obj.id}>
-            <Label htmlFor={obj.id} label={obj.label} />
+            <Label htmlFor={obj.id}>{obj.label}</Label>
             <Input
               className={"input-xs w-full"}
               value={newTraceOptions[obj.id]}
@@ -195,11 +195,9 @@ function TraceInfoMenu({
           {traceHeaderParams.map((obj) => (
             <>
               <div key={obj.id} className="my-1">
-                <Label
-                  htmlFor={obj.id}
-                  label={obj.label}
-                  className=" font-semibold"
-                />
+                <Label htmlFor={obj.id} className=" font-semibold">
+                  {obj.label}
+                </Label>
                 <div className="grid grid-cols-2 items-center">
                   {currentUpdateIndex === obj.id ? (
                     <Input

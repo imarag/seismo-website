@@ -21,7 +21,7 @@ function CoordContainer({ label, children }) {
 
 function CoordItem({ coordLabel, coordValue, coords, setCoords }) {
   <div className="flex flex-col items-stretch justify-center gap-2">
-    <Label htmlFor={coordValue} label={coordLabel} />
+    <Label htmlFor={coordValue}>{coordLabel}</Label>
     <Input
       type="number"
       id={coordValue}
