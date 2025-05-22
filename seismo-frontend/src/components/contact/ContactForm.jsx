@@ -85,7 +85,7 @@ export default function ContactForm() {
 
   return (
     <>
-      {error && (
+      {error.length !== 0 && (
         <Message
           type="error"
           text={error}
