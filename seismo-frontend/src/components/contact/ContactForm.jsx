@@ -11,7 +11,7 @@ import { contactFormElements } from "../../assets/data/static";
 export default function ContactForm() {
   const form = useRef();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState([]);
   const [success, setSuccess] = useState(null);
   const [formErrors, setFormErrors] = useState({
     nameError: null,
@@ -77,7 +77,7 @@ export default function ContactForm() {
         (error) => {
           setLoading(false);
           setSuccess(null);
-          setError(error.text);
+          setError([error.text]);
           setTimeout(() => setError([]), 5000);
         }
       );
