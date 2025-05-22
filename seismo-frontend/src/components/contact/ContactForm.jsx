@@ -6,7 +6,6 @@ import Message from "../ui/Message";
 import Button from "../ui/Button";
 import emailjs from "@emailjs/browser";
 import Spinner from "../ui/Spinner";
-import { contactFormElements } from "../../assets/data/static";
 
 export default function ContactForm() {
   const form = useRef();
@@ -21,9 +20,11 @@ export default function ContactForm() {
 
   function handleSubmitForm(e) {
     e.preventDefault();
+
     setLoading(true);
 
     const formData = new FormData(form.current);
+
     const userEmail = formData.get("user_email");
     const userName = formData.get("user_name");
     const userMessage = formData.get("message");
@@ -32,22 +33,22 @@ export default function ContactForm() {
     let messageError = null;
     let nameError = null;
 
-    const namePattern = /^[a-zA-z- ]{3,20}$/;
+    const namePattern = /^[a-zA-Z- ]{3,80}$/;
     const emailPattern = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-    const messagePattern = /^[a-zA-z0-9-_ ]{10,500}$/;
+    const messagePattern = /^[\s\S]{5,500}$/;
 
     if (!namePattern.test(userName)) {
       nameError =
-        "Name must be 3-20 characters long and contain only letters and hyphens.";
+        "Please enter your full name (3–80 characters). Only letters, spaces, and hyphens are allowed!";
     }
 
     if (!emailPattern.test(userEmail)) {
-      emailError = "Please enter a valid email address.";
+      emailError =
+        "The email address you entered is invalid. Please check for typos (e.g. missing @ or domain)!";
     }
 
     if (!messagePattern.test(userMessage)) {
-      messageError =
-        "Message must be 10-500 characters long and can only contain letters, numbers, hyphens, and underscores.";
+      messageError = "Your message should be between 5 and 500 characters!";
     }
 
     if (emailError || messageError || nameError) {
@@ -69,7 +70,9 @@ export default function ContactForm() {
       .then(
         () => {
           setLoading(false);
-          setSuccess("You have successfully sent the message. Thank you!");
+          setSuccess(
+            "You have successfully sent the message. Thank you for your feedback !!"
+          );
           setTimeout(() => setSuccess(null), 5000);
           setError([]);
           form.current.reset();
@@ -77,7 +80,9 @@ export default function ContactForm() {
         (error) => {
           setLoading(false);
           setSuccess(null);
-          setError([error.text]);
+          setError([
+            "We couldn’t send your message at the moment. Please try again shortly or contact us through another method!",
+          ]);
           setTimeout(() => setError([]), 5000);
         }
       );
@@ -103,32 +108,53 @@ export default function ContactForm() {
       )}
       <form method="post" onSubmit={handleSubmitForm} ref={form}>
         <div className="flex flex-col item-center gap-4">
-          {contactFormElements.map((obj) => {
-            const element =
-              obj.id == "user_name"
-                ? formErrors.nameError
-                : obj.id == "user_email"
-                ? formErrors.emailError
-                : formErrors.messageError;
-            return (
-              <div key={obj.id} className="flex flex-col gap-1">
-                <Label id={obj.id} className="w-full mx-auto">
-                  {obj.label}
-                </Label>
-                {obj.type === "textarea" ? (
-                  <TextArea {...obj} className="w-full mx-auto" />
-                ) : (
-                  <Input {...obj} className="w-full mx-auto" />
-                )}
-                {element && (
-                  <p className="text-error my-2 text-sm">{element}</p>
-                )}
-              </div>
-            );
-          })}
+          <div className="flex flex-col gap-1">
+            <Label htmlFor="user_name" className="w-full mx-auto">
+              Name
+            </Label>
+            <Input
+              id="user_name"
+              name="user_name"
+              className="w-full mx-auto"
+              required
+            />
+            {formErrors.nameError && (
+              <p className="text-error my-2 text-sm">{formErrors.nameError}</p>
+            )}
+          </div>
+          <div className="flex flex-col gap-1">
+            <Label htmlFor="user_email" className="w-full mx-auto">
+              Email Address
+            </Label>
+            <Input
+              id="user_email"
+              name="user_email"
+              className="w-full mx-auto"
+              required
+            />
+            {formErrors.emailError && (
+              <p className="text-error my-2 text-sm">{formErrors.emailError}</p>
+            )}
+          </div>
+          <div className="flex flex-col gap-1">
+            <Label htmlFor="message" className="w-full mx-auto">
+              Feedback
+            </Label>
+            <TextArea
+              id="message"
+              name="message"
+              className="w-full mx-auto"
+              required
+            />
+            {formErrors.messageError && (
+              <p className="text-error my-2 text-sm">
+                {formErrors.messageError}
+              </p>
+            )}
+          </div>
           <div className="my-4 flex flex-col items-stretch">
             <Button type="submit" disabled={loading}>
-              Submit
+              {loading ? "Submitting..." : "Submit"}
               {loading && <Spinner />}
             </Button>
           </div>
