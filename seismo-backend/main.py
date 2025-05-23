@@ -5,8 +5,26 @@ from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from fastapi.staticfiles import StaticFiles
 import os
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+origins = [
+    "http://localhost.tiangolo.com",
+    "https://localhost.tiangolo.com",
+    "http://localhost",
+    "http://127.0.0.1:8000",
+    "http://localhost:4321",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 # Global prefix
 api_prefix = "/api"
@@ -32,7 +50,7 @@ app.mount("/", StaticFiles(directory="dist", html=True), name="frontend")
 async def http_exception_handler(request, exc):
     return JSONResponse(
         status_code=404,
-        content={"error_message": [str(exc.detail)]},
+        content={"error_message": str(exc.detail)},
     )
 
 
@@ -42,7 +60,8 @@ async def http_exception_handler(request, exc):
 async def validation_exception_handler(request, exc):
     errors = exc.errors()
     return JSONResponse(
-        status_code=400, content={"error_message": [f'{err["msg"]}' for err in errors]}
+        status_code=400,
+        content={"error_message": ", ".join([f'{err["msg"]}' for err in errors])},
     )
 
 

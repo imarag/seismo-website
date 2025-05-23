@@ -4,9 +4,9 @@ import Message from "../ui/Message";
 import Input from "../ui/Input.jsx";
 import Label from "../ui/Label.jsx";
 import { fastapiEndpoints } from "../../assets/data/static";
-import fetchRequest from "../../assets/utils/fetchRequest";
 import { LuCalculator } from "react-icons/lu";
 import { IoLocationOutline } from "react-icons/io5";
+import { apiRequest } from "../../assets/utils/apiRequest.js";
 
 function CoordContainer({ children, label }) {
   return (
@@ -76,8 +76,10 @@ function CoordinatesFields({ coords, setCoords }) {
 }
 
 export default function DistanceBetweenPoints() {
-  const [error, setError] = useState([]);
-  const [success, setSuccess] = useState(null);
+  const [showMessage, setShowMessage] = useState({
+    message: "",
+    type: "",
+  });
   const [loading, setLoading] = useState(false);
   const [coords, setCoords] = useState({
     lat1: 34,
@@ -93,35 +95,37 @@ export default function DistanceBetweenPoints() {
 
   async function handleComputeButton() {
     let queryParams = `?lat1=${coords["lat1"]}&lon1=${coords["lon1"]}&lat2=${coords["lat2"]}&lon2=${coords["lon2"]}`;
-    console.log(fastapiEndpoints["CALCULATE-DISTANCE"] + queryParams, "***");
-    const data = await fetchRequest({
-      endpoint: fastapiEndpoints["CALCULATE-DISTANCE"] + queryParams,
-      setError: setError,
-      setSuccess: setSuccess,
+    const { resData, error } = await apiRequest({
+      url: fastapiEndpoints["CALCULATE-DISTANCE"] + queryParams,
+      method: "get",
+      setShowMessage: setShowMessage,
       setLoading: setLoading,
-      method: "GET",
-      successMessage: "The distance has been succesfully calculated",
+      successMessage: "Distance calculated successfully.",
+      errorMessage:
+        "Cannot compute the distance between the points. Please try again later.",
     });
-    console.log(queryParams, "**");
-    setGps2azimuth(data);
+
+    if (error) {
+      return;
+    }
+
+    setGps2azimuth(resData);
   }
 
   return (
     <>
-      {error.length !== 0 && (
+      {showMessage.message && (
         <Message
-          setError={setError}
-          setSuccess={setSuccess}
-          type="error"
-          text={error}
-        />
-      )}
-      {success && (
-        <Message
-          setError={setError}
-          setSuccess={setSuccess}
-          type="success"
-          text={success}
+          message={showMessage.message}
+          type={showMessage.type}
+          autoDismiss={5000}
+          position="bottom-right"
+          onClose={() =>
+            setShowMessage({
+              type: "",
+              message: "",
+            })
+          }
         />
       )}
       <CoordinatesFields coords={coords} setCoords={setCoords} />
@@ -141,7 +145,7 @@ export default function DistanceBetweenPoints() {
           <LuCalculator />
         </Button>
       </div>
-      {gps2azimuth["distance_km"] && (
+      {gps2azimuth["distance_km"] >= 0 && (
         <div>
           <p>
             The distance between point 1 and point 2 is{" "}
@@ -157,7 +161,10 @@ export default function DistanceBetweenPoints() {
       <div className="mt-16">
         <p>
           The tool utilizes the{" "}
-          <a href="https://docs.obspy.org/packages/autogen/obspy.geodetics.base.gps2dist_azimuth.html">
+          <a
+            target="_blank"
+            href="https://docs.obspy.org/packages/autogen/obspy.geodetics.base.gps2dist_azimuth.html"
+          >
             <code>gps2dist_azimuth</code>
           </a>{" "}
           function to do the calculation.

@@ -4,13 +4,14 @@ import Button from "../ui/Button";
 import Message from "../ui/Message";
 import Label from "../ui/Label";
 import Input from "../ui/Input";
+import SmallScreenToolAlert from "../utils/SmallScreenToolALert";
 import {
   addTraceParameters,
   traceHeaderParams,
 } from "../../assets/data/static";
 import { fastapiEndpoints } from "../../assets/data/static";
 import { downloadURI } from "../../assets/utils/utility-functions";
-import fetchRequest from "../../assets/utils/fetchRequest";
+import { apiRequest } from "../../assets/utils/apiRequest";
 import { MdEdit } from "react-icons/md";
 import { LiaUndoAltSolid } from "react-icons/lia";
 import { MdOutlineFileDownload, MdDeleteOutline } from "react-icons/md";
@@ -158,8 +159,6 @@ function TraceInfoMenu({
   backupTraces,
   setTraces,
   setBackupTraces,
-  setError,
-  setSuccess,
   setLoading,
   traceId,
 }) {
@@ -179,7 +178,7 @@ function TraceInfoMenu({
 
   return (
     <form onSubmit={(e) => handleUpdateHeader(e)}>
-      <div className="flex flex-col p-4 items-stretch gap-1 absolute top-0 end-0 bg-base-200 border border-neutral-500/20 shadow rounded z-50">
+      <div className="flex flex-col p-4 items-stretch gap-1 absolute top-0 end-4 bg-base-200 border border-neutral-500/20 shadow rounded z-50">
         <div className="absolute top-1 end-2">
           <Button
             style="ghost"
@@ -194,13 +193,14 @@ function TraceInfoMenu({
         <div className="flex flex-col items-stretch">
           {traceHeaderParams.map((obj) => (
             <>
-              <div key={obj.id} className="my-1">
-                <Label htmlFor={obj.id} className=" font-semibold">
+              <div key={obj.id} className="text-xs">
+                <Label htmlFor={obj.id} className="font-semibold">
                   {obj.label}
                 </Label>
-                <div className="grid grid-cols-2 items-center">
+                <div className="flex flex-row justify-between items-center">
                   {currentUpdateIndex === obj.id ? (
                     <Input
+                      {...obj}
                       value={trace.stats[obj.id]}
                       onChange={(e) =>
                         handleFormInputChange(
@@ -209,14 +209,12 @@ function TraceInfoMenu({
                           e.target.value
                         )
                       }
-                      size="xs"
+                      size="small"
                       className="w-40"
                       {...obj}
                     />
                   ) : (
-                    <p className="text-sm w-40  font-light">
-                      {trace.stats[obj.id]}
-                    </p>
+                    <p className="w-40  font-light">{trace.stats[obj.id]}</p>
                   )}
                   {!obj.readOnly &&
                     (currentUpdateIndex === obj.id ? (
@@ -243,7 +241,7 @@ function TraceInfoMenu({
             </>
           ))}
         </div>
-        <p className="text-sm text-center my-1">
+        <p className="text-xs text-center my-1">
           Elements with &quot;*&quot; are readonly
         </p>
       </div>
@@ -288,8 +286,6 @@ function Graphs({
   backupTraces,
   setTraces,
   setBackupTraces,
-  setError,
-  setSuccess,
   setLoading,
   handleDownloadFile,
 }) {
@@ -371,8 +367,6 @@ function Graphs({
               backupTraces={backupTraces}
               setTraces={setTraces}
               setBackupTraces={setBackupTraces}
-              setError={setError}
-              setSuccess={setSuccess}
               setLoading={setLoading}
               traceId={tr.trace_id}
             />
@@ -392,8 +386,10 @@ function Graphs({
 }
 
 export default function EditSeismicFile() {
-  const [error, setError] = useState([]);
-  const [success, setSuccess] = useState(null);
+  const [showMessage, setShowMessage] = useState({
+    message: "",
+    type: "",
+  });
   const [loading, setLoading] = useState(false);
   const [traces, setTraces] = useState([]);
   const [backupTraces, setBackupTraces] = useState([]);
@@ -415,17 +411,22 @@ export default function EditSeismicFile() {
     const formData = new FormData();
     formData.append("file", e.target.files[0]);
 
-    const traces = await fetchRequest({
-      endpoint: fastapiEndpoints[endpoint],
-      setError: setError,
-      setSuccess: setSuccess,
+    const { resData, error } = await apiRequest({
+      url: fastapiEndpoints[endpoint],
+      method: "post",
+      requestData: formData,
+      setShowMessage: setShowMessage,
       setLoading: setLoading,
-      method: "POST",
-      data: formData,
-      successMessage: "The file has been succesfully uploaded!",
+      successMessage: "Your file has been uploaded!",
+      errorMessage: "Cannot upload the file. Please try again later.",
     });
-    setTraces(traces);
-    setBackupTraces(traces);
+
+    if (error) {
+      return;
+    }
+
+    setTraces(resData);
+    setBackupTraces(resData);
   }
 
   async function handleFileSelection2(e, endpoint) {
@@ -438,17 +439,22 @@ export default function EditSeismicFile() {
       formData.append(key, newTraceOptions[key]);
     });
 
-    const traceDict = await fetchRequest({
-      endpoint: fastapiEndpoints[endpoint],
-      setError: setError,
-      setSuccess: setSuccess,
+    const { resData, error } = await apiRequest({
+      url: fastapiEndpoints[endpoint],
+      method: "post",
+      requestData: formData,
+      setShowMessage: setShowMessage,
       setLoading: setLoading,
-      method: "POST",
-      data: formData,
-      successMessage: "The file has been succesfully uploaded!",
+      successMessage: "Your file has been uploaded!",
+      errorMessage: "Cannot upload the file. Please try again later.",
     });
-    setTraces([traceDict, ...traces]);
-    setBackupTraces([traceDict, ...traces]);
+
+    if (error) {
+      return;
+    }
+
+    setTraces([traceDict, ...resData]);
+    setBackupTraces([traceDict, ...resData]);
   }
 
   function handleFileUpload(e) {
@@ -457,15 +463,19 @@ export default function EditSeismicFile() {
   }
 
   async function handleDownloadFile(fileType, data, downloadName) {
-    const blobData = await fetchRequest({
-      endpoint: fastapiEndpoints["DOWNLOAD-FILE"],
-      setError: setError,
-      setSuccess: setSuccess,
+    const { resData: blobData, error } = await apiRequest({
+      url: fastapiEndpoints["DOWNLOAD-FILE"],
+      method: "post",
+      requestData: { data: data, file_type: fileType },
+      setShowMessage: setShowMessage,
       setLoading: setLoading,
-      method: "POST",
-      data: { data: data, file_type: fileType },
-      returnType: "blob",
+      errorMessage: "Cannot download the file. Please try again later.",
+      responseType: "blob",
     });
+
+    if (error) {
+      return;
+    }
 
     const url = window.URL.createObjectURL(blobData);
     downloadURI(url, downloadName + "." + fileType);
@@ -473,20 +483,18 @@ export default function EditSeismicFile() {
 
   return (
     <>
-      {error.length !== 0 && (
+      {showMessage.message && (
         <Message
-          setError={setError}
-          setSuccess={setSuccess}
-          type="error"
-          text={error}
-        />
-      )}
-      {success && (
-        <Message
-          setError={setError}
-          setSuccess={setSuccess}
-          type="success"
-          text={success}
+          message={showMessage.message}
+          type={showMessage.type}
+          autoDismiss={5000}
+          position="bottom-right"
+          onClose={() =>
+            setShowMessage({
+              type: "",
+              message: "",
+            })
+          }
         />
       )}
       <input
@@ -496,7 +504,10 @@ export default function EditSeismicFile() {
         onChange={(e) => handleFileSelection(e, "UPLOAD-SEISMIC-FILE")}
         hidden
       />
-      <div className="h-screen min-h-96">
+      <div className="md:hidden">
+        <SmallScreenToolAlert />
+      </div>
+      <div className="hidden md:block h-screen min-h-96">
         <div className="border border-neutral-500/20 rounded-t-lg bg-base-200 p-3 flex flex-row items-center justify-start">
           <MainMenu
             traces={traces}
@@ -522,7 +533,7 @@ export default function EditSeismicFile() {
             </div>
           ) : (
             <>
-              <div className="relative">
+              {/* <div className="relative">
                 <Button
                   onClick={() =>
                     setActivatedNewTraceMenu(!activatedNewTraceMenu)
@@ -541,14 +552,13 @@ export default function EditSeismicFile() {
                     handleFileSelection2={handleFileSelection2}
                   />
                 )}
-              </div>
+              </div> */}
+
               <Graphs
                 traces={traces}
                 backupTraces={backupTraces}
                 setTraces={setTraces}
                 setBackupTraces={setBackupTraces}
-                setError={setError}
-                setSuccess={setSuccess}
                 setLoading={setLoading}
                 handleDownloadFile={handleDownloadFile}
               />

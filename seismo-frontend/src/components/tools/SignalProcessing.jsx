@@ -4,13 +4,14 @@ import LineGraph from "../ui/LineGraph";
 import Input from "../ui/Input";
 import Label from "../ui/Label";
 import Select from "../ui/Select";
+import SmallScreenToolAlert from "../utils/SmallScreenToolALert";
 import {
   taperTypeOptions,
   taperSideOptions,
   detrendTypeOptions,
 } from "../../assets/data/static";
 import Message from "../ui/Message";
-import fetchRequest from "../../assets/utils/fetchRequest";
+import { apiRequest } from "../../assets/utils/apiRequest";
 import { downloadURI } from "../../assets/utils/utility-functions";
 import { getRandomNumber } from "../../assets/utils/utility-functions";
 import { fastapiEndpoints } from "../../assets/data/static";
@@ -59,11 +60,10 @@ function MainMenu({
   setTraces,
   loading,
   setLoading,
-  setError,
-  setSuccess,
   handleFileUpload,
   appliedProcesses,
   setAppliedProcesses,
+  setShowMessage,
 }) {
   const [sigProcOptions, setSigProcOptions] = useState({
     "detrend-type": "simple",
@@ -86,44 +86,28 @@ function MainMenu({
       fetchURL: fastapiEndpoints["TRIM-WAVEFORM"],
       text: `trim-${sigProcOptions["trim-left-side"]}-${sigProcOptions["trim-right-side"]}`,
       fetchBody: {
-        data: traces.map((tr) => ({
-          trace_id: tr.trace_id,
-          values: tr.ydata,
-        })),
+        traces: traces,
         options: {
-          sampling_rate: traces[0].stats.sampling_rate,
           trim_start: sigProcOptions["trim-left-side"],
           trim_end: sigProcOptions["trim-right-side"],
         },
       },
       processId: getRandomNumber(),
     };
-    const response = await fetch(process.fetchURL, {
-      method: "POST",
-      body: JSON.stringify(process.fetchBody),
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
+    const { resData: jsonData, error } = await apiRequest({
+      url: process.fetchURL,
+      method: "post",
+      requestData: process.fetchBody,
+      setShowMessage: setShowMessage,
+      setLoading: setLoading,
+      errorMessage: "Cannot trim the waveforms. Please try again later.",
     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      setError(errorData["error_message"]);
-      throw new Error(
-        `Error: ${response.status} - ${errorData.message || "Request failed"}`
-      );
+    if (error) {
+      return;
     }
 
-    const jsonData = await response.json();
-
-    setError([]);
-    setTraces(
-      traces.map((trace) => {
-        const updatedTrace = jsonData.find(
-          (el) => el.trace_id === trace.trace_id
-        );
-        return updatedTrace ? { ...trace, ydata: updatedTrace.values } : trace;
-      })
-    );
+    setTraces(jsonData);
     setAppliedProcesses([...appliedProcesses, process]);
 
     setSigProcOptions({
@@ -138,10 +122,7 @@ function MainMenu({
       fetchURL: fastapiEndpoints["TAPER-WAVEFORM"],
       text: `taper-${sigProcOptions["taper-type"]}-${sigProcOptions["taper-side"]}-${sigProcOptions["taper-length"]}`,
       fetchBody: {
-        data: traces.map((tr) => ({
-          trace_id: tr.trace_id,
-          values: tr.ydata,
-        })),
+        traces: traces,
         options: {
           sampling_rate: traces[0].stats.sampling_rate,
           taper_type: sigProcOptions["taper-type"],
@@ -152,31 +133,20 @@ function MainMenu({
       processId: getRandomNumber(),
     };
 
-    const response = await fetch(process.fetchURL, {
-      method: "POST",
-      body: JSON.stringify(process.fetchBody),
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
+    const { resData: jsonData, error } = await apiRequest({
+      url: process.fetchURL,
+      method: "post",
+      requestData: process.fetchBody,
+      setShowMessage: setShowMessage,
+      setLoading: setLoading,
+      errorMessage: "Cannot taper the waveforms. Please try again later.",
     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      setError(errorData["error_message"]);
-      throw new Error(
-        `Error: ${response.status} - ${errorData.message || "Request failed"}`
-      );
+    if (error) {
+      return;
     }
 
-    const jsonData = await response.json();
-    setError([]);
-    setTraces(
-      traces.map((trace) => {
-        const updatedTrace = jsonData.find(
-          (el) => el.trace_id === trace.trace_id
-        );
-        return updatedTrace ? { ...trace, ydata: updatedTrace.values } : trace;
-      })
-    );
+    setTraces(jsonData);
 
     setAppliedProcesses([...appliedProcesses, process]);
   }
@@ -186,42 +156,28 @@ function MainMenu({
       fetchURL: fastapiEndpoints["DETREND-WAVEFORM"],
       text: `detrend-${sigProcOptions["detrend-type"]}`,
       fetchBody: {
-        data: traces.map((tr) => ({
-          trace_id: tr.trace_id,
-          values: tr.ydata,
-        })),
+        traces: traces,
         options: {
-          sampling_rate: traces[0].stats.sampling_rate,
           detrend_type: sigProcOptions["detrend-type"],
         },
       },
       processId: getRandomNumber(),
     };
-    const response = await fetch(process.fetchURL, {
-      method: "POST",
-      body: JSON.stringify(process.fetchBody),
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
+
+    const { resData: jsonData, error } = await apiRequest({
+      url: process.fetchURL,
+      method: "post",
+      requestData: process.fetchBody,
+      setShowMessage: setShowMessage,
+      setLoading: setLoading,
+      errorMessage: "Cannot detrend the waveform. Please try again later.",
     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      setError(errorData["error_message"]);
-      throw new Error(
-        `Error: ${response.status} - ${errorData.message || "Request failed"}`
-      );
+    if (error) {
+      return;
     }
 
-    const jsonData = await response.json();
-    setError([]);
-    setTraces(
-      traces.map((trace) => {
-        const updatedTrace = jsonData.find(
-          (el) => el.trace_id === trace.trace_id
-        );
-        return updatedTrace ? { ...trace, ydata: updatedTrace.values } : trace;
-      })
-    );
+    setTraces(jsonData);
 
     setAppliedProcesses([...appliedProcesses, process]);
   }
@@ -246,12 +202,8 @@ function MainMenu({
         sigProcOptions["filter-max"] ? sigProcOptions["filter-max"] : null
       ),
       fetchBody: {
-        data: traces.map((tr) => ({
-          trace_id: tr.trace_id,
-          values: tr.ydata,
-        })),
+        traces: traces,
         options: {
-          sampling_rate: traces[0].stats.sampling_rate,
           freq_min: sigProcOptions["filter-min"]
             ? sigProcOptions["filter-min"]
             : null,
@@ -263,23 +215,20 @@ function MainMenu({
       processId: getRandomNumber(),
     };
 
-    const jsonData = await fetchRequest({
-      endpoint: process.fetchURL,
-      setError: setError,
-      setSuccess: setSuccess,
+    const { resData: jsonData, error } = await apiRequest({
+      url: process.fetchURL,
+      method: "post",
+      requestData: process.fetchBody,
+      setShowMessage: setShowMessage,
       setLoading: setLoading,
-      data: process.fetchBody,
-      method: "POST",
+      errorMessage: "Cannot filter the waveforms. Please try again later.",
     });
 
-    setTraces(
-      traces.map((trace) => {
-        const updatedTrace = jsonData.find(
-          (el) => el.trace_id === trace.trace_id
-        );
-        return updatedTrace ? { ...trace, ydata: updatedTrace.values } : trace;
-      })
-    );
+    if (error) {
+      return;
+    }
+
+    setTraces(jsonData);
     setAppliedProcesses([...appliedProcesses, process]);
   }
 
@@ -293,15 +242,19 @@ function MainMenu({
   }
 
   async function handleDownloadFile(fileType, data, downloadName) {
-    const blobData = await fetchRequest({
-      endpoint: fastapiEndpoints["DOWNLOAD-FILE"],
-      setError: setError,
-      setSuccess: setSuccess,
+    const { resData: blobData, error } = await apiRequest({
+      url: fastapiEndpoints["DOWNLOAD-FILE"],
+      method: "post",
+      requestData: { data: data, file_type: fileType },
+      setShowMessage: setShowMessage,
       setLoading: setLoading,
-      method: "POST",
-      data: { data: data, file_type: fileType },
-      returnType: "blob",
+      errorMessage: "Cannot download the data. Please try again later.",
+      responseType: "blob",
     });
+
+    if (error) {
+      return;
+    }
 
     const url = window.URL.createObjectURL(blobData);
     downloadURI(url, downloadName + "." + fileType);
@@ -345,7 +298,7 @@ function MainMenu({
                 <Select
                   id="taper-type"
                   name="taper-type"
-                  optionsList={taperTypeOptions}
+                  optionslist={taperTypeOptions}
                   value={sigProcOptions["taper-type"]}
                   size="sm"
                   onChange={(e) =>
@@ -358,7 +311,7 @@ function MainMenu({
                 <Select
                   id="taper-side"
                   name="taper-side"
-                  optionsList={taperSideOptions}
+                  optionslist={taperSideOptions}
                   value={sigProcOptions["taper-side"]}
                   size="sm"
                   onChange={(e) =>
@@ -482,7 +435,7 @@ function MainMenu({
                   id="detrend-type"
                   name="detrend-type"
                   size="sm"
-                  optionsList={detrendTypeOptions}
+                  optionslist={detrendTypeOptions}
                   value={sigProcOptions["detrend-type"]}
                   onChange={(e) =>
                     handleSigProcOptions("detrend-type", e.target.value)
@@ -623,8 +576,10 @@ function ProcessingFilters({ appliedProcesses, handleRemoveProcesses }) {
 }
 
 export default function SignalProcessingPage() {
-  const [error, setError] = useState([]);
-  const [success, setSuccess] = useState(null);
+  const [showMessage, setShowMessage] = useState({
+    message: "",
+    type: "",
+  });
   const [loading, setLoading] = useState(false);
   const [traces, setTraces] = useState([]);
   const [fourierData, setFourierData] = useState([]);
@@ -670,18 +625,23 @@ export default function SignalProcessingPage() {
     const formData = new FormData();
     formData.append("file", e.target.files[0]);
 
-    const traces = await fetchRequest({
-      endpoint: fastapiEndpoints["UPLOAD-SEISMIC-FILE"],
-      setError: setError,
-      setSuccess: setSuccess,
+    const { resData: traces, error } = await apiRequest({
+      url: fastapiEndpoints["UPLOAD-SEISMIC-FILE"],
+      method: "post",
+      requestData: formData,
+      setShowMessage: setShowMessage,
       setLoading: setLoading,
-      method: "POST",
-      data: formData,
-      successMessage: "The file has been succesfully uploaded!",
+      successMessage: "Your file has been uploaded!",
+      errorMessage: "Cannot upload the file. Please try again later.",
     });
+
+    if (error) {
+      return;
+    }
 
     setTraces(traces);
     setBackupTraces(traces);
+    setAppliedProcesses([]);
   }
 
   function handleFileUpload(e) {
@@ -691,20 +651,18 @@ export default function SignalProcessingPage() {
 
   return (
     <div>
-      {error.length !== 0 && (
+      {showMessage.message && (
         <Message
-          setError={setError}
-          setSuccess={setSuccess}
-          type="error"
-          text={error}
-        />
-      )}
-      {success && (
-        <Message
-          setError={setError}
-          setSuccess={setSuccess}
-          type="success"
-          text={success}
+          message={showMessage.message}
+          type={showMessage.type}
+          autoDismiss={5000}
+          position="bottom-right"
+          onClose={() =>
+            setShowMessage({
+              type: "",
+              message: "",
+            })
+          }
         />
       )}
       <input
@@ -714,18 +672,20 @@ export default function SignalProcessingPage() {
         onChange={handleFileSelection}
         hidden
       />
-      <div className="h-screen min-h-96">
+      <div className="md:hidden">
+        <SmallScreenToolAlert />
+      </div>
+      <div className="hidden md:block h-screen min-h-96">
         <div className="border border-neutral-500/20 rounded-t-lg bg-base-100 p-1">
           <MainMenu
             traces={traces}
             setTraces={setTraces}
             loading={loading}
             setLoading={setLoading}
-            setError={setError}
-            setSuccess={setSuccess}
             handleFileUpload={handleFileUpload}
             appliedProcesses={appliedProcesses}
             setAppliedProcesses={setAppliedProcesses}
+            setShowMessage={setShowMessage}
           />
         </div>
         <div className="border border-neutral-500/20 h-2/3 overflow-y-scroll p-4 relative">

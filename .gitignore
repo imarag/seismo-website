@@ -1,17 +1,23 @@
 .venv/
-
-*.pyc
 __pycache__/
-
 instance/
+data_files/*
+.astro/
+node_modules/
+/.env
 
-.pytest_cache/
-.coverage
-htmlcov/
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
-build/
-*.egg-info/
+# environment variables
+.env
+.env.production
 
-mysite/data_files/*
-node_modules
-.vercel
+# macOS-specific files
+.DS_Store
+
+# jetbrains setting folder
+.idea/

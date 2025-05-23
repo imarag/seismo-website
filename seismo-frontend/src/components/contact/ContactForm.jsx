@@ -10,8 +10,10 @@ import Spinner from "../ui/Spinner";
 export default function ContactForm() {
   const form = useRef();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState([]);
-  const [success, setSuccess] = useState(null);
+  const [showMessage, setShowMessage] = useState({
+    message: "",
+    type: "",
+  });
   const [formErrors, setFormErrors] = useState({
     nameError: null,
     emailError: null,
@@ -24,7 +26,6 @@ export default function ContactForm() {
     setLoading(true);
 
     const formData = new FormData(form.current);
-
     const userEmail = formData.get("user_email");
     const userName = formData.get("user_name");
     const userMessage = formData.get("message");
@@ -70,40 +71,38 @@ export default function ContactForm() {
       .then(
         () => {
           setLoading(false);
-          setSuccess(
-            "You have successfully sent the message. Thank you for your feedback !!"
-          );
-          setTimeout(() => setSuccess(null), 5000);
-          setError([]);
+          setShowMessage({
+            message:
+              "You have successfully sent the message. Thank you for your feedback !!",
+            type: "success",
+          });
           form.current.reset();
         },
         (error) => {
           setLoading(false);
-          setSuccess(null);
-          setError([
-            "We couldn’t send your message at the moment. Please try again shortly or contact us through another method!",
-          ]);
-          setTimeout(() => setError([]), 5000);
+          setShowMessage({
+            message:
+              "We couldn’t send your message at the moment. Please try again shortly or contact us through another method!",
+            type: "error",
+          });
         }
       );
   }
 
   return (
     <>
-      {error.length !== 0 && (
+      {showMessage.message && (
         <Message
-          type="error"
-          text={error}
-          setError={setError}
-          setSuccess={setSuccess}
-        />
-      )}
-      {success && (
-        <Message
-          type="success"
-          text={success}
-          setError={setError}
-          setSuccess={setSuccess}
+          message={showMessage.message}
+          type={showMessage.type}
+          autoDismiss={5000}
+          position="bottom-right"
+          onClose={() =>
+            setShowMessage({
+              type: "",
+              message: "",
+            })
+          }
         />
       )}
       <form method="post" onSubmit={handleSubmitForm} ref={form}>

@@ -3,7 +3,7 @@ from pydantic_extra_types.coordinate import Latitude, Longitude
 from typing import Annotated
 from src.functions import (
     convert_stream_to_traces_list,
-    read_bytes_to_mseed,
+    read_bytes_to_stream,
     validate_stream,
     compute_distance_km,
     write_json_to_file,
@@ -28,7 +28,7 @@ async def upload_seismic_file(file: UploadFile) -> list:
     spooled_file = file.file
 
     logger.info("Converting the data into a stream object")
-    stream = read_bytes_to_mseed(spooled_file)
+    stream = read_bytes_to_stream(spooled_file)
 
     logger.info("Validating stream object")
     validate_stream(stream)
@@ -41,9 +41,9 @@ async def upload_seismic_file(file: UploadFile) -> list:
 def calculate_distance(
     lat1: Latitude, lon1: Longitude, lat2: Latitude, lon2: Latitude
 ) -> dict:
-    """Calculates the distance between two coordinates."""
+    """Calculates the distance and azimuth between two coordinates."""
     logger.info(
-        f"Calculating distance between ({lat1}, {lon1}) and ({lat2}, {lon2}) in km"
+        f"Calculating distance and azimuth between ({lat1}, {lon1}) and ({lat2}, {lon2}) in km"
     )
     result = compute_distance_km(lat1, lon1, lat2, lon2)
     distance_km = round(result[0] / 1000, 3)

@@ -2,13 +2,15 @@ from pathlib import Path
 from fastapi import HTTPException, Response
 from fastapi.responses import FileResponse
 from internals.config import Settings
+from typing import NoReturn
 
 settings = Settings()
 logger = settings.logger
 
+
 class RequestHandler:
     @staticmethod
-    def send_error(error_message: str, status_code: int = 500) -> None:
+    def send_error(error_message: str, status_code: int = 500) -> NoReturn:
         """Raises an HTTPException with a given error message and status code."""
         logger.error(error_message)
         raise HTTPException(detail=error_message, status_code=status_code)
@@ -24,7 +26,7 @@ class RequestHandler:
         return FileResponse(
             file_path,
             filename=file_name,
-            headers={"Content-Disposition": f'attachment; filename="{file_name}"'}
+            headers={"Content-Disposition": f'attachment; filename="{file_name}"'},
         )
 
 
