@@ -23,11 +23,9 @@ function PSElements({
   formattedArrivals,
 }) {
   return (
-    <div className="flex flex-row items-center gap-4">
-      <div className="flex flex-row items-center">
-        <Label htmlFor="p-wave-radio" className="text-lg mx-2">
-          P
-        </Label>
+    <div className="flex flex-row items-center gap-4 text-sm">
+      <div className="flex flex-row items-center gap-2">
+        <Label htmlFor="p-wave-radio">P</Label>
         <Input
           type="radio"
           id="p-wave-radio"
@@ -35,14 +33,16 @@ function PSElements({
           value="P"
           checked={selectedWave === "P"}
           onChange={() => setSelectedWave("P")}
-          disabled={traces.length === 0 || formattedArrivals["P"] !== null}
-          className="radio-sm"
+          disabled={
+            traces.length === 0 || formattedArrivals["P"] !== null
+              ? true
+              : false
+          }
+          size="extra-small"
         />
       </div>
-      <div className="flex flex-row items-center">
-        <Label htmlFor="s-wave-radio" className="text-lg mx-2">
-          S
-        </Label>
+      <div className="flex flex-row items-center gap-2">
+        <Label htmlFor="s-wave-radio">S</Label>
         <Input
           type="radio"
           id="s-wave-radio"
@@ -50,8 +50,12 @@ function PSElements({
           value="S"
           checked={selectedWave === "S"}
           onChange={() => setSelectedWave("S")}
-          disabled={traces.length === 0 || formattedArrivals["S"] !== null}
-          className="radio-sm"
+          disabled={
+            traces.length === 0 || formattedArrivals["S"] !== null
+              ? true
+              : false
+          }
+          size="extra-small"
         />
       </div>
       {formattedArrivals["P"] !== null && (
@@ -82,32 +86,20 @@ function PSElements({
   );
 }
 
-function FiltersDropdown({
-  traces,
-  selectedFilter,
-  handleDropdownFilterChange,
-}) {
-  return (
-    <Select
-      id="filters-dropdown"
-      name="filters-dropdown"
-      value={selectedFilter}
-      onChange={handleDropdownFilterChange}
-      disabled={traces.length === 0}
-      optionslist={filterOptions}
-      className="select-sm"
-    />
-  );
-}
+function ManualFilters({ traces, handleFilterChange }) {
+  const [manualFilter, setManualFilter] = useState({ freqMin: 1, freqMax: 3 });
 
-function FiltersInputs({
-  traces,
-  manualFilter,
-  setManualFilter,
-  handleEnterKey,
-}) {
+  function handleEnterKey(e) {
+    if (e.key === "Enter") {
+      handleFilterChange(
+        manualFilter["freqMin"] ? manualFilter["freqMin"] : null,
+        manualFilter["freqMax"] ? manualFilter["freqMax"] : null
+      );
+    }
+  }
+
   return (
-    <div className="flex justify-end align-center gap-3 mt-4">
+    <div className="flex justify-end align-center gap-2 py-4">
       <Input
         type="number"
         id="freq_min"
@@ -119,7 +111,8 @@ function FiltersInputs({
         }
         placeholder="e.g. 0.1"
         disabled={traces.length === 0}
-        className="input-sm w-40"
+        size="small"
+        className="w-28"
       />
       <Input
         type="number"
@@ -132,7 +125,8 @@ function FiltersInputs({
         }
         placeholder="e.g. 3"
         disabled={traces.length === 0}
-        className="input-sm w-40"
+        size="small"
+        className="w-28"
       />
     </div>
   );
@@ -152,15 +146,10 @@ function MainMenu({
   setShowMessage,
   selectedFilter,
   setSelectedFilter,
+  loading,
 }) {
   let formattedArrivals = { P: null, S: null };
-
   arrivals.forEach((arr) => (formattedArrivals[arr.wave] = arr.arrival));
-
-  let duration =
-    traces.length !== 0
-      ? traces[0].ydata.length / traces[0].stats.sampling_rate
-      : 0;
 
   async function handleSaveArrivals() {
     let PArr = formattedArrivals["P"];
@@ -172,6 +161,8 @@ function MainMenu({
       responseType: "blob",
       setShowMessage: setShowMessage,
       setLoading: setLoading,
+      successMessage:
+        "Arrivals have been downloaded. Please check your 'Downloads' folder.",
       errorMessage: "Cannot download the arrivals. Please try again later.",
     });
 
@@ -201,49 +192,54 @@ function MainMenu({
   }
 
   return (
-    <>
-      <div className="flex flex-row items-center justify-center">
-        <div className="grow-0 border-r border-neutral-500/20">
-          <Button
-            onClick={handleFileUpload}
-            style="ghost"
-            size="small"
-            tooltiptext="Upload a seismic file"
-          >
-            <HiOutlineUpload />
-            Upload file
-          </Button>
-          <Button
-            style="ghost"
-            size="small"
-            onClick={handleSaveArrivals}
-            disabled={
-              traces.length === 0 ||
-              (formattedArrivals["P"] === null &&
-                formattedArrivals["S"] === null)
-            }
-            tooltiptext="Download the selected P & S wave arrivals in a txt file"
-          >
-            <MdOutlineFileDownload />
-            Download arrivals
-          </Button>
-        </div>
-        <div className="grow flex flex-row justify-around items-center gap-4">
-          <PSElements
-            traces={traces}
-            selectedWave={selectedWave}
-            setSelectedWave={setSelectedWave}
-            handleDeleteWave={handleDeleteWave}
-            formattedArrivals={formattedArrivals}
-          />
-          <FiltersDropdown
-            traces={traces}
-            selectedFilter={selectedFilter}
-            handleDropdownFilterChange={handleDropdownFilterChange}
-          />
-        </div>
+    <div className="flex flex-row items-center justify-center border border-neutral-500/20 rounded-t-lg bg-base-100 p-3">
+      <div className="flex-grow-0 flex-shrink-0 border-r border-neutral-500/20">
+        <Button
+          onClick={handleFileUpload}
+          disabled={loading}
+          style="ghost"
+          size="extra-small"
+          tooltiptext="Upload a seismic file"
+        >
+          <HiOutlineUpload />
+          Upload file
+        </Button>
+        <Button
+          style="ghost"
+          size="extra-small"
+          onClick={handleSaveArrivals}
+          disabled={
+            traces.length === 0 ||
+            (formattedArrivals["P"] === null && formattedArrivals["S"] === null)
+              ? true
+              : ""
+          }
+          tooltiptext="Download the selected P & S wave arrivals in a txt file"
+        >
+          <MdOutlineFileDownload />
+          Download arrivals
+        </Button>
       </div>
-    </>
+      <div className="flex-grow flex flex-row justify-around items-center gap-4 px-4">
+        <PSElements
+          traces={traces}
+          selectedWave={selectedWave}
+          setSelectedWave={setSelectedWave}
+          handleDeleteWave={handleDeleteWave}
+          formattedArrivals={formattedArrivals}
+        />
+        <Select
+          id="filters-dropdown"
+          name="filters-dropdown"
+          value={selectedFilter}
+          onChange={handleDropdownFilterChange}
+          disabled={traces.length === 0}
+          optionslist={filterOptions}
+          size="small"
+          className="w-28 lg:w-40"
+        />
+      </div>
+    </div>
   );
 }
 
@@ -324,6 +320,62 @@ function Graphs({
   );
 }
 
+function StartUploadFile({ loading, handleFileUpload }) {
+  return (
+    <div className="flex flex-col items-center justify-center gap-3 absolute top-1/2 start-1/2 -translate-x-1/2 -translate-y-1/2">
+      <h1 className="font-semibold text-3xl text-center">
+        Upload a seismic file
+      </h1>
+      <p className="text-base text-center">
+        Start by uploading a seismic file to interact with the tool
+      </p>
+      <Button
+        onClick={handleFileUpload}
+        loading={loading}
+        disabled={loading}
+        tooltiptext="Upload a seismic file"
+      >
+        <HiOutlineUpload />
+        Upload file
+      </Button>
+    </div>
+  );
+}
+
+function MainContent({
+  loading,
+  handleFileUpload,
+  traces,
+  arrivals,
+  selectedWave,
+  setSelectedWave,
+  setArrivals,
+  backupTraces,
+}) {
+  return (
+    <div className="border border-neutral-500/20 h-2/3 overflow-y-scroll p-4 relative">
+      {traces.length === 0 ? (
+        <StartUploadFile
+          loading={loading}
+          handleFileUpload={handleFileUpload}
+        />
+      ) : (
+        <>
+          <div className="absolute start-1/2 ">{loading && <Spinner />}</div>
+          <Graphs
+            traces={traces}
+            arrivals={arrivals}
+            selectedWave={selectedWave}
+            setArrivals={setArrivals}
+            setSelectedWave={setSelectedWave}
+            backupTraces={backupTraces}
+          />
+        </>
+      )}
+    </div>
+  );
+}
+
 export default function ArrivalsPickingPage() {
   const [showMessage, setShowMessage] = useState({
     message: "",
@@ -333,10 +385,9 @@ export default function ArrivalsPickingPage() {
   const [traces, setTraces] = useState([]);
   const [backupTraces, setBackupTraces] = useState([]);
   const [arrivals, setArrivals] = useState([]);
-  const inputRef = useRef();
   const [selectedWave, setSelectedWave] = useState("P");
-  const [manualFilter, setManualFilter] = useState({ freqMin: 1, freqMax: 3 });
   const [selectedFilter, setSelectedFilter] = useState("initial");
+  const inputRef = useRef();
 
   async function handleFileSelection(e) {
     e.preventDefault();
@@ -344,7 +395,7 @@ export default function ArrivalsPickingPage() {
     const formData = new FormData();
     formData.append("file", e.target.files[0]);
 
-    const { resData, error } = await apiRequest({
+    const { resData: tracesList, error } = await apiRequest({
       url: fastapiEndpoints["UPLOAD-SEISMIC-FILE"],
       method: "post",
       requestData: formData,
@@ -361,8 +412,8 @@ export default function ArrivalsPickingPage() {
     setArrivals([]);
     setSelectedWave("P");
     setSelectedFilter("initial");
-    setTraces(resData);
-    setBackupTraces(resData);
+    setTraces(tracesList);
+    setBackupTraces(tracesList);
   }
 
   function handleFileUpload(e) {
@@ -379,7 +430,7 @@ export default function ArrivalsPickingPage() {
       },
     };
 
-    const { resData: jsonData, error } = await apiRequest({
+    const { resData: tracesList, error } = await apiRequest({
       url: fastapiEndpoints["FILTER-WAVEFORM"],
       method: "post",
       requestData: requestBody,
@@ -392,16 +443,7 @@ export default function ArrivalsPickingPage() {
       return;
     }
 
-    setTraces(jsonData);
-  }
-
-  function handleEnterKey(e) {
-    if (e.key === "Enter") {
-      handleFilterChange(
-        manualFilter["freqMin"] ? manualFilter["freqMin"] : null,
-        manualFilter["freqMax"] ? manualFilter["freqMax"] : null
-      );
-    }
+    setTraces(tracesList);
   }
 
   return (
@@ -410,8 +452,6 @@ export default function ArrivalsPickingPage() {
         <Message
           message={showMessage.message}
           type={showMessage.type}
-          autoDismiss={5000}
-          position="bottom-right"
           onClose={() =>
             setShowMessage({
               type: "",
@@ -431,67 +471,36 @@ export default function ArrivalsPickingPage() {
         <SmallScreenToolAlert />
       </div>
       <div className="hidden md:block h-screen min-h-96">
-        <div className="border border-neutral-500/20 rounded-t-lg bg-base-100 p-3">
-          <MainMenu
-            traces={traces}
-            setTraces={setTraces}
-            handleFilterChange={handleFilterChange}
-            setLoading={setLoading}
-            handleFileUpload={handleFileUpload}
-            arrivals={arrivals}
-            setArrivals={setArrivals}
-            selectedWave={selectedWave}
-            setSelectedWave={setSelectedWave}
-            backupTraces={backupTraces}
-            setShowMessage={setShowMessage}
-            selectedFilter={selectedFilter}
-            setSelectedFilter={setSelectedFilter}
-          />
-        </div>
-        <div className="border border-neutral-500/20 h-2/3 overflow-y-scroll p-4 relative">
-          <>
-            <div className="absolute start-1/2 ">{loading && <Spinner />}</div>
-            {traces.length === 0 ? (
-              <div className="flex flex-col items-center justify-center gap-3 absolute top-1/2 start-1/2 -translate-x-1/2 -translate-y-1/2">
-                <h1 className="font-semibold text-3xl text-center">
-                  Upload a seismic file
-                </h1>
-                <p className="text-base text-center">
-                  Start by uploading a seismic file to interact with the tool
-                </p>
-                <Button
-                  onClick={handleFileUpload}
-                  loading={loading}
-                  tooltiptext="Upload a seismic file"
-                >
-                  <HiOutlineUpload />
-                  Upload file
-                </Button>
-              </div>
-            ) : (
-              <>
-                <Graphs
-                  traces={traces}
-                  arrivals={arrivals}
-                  selectedWave={selectedWave}
-                  setArrivals={setArrivals}
-                  setSelectedWave={setSelectedWave}
-                  backupTraces={backupTraces}
-                />
-              </>
-            )}
-          </>
-        </div>
-        {traces.length !== 0 && (
-          <div className="flex justify-end items-center">
-            <FiltersInputs
-              traces={traces}
-              manualFilter={manualFilter}
-              setManualFilter={setManualFilter}
-              handleEnterKey={handleEnterKey}
-            />
-          </div>
-        )}
+        <MainMenu
+          traces={traces}
+          setTraces={setTraces}
+          handleFilterChange={handleFilterChange}
+          setLoading={setLoading}
+          handleFileUpload={handleFileUpload}
+          arrivals={arrivals}
+          setArrivals={setArrivals}
+          selectedWave={selectedWave}
+          setSelectedWave={setSelectedWave}
+          backupTraces={backupTraces}
+          setShowMessage={setShowMessage}
+          selectedFilter={selectedFilter}
+          setSelectedFilter={setSelectedFilter}
+          loading={loading}
+        />
+        <MainContent
+          loading={loading}
+          handleFileUpload={handleFileUpload}
+          traces={traces}
+          arrivals={arrivals}
+          selectedWave={selectedWave}
+          setSelectedWave={setSelectedWave}
+          setArrivals={setArrivals}
+          backupTraces={backupTraces}
+        />
+        <ManualFilters
+          traces={traces}
+          handleFilterChange={handleFilterChange}
+        />
       </div>
     </>
   );

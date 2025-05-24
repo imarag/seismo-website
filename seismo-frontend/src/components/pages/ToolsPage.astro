@@ -2,6 +2,7 @@
 import PageTitle from "../utils/PageTitle.astro";
 import PageSubTitle from "../utils/PageSubTitle.astro";
 import EyeBrowText from "../utils/EyeBrowText.astro";
+import DownloadTestMSEEDFile from "../utils/DownloadTestMSEEDFile.astro";
 import LinkTag from "../ui/LinkTag.astro";
 import { fastapiEndpoints } from "../../assets/data/static.js";
 import Symbol from "../ui/Symbol.astro";
@@ -22,18 +23,7 @@ import Alert from "../ui/Alert.astro";
   class="text-center"
   text="Contribute to our cause and help us make a positive impact with your donation. Your support makes all the difference."
 />
-<div class="mt-24 mb-16 max-w-3/4 lg:max-w-1/2 mx-auto text-center text-sm">
-  <p>
-    Don&apos;t have a seismic data file ? Click below to download a miniseed
-    sample file, to experiment with the tools.
-  </p>
-  <div class="flex gap-2 items-center justify-center mt-4">
-    <Symbol name="file-download" class="flex-shrink-0" />
-    <LinkTag href={fastapiEndpoints["DOWNLOAD-TEST-FILE"]} style="info">
-      Download Sample MSEED File
-    </LinkTag>
-  </div>
-</div>
+<DownloadTestMSEEDFile />
 <Alert class="my-8">
   Note: This toolset is part of a personal seismology project currently
   maintained by a single developer. It's hosted on a free-tier server, so you

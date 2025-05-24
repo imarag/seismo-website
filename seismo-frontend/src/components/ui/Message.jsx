@@ -10,7 +10,7 @@ export default function Message({
   autoDismiss = 5000, // false or duration in ms
   showCloseButton = true, // true | false
   onClose = () => {},
-  position = "top-right", // e.g. 'top-right', 'bottom-left', 'center'
+  position = "bottom-right", // e.g. 'top-right', 'bottom-left', 'center'
 }) {
   useEffect(() => {
     if (autoDismiss) {

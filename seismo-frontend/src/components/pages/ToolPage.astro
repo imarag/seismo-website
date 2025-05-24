@@ -3,6 +3,7 @@ import Img from "../ui/Img.astro";
 import PageTitle from "../utils/PageTitle.astro";
 import PageSubTitle from "../utils/PageSubTitle.astro";
 import Collapse from "../ui/Collapse.astro";
+import DownloadTestMSEEDFile from "../utils/DownloadTestMSEEDFile.astro";
 
 import EditSeismicFile from "../tools/EditSeismicFile";
 import DistanceBetweenPoints from "../tools/DistanceBetweenPoints";
@@ -28,18 +29,19 @@ const { selectedTool } = Astro.props;
     </Collapse>
   </div>
 </div>
+{selectedTool.slug !== "distance-between-points" && <DownloadTestMSEEDFile />}
 <div class="mt-24">
-  {selectedTool.slug === "edit-seismic-file" && <EditSeismicFile client:load />}
+  {selectedTool.slug === "edit-seismic-file" && <EditSeismicFile client:only />}
   {
     selectedTool.slug === "distance-between-points" && (
-      <DistanceBetweenPoints client:load />
+      <DistanceBetweenPoints client:only />
     )
   }
-  {selectedTool.slug === "file-to-mseed" && <FileToMseed client:load />}
-  {selectedTool.slug === "pick-arrivals" && <PickArrivals client:load />}
+  {selectedTool.slug === "file-to-mseed" && <FileToMseed client:only />}
+  {selectedTool.slug === "pick-arrivals" && <PickArrivals client:only />}
   {
     selectedTool.slug === "signal-processing" && (
-      <SignalProcessing client:load />
+      <SignalProcessing client:only />
     )
   }
 </div>

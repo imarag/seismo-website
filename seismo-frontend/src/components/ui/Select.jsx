@@ -4,7 +4,7 @@ export default function Select({
   optionslist = [],
   ...attrs
 }) {
-  const baseClass = "select select-bordered";
+  const baseClass = "select select-bordered rounded-md";
   const sizeMapping = {
     "extra-small": "select-xs",
     small: "select-sm",

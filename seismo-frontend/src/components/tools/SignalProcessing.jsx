@@ -689,30 +689,36 @@ export default function SignalProcessingPage() {
           />
         </div>
         <div className="border border-neutral-500/20 h-2/3 overflow-y-scroll p-4 relative">
-          {traces.length === 0 ? (
-            <div className="flex flex-col items-center justify-center gap-3 absolute top-1/2 start-1/2 -translate-x-1/2 -translate-y-1/2">
-              <h1 className="font-semibold text-3xl">Upload a seismic file</h1>
-              <p className="text-lg">
-                Start by uploading a seismic file to interact with the tool
-              </p>
-              <Button
-                onClick={handleFileUpload}
-                loading={loading}
-                tooltiptext="Upload a seismic file"
-              >
-                <HiOutlineUpload />
-                Upload file
-              </Button>
-            </div>
-          ) : (
-            <>
-              <ProcessingFilters
-                appliedProcesses={appliedProcesses}
-                handleRemoveProcesses={handleRemoveProcesses}
-              />
-              <Graphs traces={traces} fourierData={fourierData} />
-            </>
-          )}
+          <>
+            <div className="absolute start-1/2 ">{loading && <Spinner />}</div>
+
+            {traces.length === 0 ? (
+              <div className="flex flex-col items-center justify-center gap-3 absolute top-1/2 start-1/2 -translate-x-1/2 -translate-y-1/2">
+                <h1 className="font-semibold text-3xl text-center">
+                  Upload a seismic file
+                </h1>
+                <p className="text-base text-center">
+                  Start by uploading a seismic file to interact with the tool
+                </p>
+                <Button
+                  onClick={handleFileUpload}
+                  loading={loading}
+                  tooltiptext="Upload a seismic file"
+                >
+                  <HiOutlineUpload />
+                  Upload file
+                </Button>
+              </div>
+            ) : (
+              <>
+                <ProcessingFilters
+                  appliedProcesses={appliedProcesses}
+                  handleRemoveProcesses={handleRemoveProcesses}
+                />
+                <Graphs traces={traces} fourierData={fourierData} />
+              </>
+            )}
+          </>
         </div>
       </div>
     </div>

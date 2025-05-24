@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import LineGraph from "../ui/LineGraph";
 import Button from "../ui/Button";
 import Message from "../ui/Message";
+import Spinner from "../ui/Spinner";
 import Label from "../ui/Label";
 import Input from "../ui/Input";
 import SmallScreenToolAlert from "../utils/SmallScreenToolALert";
@@ -516,10 +517,13 @@ export default function EditSeismicFile() {
           />
         </div>
         <div className="border border-neutral-500/20 h-2/3 overflow-y-scroll p-4 relative">
+          <div className="absolute start-1/2 ">{loading && <Spinner />}</div>
           {traces.length === 0 ? (
             <div className="flex flex-col items-center justify-center gap-3 absolute top-1/2 start-1/2 -translate-x-1/2 -translate-y-1/2">
-              <h1 className="text-4xl">Upload a seismic file</h1>
-              <p className="text-lg">
+              <h1 className="font-semibold text-3xl text-center">
+                Upload a seismic file
+              </h1>
+              <p className="text-base text-center">
                 Start by uploading a seismic file to interact with the tool
               </p>
               <Button
