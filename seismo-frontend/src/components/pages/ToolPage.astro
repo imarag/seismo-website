@@ -10,6 +10,7 @@ import DistanceBetweenPoints from "../tools/DistanceBetweenPoints";
 import FileToMseed from "../tools/FileToMseed";
 import PickArrivals from "../tools/PickArrivals";
 import SignalProcessing from "../tools/SignalProcessing";
+import SimpleTriangulation from "../tools/SimpleTriangulation";
 
 const { selectedTool } = Astro.props;
 ---
@@ -39,6 +40,11 @@ const { selectedTool } = Astro.props;
   }
   {selectedTool.slug === "file-to-mseed" && <FileToMseed client:only />}
   {selectedTool.slug === "pick-arrivals" && <PickArrivals client:only />}
+  {
+    selectedTool.slug === "simple-triangulation" && (
+      <SimpleTriangulation client:only />
+    )
+  }
   {
     selectedTool.slug === "signal-processing" && (
       <SignalProcessing client:only />

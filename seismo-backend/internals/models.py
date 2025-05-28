@@ -73,7 +73,7 @@ class TrimOptions(BaseModel):
     def verify_trim_limits(self) -> Self:
         if self.trim_start >= self.trim_end:
             raise ValueError(
-                "The left trim value cannot be greater or equal to the right trim value"
+                "The start trim value cannot be greater or equal to the end trim value"
             )
         return self
 

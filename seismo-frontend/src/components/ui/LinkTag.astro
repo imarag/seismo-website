@@ -9,7 +9,7 @@ const {
   ...attrs
 } = Astro.props;
 
-const baseClass = `${button ? "btn" : "link"} group z-30 inline-flex items-center gap-2 transition-all`;
+const baseClass = `${button ? "btn" : "link"} rounded-md group z-30 inline-flex items-center gap-2 transition-all`;
 const styleMapping = {
   primary: button ? "btn-primary" : "link-primary",
   secondary: button ? "btn-secondary" : "link-secondary",

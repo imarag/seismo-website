@@ -97,16 +97,20 @@ export const tools = [
   {
     id: 1,
     title: "Interactive Seismic File Editor",
-    subtitle: "Edit seismic file headers with ease.",
-    description: "Inspect and edit seismic file headers and metadata with a user-friendly interface. Ensure data accuracy by updating station codes, timing, and other attributes. Export the modified file for seamless integration into seismic analysis workflows.",
-    smallDescription: "Edit seismic file headers and metadata easily.",
+    subtitle: "Edit and explore seismic file headers and data.",
+    description:
+      "Import seismic files to inspect, edit, and export trace header information and waveform data. Visualize traces in a chart, update metadata such as station codes and timing, and download individual traces or the entire file. A streamlined tool for managing seismic file contents with precision.",
+    smallDescription:
+      "Import seismic files to view and edit headers and waveform data.",
     image_src: EditSeismicFileIcon,
     image_alt: "Interactive Seismic File Editor Icon",
     type: "tool",
     slug: "edit-seismic-file",
     completed: true,
-    userGuide: "This editor allows you to inspect and update seismic file headers and metadata. Load your seismic file to view detailed information, including station, channel, and timing data. Use the editing interface to correct errors, fill missing fields, or update values as required. After editing, save and download the updated file for integration into your workflows."
+    userGuide:
+      "Upload a seismic file to explore its contents. Use the 'Show Traces Info' button for a quick summary of each trace’s metadata. View the waveform of each trace in the interactive graphs. Above each trace, use the available buttons to download either the trace's header information or its data samples. You can also update the trace header using the 'Trace Info” menu or remove any unwanted traces entirely. Once you've finished editing the headers and removing unnecessary traces, export the updated stream in MiniSEED format by clicking the 'Download To MSEED' option.",
   },
+
   {
     id: 2,
     title: "Geodesic Distance Calculator",
@@ -131,7 +135,7 @@ export const tools = [
     type: "tool",
     slug: "pick-arrivals",
     completed: true,
-    userGuide: "This tool is designed to help you identify P and S wave arrivals on seismic waveforms. Upload your data, and use the interactive waveform display to zoom into areas of interest. Apply filters to remove noise and highlight critical wave patterns. Manually mark arrival times for P and S waves, and export your selections for further analysis."
+    userGuide: "This tool is designed to help you identify P and S wave arrivals on seismic waveforms. Upload your seismic data using the file selector and explore the interactive waveform display to zoom into areas of interest. Use the filters dropdown and the manual filter fields at the bottom to apply specific frequency ranges to the waveforms. Manually mark arrival times for P and S waves by clicking on the seismogram, and export your selections using the 'download arrivals' option. For manual filtering: fill only the left field to apply a highpass filter (passing frequencies above the cutoff), fill only the right field to apply a lowpass filter (passing frequencies below the cutoff), fill both fields to apply a bandpass filter (passing frequencies within the range). Press the Enter key to apply the filter. Use the mouse to select a window on the graph to zoom into that area. Double-click anywhere on the graph to zoom out and reset the axis. Note: If you interact with elements outside the graph—for example, clicking a button to download arrival times—Plotly’s interactivity may temporarily stop responding. To restore full interactivity, simply click once on the graph."
   },
   {
     id: 4,
@@ -158,5 +162,19 @@ export const tools = [
     slug: "signal-processing",
     completed: true,
     userGuide: "This toolkit provides advanced signal processing capabilities for seismic waveforms. Load your data, and use tools to cut waveforms, apply filters, or smooth noisy signals. Additional features allow you to remove trends and perform baseline corrections. Export processed data for detailed seismic analysis or visualization."
+  },
+  {
+    id: 6,
+    title: "Simple Triangulation",
+    subtitle: "Locate an earthquake's epicenter using body wave arrivals",
+    description: "Estimate an earthquake’s epicenter by analyzing P and S wave arrival times from multiple stations. Calculate distances and visualize intersecting circles to pinpoint the source location.",
+    smallDescription: "Determine epicenter using arrival times.",
+    image_src: SignalProcessingIcon,
+    image_alt: "Triangulation Tool Icon",
+    type: "tool",
+    slug: "simple-triangulation",
+    completed: true,
+    userGuide: "This tool allows you to locate an earthquake's epicenter using triangulation. Upload seismic data from at least three stations and manually mark the P and S wave arrival times. The tool calculates the distance from each station based on the S-P time difference and draws a circle of that radius around each station. The intersection point of these circles indicates the estimated epicenter location. Adjust parameters if needed and export the results for further analysis."
   }
+
 ];

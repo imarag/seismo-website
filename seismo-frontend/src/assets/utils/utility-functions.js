@@ -1,8 +1,8 @@
 export function capitalizeWords(str) {
     return str.split('-')
-              .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-              .join('');
-  }
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join('');
+}
 
 
 export function downloadURI(uri, name) {
@@ -21,3 +21,8 @@ export function getRandomNumber(num = 6) {
     }
     return randomId
 }
+
+export function getUniqueItems(list) {
+    const uniqueList = [...new Set(list)];
+    return uniqueList
+} 

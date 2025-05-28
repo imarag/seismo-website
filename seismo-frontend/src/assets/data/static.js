@@ -9,6 +9,7 @@ export const socialMediaInfo = [
 
 export const fastapiEndpoints = {
     "CALCULATE-DISTANCE": `${serverUrl}/core/calculate-distance`,
+    "TRIANGULATE-STATIONS": `${serverUrl}/core/triangulate-stations`,
     "UPLOAD-SEISMIC-FILE": `${serverUrl}/core/upload-seismic-file`,
     "DOWNLOAD-TEST-FILE": `${serverUrl}/core/download-test-file`,
     "DOWNLOAD-FILE": `${serverUrl}/core/download-file`,
@@ -31,39 +32,6 @@ export const navLinks = [
     { label: "Contact", href: "/contact" },
 ]
 
-export const taperTypeOptions = [
-    { value: "cosine", label: "Cosine taper" },
-    { value: "barthann", label: "Bartlett-Hann" },
-    { value: "bartlett", label: "Bartlett" },
-    { value: "blackman", label: "Blackman" },
-    { value: "blackmanharris", label: "Blackman-Harris" },
-    { value: "bohman", label: "Bohman" },
-    { value: "boxcar", label: "Boxcar" },
-    { value: "chebwin", label: "Dolph-Chebyshev" },
-    { value: "flattop", label: "Flat top" },
-    { value: "gaussian", label: "Gaussian std" },
-    { value: "general_gaussian", label: "Gen. Gaussian" },
-    { value: "hamming", label: "Hamming" },
-    { value: "hann", label: "Hann" },
-    { value: "kaiser", label: "Kaiser" },
-    { value: "nuttall", label: "Nuttall" },
-    { value: "parzen", label: "Parzen" },
-    { value: "slepian", label: "Slepian" },
-    { value: "triang", label: "Triangular" },
-]
-
-export const taperSideOptions = [
-    { value: "left", label: "left" },
-    { value: "right", label: "right" },
-    { value: "both", label: "both" },
-]
-
-export const detrendTypeOptions = [
-    { value: "linear", label: "linear" },
-    { value: "constant", label: "constant" },
-    { value: "simple", label: "simple" },
-]
-
 export const filterOptions = [
     { label: "initial", value: "initial" },
     { label: "1-2", value: "1-2" },
@@ -80,7 +48,8 @@ export const arrivalsStyles = {
         style: "dot"
     },
     label: {
-        size: 30
+        size: 25,
+        color: "#ebebeb",
     }
 }
 
@@ -141,7 +110,7 @@ export const addTraceParameters = [
         label: "Component",
         name: "component",
         id: "component",
-        optionslist: seismicComponents,
+        optionsList: seismicComponents,
         category: "seismic parameters"
     },
     {
@@ -168,6 +137,136 @@ export const addTraceParameters = [
 ]
 
 
+
+
+
+export const taperProcessingParams = [
+    {
+        type: "select",
+        label: "Type",
+        name: "taper-type",
+        id: "taper-type",
+        optionsList: [
+            { label: "cosine", value: "cosine" },
+            { label: "barthann", value: "barthann" },
+            { label: "bartlett", value: "bartlett" },
+            { label: "blackman", value: "blackman" },
+            { label: "blackmanharris", value: "blackmanharris" },
+            { label: "bohman", value: "bohman" },
+            { label: "boxcar", value: "boxcar" },
+            { label: "chebwin", value: "chebwin" },
+            { label: "flattop", value: "flattop" },
+            { label: "gaussian", value: "gaussian" },
+            { label: "general_gaussian", value: "general_gaussian" },
+            { label: "hamming", value: "hamming" },
+            { label: "hann", value: "hann" },
+            { label: "kaiser", value: "kaiser" },
+            { label: "nuttall", value: "nuttall" },
+            { label: "parzen", value: "parzen" },
+            { label: "slepian", value: "slepian" },
+            { label: "triang", value: "triang" }
+        ]
+        ,
+        readOnly: false
+    },
+    {
+        type: "select",
+        label: "Side",
+        name: "taper-side",
+        id: "taper-side",
+        optionsList: [
+            { label: "left", value: "left" },
+            { label: "right", value: "right" },
+            { label: "both", value: "both" }
+        ],
+        readOnly: false
+    },
+    {
+        type: "number",
+        label: "Length",
+        name: "taper-length",
+        id: "taper-length",
+        min: 0,
+        max: 100,
+        step: 0.1,
+        readOnly: false
+    },
+]
+
+export const trimProcessingParams = [
+    {
+        type: "number",
+        label: "Start time (sec)",
+        name: "trim-start",
+        id: "trim-start",
+        min: 0,
+        step: 0.1,
+        readOnly: false
+    },
+    {
+        type: "range",
+        label: "",
+        name: "trim-start",
+        id: "trim-start-slider",
+        min: 0,
+        step: 0.1,
+        readOnly: false
+    },
+    {
+        type: "number",
+        label: "End time (sec)",
+        name: "trim-end",
+        id: "trim-end",
+        min: 0,
+        step: 0.1,
+        readOnly: false
+    },
+    {
+        type: "range",
+        label: "",
+        name: "trim-end",
+        id: "trim-end-slider",
+        min: 0,
+        step: 0.1,
+        readOnly: false
+    },
+]
+
+export const detrendProcessingParams = [
+    {
+        type: "select",
+        label: "Type",
+        name: "detrend-type",
+        id: "detrend-type",
+        optionsList: [
+            { label: "simple", value: "simple" },
+            { label: "linear", value: "linear" },
+            { label: "constant", value: "constant" }
+        ],
+        readOnly: false
+    },
+]
+
+export const filterProcessingParams = [
+    {
+        type: "number",
+        label: "Min frequency",
+        name: "freq-min",
+        id: "freq-min",
+        min: 0,
+        step: 0.1,
+        readOnly: false
+    },
+    {
+        type: "number",
+        label: "Max frequency",
+        name: "freq-max",
+        id: "freq-max",
+        min: 0,
+        step: 0.1,
+        readOnly: false
+    },
+]
 
 
 export const traceHeaderParams = [

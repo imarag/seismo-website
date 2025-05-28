@@ -1,7 +1,9 @@
+import ToolTip from "./ToolTip";
 export default function Button({
   style = "primary",
   size = "medium",
-  tooltiptext = null,
+  toolTipText = "",
+  toolTipPosition = "top",
   outline = false,
   className = "",
   loading = false,
@@ -45,11 +47,13 @@ export default function Button({
     </button>
   );
 
-  return tooltiptext ? (
-    <div className="tooltip z-30" data-tip={tooltiptext}>
-      {button}
-    </div>
-  ) : (
-    button
-  );
+  if (toolTipText) {
+    return (
+      <ToolTip toolTipText={toolTipText} toolTipPosition={toolTipPosition}>
+        {button}
+      </ToolTip>
+    );
+  }
+
+  return button;
 }

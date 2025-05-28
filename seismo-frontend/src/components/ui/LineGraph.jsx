@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy } from "react";
 
 const Plot = lazy(async () => {
   let obj = await import("react-plotly.js");
@@ -30,7 +30,6 @@ export default function LineGraph({
       x: 0.5,
       y: 0.96,
     },
-
     margin: { t: 20, b: 20, l: 20, r: 20 },
     legend: {
       x: 0.01,
@@ -75,7 +74,20 @@ export default function LineGraph({
         height: height ? height : "100%",
       }}
       useResizeHandler={true}
-      config={{ scrollZoom: true }}
+      config={{
+        scrollZoom: true,
+        displaylogo: false,
+        modeBarButtonsToRemove: [
+          "zoom2d",
+          "zoomIn2d",
+          "zoomOut2d",
+          "pan2d",
+          "autoScale2d",
+          "toImage",
+          "lasso2d",
+          "select2d",
+        ],
+      }}
       onClick={onGraphClick}
     />
   );

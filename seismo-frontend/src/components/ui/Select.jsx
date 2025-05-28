@@ -1,7 +1,7 @@
 export default function Select({
   className = "",
   size = "medium",
-  optionslist = [],
+  optionsList = [],
   ...attrs
 }) {
   const baseClass = "select select-bordered rounded-md";
@@ -16,7 +16,7 @@ export default function Select({
   } ${className}`;
   return (
     <select className={globalClass} {...attrs}>
-      {optionslist.map((el) => (
+      {optionsList.map((el) => (
         <option key={el.value} value={el.value}>
           {el.label}
         </option>

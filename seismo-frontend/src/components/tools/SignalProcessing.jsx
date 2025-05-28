@@ -3,12 +3,16 @@ import Button from "../ui/Button";
 import LineGraph from "../ui/LineGraph";
 import Input from "../ui/Input";
 import Label from "../ui/Label";
+import Spinner from "../ui/Spinner";
 import Select from "../ui/Select";
 import SmallScreenToolAlert from "../utils/SmallScreenToolALert";
+import ToolTip from "../ui/ToolTip";
+import Symbol from "../ui/Symbol";
 import {
-  taperTypeOptions,
-  taperSideOptions,
-  detrendTypeOptions,
+  taperProcessingParams,
+  trimProcessingParams,
+  detrendProcessingParams,
+  filterProcessingParams,
 } from "../../assets/data/static";
 import Message from "../ui/Message";
 import { apiRequest } from "../../assets/utils/apiRequest";
@@ -21,6 +25,7 @@ import { TbFileDownload } from "react-icons/tb";
 import { IoMdClose } from "react-icons/io";
 import { IoCut, IoFilter } from "react-icons/io5";
 import { BsSoundwave } from "react-icons/bs";
+import { BsFillQuestionCircleFill } from "react-icons/bs";
 
 function MenuButton({ onClick, disabled = false }) {
   return (
@@ -39,15 +44,15 @@ function MenuButton({ onClick, disabled = false }) {
 
 function MenuDropdown({ label, icon, children }) {
   return (
-    <div className="dropdown ">
-      <div tabIndex={0} role="button" className="btn btn-ghost btn-md m-1">
+    <div className="dropdown">
+      <div tabIndex={0} role="button" className="btn btn-ghost btn-md">
         {icon}
-        {label}
+        <span className="text-xs">{label}</span>
         <MdArrowDropDown />
       </div>
       <div
         tabIndex={0}
-        className="dropdown-content card card-compact bg-base-100 border border-neutral-500/20 rounded-lg z-[1] w-64 p-2 shadow-lg"
+        className="dropdown-content card card-compact bg-base-100 border border-neutral-500/20 rounded-lg w-64 p-2 shadow-lg"
       >
         <div className="card-body">{children}</div>
       </div>
@@ -70,10 +75,10 @@ function MainMenu({
     "taper-type": "parzen",
     "taper-side": "both",
     "taper-length": 20,
-    "trim-left-side": 0,
-    "trim-right-side": 0,
-    "filter-min": 0,
-    "filter-max": 0,
+    "trim-start": 0,
+    "trim-end": 0,
+    "freq-min": 0,
+    "freq-max": 0,
   });
 
   let duration =
@@ -84,12 +89,12 @@ function MainMenu({
   async function handleTrimApply() {
     const process = {
       fetchURL: fastapiEndpoints["TRIM-WAVEFORM"],
-      text: `trim-${sigProcOptions["trim-left-side"]}-${sigProcOptions["trim-right-side"]}`,
+      text: `trim-${sigProcOptions["trim-start"]}-${sigProcOptions["trim-end"]}`,
       fetchBody: {
         traces: traces,
         options: {
-          trim_start: sigProcOptions["trim-left-side"],
-          trim_end: sigProcOptions["trim-right-side"],
+          trim_start: sigProcOptions["trim-start"],
+          trim_end: sigProcOptions["trim-end"],
         },
       },
       processId: getRandomNumber(),
@@ -112,8 +117,8 @@ function MainMenu({
 
     setSigProcOptions({
       ...sigProcOptions,
-      "trim-left-side": 0,
-      "trim-right-side": 0,
+      "trim-start": 0,
+      "trim-end": 0,
     });
   }
 
@@ -198,17 +203,17 @@ function MainMenu({
     const process = {
       fetchURL: fastapiEndpoints["FILTER-WAVEFORM"],
       text: getFilterPill(
-        sigProcOptions["filter-min"] ? sigProcOptions["filter-min"] : null,
-        sigProcOptions["filter-max"] ? sigProcOptions["filter-max"] : null
+        sigProcOptions["freq-min"] ? sigProcOptions["freq-min"] : null,
+        sigProcOptions["freq-max"] ? sigProcOptions["freq-max"] : null
       ),
       fetchBody: {
         traces: traces,
         options: {
-          freq_min: sigProcOptions["filter-min"]
-            ? sigProcOptions["filter-min"]
+          freq_min: sigProcOptions["freq-min"]
+            ? sigProcOptions["freq-min"]
             : null,
-          freq_max: sigProcOptions["filter-max"]
-            ? sigProcOptions["filter-max"]
+          freq_max: sigProcOptions["freq-max"]
+            ? sigProcOptions["freq-max"]
             : null,
         },
       },
@@ -261,236 +266,194 @@ function MainMenu({
   }
 
   return (
-    <>
-      <div className="flex flex-row items-center justify-center">
-        <div className="grow-0 border-r border-neutral-500/20">
-          <Button
-            onClick={handleFileUpload}
-            loading={loading}
-            style="ghost"
-            tooltiptext="Upload a seismic file"
-          >
-            <HiOutlineUpload />
-            Upload file
-          </Button>
-          <Button
-            loading={loading}
-            style="ghost"
-            onClick={() =>
-              handleDownloadFile(
-                "mseed",
-                traces,
-                traces[0].stats.record_name + "_download"
-              )
-            }
-            disabled={traces.length === 0}
-            tooltiptext="Download the processed seismic file into MiniSEED file format"
-          >
-            <TbFileDownload />
-            Download To MSEED
-          </Button>
-        </div>
-        <div className="grow">
-          <MenuDropdown icon={<BsSoundwave />} label="Taper">
-            <div className="flex flex-col items-stretch gap-3">
-              <div className="flex flex-col gap-2">
-                <Label htmlFor="taper-type">Type</Label>
-                <Select
-                  id="taper-type"
-                  name="taper-type"
-                  optionslist={taperTypeOptions}
-                  value={sigProcOptions["taper-type"]}
-                  size="sm"
-                  onChange={(e) =>
-                    handleSigProcOptions("taper-type", e.target.value)
-                  }
-                />
-              </div>
-              <div className="flex flex-col gap-2">
-                <Label htmlFor="taper-side">Side</Label>
-                <Select
-                  id="taper-side"
-                  name="taper-side"
-                  optionslist={taperSideOptions}
-                  value={sigProcOptions["taper-side"]}
-                  size="sm"
-                  onChange={(e) =>
-                    handleSigProcOptions("taper-side", e.target.value)
-                  }
-                />
-              </div>
-              <div className="flex flex-col gap-2">
-                <Label htmlFor="taper-length">Length</Label>
-                <Input
-                  type="number"
-                  id="taper-length"
-                  name="taper-length"
-                  min={0}
-                  max={100}
-                  step={0.1}
-                  size="sm"
-                  value={sigProcOptions["taper-length"]}
-                  onChange={(e) =>
-                    handleSigProcOptions(
-                      "taper-length",
-                      e.target.value,
-                      "number"
-                    )
-                  }
-                />
-              </div>
-              <MenuButton
-                onClick={handleTaperApply}
-                disabled={traces.length === 0}
-              />
-            </div>
-          </MenuDropdown>
-          <MenuDropdown icon={<IoCut />} label="Trim">
-            <div className="flex flex-col items-stretch gap-3">
-              <div className="flex flex-col gap-2">
-                <Label htmlFor="trim-left-side">Start time (sec)</Label>
-                <Input
-                  type="number"
-                  id="trim-left-side"
-                  name="trim-left-side"
-                  min={0}
-                  max={duration}
-                  step={0.1}
-                  size="sm"
-                  value={sigProcOptions["trim-left-side"]}
-                  onChange={(e) =>
-                    handleSigProcOptions(
-                      "trim-left-side",
-                      e.target.value,
-                      "number"
-                    )
-                  }
-                />
-                <Input
-                  type="range"
-                  id="trim-left-side"
-                  name="trim-left-side"
-                  min={0}
-                  max={duration}
-                  step={0.1}
-                  size="xs"
-                  value={sigProcOptions["trim-left-side"]}
-                  onChange={(e) =>
-                    handleSigProcOptions(
-                      "trim-left-side",
-                      e.target.value,
-                      "number"
-                    )
-                  }
-                />
-              </div>
-              <div className="flex flex-col gap-2">
-                <Label htmlFor="trim-right-side">End time (sec)</Label>
-                <Input
-                  type="number"
-                  id="trim-right-side"
-                  name="trim-right-side"
-                  min={0}
-                  max={duration}
-                  step={0.1}
-                  size="sm"
-                  value={sigProcOptions["trim-right-side"]}
-                  onChange={(e) =>
-                    handleSigProcOptions(
-                      "trim-right-side",
-                      e.target.value,
-                      "number"
-                    )
-                  }
-                />
-                <Input
-                  type="range"
-                  id="trim-right-side"
-                  name="trim-right-side"
-                  min={0}
-                  max={duration}
-                  step={0.1}
-                  size="xs"
-                  value={sigProcOptions["trim-right-side"]}
-                  onChange={(e) =>
-                    handleSigProcOptions(
-                      "trim-right-side",
-                      e.target.value,
-                      "number"
-                    )
-                  }
-                />
-              </div>
-              <MenuButton
-                onClick={handleTrimApply}
-                disabled={traces.length === 0}
-              />
-            </div>
-          </MenuDropdown>
-          <MenuDropdown icon={<MdAlignVerticalCenter />} label="Detrend">
-            <div className="flex flex-col items-stretch gap-3">
-              <div className="flex flex-col gap-2">
-                <Label htmlFor="detrend-type">Type</Label>
-                <Select
-                  id="detrend-type"
-                  name="detrend-type"
-                  size="sm"
-                  optionslist={detrendTypeOptions}
-                  value={sigProcOptions["detrend-type"]}
-                  onChange={(e) =>
-                    handleSigProcOptions("detrend-type", e.target.value)
-                  }
-                />
-              </div>
-              <MenuButton
-                onClick={handleDetrendApply}
-                disabled={traces.length === 0}
-              />
-            </div>
-          </MenuDropdown>
-          <MenuDropdown icon={<IoFilter />} label="Filter">
-            <div className="flex flex-col items-stretch gap-3">
-              <div className="flex flex-col gap-2">
-                <Label htmlFor="filter-min">Min frequency</Label>
-                <Input
-                  type="number"
-                  id="filter-min"
-                  name="filter-min"
-                  min={0}
-                  max={duration}
-                  step={0.1}
-                  size="sm"
-                  value={sigProcOptions["filter-min"]}
-                  onChange={(e) =>
-                    handleSigProcOptions("filter-min", e.target.value)
-                  }
-                />
-              </div>
-              <div className="flex flex-col gap-2">
-                <Label htmlFor="freq-max">Max frequency</Label>
-                <Input
-                  type="number"
-                  id="freq-max"
-                  name="freq-max"
-                  min={0}
-                  max={duration}
-                  step={0.1}
-                  size="sm"
-                  value={sigProcOptions["filter-max"]}
-                  onChange={(e) =>
-                    handleSigProcOptions("filter-max", e.target.value)
-                  }
-                />
-              </div>
-              <MenuButton
-                onClick={handleFilterApply}
-                disabled={traces.length === 0}
-              />
-            </div>
-          </MenuDropdown>
-        </div>
+    <div className="flex flex-row items-center justify-center border border-neutral-500/20 rounded-t-lg bg-base-100 p-3">
+      <div className="grow-0 border-r border-neutral-500/20">
+        <Button
+          onClick={handleFileUpload}
+          style="ghost"
+          size="small"
+          disabled={loading}
+          toolTipText="Upload a seismic file (one of the supported formats in Python Obspy's read function)"
+        >
+          <Symbol IconComponent={HiOutlineUpload} />
+          Upload file
+        </Button>
+        <Button
+          onClick={() =>
+            handleDownloadFile(
+              "mseed",
+              traces,
+              traces[0].stats.record_name + "_download"
+            )
+          }
+          style="ghost"
+          size="small"
+          disabled={traces.length === 0 || loading}
+          toolTipText="Download the processed seismic file into MiniSEED file format"
+        >
+          <TbFileDownload />
+          Download To MSEED
+        </Button>
       </div>
-    </>
+      <div className="grow flex flex-row items-center">
+        <MenuDropdown icon={<BsSoundwave />} label="Taper">
+          <div className="flex flex-col items-stretch gap-2">
+            {taperProcessingParams.map((el) => {
+              return (
+                <div key={el.id}>
+                  <Label htmlFor={el.id}>{el.label}</Label>
+                  {el.type === "select" ? (
+                    <Select
+                      {...el}
+                      optionsList={el.optionsList}
+                      size="small"
+                      value={sigProcOptions[el.id]}
+                      onChange={(e) =>
+                        handleSigProcOptions(el.id, e.target.value)
+                      }
+                      disabled={traces.length === 0}
+                    />
+                  ) : (
+                    <Input
+                      {...el}
+                      size="small"
+                      value={sigProcOptions[el.id]}
+                      onChange={(e) =>
+                        handleSigProcOptions(el.id, e.target.value)
+                      }
+                      disabled={traces.length === 0}
+                    />
+                  )}
+                </div>
+              );
+            })}
+            <MenuButton
+              onClick={handleTaperApply}
+              disabled={traces.length === 0}
+            />
+          </div>
+        </MenuDropdown>
+        <MenuDropdown icon={<IoCut />} label="Trim">
+          <div className="flex flex-col items-stretch gap-2">
+            {trimProcessingParams.map((el) => {
+              return (
+                <div key={el.id}>
+                  <Label htmlFor={el.id}>{el.label}</Label>
+                  {el.type === "select" ? (
+                    <Select
+                      {...el}
+                      optionsList={el.optionsList}
+                      size="small"
+                      value={sigProcOptions[el.name]}
+                      onChange={(e) =>
+                        handleSigProcOptions(el.name, e.target.value)
+                      }
+                      disabled={traces.length === 0}
+                    />
+                  ) : (
+                    <Input
+                      {...el}
+                      size="small"
+                      value={sigProcOptions[el.name]}
+                      max={duration}
+                      onChange={(e) =>
+                        handleSigProcOptions(el.name, e.target.value, "number")
+                      }
+                      disabled={traces.length === 0}
+                    />
+                  )}
+                </div>
+              );
+            })}
+            <MenuButton
+              onClick={handleTrimApply}
+              disabled={traces.length === 0}
+            />
+          </div>
+        </MenuDropdown>
+        <MenuDropdown icon={<MdAlignVerticalCenter />} label="Detrend">
+          <div className="flex flex-col items-stretch gap-2">
+            {detrendProcessingParams.map((el) => {
+              return (
+                <div key={el.id}>
+                  <Label htmlFor={el.id}>{el.label}</Label>
+                  {el.type === "select" ? (
+                    <Select
+                      {...el}
+                      optionsList={el.optionsList}
+                      size="small"
+                      value={sigProcOptions[el.id]}
+                      onChange={(e) =>
+                        handleSigProcOptions(el.id, e.target.value)
+                      }
+                      disabled={traces.length === 0}
+                    />
+                  ) : (
+                    <Input
+                      {...el}
+                      size="small"
+                      value={sigProcOptions[el.id]}
+                      onChange={(e) =>
+                        handleSigProcOptions(el.id, e.target.value)
+                      }
+                      disabled={traces.length === 0}
+                    />
+                  )}
+                </div>
+              );
+            })}
+            <MenuButton
+              onClick={handleDetrendApply}
+              disabled={traces.length === 0}
+            />
+          </div>
+        </MenuDropdown>
+        <MenuDropdown icon={<IoFilter />} label="Filter">
+          <div className="flex flex-col items-stretch gap-2">
+            {filterProcessingParams.map((el) => {
+              return (
+                <div key={el.id}>
+                  <Label htmlFor={el.id}>{el.label}</Label>
+                  {el.type === "select" ? (
+                    <Select
+                      {...el}
+                      optionsList={el.optionsList}
+                      size="small"
+                      value={sigProcOptions[el.id]}
+                      onChange={(e) =>
+                        handleSigProcOptions(el.id, e.target.value)
+                      }
+                      disabled={traces.length === 0}
+                    />
+                  ) : (
+                    <Input
+                      {...el}
+                      size="small"
+                      value={sigProcOptions[el.id]}
+                      onChange={(e) =>
+                        handleSigProcOptions(el.id, e.target.value)
+                      }
+                      disabled={traces.length === 0}
+                    />
+                  )}
+                </div>
+              );
+            })}
+            <MenuButton
+              onClick={handleFilterApply}
+              disabled={traces.length === 0}
+            />
+          </div>
+        </MenuDropdown>
+        <ToolTip
+          className="ms-auto"
+          toolTipText={`Upload a seismic file and apply one of the pre-defined processing options. Feel free to download the processed traces.`}
+          toolTipPosition="top-left"
+        >
+          <Symbol IconComponent={BsFillQuestionCircleFill} />
+        </ToolTip>
+      </div>
+    </div>
   );
 }
 
@@ -560,9 +523,9 @@ function ProcessingFilters({ appliedProcesses, handleRemoveProcesses }) {
             <span className="ms-5">
               <Button
                 style="error"
-                size="extra-small"
+                size="small"
                 onClick={handleRemoveProcesses}
-                tooltiptext="Remove all applied filters"
+                toolTipText="Remove all applied filters"
               >
                 remove all
                 <IoMdClose />
@@ -575,6 +538,59 @@ function ProcessingFilters({ appliedProcesses, handleRemoveProcesses }) {
   );
 }
 
+function StartUploadFile({ loading, handleFileUpload }) {
+  return (
+    <div className="flex flex-col items-center justify-center gap-3 absolute top-1/2 start-1/2 -translate-x-1/2 -translate-y-1/2">
+      <h1 className="font-semibold text-3xl text-center">
+        Upload a seismic file
+      </h1>
+      <p className="text-base text-center">
+        Start by uploading a seismic file to interact with the tool
+      </p>
+      <Button
+        onClick={handleFileUpload}
+        loading={loading}
+        disabled={loading}
+        toolTipText="Upload a seismic file (one of the supported formats in Python Obspy's read function)"
+      >
+        <Symbol IconComponent={HiOutlineUpload} />
+        Upload file
+      </Button>
+    </div>
+  );
+}
+
+function MainContent({
+  loading,
+  handleFileUpload,
+  traces,
+  backupTraces,
+  appliedProcesses,
+  handleRemoveProcesses,
+}) {
+  return (
+    <div className="border border-neutral-500/20 h-2/3 overflow-y-scroll p-4 relative">
+      {traces.length === 0 ? (
+        <StartUploadFile
+          loading={loading}
+          handleFileUpload={handleFileUpload}
+        />
+      ) : (
+        <>
+          <div className="absolute start-1/2 -translate-x-1/2">
+            {loading && <Spinner />}
+          </div>
+          <ProcessingFilters
+            appliedProcesses={appliedProcesses}
+            handleRemoveProcesses={handleRemoveProcesses}
+          />
+          <Graphs traces={traces} backupTraces={backupTraces} />
+        </>
+      )}
+    </div>
+  );
+}
+
 export default function SignalProcessingPage() {
   const [showMessage, setShowMessage] = useState({
     message: "",
@@ -582,37 +598,9 @@ export default function SignalProcessingPage() {
   });
   const [loading, setLoading] = useState(false);
   const [traces, setTraces] = useState([]);
-  const [fourierData, setFourierData] = useState([]);
   const [backupTraces, setBackupTraces] = useState([]);
-  const inputRef = useRef();
+  const uploadFileInputRef = useRef();
   const [appliedProcesses, setAppliedProcesses] = useState([]);
-
-  // useEffect(() => {
-  //     async function applyProcesses() {
-  //         setLoading(true);
-
-  //         const fourierBody = {
-  //             traces_data: traces.map(tr => ({trace_id: tr.trace_id, component: tr.stats.channel, values: tr.ydata})),
-  //             sampling_rate: traces.length > 0 ? traces[0].stats.sampling_rate : 100,
-  //         };
-
-  //         const FourierJsonData = await fetchRequest({
-  //             endpoint: fastapiEndpoints["COMPUTE-FOURIER"],
-  //             setError: setError,
-  //             setSuccess: setSuccess,
-  //             setLoading: setLoading,
-  //             method: "POST",
-  //             data: fourierBody
-  //         });
-
-  //         setFourierData(FourierJsonData);
-  //     }
-
-  //     if (traces.length !== 0) {
-  //         applyProcesses();
-  //     }
-
-  // }, [traces])
 
   function handleRemoveProcesses() {
     setTraces(backupTraces);
@@ -646,17 +634,15 @@ export default function SignalProcessingPage() {
 
   function handleFileUpload(e) {
     e.preventDefault();
-    inputRef.current.click();
+    uploadFileInputRef.current.click();
   }
 
   return (
-    <div>
+    <>
       {showMessage.message && (
         <Message
           message={showMessage.message}
           type={showMessage.type}
-          autoDismiss={5000}
-          position="bottom-right"
           onClose={() =>
             setShowMessage({
               type: "",
@@ -666,7 +652,7 @@ export default function SignalProcessingPage() {
         />
       )}
       <input
-        ref={inputRef}
+        ref={uploadFileInputRef}
         name="file"
         type="file"
         onChange={handleFileSelection}
@@ -676,51 +662,25 @@ export default function SignalProcessingPage() {
         <SmallScreenToolAlert />
       </div>
       <div className="hidden md:block h-screen min-h-96">
-        <div className="border border-neutral-500/20 rounded-t-lg bg-base-100 p-1">
-          <MainMenu
-            traces={traces}
-            setTraces={setTraces}
-            loading={loading}
-            setLoading={setLoading}
-            handleFileUpload={handleFileUpload}
-            appliedProcesses={appliedProcesses}
-            setAppliedProcesses={setAppliedProcesses}
-            setShowMessage={setShowMessage}
-          />
-        </div>
-        <div className="border border-neutral-500/20 h-2/3 overflow-y-scroll p-4 relative">
-          <>
-            <div className="absolute start-1/2 ">{loading && <Spinner />}</div>
-
-            {traces.length === 0 ? (
-              <div className="flex flex-col items-center justify-center gap-3 absolute top-1/2 start-1/2 -translate-x-1/2 -translate-y-1/2">
-                <h1 className="font-semibold text-3xl text-center">
-                  Upload a seismic file
-                </h1>
-                <p className="text-base text-center">
-                  Start by uploading a seismic file to interact with the tool
-                </p>
-                <Button
-                  onClick={handleFileUpload}
-                  loading={loading}
-                  tooltiptext="Upload a seismic file"
-                >
-                  <HiOutlineUpload />
-                  Upload file
-                </Button>
-              </div>
-            ) : (
-              <>
-                <ProcessingFilters
-                  appliedProcesses={appliedProcesses}
-                  handleRemoveProcesses={handleRemoveProcesses}
-                />
-                <Graphs traces={traces} fourierData={fourierData} />
-              </>
-            )}
-          </>
-        </div>
+        <MainMenu
+          traces={traces}
+          setTraces={setTraces}
+          loading={loading}
+          setLoading={setLoading}
+          handleFileUpload={handleFileUpload}
+          appliedProcesses={appliedProcesses}
+          setAppliedProcesses={setAppliedProcesses}
+          setShowMessage={setShowMessage}
+        />
+        <MainContent
+          loading={loading}
+          handleFileUpload={handleFileUpload}
+          traces={traces}
+          backupTraces={backupTraces}
+          appliedProcesses={appliedProcesses}
+          handleRemoveProcesses={handleRemoveProcesses}
+        />
       </div>
-    </div>
+    </>
   );
 }

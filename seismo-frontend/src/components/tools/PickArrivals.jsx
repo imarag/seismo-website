@@ -3,17 +3,22 @@ import Spinner from "../ui/Spinner";
 import Message from "../ui/Message";
 import Button from "../ui/Button";
 import Input from "../ui/Input";
+import ToolTip from "../ui/ToolTip";
 import Label from "../ui/Label";
+import Symbol from "../ui/Symbol";
 import Select from "../ui/Select";
 import LineGraph from "../ui/LineGraph";
 import SmallScreenToolAlert from "../utils/SmallScreenToolALert";
-import { fastapiEndpoints, arrivalsStyles } from "../../assets/data/static";
 import { apiRequest } from "../../assets/utils/apiRequest";
 import { downloadURI } from "../../assets/utils/utility-functions";
+import { fastapiEndpoints, arrivalsStyles } from "../../assets/data/static";
 import { filterOptions } from "../../assets/data/static";
 import { MdOutlineFileDownload } from "react-icons/md";
 import { HiOutlineUpload } from "react-icons/hi";
 import { IoMdClose } from "react-icons/io";
+import { BsFillQuestionCircleFill } from "react-icons/bs";
+
+let clickTimeout;
 
 function PSElements({
   traces,
@@ -21,6 +26,7 @@ function PSElements({
   setSelectedWave,
   handleDeleteWave,
   formattedArrivals,
+  loading,
 }) {
   return (
     <div className="flex flex-row items-center gap-4 text-sm">
@@ -34,7 +40,7 @@ function PSElements({
           checked={selectedWave === "P"}
           onChange={() => setSelectedWave("P")}
           disabled={
-            traces.length === 0 || formattedArrivals["P"] !== null
+            traces.length === 0 || loading || formattedArrivals["P"] !== null
               ? true
               : false
           }
@@ -51,7 +57,7 @@ function PSElements({
           checked={selectedWave === "S"}
           onChange={() => setSelectedWave("S")}
           disabled={
-            traces.length === 0 || formattedArrivals["S"] !== null
+            traces.length === 0 || loading || formattedArrivals["S"] !== null
               ? true
               : false
           }
@@ -64,10 +70,11 @@ function PSElements({
           style="error"
           size="extra-small"
           outline={true}
-          tooltiptext="Delete the selected P wave arrival"
+          disabled={loading}
+          toolTipText="Delete the selected P wave arrival"
         >
           P
-          <IoMdClose />
+          <Symbol IconComponent={IoMdClose} />
         </Button>
       )}
       {formattedArrivals["S"] !== null && (
@@ -76,18 +83,22 @@ function PSElements({
           style="error"
           size="extra-small"
           outline={true}
-          tooltiptext="Delete the selected S wave arrival"
+          disabled={loading}
+          toolTipText="Delete the selected S wave arrival"
         >
           S
-          <IoMdClose />
+          <Symbol IconComponent={IoMdClose} />
         </Button>
       )}
     </div>
   );
 }
 
-function ManualFilters({ traces, handleFilterChange }) {
-  const [manualFilter, setManualFilter] = useState({ freqMin: 1, freqMax: 3 });
+function ManualFilters({ traces, handleFilterChange, loading }) {
+  const [manualFilter, setManualFilter] = useState({
+    freqMin: "",
+    freqMax: "",
+  });
 
   function handleEnterKey(e) {
     if (e.key === "Enter") {
@@ -99,7 +110,13 @@ function ManualFilters({ traces, handleFilterChange }) {
   }
 
   return (
-    <div className="flex justify-end align-center gap-2 py-4">
+    <div className="flex justify-end items-center align-center gap-2 py-4">
+      <ToolTip
+        toolTipText={`For manual filtering: fill only the left field to apply a highpass filter, fill only the right field to 
+      apply a lowpass filter, fill both fields to apply a bandpass filter. Press the Enter key to apply.`}
+      >
+        <Symbol IconComponent={BsFillQuestionCircleFill} />
+      </ToolTip>
       <Input
         type="number"
         id="freq_min"
@@ -110,7 +127,7 @@ function ManualFilters({ traces, handleFilterChange }) {
           setManualFilter({ ...manualFilter, freqMin: e.target.value })
         }
         placeholder="e.g. 0.1"
-        disabled={traces.length === 0}
+        disabled={traces.length === 0 || loading}
         size="small"
         className="w-28"
       />
@@ -124,7 +141,7 @@ function ManualFilters({ traces, handleFilterChange }) {
           setManualFilter({ ...manualFilter, freqMax: e.target.value })
         }
         placeholder="e.g. 3"
-        disabled={traces.length === 0}
+        disabled={traces.length === 0 || loading}
         size="small"
         className="w-28"
       />
@@ -199,9 +216,9 @@ function MainMenu({
           disabled={loading}
           style="ghost"
           size="extra-small"
-          tooltiptext="Upload a seismic file"
+          toolTipText="Upload a seismic file (one of the supported formats in Python Obspy's read function)"
         >
-          <HiOutlineUpload />
+          <Symbol IconComponent={HiOutlineUpload} />
           Upload file
         </Button>
         <Button
@@ -210,13 +227,14 @@ function MainMenu({
           onClick={handleSaveArrivals}
           disabled={
             traces.length === 0 ||
+            loading ||
             (formattedArrivals["P"] === null && formattedArrivals["S"] === null)
               ? true
               : ""
           }
-          tooltiptext="Download the selected P & S wave arrivals in a txt file"
+          toolTipText="Download the selected P & S wave arrivals in a txt file. Select at least one arrival to use this option."
         >
-          <MdOutlineFileDownload />
+          <Symbol IconComponent={MdOutlineFileDownload} />
           Download arrivals
         </Button>
       </div>
@@ -227,18 +245,27 @@ function MainMenu({
           setSelectedWave={setSelectedWave}
           handleDeleteWave={handleDeleteWave}
           formattedArrivals={formattedArrivals}
+          loading={loading}
         />
         <Select
           id="filters-dropdown"
           name="filters-dropdown"
           value={selectedFilter}
           onChange={handleDropdownFilterChange}
-          disabled={traces.length === 0}
+          disabled={traces.length === 0 || loading}
           optionslist={filterOptions}
           size="small"
           className="w-28 lg:w-40"
         />
       </div>
+      <ToolTip
+        toolTipPosition="top-left"
+        toolTipText={`Select the P or S wave radio button to mark the corresponding 
+          wave arrival, then click on the graphs to insert the respective arrival. 
+          Use the filter dropdown on the right to apply a predefined filter range.`}
+      >
+        <Symbol IconComponent={BsFillQuestionCircleFill} />
+      </ToolTip>
     </div>
   );
 }
@@ -254,7 +281,7 @@ function Graphs({
   let annotations = arrivals.map((arr) => ({
     x:
       backupTraces.length !== 0
-        ? arr["arrival"] - backupTraces[0]["stats"]["duration"] / 40
+        ? arr["arrival"] - backupTraces[0]["stats"]["duration"] / 45
         : 0,
     y: 0.8,
     xref: "x",
@@ -263,6 +290,7 @@ function Graphs({
     showarrow: false,
     font: {
       size: arrivalsStyles.label.size,
+      color: arrivalsStyles.label.color,
     },
   }));
 
@@ -282,21 +310,32 @@ function Graphs({
   }));
 
   function onGraphClick(e) {
-    const point = e.points[0];
-    for (let arr of arrivals) {
-      if (arr["wave"] === selectedWave && arr["arrival"]) {
-        return;
-      }
+    if (clickTimeout) {
+      // Double click detected, clear single click action
+      clearTimeout(clickTimeout);
+      clickTimeout = null;
+      return; // ignore single click action
     }
 
-    if (point) {
-      const x = point.x;
-      setSelectedWave(selectedWave === "P" ? "S" : "P");
-      setArrivals((oldarrivals) => [
-        ...oldarrivals,
-        { wave: selectedWave, arrival: x },
-      ]);
-    }
+    clickTimeout = setTimeout(() => {
+      const point = e.points[0];
+      for (let arr of arrivals) {
+        if (arr["wave"] === selectedWave && arr["arrival"]) {
+          return;
+        }
+      }
+
+      if (point) {
+        const x = point.x;
+        setSelectedWave(selectedWave === "P" ? "S" : "P");
+        setArrivals((oldarrivals) => [
+          ...oldarrivals,
+          { wave: selectedWave, arrival: x },
+        ]);
+      }
+
+      clickTimeout = null; // reset after single click processed
+    }, 140); // wait 140ms to confirm no double click
   }
 
   return (
@@ -306,7 +345,7 @@ function Graphs({
           <LineGraph
             xData={[tr["xdata"]]}
             yData={[tr["ydata"]]}
-            height="220px"
+            height="100%"
             legendTitle={[`Component: ${tr["stats"]["component"]}`]}
             showGraphTitle={ind === 0}
             graphTitle={""}
@@ -333,9 +372,9 @@ function StartUploadFile({ loading, handleFileUpload }) {
         onClick={handleFileUpload}
         loading={loading}
         disabled={loading}
-        tooltiptext="Upload a seismic file"
+        toolTipText="Upload a seismic file (one of the supported formats in Python Obspy's read function)"
       >
-        <HiOutlineUpload />
+        <Symbol IconComponent={HiOutlineUpload} />
         Upload file
       </Button>
     </div>
@@ -361,7 +400,9 @@ function MainContent({
         />
       ) : (
         <>
-          <div className="absolute start-1/2 ">{loading && <Spinner />}</div>
+          <div className="absolute start-1/2 -translate-x-1/2">
+            {loading && <Spinner />}
+          </div>
           <Graphs
             traces={traces}
             arrivals={arrivals}
@@ -387,7 +428,7 @@ export default function ArrivalsPickingPage() {
   const [arrivals, setArrivals] = useState([]);
   const [selectedWave, setSelectedWave] = useState("P");
   const [selectedFilter, setSelectedFilter] = useState("initial");
-  const inputRef = useRef();
+  const uploadFileInputRef = useRef();
 
   async function handleFileSelection(e) {
     e.preventDefault();
@@ -418,7 +459,7 @@ export default function ArrivalsPickingPage() {
 
   function handleFileUpload(e) {
     e.preventDefault();
-    inputRef.current.click();
+    uploadFileInputRef.current.click();
   }
 
   async function handleFilterChange(freqMin = null, freqMax = null) {
@@ -461,7 +502,7 @@ export default function ArrivalsPickingPage() {
         />
       )}
       <input
-        ref={inputRef}
+        ref={uploadFileInputRef}
         name="file"
         type="file"
         onChange={handleFileSelection}
@@ -500,6 +541,7 @@ export default function ArrivalsPickingPage() {
         <ManualFilters
           traces={traces}
           handleFilterChange={handleFilterChange}
+          loading={loading}
         />
       </div>
     </>
