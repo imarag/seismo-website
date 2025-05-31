@@ -39,7 +39,7 @@ async def upload_seismic_file(file: UploadFile) -> list:
 
 @router.get("/calculate-distance")
 def calculate_distance(
-    lat1: Latitude, lon1: Longitude, lat2: Latitude, lon2: Latitude
+    lat1: Latitude, lon1: Longitude, lat2: Latitude, lon2: Longitude
 ) -> dict:
     """Calculates the distance and azimuth between two coordinates."""
     logger.info(
@@ -50,6 +50,7 @@ def calculate_distance(
     azimuth_a_b = round(result[1], 3)
     azimuth_b_a = round(result[2], 3)
     return {
+        "coords": {"lat1": lat1, "lat2": lat2, "lon1": lon1, "lon2": lon2},
         "distance_km": distance_km,
         "azimuth_a_b": azimuth_a_b,
         "azimuth_b_a": azimuth_b_a,

@@ -114,15 +114,15 @@ export const tools = [
   {
     id: 2,
     title: "Geodesic Distance Calculator",
-    subtitle: "Calculate distances between geographic points.",
-    description: "Compute precise distances between two geographical points using advanced geodesic algorithms. Visualize points on an interactive map for improved accuracy and usability.",
-    smallDescription: "Compute geographic distances with precision.",
+    subtitle: "Calculate distances and azimuths between geographic points.",
+    description: "Compute the precise geodesic distance and forward/backward azimuths between two geographic points using the WGS84 ellipsoid. Use the interactive map to visualize and refine point positions.",
+    smallDescription: "Calculate distance and azimuths between two points.",
     image_src: DistanceBetweenPointsIcon,
     image_alt: "Geodesic Distance Calculator Icon",
     type: "tool",
     slug: "distance-between-points",
     completed: true,
-    userGuide: "Calculate accurate distances between two points on Earth using geodesic algorithms. Input the latitude and longitude for each point, and the tool will compute the distance based on the WGS84 ellipsoid. Use the interactive map to verify and adjust the points visually. This tool is ideal for geophysical applications requiring precise location measurements."
+    userGuide: "This tool calculates the geodesic distance and both forward and backward azimuths between two locations on Earth using the WGS84 ellipsoid. Enter the latitude and longitude for each point (latitude must be between -90° and 90°, longitude between -180° and 180°). Use the interactive map to verify and adjust point positions for accuracy. Ideal for geospatial and geophysical use cases where precision is essential. Take into account that some browsers may not accept starting with a minus in number inputs when entering negative values in the input fields. For this reason, in case you need to add a negative coordinate, first type the number and then add the minus sign in front. Use the interactive map to verify and adjust point positions for accuracy. Ideal for geospatial and geophysical use cases where precision is essential."
   },
   {
     id: 3,

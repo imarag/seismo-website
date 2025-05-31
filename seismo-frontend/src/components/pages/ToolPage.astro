@@ -15,23 +15,21 @@ import SimpleTriangulation from "../tools/SimpleTriangulation";
 const { selectedTool } = Astro.props;
 ---
 
-<div class="flex flex-col gap-4 items-center">
-  <Img
-    src={selectedTool.image_src}
-    alt={selectedTool.image_alt}
-    class="block w-20 mx-auto"
-  />
-  <PageTitle class="text-center" text={selectedTool.title} />
-  <PageSubTitle class="text-center" text={selectedTool.subtitle} />
-  <div class="max-w-5xl mx-auto flex flex-col gap-8 items-center mt-20 mb-8">
-    <p>{selectedTool.description}</p>
-    <Collapse label="User guide">
-      <p>{selectedTool.userGuide}</p>
-    </Collapse>
-  </div>
+<Img
+  src={selectedTool.image_src}
+  alt={selectedTool.image_alt}
+  class="block w-20 mx-auto"
+/>
+<PageTitle class="text-center" text={selectedTool.title} />
+<PageSubTitle class="text-center" text={selectedTool.subtitle} />
+<div class="max-w-5xl mx-auto flex flex-col gap-8 items-center mt-20 mb-8">
+  <p>{selectedTool.description}</p>
+  <Collapse label="User guide">
+    <p>{selectedTool.userGuide}</p>
+  </Collapse>
 </div>
 {selectedTool.slug !== "distance-between-points" && <DownloadTestMSEEDFile />}
-<div class="mt-24">
+<div class="mt-24 space-y-8">
   {selectedTool.slug === "edit-seismic-file" && <EditSeismicFile client:only />}
   {
     selectedTool.slug === "distance-between-points" && (
