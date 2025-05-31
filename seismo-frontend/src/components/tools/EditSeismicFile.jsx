@@ -45,7 +45,7 @@ function TraceInfoMenu({ setActivatedMenuIndex, traces, setTraces, traceId }) {
 
   return (
     <form>
-      <div className="flex flex-col p-4 items-stretch gap-1 absolute top-0 end-4 bg-base-200 border border-neutral-500/20 shadow rounded z-50 max-h-80 overflow-scroll">
+      <div className="flex flex-col p-4 items-stretch gap-1 absolute top-0 end-4 bg-base-200 border border-neutral-500/20 shadow rounded z-50 max-h-80">
         <div className="absolute top-1 end-2">
           <Button
             style="ghost"
@@ -154,7 +154,73 @@ function MainMenu({ traces, handleFileUpload, loading, handleDownloadFile }) {
   );
 }
 
-function Graphs({ traces, setTraces, setBackupTraces, handleDownloadFile }) {
+function TraceGraphOptionMenu({
+  trace,
+  handleOptionsMenuButtonClick,
+  handleDeleteTrace,
+  handleDownloadFile,
+  currentMenuIndex,
+}) {
+  return (
+    <div className="flex flex-row justify-end items-center gap-2">
+      <Button
+        style="ghost"
+        size="small"
+        onClick={() => handleOptionsMenuButtonClick(currentMenuIndex)}
+        toolTipText={`Open the trace header menu. Feel free to update the fields.`}
+        toolTipPosition="bottom-left"
+      >
+        <Symbol IconComponent={PiGearLight} />
+      </Button>
+      <Button
+        style="ghost"
+        size="small"
+        onClick={() =>
+          handleDownloadFile(
+            "json",
+            trace.stats,
+            trace.stats.record_name + "_header"
+          )
+        }
+        toolTipText={`Download the header information of the current trace in a json format`}
+        toolTipPosition="bottom-left"
+      >
+        <Symbol IconComponent={TbFileDownload} />
+      </Button>
+      <Button
+        style="ghost"
+        size="small"
+        onClick={() =>
+          handleDownloadFile(
+            "json",
+            {
+              record: trace.stats.record_name,
+              component: trace.stats.component,
+              data: trace.ydata,
+            },
+            trace.stats.record_name + "_data"
+          )
+        }
+        toolTipText={`Download the data values of the current trace in a json file format`}
+        toolTipPosition="bottom-left"
+      >
+        <Symbol IconComponent={BsDatabaseDown} />
+      </Button>
+      <Button
+        style="ghost"
+        size="small"
+        onClick={() => handleDeleteTrace(trace.trace_id)}
+        toolTipText={`Remove the current trace`}
+        toolTipPosition="bottom-left"
+        className="text-error"
+      >
+        <Symbol IconComponent={MdDeleteOutline} />
+      </Button>
+    </div>
+  );
+}
+
+function Graphs({ traces, setTraces, handleDownloadFile }) {
   const [activatedMenuIndex, setActivatedMenuIndex] = useState(null);
 
   function handleOptionsMenuButtonClick(ind) {
@@ -168,68 +234,19 @@ function Graphs({ traces, setTraces, setBackupTraces, handleDownloadFile }) {
   function handleDeleteTrace(traceId) {
     const newTraces = traces.filter((tr) => tr.trace_id !== traceId);
     setTraces(newTraces);
-    setBackupTraces(newTraces);
   }
 
   return (
-    <>
+    <div className="flex-grow overflow-scroll">
       {traces.map((tr, ind) => (
-        <div key={tr.trace_id} className="h-1/3 relative">
-          <div className="flex flex-row justify-end items-center gap-2">
-            <Button
-              style="ghost"
-              size="small"
-              onClick={() => handleOptionsMenuButtonClick(ind)}
-              toolTipText={`Open the trace header menu. Feel free to update the fields.`}
-              toolTipPosition="bottom-left"
-            >
-              <Symbol IconComponent={PiGearLight} />
-            </Button>
-            <Button
-              style="ghost"
-              size="small"
-              onClick={() =>
-                handleDownloadFile(
-                  "json",
-                  tr.stats,
-                  tr.stats.record_name + "_header"
-                )
-              }
-              toolTipText={`Download the header information of the current trace in a json format`}
-              toolTipPosition="bottom-left"
-            >
-              <Symbol IconComponent={TbFileDownload} />
-            </Button>
-            <Button
-              style="ghost"
-              size="small"
-              onClick={() =>
-                handleDownloadFile(
-                  "json",
-                  {
-                    record: tr.stats.record_name,
-                    component: tr.stats.component,
-                    data: tr.ydata,
-                  },
-                  tr.stats.record_name + "_data"
-                )
-              }
-              toolTipText={`Download the data values of the current trace in a json file format`}
-              toolTipPosition="bottom-left"
-            >
-              <Symbol IconComponent={BsDatabaseDown} />
-            </Button>
-            <Button
-              style="ghost"
-              size="small"
-              onClick={() => handleDeleteTrace(tr.trace_id)}
-              toolTipText={`Remove the current trace`}
-              toolTipPosition="bottom-left"
-              className="text-error"
-            >
-              <Symbol IconComponent={MdDeleteOutline} />
-            </Button>
-          </div>
+        <div key={tr.trace_id} className="h-40 relative">
+          <TraceGraphOptionMenu
+            trace={tr}
+            handleOptionsMenuButtonClick={handleOptionsMenuButtonClick}
+            handleDeleteTrace={handleDeleteTrace}
+            handleDownloadFile={handleDownloadFile}
+            currentMenuIndex={ind}
+          />
           {activatedMenuIndex === ind && (
             <TraceInfoMenu
               setActivatedMenuIndex={setActivatedMenuIndex}
@@ -248,7 +265,7 @@ function Graphs({ traces, setTraces, setBackupTraces, handleDownloadFile }) {
           />
         </div>
       ))}
-    </>
+    </div>
   );
 }
 
@@ -276,59 +293,42 @@ function StartUploadFile({ loading, handleFileUpload }) {
 
 function QuickTraceInfo({ traces }) {
   const [showQuickInfo, setShowQuickInfo] = useState(true);
-
-  // total traces
-  const totalTraces = traces.length;
-
-  // get unique npts values. If all traces have the same npts return this else return "varying"
-  const uniqueNpts = getUniqueItems(traces.map((tr) => tr.stats.npts));
-  const nptsInfo = uniqueNpts.length === 1 ? uniqueNpts[0] : "varying";
-
-  // get unique sampling rate values. If all traces have the same fs return this else return "varying"
-  const uniqueSamplingRates = getUniqueItems(
-    traces.map((tr) => tr.stats.sampling_rate)
-  );
-  const samplingRateInfo =
-    uniqueSamplingRates.length === 1 ? uniqueSamplingRates[0] : "varying";
-
-  // get unique start date values. If all traces have the same start date values return this else return "varying"
-  const uniqueStartDates = getUniqueItems(
-    traces.map((tr) => `${tr.stats.start_date} ${tr.stats.start_time}`)
-  );
-  const startDateInfo =
-    uniqueStartDates.length === 1 ? uniqueStartDates[0] : "varying";
-
-  // get all component values
-  const components = traces.map((tr) => tr.stats.component).join(" ");
-
   return (
-    <div>
+    <div className="my-4">
       <Button
         style="primary"
         outline
         size="extra-small"
         onClick={() => setShowQuickInfo((prev) => !prev)}
       >
-        {showQuickInfo ? "Hide" : "Show"} traces info
+        {showQuickInfo ? "Hide" : "View"} traces info
       </Button>
       {showQuickInfo && (
-        <ul className="mt-4 rounded-md bg-base-200 p-4 text-sm text-base-content/60">
-          <li>
-            Total traces: <span>{totalTraces}</span>
-          </li>
-          <li>
-            Components: <span>{components}</span>
-          </li>
-          <li>
-            Number of points (npts): <span>{nptsInfo}</span>
-          </li>
-          <li>
-            Start date: <span>{startDateInfo}</span>
-          </li>
-          <li>
-            Sampling rate: <span>{samplingRateInfo}</span>
-          </li>
-        </ul>
+        <div className="text-sm text-base-content/50 space-y-2 my-2 flex-grow-0 flex-shrink-0">
+          <div>
+            <h2 className="font-semibold">Stream Summary:</h2>
+            <ul>
+              <li>Total traces: {traces.length}</li>
+            </ul>
+          </div>
+          <div>
+            <h2 className="font-semibold">Traces:</h2>
+            <ul className="overflow-auto w-full whitespace-nowrap">
+              {traces.map((tr, ind) => (
+                <li key={ind} className="px-2">
+                  {[
+                    `${ind + 1}.${" "}`,
+                    `component: ${tr.stats.component}`,
+                    `station: ${tr.stats.station}`,
+                    `start date: ${tr.stats.start_date}`,
+                    `npts: ${tr.stats.npts}`,
+                    `sampling rate: ${tr.stats.sampling_rate}`,
+                  ].join(" | ")}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
       )}
     </div>
   );
@@ -340,10 +340,9 @@ function MainContent({
   traces,
   handleDownloadFile,
   setTraces,
-  setBackupTraces,
 }) {
   return (
-    <div className="border border-neutral-500/20 h-2/3 overflow-y-scroll p-4 relative">
+    <div className="border border-neutral-500/20 h-2/3 p-4 flex flex-col relative">
       {traces.length === 0 ? (
         <StartUploadFile
           loading={loading}
@@ -358,7 +357,6 @@ function MainContent({
           <Graphs
             traces={traces}
             setTraces={setTraces}
-            setBackupTraces={setBackupTraces}
             handleDownloadFile={handleDownloadFile}
           />
         </>
@@ -374,7 +372,6 @@ export default function EditSeismicFile() {
   });
   const [loading, setLoading] = useState(false);
   const [traces, setTraces] = useState([]);
-  const [backupTraces, setBackupTraces] = useState([]);
   const uploadFileInputRef = useRef();
 
   async function handleFileSelection(e) {
@@ -398,7 +395,6 @@ export default function EditSeismicFile() {
     }
 
     setTraces(tracesList);
-    setBackupTraces(tracesList);
   }
 
   function handleFileUpload(e) {
@@ -426,12 +422,11 @@ export default function EditSeismicFile() {
   }
 
   return (
-    <>
+    <div className="space-y-8">
       {showMessage.message && (
         <Message
           message={showMessage.message}
           type={showMessage.type}
-          position="bottom-right"
           onClose={() =>
             setShowMessage({
               type: "",
@@ -463,9 +458,8 @@ export default function EditSeismicFile() {
           traces={traces}
           handleDownloadFile={handleDownloadFile}
           setTraces={setTraces}
-          setBackupTraces={setBackupTraces}
         />
       </div>
-    </>
+    </div>
   );
 }

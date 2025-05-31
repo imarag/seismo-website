@@ -122,7 +122,7 @@ export const tools = [
     type: "tool",
     slug: "distance-between-points",
     completed: true,
-    userGuide: "This tool calculates the geodesic distance and both forward and backward azimuths between two locations on Earth using the WGS84 ellipsoid. Enter the latitude and longitude for each point (latitude must be between -90° and 90°, longitude between -180° and 180°). Use the interactive map to verify and adjust point positions for accuracy. Ideal for geospatial and geophysical use cases where precision is essential. Take into account that some browsers may not accept starting with a minus in number inputs when entering negative values in the input fields. For this reason, in case you need to add a negative coordinate, first type the number and then add the minus sign in front. Use the interactive map to verify and adjust point positions for accuracy. Ideal for geospatial and geophysical use cases where precision is essential."
+    userGuide: "This tool calculates the geodesic distance and both forward and backward azimuths between two locations on Earth using the WGS84 ellipsoid. Enter the latitude and longitude for each point (latitude must be between -90° and 90°, longitude between -180° and 180°). Use the interactive map to verify and adjust point positions for accuracy. Ideal for geospatial and geophysical use cases where precision is essential. Take into account that some browsers may not accept starting with a minus in number inputs when entering negative values in the input fields. For this reason, in case you need to add a negative coordinate first type the number and then add the minus sign in front. Use the interactive map to verify and adjust point positions for accuracy. Ideal for geospatial and geophysical use cases where precision is essential."
   },
   {
     id: 3,
@@ -163,18 +163,18 @@ export const tools = [
     completed: true,
     userGuide: "This toolkit provides advanced signal processing capabilities for seismic waveforms. Load your data, and use tools to cut waveforms, apply filters, or smooth noisy signals. Additional features allow you to remove trends and perform baseline corrections. Export processed data for detailed seismic analysis or visualization."
   },
-  {
-    id: 6,
-    title: "Simple Triangulation",
-    subtitle: "Locate an earthquake's epicenter using body wave arrivals",
-    description: "Estimate an earthquake’s epicenter by analyzing P and S wave arrival times from multiple stations. Calculate distances and visualize intersecting circles to pinpoint the source location.",
-    smallDescription: "Determine epicenter using arrival times.",
-    image_src: SignalProcessingIcon,
-    image_alt: "Triangulation Tool Icon",
-    type: "tool",
-    slug: "simple-triangulation",
-    completed: true,
-    userGuide: "This tool allows you to locate an earthquake's epicenter using triangulation. Upload seismic data from at least three stations and manually mark the P and S wave arrival times. The tool calculates the distance from each station based on the S-P time difference and draws a circle of that radius around each station. The intersection point of these circles indicates the estimated epicenter location. Adjust parameters if needed and export the results for further analysis."
-  }
+  // {
+  //   id: 6,
+  //   title: "Simple Triangulation",
+  //   subtitle: "Locate an earthquake's epicenter using body wave arrivals",
+  //   description: "Estimate an earthquake’s epicenter by analyzing P and S wave arrival times from multiple stations. Calculate distances and visualize intersecting circles to pinpoint the source location.",
+  //   smallDescription: "Determine epicenter using arrival times.",
+  //   image_src: SignalProcessingIcon,
+  //   image_alt: "Triangulation Tool Icon",
+  //   type: "tool",
+  //   slug: "simple-triangulation",
+  //   completed: true,
+  //   userGuide: "This tool allows you to locate an earthquake's epicenter using triangulation. Upload seismic data from at least three stations and manually mark the P and S wave arrival times. The tool calculates the distance from each station based on the S-P time difference and draws a circle of that radius around each station. The intersection point of these circles indicates the estimated epicenter location. Adjust parameters if needed and export the results for further analysis."
+  // }
 
 ];

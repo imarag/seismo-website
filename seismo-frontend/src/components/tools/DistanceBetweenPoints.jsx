@@ -1,11 +1,9 @@
-import { useState, useEffect } from "react";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
-import { useMap } from "react-leaflet";
+import { useState } from "react";
 import Button from "../ui/Button";
 import Message from "../ui/Message";
 import ToolTip from "../ui/ToolTip.jsx";
 import Symbol from "../ui/Symbol";
+import Map from "../ui/Map.jsx";
 import Input from "../ui/Input.jsx";
 import Label from "../ui/Label.jsx";
 import { fastapiEndpoints } from "../../assets/data/static";
@@ -13,71 +11,6 @@ import { LuCalculator } from "react-icons/lu";
 import { IoLocationOutline } from "react-icons/io5";
 import { apiRequest } from "../../assets/utils/apiRequest.js";
 import { BsFillQuestionCircleFill } from "react-icons/bs";
-
-// Fix Leaflet's default icon issue
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl:
-    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
-  iconUrl:
-    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
-  shadowUrl:
-    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
-});
-
-function MapComponent({ gps2azimuth }) {
-  const map = useMap();
-  const mapCenter = [
-    (gps2azimuth.coords.lat1 + gps2azimuth.coords.lat2) / 2,
-    (gps2azimuth.coords.lon1 + gps2azimuth.coords.lon2) / 2,
-  ];
-  const distance = gps2azimuth.distance_km;
-  useEffect(() => {
-    if (distance >= 0) {
-      map.setView(mapCenter, 5);
-    }
-  }, [gps2azimuth]);
-
-  return (
-    <>
-      {distance >= 0 && (
-        <>
-          <Marker position={[gps2azimuth.coords.lat1, gps2azimuth.coords.lon1]}>
-            <Popup>
-              Point 1: lat={gps2azimuth.coords.lat1}, lon=
-              {gps2azimuth.coords.lon1}
-            </Popup>
-          </Marker>
-          <Marker position={[gps2azimuth.coords.lat2, gps2azimuth.coords.lon2]}>
-            <Popup>
-              Point 2: lat={gps2azimuth.coords.lat2}, lon=
-              {gps2azimuth.coords.lon2}
-            </Popup>
-          </Marker>
-        </>
-      )}
-    </>
-  );
-}
-
-function Map({ gps2azimuth }) {
-  return (
-    <div className="h-96 z-40">
-      <MapContainer
-        zoom={5}
-        scrollWheelZoom={true}
-        center={[38, 28]}
-        style={{ height: "100%", width: "100%" }}
-      >
-        <TileLayer
-          attribution="&copy; OpenStreetMap contributors"
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        {gps2azimuth && <MapComponent gps2azimuth={gps2azimuth} />}
-      </MapContainer>
-    </div>
-  );
-}
 
 function CoordContainer({ children, label }) {
   return (
@@ -101,8 +34,8 @@ function CoordContainer({ children, label }) {
 }
 
 function CoordItem({ coordLabel, coordValue, coords, setCoords }) {
-  const minValue = coordLabel === "Latitude" ? -90 : -180;
-  const maxValue = coordLabel === "Latitude" ? 90 : 180;
+  const minValue = coordLabel.toLowerCase() === "latitude" ? -90 : -180;
+  const maxValue = coordLabel.toLowerCase() === "latitude" ? 90 : 180;
   return (
     <div className="flex flex-col items-stretch justify-center gap-2">
       <Label htmlFor={coordValue}>{coordLabel}</Label>
@@ -116,7 +49,7 @@ function CoordItem({ coordLabel, coordValue, coords, setCoords }) {
         onChange={(e) =>
           setCoords({ ...coords, [coordValue]: Number(e.target.value) })
         }
-        className="w-34"
+        className="w-36 grow"
       />
     </div>
   );
@@ -169,35 +102,6 @@ function CoordsComputeResult({ gps2azimuth }) {
       of point 2 to point 1,{" "}
       <span className="font-bold">{gps2azimuth.azimuth_b_a}</span> degrees
     </p>
-  );
-}
-
-function ObspyExample() {
-  return (
-    <>
-      <p>
-        The tool utilizes the{" "}
-        <a
-          className="link link-info link-hover"
-          target="_blank"
-          href="https://docs.obspy.org/packages/autogen/obspy.geodetics.base.gps2dist_azimuth.html"
-        >
-          <code>gps2dist_azimuth</code>
-        </a>{" "}
-        function to do the calculation.
-      </p>
-      <div className="mockup-code">
-        <pre data-prefix={1}>
-          <code>from obspy.geodetics.base import gps2dist_azimuth</code>
-        </pre>
-        <pre data-prefix={2}>
-          <code>
-            gps2dist_azimuth(lat1, lon1, lat2, lon2, a=6378137.0,
-            f=0.0033528106647474805)
-          </code>
-        </pre>
-      </div>
-    </>
   );
 }
 
@@ -263,6 +167,7 @@ export default function DistanceBetweenPoints() {
           }
         />
       )}
+
       <CoordinatesFields coords={coords} setCoords={setCoords} />
       {!coordsValid && (
         <p className="text-error text-center text-sm">
@@ -285,8 +190,39 @@ export default function DistanceBetweenPoints() {
         </Button>
       </div>
       {gps2azimuth && <CoordsComputeResult gps2azimuth={gps2azimuth} />}
-      <Map gps2azimuth={gps2azimuth} />
-      <ObspyExample />
+      <Map
+        coordsObj={
+          gps2azimuth
+            ? {
+                coords: [
+                  {
+                    lat: gps2azimuth.coords.lat1,
+                    lon: gps2azimuth.coords.lon1,
+                  },
+                  {
+                    lat: gps2azimuth.coords.lat2,
+                    lon: gps2azimuth.coords.lon2,
+                  },
+                ],
+                mapCenter: [
+                  (gps2azimuth.coords.lat1 + gps2azimuth.coords.lat2) / 2,
+                  (gps2azimuth.coords.lon1 + gps2azimuth.coords.lon2) / 2,
+                ],
+              }
+            : null
+        }
+      />
+      <p>
+        The tool utilizes the{" "}
+        <a
+          className="link link-info link-hover"
+          target="_blank"
+          href="https://docs.obspy.org/packages/autogen/obspy.geodetics.base.gps2dist_azimuth.html"
+        >
+          <code>gps2dist_azimuth</code>
+        </a>{" "}
+        function from ObsPy to perform the calculations.
+      </p>
     </div>
   );
 }
