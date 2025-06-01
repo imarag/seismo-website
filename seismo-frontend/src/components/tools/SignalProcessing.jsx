@@ -27,11 +27,12 @@ import { IoCut, IoFilter } from "react-icons/io5";
 import { BsSoundwave } from "react-icons/bs";
 import { BsFillQuestionCircleFill } from "react-icons/bs";
 
-function MenuButton({ onClick, disabled = false }) {
+function MenuButton({ onClick, loading, disabled = false }) {
   return (
     <div className="mt-4 flex justify-center">
       <Button
         onClick={onClick}
+        loading={loading}
         size="small"
         style="primary"
         disabled={disabled}
@@ -329,6 +330,7 @@ function MainMenu({
             })}
             <MenuButton
               onClick={handleTaperApply}
+              loading={loading}
               disabled={traces.length === 0}
             />
           </div>
@@ -367,6 +369,7 @@ function MainMenu({
             })}
             <MenuButton
               onClick={handleTrimApply}
+              loading={loading}
               disabled={traces.length === 0}
             />
           </div>
@@ -404,6 +407,7 @@ function MainMenu({
             })}
             <MenuButton
               onClick={handleDetrendApply}
+              loading={loading}
               disabled={traces.length === 0}
             />
           </div>
@@ -441,6 +445,7 @@ function MainMenu({
             })}
             <MenuButton
               onClick={handleFilterApply}
+              loading={loading}
               disabled={traces.length === 0}
             />
           </div>
