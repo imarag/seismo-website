@@ -7,16 +7,10 @@ import Label from "../ui/Label";
 import Input from "../ui/Input";
 import Symbol from "../ui/Symbol";
 import SmallScreenToolAlert from "../utils/SmallScreenToolALert";
-import {
-  addTraceParameters,
-  traceHeaderParams,
-} from "../../assets/data/static";
+import { traceHeaderParams } from "../../assets/data/static";
 import { fastapiEndpoints } from "../../assets/data/static";
 import ToolTip from "../ui/ToolTip";
-import {
-  downloadURI,
-  getUniqueItems,
-} from "../../assets/utils/utility-functions";
+import { downloadURI } from "../../assets/utils/utility-functions";
 import { apiRequest } from "../../assets/utils/apiRequest";
 import { MdEdit } from "react-icons/md";
 import { LiaUndoAltSolid } from "react-icons/lia";
@@ -28,25 +22,62 @@ import { BsDatabaseDown } from "react-icons/bs";
 import { TbFileDownload } from "react-icons/tb";
 import { BsFillQuestionCircleFill } from "react-icons/bs";
 
-function TraceInfoMenu({ setActivatedMenuIndex, traces, setTraces, traceId }) {
+function TraceInfoMenu({
+  setShowMessage,
+  setActivatedMenuIndex,
+  loading,
+  traces,
+  setTraces,
+  setLoading,
+  traceId,
+}) {
   const [currentUpdateIndex, setCurrentUpdateIndex] = useState(null);
+  // create a new state that will temporarely store the trace stats
+  const [updateTraces, setUpdateTraces] = useState(traces);
+
+  const trace = updateTraces.find((tr) => tr.trace_id === traceId);
+
   async function handleFormInputChange(curr_trace_id, param, value) {
-    let newTraces = traces.map((tr, i) => {
+    let newTraces = updateTraces.map((tr, i) => {
       if (tr.trace_id === curr_trace_id) {
         return { ...tr, stats: { ...tr.stats, [param]: value } };
       } else {
         return tr;
       }
     });
-    setTraces(newTraces);
+    setUpdateTraces(newTraces);
   }
 
-  const trace = traces.find((tr) => tr.trace_id === traceId);
+  async function handleUpdateHeader() {
+    const { resData: traceStats, error } = await apiRequest({
+      url: fastapiEndpoints["UPDATE-TRACE-HEADER"],
+      method: "post",
+      requestData: trace.stats,
+      setShowMessage: setShowMessage,
+      setLoading: setLoading,
+      successMessage: "Your header has been updated!",
+      errorMessage: "Cannot update the header. Please try again later.",
+    });
+
+    if (error) {
+      return;
+    }
+
+    const updatedTraces = traces.map((tr) => {
+      if (tr.trace_id === traceId) {
+        return { ...tr, stats: traceStats };
+      } else {
+        return tr;
+      }
+    });
+    setTraces(updatedTraces);
+    setUpdateTraces(updatedTraces);
+  }
 
   return (
     <form>
-      <div className="flex flex-col p-4 items-stretch gap-1 absolute top-0 end-4 bg-base-200 border border-neutral-500/20 shadow rounded z-50 max-h-80">
-        <div className="absolute top-1 end-2">
+      <div className="flex flex-col pt-10 pb-6 px-4 items-stretch gap-1 absolute top-0 end-4 bg-base-200 border border-neutral-500/20 shadow rounded z-50 max-h-80">
+        <div className="absolute top-1 start-2">
           <Button
             style="ghost"
             size="small"
@@ -56,7 +87,15 @@ function TraceInfoMenu({ setActivatedMenuIndex, traces, setTraces, traceId }) {
             <IoMdClose />
           </Button>
         </div>
-        <div className="flex flex-col items-stretch text-xs">
+        <div className="absolute top-2 end-4">
+          <ToolTip
+            toolTipPosition="bottom-left"
+            toolTipText={`Use the menu to view header details of the selected trace. Click the pencil icon next to any editable field to make changes (fields marked with an asterisk * are read-only). Don’t forget to click the 'Update header' button to save your changes.`}
+          >
+            <Symbol IconComponent={BsFillQuestionCircleFill} />
+          </ToolTip>
+        </div>
+        <div className="flex flex-col items-stretch text-xs overflow-scroll">
           {traceHeaderParams.map((obj) => (
             <div key={obj.id}>
               <Label htmlFor={obj.id} className="font-semibold">
@@ -76,7 +115,6 @@ function TraceInfoMenu({ setActivatedMenuIndex, traces, setTraces, traceId }) {
                     }
                     size="small"
                     className="w-40"
-                    {...obj}
                   />
                 ) : (
                   <p className="w-40 font-light">{trace.stats[obj.id]}</p>
@@ -109,6 +147,15 @@ function TraceInfoMenu({ setActivatedMenuIndex, traces, setTraces, traceId }) {
         <p className="text-xs text-center my-1">
           Elements with &quot;*&quot; are readonly
         </p>
+        <Button
+          type="button"
+          style="primary"
+          loading={loading}
+          size="extra-small"
+          onClick={handleUpdateHeader}
+        >
+          Update header
+        </Button>
       </div>
     </form>
   );
@@ -137,7 +184,8 @@ function MainMenu({ traces, handleFileUpload, loading, handleDownloadFile }) {
         }
         style="ghost"
         size="extra-small"
-        disabled={loading || traces.length === 0}
+        loading={loading}
+        disabled={traces.length === 0}
         toolTipText={`Download the updated traces to MiniSEED file format`}
       >
         <MdOutlineFileDownload />
@@ -194,7 +242,7 @@ function TraceGraphOptionMenu({
           handleDownloadFile(
             "json",
             {
-              record: trace.stats.record_name,
+              record_name: trace.stats.record_name,
               component: trace.stats.component,
               data: trace.ydata,
             },
@@ -220,7 +268,14 @@ function TraceGraphOptionMenu({
   );
 }
 
-function Graphs({ traces, setTraces, handleDownloadFile }) {
+function Graphs({
+  setShowMessage,
+  setLoading,
+  loading,
+  traces,
+  setTraces,
+  handleDownloadFile,
+}) {
   const [activatedMenuIndex, setActivatedMenuIndex] = useState(null);
 
   function handleOptionsMenuButtonClick(ind) {
@@ -249,9 +304,12 @@ function Graphs({ traces, setTraces, handleDownloadFile }) {
           />
           {activatedMenuIndex === ind && (
             <TraceInfoMenu
+              setShowMessage={setShowMessage}
               setActivatedMenuIndex={setActivatedMenuIndex}
+              loading={loading}
               traces={traces}
               setTraces={setTraces}
+              setLoading={setLoading}
               traceId={tr.trace_id}
             />
           )}
@@ -292,7 +350,7 @@ function StartUploadFile({ loading, handleFileUpload }) {
 }
 
 function QuickTraceInfo({ traces }) {
-  const [showQuickInfo, setShowQuickInfo] = useState(true);
+  const [showQuickInfo, setShowQuickInfo] = useState(false);
   return (
     <div className="my-4">
       <Button
@@ -306,7 +364,7 @@ function QuickTraceInfo({ traces }) {
       {showQuickInfo && (
         <div className="text-sm text-base-content/50 space-y-2 my-2 flex-grow-0 flex-shrink-0">
           <div>
-            <h2 className="font-semibold">Stream Summary:</h2>
+            <h2 className="font-semibold">Stream summary:</h2>
             <ul>
               <li>Total traces: {traces.length}</li>
             </ul>
@@ -336,6 +394,8 @@ function QuickTraceInfo({ traces }) {
 
 function MainContent({
   loading,
+  setLoading,
+  setShowMessage,
   handleFileUpload,
   traces,
   handleDownloadFile,
@@ -355,6 +415,9 @@ function MainContent({
           </div>
           <QuickTraceInfo traces={traces} />
           <Graphs
+            setShowMessage={setShowMessage}
+            setLoading={setLoading}
+            loading={loading}
             traces={traces}
             setTraces={setTraces}
             handleDownloadFile={handleDownloadFile}
@@ -454,6 +517,8 @@ export default function EditSeismicFile() {
         />
         <MainContent
           loading={loading}
+          setLoading={setLoading}
+          setShowMessage={setShowMessage}
           handleFileUpload={handleFileUpload}
           traces={traces}
           handleDownloadFile={handleDownloadFile}

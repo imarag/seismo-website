@@ -267,7 +267,7 @@ function MainMenu({
 
   return (
     <div className="flex flex-row items-center justify-center border border-neutral-500/20 rounded-t-lg bg-base-100 p-3">
-      <div className="grow-0 border-r border-neutral-500/20">
+      <div className="grow-0 shrink-0 border-r border-neutral-500/20">
         <Button
           onClick={handleFileUpload}
           style="ghost"
@@ -516,14 +516,17 @@ function ProcessingFilters({ appliedProcesses, handleRemoveProcesses }) {
           <div className="flex flex-row items-center flex-wrap gap-2 my-6">
             <p>Filters applied:</p>
             {appliedProcesses.map((process, index) => (
-              <span key={process.processId} className="badge badge-info">
+              <span
+                key={process.processId}
+                className="badge badge-sm badge-info"
+              >
                 {index + 1}. {process.text}
               </span>
             ))}
             <span className="ms-5">
               <Button
                 style="error"
-                size="small"
+                size="extra-small"
                 onClick={handleRemoveProcesses}
                 toolTipText="Remove all applied filters"
               >

@@ -1,5 +1,5 @@
 import re
-from fastapi import APIRouter, Form, UploadFile
+from fastapi import APIRouter, Form, UploadFile, Request
 import pandas as pd
 from pathlib import Path
 import datetime
@@ -116,5 +116,6 @@ def add_trace(
 
 
 @router.post("/update-trace-header")
-def update_trace_header(trace_params: list[TraceParams]):
-    return trace_params
+async def update_trace_header(request: Request):
+    stats = await request.json()
+    return TraceStats(**stats)

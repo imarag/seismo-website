@@ -19,7 +19,7 @@ class TraceStats(BaseModel):
         extra = "ignore"
 
     @computed_field
-    def endtime(self) -> datetime.datetime:
+    def end_time(self) -> datetime.datetime:
         """Extract the time from starttime"""
         start_date_time = datetime.datetime.fromisoformat(
             f"{self.start_date} {self.start_time}"
