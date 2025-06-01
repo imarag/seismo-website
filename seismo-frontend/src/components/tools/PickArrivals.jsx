@@ -253,7 +253,7 @@ function MainMenu({
           value={selectedFilter}
           onChange={handleDropdownFilterChange}
           disabled={traces.length === 0 || loading}
-          optionslist={filterOptions}
+          optionsList={filterOptions}
           size="small"
           className="w-28 lg:w-40"
         />
