@@ -1,5 +1,11 @@
 import { useState, useEffect } from "react";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  useMapEvents,
+} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { useMap } from "react-leaflet";
 
@@ -18,7 +24,7 @@ function MapComponent({ coordsObj, zoom }) {
   const map = useMap();
   useEffect(() => {
     if (coordsObj?.mapCenter) {
-      map.setView(coordsObj.mapCenter, zoom);
+      map.flyTo(coordsObj.mapCenter, zoom);
     }
   }, [coordsObj]);
 
@@ -26,11 +32,36 @@ function MapComponent({ coordsObj, zoom }) {
     <>
       {coordsObj.coords.map((el, ind) => (
         <Marker key={ind} position={[el.lat, el.lon]}>
-          {el?.popup && <Popup>{el.popup}</Popup>}
+          <Popup>
+            {el?.popup
+              ? el.popup
+              : `Lat: ${el.lat.toFixed(4)}, Lng: ${el.lon.toFixed(4)}`}
+          </Popup>
         </Marker>
       ))}
     </>
   );
+}
+
+function MouseTracker() {
+  const [pos, setPos] = useState(null);
+
+  useMapEvents({
+    mousemove(e) {
+      setPos(e.latlng);
+    },
+  });
+
+  return pos ? (
+    <div
+      className="absolute start-4 bottom-4 bg-white px-2 py-1 rounded-sm z-50 text-gray-500 text-xs shadow-lg "
+      style={{
+        zIndex: 1000,
+      }}
+    >
+      Lat: {pos.lat.toFixed(4)}, Lng: {pos.lng.toFixed(4)}
+    </div>
+  ) : null;
 }
 
 export default function Map({
@@ -42,6 +73,7 @@ export default function Map({
     <div className="h-96 z-40">
       <MapContainer
         zoom={zoom}
+        onMou
         scrollWheelZoom={true}
         center={initCenter}
         style={{ height: "100%", width: "100%" }}
@@ -50,6 +82,7 @@ export default function Map({
           attribution="&copy; OpenStreetMap contributors"
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
+        <MouseTracker />
         {coordsObj && <MapComponent coordsObj={coordsObj} zoom={zoom} />}
       </MapContainer>
     </div>
