@@ -2,7 +2,7 @@ from fastapi import APIRouter, UploadFile, BackgroundTasks, Query, Response
 from pydantic_extra_types.coordinate import Latitude, Longitude
 from typing import Annotated
 from src.functions import (
-    convert_stream_to_traces_list,
+    convert_stream_to_list,
     read_bytes_to_stream,
     validate_stream,
     compute_distance_km,
@@ -34,7 +34,7 @@ async def upload_seismic_file(file: UploadFile) -> list:
     validate_stream(stream)
 
     logger.info("Converting stream to list of traces dictionaries")
-    return convert_stream_to_traces_list(stream)
+    return convert_stream_to_list(stream)
 
 
 @router.get("/calculate-distance")

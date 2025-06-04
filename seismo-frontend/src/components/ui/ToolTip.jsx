@@ -20,7 +20,7 @@ export default function ToolTip({
     toolTipPositionMapping["top-center"];
 
   const tooltipClass = `
-    absolute z-10 w-60 rounded-md bg-base-300 p-2 text-sm text-white/60 text-center
+    absolute z-50 w-max max-w-60 rounded-md bg-base-300 p-2 text-sm text-white/60 text-center
     hidden transition-all duration-300 border-1 border-white/5
     ${positionClass}
     group-hover:inline-block

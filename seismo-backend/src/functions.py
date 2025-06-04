@@ -55,27 +55,6 @@ def validate_stream(stream: Stream) -> None:
             RequestHandler.send_error(error_message, status_code=404)
 
 
-def convert_stream_to_traces_list(stream: Stream) -> list[dict]:
-    """Extract the data from the mseed file into a list of traces (dictionaries)"""
-    traces_data_list = []
-    for tr in stream.traces:
-        trace_stats = tr.stats
-        trace_params = TraceParams(
-            ydata=tr.data.tolist(),
-            xdata=tr.times().tolist(),
-            stats=TraceStats(
-                station=trace_stats.station,
-                component=trace_stats.component,
-                start_date=trace_stats.starttime.date,
-                start_time=trace_stats.starttime.time,
-                sampling_rate=trace_stats.sampling_rate,
-                npts=trace_stats.npts,
-            ),
-        )
-        traces_data_list.append(trace_params.model_dump())
-    return traces_data_list
-
-
 def compute_distance_km(lat1: float, lon1: float, lat2: float, lon2: float) -> tuple:
     """Calculates the distance in kilometers and azimuth between two geographic points."""
     try:
@@ -101,7 +80,7 @@ def write_txt_to_file(data: list | dict, path: Path) -> None:
 
 def write_mseed_to_file(data: list, path: Path) -> None:
     """Helper function to write miniseed data to a file."""
-    stream = convert_traces_to_stream(data)
+    stream = convert_list_to_stream(data)
     stream.write(path)
 
 
@@ -123,25 +102,59 @@ def get_record_name(stream: Stream) -> str:
     return rec_name
 
 
-def convert_traces_to_stream(trace_list: list) -> Stream:
-    """Construct a Stream object from the list of traces"""
-    traces = []
-    for tr_dict in trace_list:
-        trace_header = tr_dict["stats"]
-        logger.info(trace_header)
-        trace_header["starttime"] = UTCDateTime(
-            trace_header["start_date"] + " " + trace_header["start_time"]
-        )
-        trace = Trace(data=np.array(tr_dict["ydata"]), header=trace_header)
-        traces.append(trace)
-    return Stream(traces=traces)
+def convert_stream_to_list(stream: Stream) -> list[dict]:
+    """Extract the data from the mseed file into a list of dicts (trace dicts)"""
+    trace_dict_list = []
+    for trace in stream.traces:
+        tr_dict = convert_trace_to_dict(trace)
+        trace_dict_list.append(tr_dict)
+    return trace_dict_list
+
+
+def convert_list_to_stream(trace_dict_list: list) -> Stream:
+    """Construct a Stream object from the list of dicts (trace dicts)"""
+    trace_list = []
+    for tr_dict in trace_dict_list:
+        trace = convert_dict_to_trace(tr_dict)
+        trace_list.append(trace)
+    return Stream(traces=trace_list)
+
+
+def convert_dict_to_trace(trace_dict: dict) -> Trace:
+    """Construct a Trace object from the trace dict"""
+    trace_header = trace_dict["stats"].copy()
+
+    start_date = trace_header.get("start_date", "1970-01-01")
+    start_time = trace_header.get("start_time", "00:00:00")
+    trace_header["starttime"] = UTCDateTime(f"{start_date} {start_time}")
+
+    # Remove these (automatically calculated)
+    trace_header.pop("npts", None)
+    trace_header.pop("delta", None)
+    trace_header.pop("endtime", None)
+
+    # get the component that the user provided in the frontend
+    # and set it as the last character of the channel
+    trace_header["channel"] = trace_header["channel"][0:-1] + trace_header["component"]
+
+    return Trace(data=np.array(trace_dict["ydata"]), header=trace_header)
+
+
+def convert_trace_to_dict(trace: Trace) -> dict:
+    """Construct a trace dict from a Trace object"""
+    trace_params = TraceParams(
+        ydata=trace.data.tolist(),
+        xdata=trace.times().tolist(),
+        stats=TraceStats(**trace.stats),
+    )
+    return trace_params.model_dump()
 
 
 def trim_trace(trim_params: TrimParams) -> list[dict]:
     """Trim a single trace based on the given parameters."""
     try:
         trim_params_dict = trim_params.model_dump()
-        st_processed = convert_traces_to_stream(trim_params_dict["traces"])
+        st_processed = convert_list_to_stream(trim_params_dict["traces"])
         starttime = st_processed.traces[0].stats.starttime
         st_processed.trim(
             starttime=starttime + trim_params_dict["options"]["trim_start"],
@@ -150,14 +163,14 @@ def trim_trace(trim_params: TrimParams) -> list[dict]:
     except Exception as e:
         error_message = f"Cannot trim the waveforms: {str(e)}"
         RequestHandler.send_error(error_message, status_code=500)
-    return convert_stream_to_traces_list(st_processed)
+    return convert_stream_to_list(st_processed)
 
 
 def taper_trace(taper_params: TaperParams) -> list[dict]:
     """taper a single trace based on the given parameters."""
     try:
         taper_params_dict = taper_params.model_dump()
-        st_processed = convert_traces_to_stream(taper_params_dict["traces"])
+        st_processed = convert_list_to_stream(taper_params_dict["traces"])
         st_processed.taper(
             None,
             type=taper_params_dict["options"]["taper_type"],
@@ -167,28 +180,28 @@ def taper_trace(taper_params: TaperParams) -> list[dict]:
     except Exception as e:
         error_message = f"Cannot taper the waveforms: {str(e)}"
         RequestHandler.send_error(error_message, status_code=500)
-    return convert_stream_to_traces_list(st_processed)
+    return convert_stream_to_list(st_processed)
 
 
 def detrend_trace(detrend_params: DetrendParams) -> list[dict]:
     """detrend a single trace based on the given parameters."""
     try:
         detrend_params_dict = detrend_params.model_dump()
-        st_processed = convert_traces_to_stream(detrend_params_dict["traces"])
+        st_processed = convert_list_to_stream(detrend_params_dict["traces"])
         st_processed.detrend(
             type=detrend_params_dict["options"]["detrend_type"],
         )
     except Exception as e:
         error_message = f"Cannot detrend the waveforms: {str(e)}"
         RequestHandler.send_error(error_message, status_code=500)
-    return convert_stream_to_traces_list(st_processed)
+    return convert_stream_to_list(st_processed)
 
 
 def filter_trace(filter_params: FilterParams) -> list[dict]:
     """filter a single trace based on the given parameters."""
     try:
         filter_params_dict = filter_params.model_dump()
-        st_processed = convert_traces_to_stream(filter_params_dict["traces"])
+        st_processed = convert_list_to_stream(filter_params_dict["traces"])
         if (
             filter_params_dict["options"]["freq_min"] is None
             and filter_params_dict["options"]["freq_max"] is not None
@@ -215,7 +228,7 @@ def filter_trace(filter_params: FilterParams) -> list[dict]:
     except Exception as e:
         error_message = f"Cannot filter the waveforms: {str(e)}"
         RequestHandler.send_error(error_message, status_code=500)
-    return convert_stream_to_traces_list(st_processed)
+    return convert_stream_to_list(st_processed)
 
 
 def compute_fourier_spectra(fourier_params: FourierParams) -> list[dict]:

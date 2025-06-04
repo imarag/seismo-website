@@ -462,16 +462,19 @@ function MainMenu({
   );
 }
 
-function Graphs({ traces, fourierData }) {
+function Graphs({ traces }) {
   return (
     <>
       {traces.map((tr, ind) => (
-        <div key={tr.trace_id} className="h-1/3">
+        <div key={tr.trace_id}>
           <LineGraph
             xData={traces.length !== 0 ? [tr["xdata"]] : []}
             yData={traces.length !== 0 ? [tr["ydata"]] : []}
-            graphTitle=""
+            height={150}
             showLegend={false}
+            legendTitle={[`Component: ${tr["stats"]["component"]}`]}
+            showGraphTitle={ind === 0}
+            graphTitle={""}
           />
         </div>
       ))}

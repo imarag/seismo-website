@@ -21,6 +21,8 @@ import { HiOutlineUpload } from "react-icons/hi";
 import { BsDatabaseDown } from "react-icons/bs";
 import { TbFileDownload } from "react-icons/tb";
 import { BsFillQuestionCircleFill } from "react-icons/bs";
+import { FaUpload } from "react-icons/fa6";
+import { FaCheckCircle } from "react-icons/fa";
 
 function TraceInfoMenu({
   setShowMessage,
@@ -34,7 +36,8 @@ function TraceInfoMenu({
   const [currentUpdateIndex, setCurrentUpdateIndex] = useState(null);
   // create a new state that will temporarely store the trace stats
   const [updateTraces, setUpdateTraces] = useState(traces);
-
+  const [traceDataFileResult, setTraceDataFileResult] = useState(null);
+  const uploadDataSamplesRef = useRef();
   const trace = updateTraces.find((tr) => tr.trace_id === traceId);
 
   async function handleFormInputChange(curr_trace_id, param, value) {
@@ -48,11 +51,13 @@ function TraceInfoMenu({
     setUpdateTraces(newTraces);
   }
 
-  async function handleUpdateHeader() {
-    const { resData: traceStats, error } = await apiRequest({
-      url: fastapiEndpoints["UPDATE-TRACE-HEADER"],
+  async function handleUpdateHeader(traceId) {
+    const traceObj = updateTraces.find((tr) => tr.trace_id === traceId);
+
+    const { resData: updatedTraceObj, error } = await apiRequest({
+      url: fastapiEndpoints["UPDATE-TRACE"],
       method: "post",
-      requestData: trace.stats,
+      requestData: traceObj,
       setShowMessage: setShowMessage,
       setLoading: setLoading,
       successMessage: "Your header has been updated!",
@@ -65,7 +70,7 @@ function TraceInfoMenu({
 
     const updatedTraces = traces.map((tr) => {
       if (tr.trace_id === traceId) {
-        return { ...tr, stats: traceStats };
+        return updatedTraceObj;
       } else {
         return tr;
       }
@@ -74,90 +79,194 @@ function TraceInfoMenu({
     setUpdateTraces(updatedTraces);
   }
 
+  async function handleAddDataSamples(e) {
+    setTraceDataFileResult(null);
+    const formData = new FormData();
+    formData.append("file", e.target.files[0]);
+
+    const { resData: dataSamples, error } = await apiRequest({
+      url: fastapiEndpoints["UPLOAD-TRACE-DATA-SAMPLES"],
+      method: "post",
+      requestData: formData,
+      setShowMessage: setShowMessage,
+      setLoading: setLoading,
+      successMessage: "Your data samples has been uploaded succesfully!",
+      errorMessage: "Cannot upload the file. Please try again later.",
+    });
+
+    if (error) {
+      return;
+    }
+
+    let newTraces = updateTraces.map((tr, i) => {
+      if (tr.trace_id === traceId) {
+        return { ...tr, ydata: dataSamples };
+      } else {
+        return tr;
+      }
+    });
+    setUpdateTraces(newTraces);
+    setTraceDataFileResult(`Sample data uploaded succesfully!`);
+  }
+
+  function handleFileUpload(e) {
+    e.preventDefault();
+    uploadDataSamplesRef.current.click();
+  }
+
   return (
-    <form>
-      <div className="flex flex-col pt-10 pb-6 px-4 items-stretch gap-1 absolute top-0 end-4 bg-base-200 border border-neutral-500/20 shadow rounded z-50 max-h-80">
-        <div className="absolute top-1 start-2">
-          <Button
-            style="ghost"
-            size="small"
-            onClick={() => setActivatedMenuIndex(null)}
-            type="button"
-          >
-            <IoMdClose />
-          </Button>
-        </div>
-        <div className="absolute top-2 end-4">
+    <div className="pt-8 pb-4 px-4 absolute top-0 end-4 bg-base-200 border border-neutral-500/20 shadow rounded z-50 w-64">
+      <Button
+        style="ghost"
+        size="small"
+        onClick={() => setActivatedMenuIndex(null)}
+        type="button"
+        className="absolute top-1 start-2"
+      >
+        <Symbol className="size-4" IconComponent={IoMdClose} />
+      </Button>
+      <div className="text-xs space-y-2 py-2">
+        <h3 className="flex items-center justify-between">
+          <span className="font-semibold">TRACE HEADER</span>
           <ToolTip
             toolTipPosition="bottom-left"
-            toolTipText={`Use the menu to view header details of the selected trace. Click the pencil icon next to any editable field to make changes (fields marked with an asterisk * are read-only). Don’t forget to click the 'Update header' button to save your changes.`}
+            toolTipText={`Use the trace header section to view header details of the selected trace. Click the pencil icon next to any editable field to make changes (fields marked with an asterisk * are read-only). Don’t forget to click the 'Update trace' button to save your changes.`}
           >
-            <Symbol IconComponent={BsFillQuestionCircleFill} />
+            <Symbol
+              className="size-3"
+              IconComponent={BsFillQuestionCircleFill}
+            />
           </ToolTip>
-        </div>
-        <div className="flex flex-col items-stretch text-xs overflow-scroll">
+        </h3>
+        <hr className="border-neutral-500/50 w-full" />
+        <div className="max-h-30 bg-base-100 px-2 overflow-y-scroll">
           {traceHeaderParams.map((obj) => (
-            <div key={obj.id}>
+            <div key={obj.id} className="flex items-center gap-2 my-1">
               <Label htmlFor={obj.id} className="font-semibold">
-                {obj.label}
+                {obj.label}:
               </Label>
-              <div className="flex flex-row justify-between items-center">
-                {currentUpdateIndex === obj.id ? (
-                  <Input
-                    {...obj}
-                    value={trace.stats[obj.id]}
-                    onChange={(e) =>
-                      handleFormInputChange(
-                        trace.trace_id,
-                        obj.id,
-                        e.target.value
-                      )
-                    }
-                    size="small"
-                    className="w-40"
-                  />
-                ) : (
-                  <p className="w-40 font-light">{trace.stats[obj.id]}</p>
-                )}
-                {!obj.readOnly &&
-                  (currentUpdateIndex === obj.id ? (
+              {currentUpdateIndex === obj.id ? (
+                <Input
+                  {...obj}
+                  value={trace.stats[obj.id]}
+                  onChange={(e) =>
+                    handleFormInputChange(
+                      trace.trace_id,
+                      obj.id,
+                      e.target.value
+                    )
+                  }
+                  size="extra-small"
+                />
+              ) : (
+                <p className="font-light">{trace.stats[obj.id]}</p>
+              )}
+              {!obj.readOnly &&
+                (currentUpdateIndex === obj.id ? (
+                  <div>
                     <Button
                       style="ghost"
                       size="extra-small"
                       type="button"
+                      className="ms-auto"
                       onClick={() => setCurrentUpdateIndex(null)}
                     >
                       <Symbol IconComponent={LiaUndoAltSolid} />
                     </Button>
-                  ) : (
+                  </div>
+                ) : (
+                  <div className="ms-auto">
                     <Button
                       style="ghost"
                       size="extra-small"
                       type="button"
+                      toolTipText={`modify '${obj.label}'`}
+                      toolTipPosition="left-center"
                       onClick={() => setCurrentUpdateIndex(obj.id)}
                     >
                       <Symbol IconComponent={MdEdit} />
                     </Button>
-                  ))}
-              </div>
-              <hr className="border-neutral-500/50 my-2 w-full" />
+                  </div>
+                ))}
             </div>
           ))}
         </div>
-        <p className="text-xs text-center my-1">
+        <p className="text-xs text-center">
           Elements with &quot;*&quot; are readonly
         </p>
+      </div>
+      <div className="text-xs space-y-2">
+        <h3 className="flex items-center justify-between">
+          <span className="font-semibold">TRACE DATA SAMPLES</span>
+          <ToolTip
+            toolTipPosition="bottom-left"
+            toolTipText={`Use the 'Upload File' option to upload a .csv or .xlsx file with new sample data and replace the current trace data. Don’t forget to click the 'Update trace' button to save your changes.`}
+          >
+            <Symbol
+              className="size-3"
+              IconComponent={BsFillQuestionCircleFill}
+            />
+          </ToolTip>
+        </h3>
+        <hr className="border-neutral-500/50 w-full" />
+        <input
+          ref={uploadDataSamplesRef}
+          name="file"
+          type="file"
+          onChange={handleAddDataSamples}
+          hidden
+        />
+        <div className="space-y-2 my-2">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-1">
+              <span>Update trace data</span>
+              <ToolTip
+                toolTipPosition="bottom-left"
+                toolTipText={`Upload a .csv or .xlsx file containing trace data samples (float values) in a single column. If the file has multiple columns, only the first one will be used. Any headers or non-numeric text will be treated as NaN and replaced with zeros.`}
+              >
+                <Symbol
+                  className="size-3"
+                  IconComponent={BsFillQuestionCircleFill}
+                />
+              </ToolTip>
+            </div>
+            <Button
+              type="button"
+              style="primary"
+              loading={loading}
+              outline={true}
+              size="extra-small"
+              onClick={handleFileUpload}
+              className="self-center"
+            >
+              <Symbol IconComponent={FaUpload} />
+              Upload file
+            </Button>
+          </div>
+        </div>
+        {traceDataFileResult && (
+          <p className="flex justify-center items-center gap-2 bg-base-100 p-4">
+            {traceDataFileResult}
+            <Symbol
+              IconComponent={FaCheckCircle}
+              className="text-primary size-5"
+            />
+          </p>
+        )}
+      </div>
+      <div className="mt-4">
         <Button
           type="button"
           style="primary"
           loading={loading}
           size="extra-small"
-          onClick={handleUpdateHeader}
+          className="w-full block"
+          onClick={() => handleUpdateHeader(traceId)}
         >
-          Update header
+          Update trace
         </Button>
       </div>
-    </form>
+    </div>
   );
 }
 
@@ -215,7 +324,7 @@ function TraceGraphOptionMenu({
         style="ghost"
         size="small"
         onClick={() => handleOptionsMenuButtonClick(currentMenuIndex)}
-        toolTipText={`Open the trace header menu. Feel free to update the fields.`}
+        toolTipText={`Open the trace menu. Feel free to update the trace header and data samples.`}
         toolTipPosition="bottom-left"
       >
         <Symbol IconComponent={PiGearLight} />
@@ -294,7 +403,7 @@ function Graphs({
   return (
     <div className="flex-grow overflow-scroll">
       {traces.map((tr, ind) => (
-        <div key={tr.trace_id} className="h-40 relative">
+        <div key={tr.trace_id} className="relative">
           <TraceGraphOptionMenu
             trace={tr}
             handleOptionsMenuButtonClick={handleOptionsMenuButtonClick}
@@ -316,9 +425,10 @@ function Graphs({
           <LineGraph
             xData={[tr["xdata"]]}
             yData={[tr["ydata"]]}
-            height="220px"
+            height={150}
             legendTitle={[`Component: ${tr["stats"]["component"]}`]}
             showGraphTitle={ind === 0}
+            zoomOnScroll={false}
             graphTitle={""}
           />
         </div>
@@ -349,18 +459,41 @@ function StartUploadFile({ loading, handleFileUpload }) {
   );
 }
 
-function QuickTraceInfo({ traces }) {
+function TracesFunctions({ traces, setTraces, setShowMessage, setLoading }) {
   const [showQuickInfo, setShowQuickInfo] = useState(false);
+
+  async function handleAddTrace() {
+    const { resData: traceData, error } = await apiRequest({
+      url: fastapiEndpoints["GET-DEFAULT-TRACE"],
+      method: "get",
+      setShowMessage: setShowMessage,
+      setLoading: setLoading,
+      successMessage:
+        "A default trace has been added. Feel free to update its contents.",
+      errorMessage: "Cannot add the trace. Please try again later.",
+    });
+
+    if (error) {
+      return;
+    }
+    setTraces([traceData, ...traces]);
+  }
+
   return (
-    <div className="my-4">
-      <Button
-        style="primary"
-        outline
-        size="extra-small"
-        onClick={() => setShowQuickInfo((prev) => !prev)}
-      >
-        {showQuickInfo ? "Hide" : "View"} traces info
-      </Button>
+    <div className="mb-4">
+      <div className="flex items-center gap-2">
+        <Button style="primary" size="extra-small" onClick={handleAddTrace}>
+          Add trace +
+        </Button>
+        <Button
+          style="primary"
+          outline={true}
+          size="extra-small"
+          onClick={() => setShowQuickInfo((prev) => !prev)}
+        >
+          {showQuickInfo ? "Hide" : "View"} traces info
+        </Button>
+      </div>
       {showQuickInfo && (
         <div className="text-sm text-base-content/50 space-y-2 my-2 flex-grow-0 flex-shrink-0">
           <div>
@@ -413,7 +546,12 @@ function MainContent({
           <div className="absolute start-1/2 -translate-x-1/2">
             {loading && <Spinner />}
           </div>
-          <QuickTraceInfo traces={traces} />
+          <TracesFunctions
+            traces={traces}
+            setTraces={setTraces}
+            setShowMessage={setShowMessage}
+            setLoading={setLoading}
+          />
           <Graphs
             setShowMessage={setShowMessage}
             setLoading={setLoading}

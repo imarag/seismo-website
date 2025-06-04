@@ -5,6 +5,7 @@ from pathlib import Path
 import datetime
 from internals.models import TraceParams, TraceStats
 from src.utils import RequestHandler
+from src.functions import convert_dict_to_trace, convert_trace_to_dict
 import numpy as np
 from obspy.core import Stream, Trace
 from typing import Annotated
@@ -58,64 +59,108 @@ def file_to_pandas_dataframe(upload_file, skip_rows: int) -> pd.DataFrame:
     return df
 
 
-@router.post("/add-trace")
-def add_trace(
-    skip_rows: Annotated[int, Form()],
-    column_index: Annotated[int, Form()],
-    station: Annotated[str, Form()],
-    component: Annotated[str, Form()],
-    start_date: Annotated[datetime.date, Form()],
-    start_time: Annotated[datetime.time, Form()],
-    sampling_rate: Annotated[float, Form()],
-    file: UploadFile,
-):
+# @router.post("/add-trace")
+# def add_trace(
+#     skip_rows: Annotated[int, Form()],
+#     column_index: Annotated[int, Form()],
+#     station: Annotated[str, Form()],
+#     component: Annotated[str, Form()],
+#     start_date: Annotated[datetime.date, Form()],
+#     start_time: Annotated[datetime.time, Form()],
+#     sampling_rate: Annotated[float, Form()],
+#     file: UploadFile,
+# ):
 
-    logger.info("Reading input file into pandas dataframe")
+#     logger.info("Reading input file into pandas dataframe")
+#     try:
+#         df = file_to_pandas_dataframe(file, skip_rows)
+#     except Exception as e:
+#         RequestHandler.send_error(f"Cannot read the file: {str(e)}", 500)
+
+#     logger.info("Validating input file params")
+#     validate_input_file_params(df, skip_rows, column_index)
+
+#     logger.info("Validating input file params")
+#     validate_seismic_parameters(component)
+
+#     logger.info("Getting the index column of the dataframe")
+#     ser = df.iloc[:, column_index - 1].replace(np.nan, None)
+#     ser_list = ser.tolist()
+
+#     logger.info("Transforming into a trace params model")
+#     npts = len(df)
+#     total_duration_sec = npts / sampling_rate
+
+#     trace_stats = TraceStats(
+#         start_date=start_date,
+#         start_time=start_time,
+#         station=station,
+#         sampling_rate=sampling_rate,
+#         npts=npts,
+#         component=component,
+#     )
+#     trace_params = TraceParams(
+#         ydata=ser_list,
+#         xdata=list(np.linspace(0, total_duration_sec, npts)),
+#         stats=trace_stats,
+#     )
+
+#     logger.info("Create a stream object with a single trace to validate the input data")
+#     # Convert the data to a stream object with a single trace to validate the data
+#     # if this runs ok then the trace data are ok
+#     try:
+#         Stream(traces=[Trace(data=ser.to_numpy(), header=trace_stats.model_dump())])
+#     except Exception as e:
+#         RequestHandler.send_error(f"Cannot read the file: {str(e)}", 500)
+
+#     return trace_params
+
+
+@router.post("/update-trace")
+async def update_trace(request: Request):
+    trace_dict = await request.json()
+    trace_object = convert_dict_to_trace(trace_dict)
+    return convert_trace_to_dict(trace_object)
+
+
+@router.get("/get-default-trace")
+async def get_default_trace():
+    return TraceParams()
+
+
+@router.post("/upload-trace-data-samples")
+async def upload_trace_data_samples(file: UploadFile):
+    """Uploads a csv/excel file and returns a list of data samples numbers."""
+    logger.info("Reading the input csv or excel file")
+
+    spooled_file = file.file
+    if file.filename:
+        file_name = Path(file.filename)
+        file_suffix = file_name.suffix.lower()
+    else:
+        RequestHandler.send_error(f"Cannot upload the file", 500)
+
     try:
-        df = file_to_pandas_dataframe(file, skip_rows)
+        if file_suffix == SupportedUploadFileTypes.CSV.value:
+            df = pd.read_csv(spooled_file)
+        elif file_suffix == SupportedUploadFileTypes.XLSX.value:
+            df = pd.read_excel(spooled_file)
+        else:
+            RequestHandler.send_error("Unsupported file format", 400)
     except Exception as e:
         RequestHandler.send_error(f"Cannot read the file: {str(e)}", 500)
 
-    logger.info("Validating input file params")
-    validate_input_file_params(df, skip_rows, column_index)
+    if df.empty or len(df.columns) < 1:
+        RequestHandler.send_error("The input file is empty or invalid.", 400)
 
-    logger.info("Validating input file params")
-    validate_seismic_parameters(component)
+    if df.iloc[:, 0].dropna().empty:
+        RequestHandler.send_error(
+            "No valid numeric data found in the first column.", 400
+        )
 
-    logger.info("Getting the index column of the dataframe")
-    ser = df.iloc[:, column_index - 1].replace(np.nan, None)
-    ser_list = ser.tolist()
-
-    logger.info("Transforming into a trace params model")
-    npts = len(df)
-    total_duration_sec = npts / sampling_rate
-
-    trace_stats = TraceStats(
-        start_date=start_date,
-        start_time=start_time,
-        station=station,
-        sampling_rate=sampling_rate,
-        npts=npts,
-        component=component,
-    )
-    trace_params = TraceParams(
-        ydata=ser_list,
-        xdata=list(np.linspace(0, total_duration_sec, npts)),
-        stats=trace_stats,
+    first_column = df.iloc[:, 0]
+    first_column_edited = (
+        pd.to_numeric(first_column, errors="coerce").fillna(0).to_list()
     )
 
-    logger.info("Create a stream object with a single trace to validate the input data")
-    # Convert the data to a stream object with a single trace to validate the data
-    # if this runs ok then the trace data are ok
-    try:
-        Stream(traces=[Trace(data=ser.to_numpy(), header=trace_stats.model_dump())])
-    except Exception as e:
-        RequestHandler.send_error(f"Cannot read the file: {str(e)}", 500)
-
-    return trace_params
-
-
-@router.post("/update-trace-header")
-async def update_trace_header(request: Request):
-    stats = await request.json()
-    return TraceStats(**stats)
+    return first_column_edited

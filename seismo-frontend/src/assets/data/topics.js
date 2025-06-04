@@ -97,20 +97,19 @@ export const tools = [
   {
     id: 1,
     title: "Interactive Seismic File Editor",
-    subtitle: "Edit and explore seismic file headers and data.",
+    subtitle: "View, edit, and manage seismic trace data and headers.",
     description:
-      "Import seismic files to inspect, edit, and export trace header information and waveform data. Visualize traces in a chart, update metadata such as station codes and timing, and download individual traces or the entire file. A streamlined tool for managing seismic file contents with precision.",
+      "Import MiniSEED seismic files to explore, edit, and export both trace headers and waveform data. Visualize each trace in an interactive chart, update metadata such as station codes, timestamps, or network info, and make precise edits to individual trace data samples. Remove unnecessary traces or headers, then export the modified stream back to MiniSEED. A powerful tool for detailed seismic data management.",
     smallDescription:
-      "Import seismic files to view and edit headers and waveform data.",
+      "Import MiniSEED files to inspect and edit trace headers and data.",
     image_src: EditSeismicFileIcon,
     image_alt: "Interactive Seismic File Editor Icon",
     type: "tool",
     slug: "edit-seismic-file",
     completed: true,
     userGuide:
-      "Upload a seismic file to explore its contents. Use the 'Show Traces Info' button for a quick summary of each trace’s metadata. View the waveform of each trace in the interactive graphs. Above each trace, use the available buttons to download either the trace's header information or its data samples. You can also update the trace header using the 'Trace Info” menu or remove any unwanted traces entirely. Once you've finished editing the headers and removing unnecessary traces, export the updated stream in MiniSEED format by clicking the 'Download To MSEED' option.",
+      "Upload a MiniSEED seismic file to explore its contents. Click 'Show Traces Info' for a summary of each trace’s metadata. View trace waveforms in interactive plots and use the toolbar above each plot to download header info or data samples individually. Use the 'Trace Info' menu to edit trace headers or delete traces. Once your edits are complete, export the updated file in MiniSEED format using the 'Download to MSEED' option.",
   },
-
   {
     id: 2,
     title: "Geodesic Distance Calculator",

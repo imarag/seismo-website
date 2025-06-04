@@ -9,14 +9,16 @@ export const socialMediaInfo = [
 ]
 
 export const fastapiEndpoints = {
+    "UPLOAD-SEISMIC-FILE": `${serverUrl}/core/upload-seismic-file`,
     "CALCULATE-DISTANCE": `${serverUrl}/core/calculate-distance`,
     "TRIANGULATE-STATIONS": `${serverUrl}/core/triangulate-stations`,
-    "UPLOAD-SEISMIC-FILE": `${serverUrl}/core/upload-seismic-file`,
     "DOWNLOAD-TEST-FILE": `${serverUrl}/core/download-test-file`,
     "DOWNLOAD-FILE": `${serverUrl}/core/download-file`,
     "SAVE-ARRIVALS": `${serverUrl}/core/save-arrivals`,
+    "UPLOAD-TRACE-DATA-SAMPLES": `${serverUrl}/handle-seismic-traces/upload-trace-data-samples`,
     "ADD-TRACE": `${serverUrl}/handle-seismic-traces/add-trace`,
-    "UPDATE-TRACE-HEADER": `${serverUrl}/handle-seismic-traces/update-trace-header`,
+    "GET-DEFAULT-TRACE": `${serverUrl}/handle-seismic-traces/get-default-trace`,
+    "UPDATE-TRACE": `${serverUrl}/handle-seismic-traces/update-trace`,
     "TRIM-WAVEFORM": `${serverUrl}/signal-processing/trim`,
     "TAPER-WAVEFORM": `${serverUrl}/signal-processing/taper`,
     "DETREND-WAVEFORM": `${serverUrl}/signal-processing/detrend`,

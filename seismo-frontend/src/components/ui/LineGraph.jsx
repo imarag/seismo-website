@@ -1,9 +1,10 @@
-import { lazy } from "react";
+import { lazy, Suspense } from "react";
 
-const Plot = lazy(async () => {
-  let obj = await import("react-plotly.js");
-  return typeof obj.default === "function" ? obj : obj.default;
-});
+const Plot = lazy(() =>
+  import("react-plotly.js").then((mod) =>
+    typeof mod.default === "function" ? mod : { default: mod.default }
+  )
+);
 
 export default function LineGraph({
   onGraphClick = null,
@@ -18,8 +19,10 @@ export default function LineGraph({
   graphTitle = "My Title",
   shapes = [],
   annotations = [],
+  zoomOnScroll = true,
 }) {
-  let defaultLayout = {
+  const hasData = xData.length > 0 && yData.length > 0;
+  let layout = {
     title: {
       text: showGraphTitle ? graphTitle : "",
       font: {
@@ -37,58 +40,53 @@ export default function LineGraph({
       xanchor: "left",
       yanchor: "top",
     },
-    responsive: true,
-    paper_bgcolor: "rgba(0,0,0,0)", // Transparent background
-    plot_bgcolor: "rgba(0,0,0,0)", // Transparent plot area
+    height: height || 200,
     xaxis: {
       type: scale,
       showgrid: false,
       range:
-        scale === "log"
+        scale === "log" && hasData
           ? [
-              Math.log10(Math.min(...xData[0])),
+              Math.log10(Math.max(1e-10, Math.min(...xData[0]))),
               Math.log10(Math.max(...xData[0])),
             ]
-          : "autoscale",
+          : undefined,
     },
     yaxis: {
       type: scale,
       showgrid: false,
     },
-    shapes: shapes,
-    annotations: annotations,
+    showlegend: showLegend,
+    shapes,
+    annotations,
+    responsive: true,
+    paper_bgcolor: "rgba(0,0,0,0)", // Transparent background
+    plot_bgcolor: "rgba(0,0,0,0)", // Transparent plot area
   };
 
+  const config = {
+    responsive: true,
+    scrollZoom: zoomOnScroll,
+    displaylogo: false,
+  };
+
+  const data = yData.map((y, i) => ({
+    x: xData[i],
+    y: y,
+    type: "scatter",
+    mode: "lines",
+    name: legendTitle[i] || `Trace ${i + 1}`,
+  }));
+
   return (
-    <Plot
-      data={xData.map((el, ind) => ({
-        x: xData[ind],
-        y: yData[ind],
-        type: "line",
-        showlegend: showLegend,
-        name: legendTitle[ind],
-      }))}
-      layout={defaultLayout}
-      style={{
-        width: width ? width : "100%",
-        height: height ? height : "100%",
-      }}
-      useResizeHandler={true}
-      config={{
-        scrollZoom: true,
-        displaylogo: false,
-        modeBarButtonsToRemove: [
-          "zoom2d",
-          "zoomIn2d",
-          "zoomOut2d",
-          "pan2d",
-          "autoScale2d",
-          "toImage",
-          "lasso2d",
-          "select2d",
-        ],
-      }}
-      onClick={onGraphClick}
-    />
+    <Suspense fallback={<div>Loading graph...</div>}>
+      <Plot
+        style={{ width: "100%" }}
+        data={data}
+        layout={layout}
+        config={config}
+        onClick={onGraphClick}
+      />
+    </Suspense>
   );
 }

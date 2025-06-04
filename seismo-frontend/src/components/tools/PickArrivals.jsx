@@ -341,11 +341,11 @@ function Graphs({
   return (
     <>
       {traces.map((tr, ind) => (
-        <div key={tr.trace_id} className="h-1/3">
+        <div key={tr.trace_id}>
           <LineGraph
             xData={[tr["xdata"]]}
             yData={[tr["ydata"]]}
-            height="100%"
+            height={150}
             legendTitle={[`Component: ${tr["stats"]["component"]}`]}
             showGraphTitle={ind === 0}
             graphTitle={""}
@@ -449,7 +449,7 @@ export default function ArrivalsPickingPage() {
     if (error) {
       return;
     }
-
+    console.log(traces);
     setArrivals([]);
     setSelectedWave("P");
     setSelectedFilter("initial");
