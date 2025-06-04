@@ -4,6 +4,8 @@ import PageTitle from "../utils/PageTitle.astro";
 import PageSubTitle from "../utils/PageSubTitle.astro";
 import Collapse from "../ui/Collapse.astro";
 import DownloadTestMSEEDFile from "../utils/DownloadTestMSEEDFile.astro";
+import LinkTag from "../ui/LinkTag.astro";
+import Alert from "../ui/Alert.astro";
 
 import EditSeismicFile from "../tools/EditSeismicFile";
 import DistanceBetweenPoints from "../tools/DistanceBetweenPoints";
@@ -28,6 +30,16 @@ const { selectedTool } = Astro.props;
     <p>{selectedTool.userGuide}</p>
   </Collapse>
 </div>
+<Alert class="my-8">
+  Note: This toolset is part of a personal seismology project currently
+  maintained by a single developer. It's hosted on a free-tier server, so you
+  might occasionally experience delays or temporary issues. If the server
+  appears unresponsive, please wait a few seconds — it may be starting up (cold
+  start). If you spot any bugs, please feel free to <LinkTag
+    style="info"
+    href="/contact">contact me</LinkTag
+  >. Your feedback helps improve the tool — thank you for using it!
+</Alert>
 {selectedTool.slug !== "distance-between-points" && <DownloadTestMSEEDFile />}
 <div class="mt-24 space-y-8">
   {selectedTool.slug === "edit-seismic-file" && <EditSeismicFile client:only />}
