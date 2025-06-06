@@ -1,5 +1,5 @@
-// export const serverUrl = "/api"
-export const serverUrl = "http://127.0.0.1:8000/api"
+export const serverUrl = "/api"
+// export const serverUrl = "http://127.0.0.1:8000/api"
 // export const serverUrl = "https://seismo-website.onrender.com"
 
 export const socialMediaInfo = [
@@ -306,10 +306,10 @@ export const traceHeaderParams = [
     },
     {
         type: "number",
-        label: "Sampling rate *",
+        label: "Sampling rate",
         name: "sampling_rate",
         id: "sampling_rate",
-        readOnly: true
+        readOnly: false
     },
     {
         type: "number",

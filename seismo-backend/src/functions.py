@@ -136,7 +136,7 @@ def convert_dict_to_trace(trace_dict: dict) -> Trace:
     # get the component that the user provided in the frontend
     # and set it as the last character of the channel
     trace_header["channel"] = trace_header["channel"][0:-1] + trace_header["component"]
-
+    trace_header["sampling_rate"] = float(trace_header["sampling_rate"])
     return Trace(data=np.array(trace_dict["ydata"]), header=trace_header)
 
 

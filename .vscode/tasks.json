@@ -2,32 +2,37 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"type": "func",
-			"label": "func: host start",
-			"command": "host start",
-			"problemMatcher": "$func-python-watch",
-			"isBackground": true,
-			"dependsOn": "pip install (functions)",
-			"options": {
-				"cwd": "${workspaceFolder}/az-functions"
-			}
+			"label": "Run seismo frontend",
+			"type": "shell",
+			"command": "cd seismo-frontend;npm run dev",
+			"group": "build",
+			"problemMatcher": [],
+			"presentation": {
+				"echo": true,
+				"reveal": "never",
+				"panel": "new",
+				"clear": true,
+  				"focus": true
+			},
 		},
 		{
-			"label": "pip install (functions)",
+			"label": "Run seismo backend",
 			"type": "shell",
-			"osx": {
-				"command": "${config:azureFunctions.pythonVenv}/bin/python -m pip install -r requirements.txt"
-			},
-			"windows": {
-				"command": "${config:azureFunctions.pythonVenv}\\Scripts\\python -m pip install -r requirements.txt"
-			},
-			"linux": {
-				"command": "${config:azureFunctions.pythonVenv}/bin/python -m pip install -r requirements.txt"
-			},
+			"command": "cd seismo-backend;.venv/Scripts/activate;python main.py",
+			"group": "build",
 			"problemMatcher": [],
-			"options": {
-				"cwd": "${workspaceFolder}/az-functions"
+			"presentation": {
+				"echo": true,
+				"reveal": "never",
+				"panel": "new",
+				"clear": true,
+  				"focus": true
+			},
+		},
+		{
+			"label": "Start development servers",
+			"dependsOn": ["Run seismo frontend", "Run seismo backend"],
+			"runOptions": {"runOn": "folderOpen"}
 			}
-		}
 	]
 }

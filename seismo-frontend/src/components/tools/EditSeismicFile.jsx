@@ -12,15 +12,13 @@ import { fastapiEndpoints } from "../../assets/data/static";
 import ToolTip from "../ui/ToolTip";
 import { downloadURI } from "../../assets/utils/utility-functions";
 import { apiRequest } from "../../assets/utils/apiRequest";
-import { MdEdit } from "react-icons/md";
 import { LiaUndoAltSolid } from "react-icons/lia";
-import { MdOutlineFileDownload, MdDeleteOutline } from "react-icons/md";
+import { MdOutlineFileDownload, MdDeleteOutline, MdEdit } from "react-icons/md";
 import { PiGearLight } from "react-icons/pi";
 import { IoMdClose } from "react-icons/io";
 import { HiOutlineUpload } from "react-icons/hi";
-import { BsDatabaseDown } from "react-icons/bs";
 import { TbFileDownload } from "react-icons/tb";
-import { BsFillQuestionCircleFill } from "react-icons/bs";
+import { BsFillQuestionCircleFill, BsDatabaseDown } from "react-icons/bs";
 import { FaUpload } from "react-icons/fa6";
 import { FaCheckCircle } from "react-icons/fa";
 
@@ -245,7 +243,7 @@ function TraceInfoMenu({
           </div>
         </div>
         {traceDataFileResult && (
-          <p className="flex justify-center items-center gap-2 bg-base-100 p-4">
+          <p className="flex justify-center items-center gap-2 bg-base-100 py-2 px-4">
             {traceDataFileResult}
             <Symbol
               IconComponent={FaCheckCircle}
@@ -303,7 +301,7 @@ function MainMenu({ traces, handleFileUpload, loading, handleDownloadFile }) {
       <ToolTip
         className="ms-auto"
         toolTipPosition="top-left"
-        toolTipText={`Import a seismic file to explore its contents. You can edit the header of each trace, download the data, or delete any trace as needed.`}
+        toolTipText={`Import a seismic file to explore its contents. You can add a new trace, delete an existing one, edit its header metadata, or update its data samples. Feel free to download the trace's header information or its data samples as needed.`}
       >
         <Symbol IconComponent={BsFillQuestionCircleFill} />
       </ToolTip>
@@ -324,7 +322,7 @@ function TraceGraphOptionMenu({
         style="ghost"
         size="small"
         onClick={() => handleOptionsMenuButtonClick(currentMenuIndex)}
-        toolTipText={`Open the trace menu. Feel free to update the trace header and data samples.`}
+        toolTipText={`Open the trace menu. Feel free to update the trace header and/or its data samples.`}
         toolTipPosition="bottom-left"
       >
         <Symbol IconComponent={PiGearLight} />
@@ -358,7 +356,7 @@ function TraceGraphOptionMenu({
             trace.stats.record_name + "_data"
           )
         }
-        toolTipText={`Download the data values of the current trace in a json file format`}
+        toolTipText={`Download the data samples (values) of the current trace in a json file format`}
         toolTipPosition="bottom-left"
       >
         <Symbol IconComponent={BsDatabaseDown} />

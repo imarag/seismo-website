@@ -414,6 +414,12 @@ function MainMenu({
         </MenuDropdown>
         <MenuDropdown icon={<IoFilter />} label="Filter">
           <div className="flex flex-col items-stretch gap-2">
+            <ToolTip
+              toolTipText={`Fill only the left field to apply a highpass filter, fill only the right field to 
+                  apply a lowpass filter, fill both fields to apply a bandpass filter.`}
+            >
+              <Symbol IconComponent={BsFillQuestionCircleFill} />
+            </ToolTip>
             {filterProcessingParams.map((el) => {
               return (
                 <div key={el.id}>
