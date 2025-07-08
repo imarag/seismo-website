@@ -1,0 +1,15 @@
+---
+import Section from "../components/utils/Section.astro";
+import Container from "../components/utils/Container.astro";
+import MainLayout from "../layouts/MainLayout.astro";
+import PlaygroundPage from "../components/pages/PlaygroundPage.astro";
+const pageTitle = "Playground";
+---
+
+<MainLayout pageTitle={pageTitle}>
+  <Section>
+    <Container>
+      <PlaygroundPage />
+    </Container>
+  </Section>
+</MainLayout>

@@ -1,0 +1,16 @@
+---
+import PageTitle from "../utils/PageTitle.astro";
+import PageSubTitle from "../utils/PageSubTitle.astro";
+import EyeBrowText from "../utils/EyeBrowText.astro";
+import PlaygroundTool from "../tools/PlaygroundTool.jsx";
+---
+
+<div class="text-center">
+  <EyeBrowText text="Interactive Seismology Tool" />
+</div>
+<PageTitle class="text-center" text={"Seismogram Playground"} />
+<PageSubTitle
+  class="text-center"
+  text={"Upload, visualize, filter, and analyze seismic waveforms in real time. A hands-on space to explore signals, pick arrivals, and understand how seismic data behaves."}
+/>
+<PlaygroundTool client:only />
