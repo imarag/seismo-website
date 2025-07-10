@@ -1,10 +1,11 @@
-from pydantic import BaseModel, Field, model_validator, computed_field
-from typing import Literal
-from typing_extensions import Self
-import uuid
 import datetime
+import uuid
+from typing import Literal
+
 import numpy as np
 from obspy.core import Trace
+from pydantic import BaseModel, Field, computed_field, model_validator
+from typing_extensions import Self
 
 
 class TraceStats(BaseModel):
@@ -33,8 +34,7 @@ class TraceStats(BaseModel):
         """Extract the component from the channel (the last character of the channel attribute)"""
         if self.channel:
             return self.channel[-1]
-        else:
-            return "C"
+        return "C"
 
     @computed_field
     def start_date(self) -> datetime.date:
@@ -137,7 +137,6 @@ class FilterOptions(BaseModel):
 
     @model_validator(mode="after")
     def verify_filter_limits(self) -> Self:
-
         if (
             self.freq_min is not None
             and self.freq_max is not None
