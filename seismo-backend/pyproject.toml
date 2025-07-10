@@ -1,0 +1,95 @@
+[tool.app_settings]
+log_level = "INFO"                                       # Options: DEBUG, INFO, WARNING, ERROR, CRITICAL
+log_format = "%(asctime)s — %(levelname)s — %(message)s"
+log_datefmt = "%Y-%m-%d %H:%M:%S"
+sample_mseed_file_name = "seismic-record.mseed"
+mseed_max_npts_allowed = 500000
+
+[tool.ruff.lint]
+preview = true
+select = [
+    # pycodestyle (whitespace, formatting, etc.)
+    "E",
+    "W",
+
+    # Pyflakes (undefined names, unused imports, etc.)
+    "F",
+
+    # pyupgrade (suggest modern Python features)
+    "UP",
+
+    # flake8-bugbear (likely bugs and design problems)
+    "B",
+
+    # flake8-simplify (simplify Python code)
+    "SIM",
+
+    # isort (import sorting)
+    "I",
+
+    # pep8-naming (naming conventions)
+    "N",
+
+    # eradicate (detect commented-out code)
+    "ERA",
+
+    # fastapi-specific plugin rules
+    "FAST",
+
+    # function annotations (missing or invalid annotations)
+    "ANN",
+
+    # bandit (security issues)
+    "S",
+
+    # flake8-annotations-complexity
+    "A",
+
+    # flake8-comprehensions
+    "C4",
+
+    # flake8-errmsg (string literal in exception messages)
+    "EM",
+
+    # flake8-implicit-str-concat
+    "ISC",
+
+    # flake8-logging-format
+    "LOG",
+
+    # flake8-logging (general logging issues)
+    "G",
+
+    # flake8-quotes (quote style consistency)
+    "Q",
+
+    # flake8-return (return-related issues)
+    "RET",
+
+    # flake8-todos (TODO comment management)
+    "TD",
+
+    # flake8-arguments (argument-related issues)
+    "ARG",
+
+    # flake8-pathlib (pathlib usage suggestions)
+    "PTH",
+
+    # pandas-vet (pandas best practices)
+    "PD",
+
+    # flake8-perf (performance-related suggestions)
+    "PERF",
+
+    # pylint compatibility (general pylint rules)
+    "PL",
+]
+
+[tool.ruff.format]
+# Prefer single quotes over double quotes.
+quote-style = "double"
+# Use tabs instead of 4 space indentation.
+indent-style = "space"
+# Enable reformatting of code snippets in docstrings.
+docstring-code-format = true
+skip-magic-trailing-comma = true

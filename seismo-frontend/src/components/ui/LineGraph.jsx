@@ -40,7 +40,7 @@ export default function LineGraph({
       xanchor: "left",
       yanchor: "top",
     },
-    height: height || 200,
+    autosize: true,
     xaxis: {
       type: scale,
       showgrid: false,
@@ -81,7 +81,7 @@ export default function LineGraph({
   return (
     <Suspense fallback={<div>Loading graph...</div>}>
       <Plot
-        style={{ width: "100%" }}
+        style={{ width: "100%", height: "100%" }}
         data={data}
         layout={layout}
         config={config}

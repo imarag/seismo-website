@@ -1,5 +1,5 @@
-export const serverUrl = "/api"
-// export const serverUrl = "http://127.0.0.1:8000/api"
+// export const serverUrl = "/api"
+export const serverUrl = "http://127.0.0.1:8000/api"
 // export const serverUrl = "https://seismo-website.onrender.com"
 
 export const socialMediaInfo = [
@@ -15,6 +15,7 @@ export const fastapiEndpoints = {
     "DOWNLOAD-TEST-FILE": `${serverUrl}/core/download-test-file`,
     "DOWNLOAD-FILE": `${serverUrl}/core/download-file`,
     "SAVE-ARRIVALS": `${serverUrl}/core/save-arrivals`,
+    "GET-SAMPLE-TRACES": `${serverUrl}/core/get-sample-traces`,
     "UPLOAD-TRACE-DATA-SAMPLES": `${serverUrl}/handle-seismic-traces/upload-trace-data-samples`,
     "ADD-TRACE": `${serverUrl}/handle-seismic-traces/add-trace`,
     "GET-DEFAULT-TRACE": `${serverUrl}/handle-seismic-traces/get-default-trace`,

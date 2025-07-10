@@ -1,20 +1,22 @@
-from obspy.core import read, UTCDateTime, Trace, Stream
-from internals.config import Settings
-import numpy as np
-from pathlib import Path
 import json
-from src.utils import RequestHandler
+from pathlib import Path
+
+import numpy as np
+from obspy.core import Stream, Trace, UTCDateTime, read
 from obspy.geodetics import gps2dist_azimuth
+
+from internals.config import Settings
 from internals.models import (
-    TraceStats,
-    TraceParams,
-    TrimParams,
-    TaperParams,
     DetrendParams,
     FilterParams,
     FourierParams,
     HVSRParams,
+    TaperParams,
+    TraceParams,
+    TraceStats,
+    TrimParams,
 )
+from src.utils import RequestHandler
 
 settings = Settings()
 logger = settings.logger
@@ -24,6 +26,16 @@ def read_bytes_to_stream(seismic_file_bytes) -> Stream:
     """Reads the given seismic file bytes and returns a Stream object."""
     try:
         stream = read(seismic_file_bytes)
+        return stream
+    except Exception as e:
+        error_message = f"Invalid seismic file. Please refer to the ObsPy 'read' function documentation for supported file types. Error: {str(e)}"
+        RequestHandler.send_error(error_message, status_code=404)
+
+
+def read_path_into_stream(file_path: str) -> Stream:
+    """Reads the given file path and returns a Stream object."""
+    try:
+        stream = read(file_path)
         return stream
     except Exception as e:
         error_message = f"Invalid seismic file. Please refer to the ObsPy 'read' function documentation for supported file types. Error: {str(e)}"
@@ -42,7 +54,7 @@ def validate_stream(stream: Stream) -> None:
     # Check if all traces have no data
     total_npts = [tr.stats.npts for tr in traces]
     if not any(total_npts):
-        error_message = f"The traces have no data!"
+        error_message = "The traces have no data!"
         RequestHandler.send_error(error_message, status_code=404)
 
     # Check for large traces that might cause performance issues
@@ -188,9 +200,7 @@ def detrend_trace(detrend_params: DetrendParams) -> list[dict]:
     try:
         detrend_params_dict = detrend_params.model_dump()
         st_processed = convert_list_to_stream(detrend_params_dict["traces"])
-        st_processed.detrend(
-            type=detrend_params_dict["options"]["detrend_type"],
-        )
+        st_processed.detrend(type=detrend_params_dict["options"]["detrend_type"])
     except Exception as e:
         error_message = f"Cannot detrend the waveforms: {str(e)}"
         RequestHandler.send_error(error_message, status_code=500)

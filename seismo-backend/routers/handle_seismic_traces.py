@@ -1,16 +1,14 @@
 import re
-from fastapi import APIRouter, Form, UploadFile, Request
-import pandas as pd
 from pathlib import Path
-import datetime
-from internals.models import TraceParams, TraceStats
-from src.utils import RequestHandler
-from src.functions import convert_dict_to_trace, convert_trace_to_dict
-import numpy as np
-from obspy.core import Stream, Trace
-from typing import Annotated
+
+import pandas as pd
+from fastapi import APIRouter, Request, UploadFile
+
 from internals.config import Settings
+from internals.models import TraceParams
 from internals.static import SupportedUploadFileTypes
+from src.functions import convert_dict_to_trace, convert_trace_to_dict
+from src.utils import RequestHandler
 
 router = APIRouter()
 
@@ -28,12 +26,12 @@ def validate_seismic_parameters(component: str):
 
 def validate_input_file_params(df: pd.DataFrame, skip_rows: int, column_index: int):
     if df.empty:
-        error_message = f"The provided file is empty or you have skipped too many rows!"
+        error_message = "The provided file is empty or you have skipped too many rows!"
         RequestHandler.send_error(error_message, status_code=404)
 
     if skip_rows >= len(df):
         error_message = (
-            f"The 'skip rows' option is greater or equal to the total rows of the file!"
+            "The 'skip rows' option is greater or equal to the total rows of the file!"
         )
         RequestHandler.send_error(error_message, status_code=404)
 
@@ -138,7 +136,7 @@ async def upload_trace_data_samples(file: UploadFile):
         file_name = Path(file.filename)
         file_suffix = file_name.suffix.lower()
     else:
-        RequestHandler.send_error(f"Cannot upload the file", 500)
+        RequestHandler.send_error("Cannot upload the file", 500)
 
     try:
         if file_suffix == SupportedUploadFileTypes.CSV.value:

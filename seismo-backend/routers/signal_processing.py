@@ -1,19 +1,20 @@
 from fastapi import APIRouter
-from src.functions import (
-    trim_trace,
-    taper_trace,
-    detrend_trace,
-    filter_trace,
-    compute_fourier_spectra,
-    compute_hvsr_spectra,
-)
+
 from internals.models import (
-    TrimParams,
-    TaperParams,
     DetrendParams,
     FilterParams,
     FourierParams,
     HVSRParams,
+    TaperParams,
+    TrimParams,
+)
+from src.functions import (
+    compute_fourier_spectra,
+    compute_hvsr_spectra,
+    detrend_trace,
+    filter_trace,
+    taper_trace,
+    trim_trace,
 )
 
 router = APIRouter()

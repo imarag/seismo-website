@@ -1,19 +1,22 @@
-from fastapi import APIRouter, UploadFile, BackgroundTasks, Query, Response
-from pydantic_extra_types.coordinate import Latitude, Longitude
 from typing import Annotated
+
+from fastapi import APIRouter, BackgroundTasks, Query, Response, UploadFile
+from pydantic_extra_types.coordinate import Latitude, Longitude
+
+from internals.config import Settings
+from internals.models import ArrivalsParams, DownloadFileParams
+from internals.static import SupportedDownloadFileTypes
 from src.functions import (
+    compute_distance_km,
     convert_stream_to_list,
     read_bytes_to_stream,
+    read_path_into_stream,
     validate_stream,
-    compute_distance_km,
     write_json_to_file,
-    write_txt_to_file,
     write_mseed_to_file,
+    write_txt_to_file,
 )
 from src.utils import RequestHandler, delete_file
-from internals.config import Settings
-from internals.models import DownloadFileParams, ArrivalsParams
-from internals.static import SupportedDownloadFileTypes
 
 router = APIRouter()
 
@@ -85,6 +88,20 @@ async def download_test_file():
         error_message = "Test file not found!"
         RequestHandler.send_error(error_message, status_code=404)
     return RequestHandler.send_file_response(file_path, file_name)
+
+
+@router.get("/get-sample-traces")
+async def get_sample_traces():
+    """Get a sample traces list."""
+    file_name = settings.sample_mseed_file_name
+    file_path = settings.resources_folder_path / file_name
+    if not file_path.exists():
+        error_message = "Test file not found!"
+        RequestHandler.send_error(error_message, status_code=404)
+
+    stream = read_path_into_stream(file_path)
+    traces_list = convert_stream_to_list(stream)
+    return traces_list
 
 
 @router.post("/download-file")

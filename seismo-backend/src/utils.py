@@ -1,8 +1,10 @@
 from pathlib import Path
+from typing import NoReturn
+
 from fastapi import HTTPException, Response
 from fastapi.responses import FileResponse
+
 from internals.config import Settings
-from typing import NoReturn
 
 settings = Settings()
 logger = settings.logger

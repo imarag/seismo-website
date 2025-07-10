@@ -1,32 +1,27 @@
+import os
+from collections.abc import AsyncGenerator
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
-from routers import core, signal_processing, handle_seismic_traces
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
-from starlette.exceptions import HTTPException as StarletteHTTPException
 from fastapi.staticfiles import StaticFiles
-import os
-from fastapi.middleware.cors import CORSMiddleware
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
-app = FastAPI()
-
-origins = [
-    "http://localhost.tiangolo.com",
-    "https://localhost.tiangolo.com",
-    "http://localhost",
-    "http://127.0.0.1:8000",
-    "http://localhost:4321",
-]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+from internals.config import Settings
+from routers import core, handle_seismic_traces, signal_processing
 
 
-# Global prefix
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> AsyncGenerator:
+    settings = Settings.from_toml("pyproject.toml")
+    settings.initialize_folders()
+    str(app)  # remove the warning 'app is not used'
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
+
 api_prefix = "/api"
 
 # include the routers
@@ -47,11 +42,8 @@ app.mount("/", StaticFiles(directory="dist", html=True), name="frontend")
 
 # this is for raising httpexception errors
 @app.exception_handler(StarletteHTTPException)
-async def http_exception_handler(request, exc):
-    return JSONResponse(
-        status_code=404,
-        content={"error_message": str(exc.detail)},
-    )
+async def http_exception_handler(request, exc) -> JSONResponse:
+    return JSONResponse(status_code=404, content={"error_message": str(exc.detail)})
 
 
 # this is for errors related to validations of pydantic
@@ -61,7 +53,7 @@ async def validation_exception_handler(request, exc):
     errors = exc.errors()
     return JSONResponse(
         status_code=400,
-        content={"error_message": ", ".join([f'{err["msg"]}' for err in errors])},
+        content={"error_message": ", ".join([f"{err['msg']}" for err in errors])},
     )
 
 
