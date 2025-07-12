@@ -1,19 +1,46 @@
-import re
-from pathlib import Path
 
-import pandas as pd
-from fastapi import APIRouter, Request, UploadFile
+@router.post("/upload-trace-data-samples")
+async def upload_trace_data_samples(file: UploadFile) ->:
+    """Uploads a csv/excel file and returns a list of data samples numbers."""
+    logger.info("Reading the input csv or excel file")
 
-from internals.config import Settings
-from internals.models import TraceParams
-from internals.static import SupportedUploadFileTypes
-from src.functions import convert_dict_to_trace, convert_trace_to_dict
-from src.utils import RequestHandler
+    spooled_file = file.file
+    if file.filename:
+        file_name = Path(file.filename)
+        file_suffix = file_name.suffix.lower()
+    else:
+        RequestHandler.send_error("Cannot upload the file", 500)
 
-router = APIRouter()
+    try:
+        if file_suffix == SupportedUploadFileTypes.CSV.value:
+            df = pd.read_csv(spooled_file)
+        elif file_suffix == SupportedUploadFileTypes.XLSX.value:
+            df = pd.read_excel(spooled_file)
+        else:
+            RequestHandler.send_error("Unsupported file format", 400)
+    except Exception as e:
+        RequestHandler.send_error(f"Cannot read the file: {str(e)}", 500)
 
-settings = Settings()
-logger = settings.logger
+    if df.empty or len(df.columns) < 1:
+        RequestHandler.send_error("The input file is empty or invalid.", 400)
+
+    if df.iloc[:, 0].dropna().empty:
+        RequestHandler.send_error(
+            "No valid numeric data found in the first column.", 400
+        )
+
+    first_column = df.iloc[:, 0]
+    first_column_edited = (
+        pd.to_numeric(first_column, errors="coerce").fillna(0).to_list()
+    )
+
+    return first_column_edited
+
+
+
+
+
+
 
 
 def validate_seismic_parameters(component: str):
@@ -112,53 +139,3 @@ def file_to_pandas_dataframe(upload_file, skip_rows: int) -> pd.DataFrame:
 #         RequestHandler.send_error(f"Cannot read the file: {str(e)}", 500)
 
 #     return trace_params
-
-
-@router.post("/update-trace")
-async def update_trace(request: Request):
-    trace_dict = await request.json()
-    trace_object = convert_dict_to_trace(trace_dict)
-    return convert_trace_to_dict(trace_object)
-
-
-@router.get("/get-default-trace")
-async def get_default_trace():
-    return TraceParams()
-
-
-@router.post("/upload-trace-data-samples")
-async def upload_trace_data_samples(file: UploadFile):
-    """Uploads a csv/excel file and returns a list of data samples numbers."""
-    logger.info("Reading the input csv or excel file")
-
-    spooled_file = file.file
-    if file.filename:
-        file_name = Path(file.filename)
-        file_suffix = file_name.suffix.lower()
-    else:
-        RequestHandler.send_error("Cannot upload the file", 500)
-
-    try:
-        if file_suffix == SupportedUploadFileTypes.CSV.value:
-            df = pd.read_csv(spooled_file)
-        elif file_suffix == SupportedUploadFileTypes.XLSX.value:
-            df = pd.read_excel(spooled_file)
-        else:
-            RequestHandler.send_error("Unsupported file format", 400)
-    except Exception as e:
-        RequestHandler.send_error(f"Cannot read the file: {str(e)}", 500)
-
-    if df.empty or len(df.columns) < 1:
-        RequestHandler.send_error("The input file is empty or invalid.", 400)
-
-    if df.iloc[:, 0].dropna().empty:
-        RequestHandler.send_error(
-            "No valid numeric data found in the first column.", 400
-        )
-
-    first_column = df.iloc[:, 0]
-    first_column_edited = (
-        pd.to_numeric(first_column, errors="coerce").fillna(0).to_list()
-    )
-
-    return first_column_edited

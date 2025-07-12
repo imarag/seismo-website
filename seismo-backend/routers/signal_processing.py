@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from internals.models import (
+from models.signal_processing_models import (
     DetrendParams,
     FilterParams,
     FourierParams,
@@ -8,7 +8,7 @@ from internals.models import (
     TaperParams,
     TrimParams,
 )
-from src.functions import (
+from services.signal_processing import (
     compute_fourier_spectra,
     compute_hvsr_spectra,
     detrend_trace,
@@ -39,7 +39,7 @@ async def detrend(detrend_params: DetrendParams) -> list[dict]:
 
 
 @router.post("/filter")
-async def filter(filter_params: FilterParams) -> list[dict]:
+async def filter(filter_params: FilterParams) -> list[dict]:  # noqa: A001
     """Endpoint to filter seismic data."""
     return filter_trace(filter_params)
 

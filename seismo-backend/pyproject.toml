@@ -1,12 +1,15 @@
 [tool.app_settings]
-log_level = "INFO"                                       # Options: DEBUG, INFO, WARNING, ERROR, CRITICAL
+log_level = "INFO"
 log_format = "%(asctime)s — %(levelname)s — %(message)s"
 log_datefmt = "%Y-%m-%d %H:%M:%S"
 sample_mseed_file_name = "seismic-record.mseed"
 mseed_max_npts_allowed = 500000
+host = "0.0.0.0"
+port = "8000"
 
 [tool.ruff.lint]
 preview = true
+ignore = ["S104", "PLR6201", "S101"]
 select = [
     # pycodestyle (whitespace, formatting, etc.)
     "E",
