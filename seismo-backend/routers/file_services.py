@@ -2,7 +2,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, BackgroundTasks, Query, Response, UploadFile
 
-from config import Settings
+from config import settings
 from core.request_handler import RequestHandler
 from models.common_models import DownloadFileParams
 from models.preprocessing_models import ArrivalsParams
@@ -19,9 +19,6 @@ from utils.transformations import convert_stream_to_list
 from utils.validators import validate_stream
 
 router = APIRouter()
-
-settings = Settings()
-logger = settings.logger
 
 
 @router.get("/save-arrivals")
@@ -46,16 +43,16 @@ def save_arrivals(
 @router.post("/upload-seismic-file")
 async def upload_seismic_file(file: UploadFile) -> list:
     """Uploads a seismic file and returns a list of Obspy Traces as a dictionary."""
-    logger.info("Reading the input seismic file")
+    settings.logger.info("Reading the input seismic file")
     spooled_file = file.file
 
-    logger.info("Converting the data into a stream object")
+    settings.logger.info("Converting the data into a stream object")
     stream = read_bytes_to_stream(spooled_file)
 
-    logger.info("Validating stream object")
+    settings.logger.info("Validating stream object")
     validate_stream(stream)
 
-    logger.info("Converting stream to list of traces dictionaries")
+    settings.logger.info("Converting stream to list of traces dictionaries")
     return convert_stream_to_list(stream)
 
 

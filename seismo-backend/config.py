@@ -62,3 +62,6 @@ class Settings:
         self.temp_folder_path.mkdir(parents=True, exist_ok=True)
         self.resources_folder_path.mkdir(parents=True, exist_ok=True)
         self.logger.info("Application directories initialized successfully.")
+
+
+settings = Settings.from_toml("pyproject.toml")

@@ -1,7 +1,12 @@
 from fastapi import APIRouter, Request
 
 from models.seismic_params_models import TraceParams
-from utils.transformations import convert_dict_to_trace, convert_trace_to_dict
+from utils.helpers import get_sample_mseed
+from utils.transformations import (
+    convert_dict_to_trace,
+    convert_stream_to_list,
+    convert_trace_to_dict,
+)
 
 router = APIRouter()
 
@@ -16,3 +21,9 @@ async def update_trace(request: Request) -> dict:
 @router.get("/get-default-trace")
 async def get_default_trace() -> TraceParams:
     return TraceParams()
+
+
+@router.get("/get-sample-mseed-params")
+async def get_sample_mseed_params() -> list:
+    sample_stream = get_sample_mseed()
+    return convert_stream_to_list(sample_stream)

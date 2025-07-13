@@ -1,13 +1,10 @@
 from fastapi import APIRouter
 from pydantic_extra_types.coordinate import Latitude, Longitude
 
-from config import Settings
+from config import settings
 from services.geodetics import compute_distance_km
 
 router = APIRouter()
-
-settings = Settings()
-logger = settings.logger
 
 
 @router.get("/calculate-distance")
@@ -15,7 +12,7 @@ def calculate_distance(
     lat1: Latitude, lon1: Longitude, lat2: Latitude, lon2: Longitude
 ) -> dict:
     """Calculates the distance and azimuth between two coordinates."""
-    logger.info(
+    settings.logger.info(
         "Calculating distance and azimuth between (%s, %s) and (%s, %s) in km",
         lat1,
         lon1,

@@ -4,12 +4,9 @@ from typing import Any
 
 from obspy.core import Stream, read
 
-from config import Settings
+from config import settings
 from core.request_handler import RequestHandler
 from utils.transformations import convert_list_to_stream
-
-settings = Settings()
-logger = settings.logger
 
 
 def read_bytes_to_stream(seismic_file_bytes: Any) -> Stream:
@@ -60,9 +57,9 @@ def delete_file(file_path: Path) -> None:
     try:
         if file_path.exists():
             file_path.unlink()
-            logger.info("Removed file: %s", file_path)
+            settings.logger.info("Removed file: %s", file_path)
         else:
-            logger.warning("File not found: %s", file_path)
+            settings.logger.warning("File not found: %s", file_path)
     except Exception as e:
         error_message = f"Error deleting file: {e}"
         RequestHandler.send_error(error_message, status_code=500)

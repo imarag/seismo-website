@@ -1,9 +1,7 @@
 from obspy.core import Stream
 
-from config import Settings
+from config import settings
 from core.request_handler import RequestHandler
-
-settings = Settings()
 
 
 def validate_stream(stream: Stream) -> None:

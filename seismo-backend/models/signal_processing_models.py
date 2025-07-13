@@ -19,7 +19,7 @@ class TrimOptions(BaseModel):
 
 
 class TrimParams(BaseModel):
-    traces: list
+    trace_data: dict | list
     options: TrimOptions
 
 
@@ -49,7 +49,7 @@ class TaperOptions(BaseModel):
 
 
 class TaperParams(BaseModel):
-    traces: list
+    trace_data: dict | list
     options: TaperOptions
 
 
@@ -58,7 +58,7 @@ class DetrendOptions(BaseModel):
 
 
 class DetrendParams(BaseModel):
-    traces: list
+    trace_data: dict | list
     options: DetrendOptions
 
 
@@ -82,7 +82,7 @@ class FilterOptions(BaseModel):
 
 
 class FilterParams(BaseModel):
-    traces: list
+    trace_data: dict | list
     options: FilterOptions
 
 
