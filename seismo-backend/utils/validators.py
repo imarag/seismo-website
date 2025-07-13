@@ -22,9 +22,7 @@ def validate_stream(stream: Stream) -> None:
     # Check for large traces that might cause performance issues
     max_npts_allowed = settings.mseed_max_npts_allowed
     for tr in traces:
-        if (
-            tr.stats.npts > max_npts_allowed
-        ):  # Threshold for performance issues (tune as necessary)
+        if tr.stats.npts > max_npts_allowed:  # Threshold for performance issues
             error_message = (
                 "A trace contains an exceptionally large number of sampling "
                 f"points (npts > {max_npts_allowed}). Consider trimming it!"

@@ -13,7 +13,7 @@ def calculate_distance(
 ) -> dict:
     """Calculates the distance and azimuth between two coordinates."""
     settings.logger.info(
-        "Calculating distance and azimuth between (%s, %s) and (%s, %s) in km",
+        "Calculating distance (km) and azimuth between points (%s, %s) and (%s, %s).",
         lat1,
         lon1,
         lat2,

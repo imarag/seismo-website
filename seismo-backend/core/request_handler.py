@@ -15,13 +15,13 @@ class RequestHandler:
         raise HTTPException(detail=error_message, status_code=status_code)
 
     @staticmethod
-    def send_file_response(file_path: Path, file_name: str) -> Response:
+    def send_file_response(file_path: Path) -> Response:
         """Returns file response if the file exists, otherwise raises HTTPException."""
         if not file_path.exists():
             error_message = f"File not found: {file_path}"
             settings.logger.error(error_message)
             raise HTTPException(status_code=404, detail=error_message)
-
+        file_name = file_path.name
         return FileResponse(
             file_path,
             filename=file_name,
