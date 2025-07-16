@@ -8,7 +8,7 @@ from fastapi.testclient import TestClient
 
 from config import settings
 from main import app
-from utils.helpers import get_record_name_from_trace, get_sample_mseed
+from utils.helpers import get_trace_name, read_sample_mseed
 from utils.transformations import convert_dict_to_trace, convert_trace_to_dict
 
 sample_mseed_file_path = settings.sample_mseed_file_path
@@ -16,9 +16,9 @@ client = TestClient(app)
 
 
 def test_get_trace_name() -> None:
-    stream = get_sample_mseed()
+    stream = read_sample_mseed()
     first_trace = stream.traces[0]
-    trace_name = get_record_name_from_trace(first_trace)
+    trace_name = get_trace_name(first_trace)
     assert trace_name == "20150724_095834_KRL1"
 
 
@@ -52,7 +52,7 @@ def test_convert_dict_to_trace() -> None:
 
 
 def test_convert_trace_to_dict() -> None:
-    stream = get_sample_mseed()
+    stream = read_sample_mseed()
     first_trace = stream.traces[0]
     trace_dict = convert_trace_to_dict(first_trace)
     assert len(trace_dict["xdata"]) == 50600  # noqa: PLR2004

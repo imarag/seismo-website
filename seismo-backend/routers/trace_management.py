@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Request
 
 from models.seismic_params_models import TraceParams
-from utils.helpers import get_sample_mseed
+from utils.helpers import read_sample_mseed
 from utils.transformations import (
     convert_dict_to_trace,
     convert_stream_to_list,
@@ -25,5 +25,5 @@ async def get_default_trace_params() -> TraceParams:
 
 @router.get("/get-sample-trace-params")
 async def get_sample_trace_params() -> list:
-    sample_stream = get_sample_mseed()
+    sample_stream = read_sample_mseed()
     return convert_stream_to_list(sample_stream)

@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Annotated
 
 from fastapi import APIRouter, BackgroundTasks, Query, Response, UploadFile
@@ -58,13 +59,17 @@ async def download_file(
 ) -> Response:
     """Generates and downloads a file in the specified format."""
 
-    temp_file_name = f"temp-file.{download_file_params.file_type}"
-    temp_file_path = settings.temp_folder_path / temp_file_name
+    temp_file_name = "temp-file"
+    if download_file_params.file_name:
+        temp_file_name = Path(
+            download_file_params.file_name
+        ).stem  # file name without extension
 
     try:
-        write_to_temp_folder(download_file_params.data, background_tasks)
+        temp_file_path = write_to_temp_folder(
+            temp_file_name, download_file_params.data, background_tasks
+        )
     except Exception as e:
         error_message = f"Cannot download the file: {str(e)}"
         RequestHandler.send_error(error_message, status_code=500)
-
     return RequestHandler.send_file_response(temp_file_path)

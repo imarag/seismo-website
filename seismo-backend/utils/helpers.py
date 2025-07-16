@@ -5,9 +5,8 @@ from obspy.core import Stream, Trace, read
 from config import settings
 
 
-def get_sample_mseed() -> Stream:
-    sample_mseed_file = settings.sample_mseed_file_path
-    return read(sample_mseed_file)
+def read_sample_mseed() -> Stream:
+    return read(settings.sample_mseed_file_path)
 
 
 def format_datetime_to_record_name(date: date, time: time, station: str = "") -> str:
@@ -17,7 +16,7 @@ def format_datetime_to_record_name(date: date, time: time, station: str = "") ->
     return record_name.replace(":", "").replace("-", "")
 
 
-def get_record_name_from_trace(trace: Trace) -> str:
+def get_trace_name(trace: Trace) -> str:
     """Extract metadata from trace and generate record name."""
     starttime = trace.stats["starttime"]
     station = trace.stats["station"]
