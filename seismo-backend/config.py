@@ -57,8 +57,22 @@ class Settings:
             self._logger = app_logger.get_logger()
         return self._logger
 
+    def log_attr_information(self) -> None:
+        self.logger.info("Application directories initialized successfully.")
+        self.logger.info("Settings:")
+        self.logger.info("---------")
+        attrs = [
+            f"{attr}: {getattr(self, attr)}"
+            for attr in dir(Settings)
+            if not attr.startswith("__")
+        ]
+        self.logger.info("\n".join(attrs))
+
     def initialize_app(self) -> None:
         """Create necessary directories and log application initialization."""
         self.temp_folder_path.mkdir(parents=True, exist_ok=True)
         self.resources_folder_path.mkdir(parents=True, exist_ok=True)
-        self.logger.info("Application directories initialized successfully.")
+        # self.log_attr_information()  # noqa: ERA001
+
+
+settings = Settings.from_toml("pyproject.toml")

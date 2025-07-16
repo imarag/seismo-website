@@ -7,15 +7,13 @@ from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from config import Settings
+from config import settings
 from routers import (
     file_services,
     seismic_operations,
     signal_processing,
     trace_management,
 )
-
-settings = Settings.from_toml("pyproject.toml")
 
 
 @asynccontextmanager
@@ -27,6 +25,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator:  # noqa: ARG001
 app = FastAPI(lifespan=lifespan)
 
 api_prefix = "/api"
+
 
 # include the routers
 app.include_router(

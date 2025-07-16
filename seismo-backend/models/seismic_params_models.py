@@ -1,10 +1,9 @@
-import datetime
 import uuid
+from datetime import date, datetime, time
 
-import numpy as np
-from obspy.core import Trace
-from pydantic import BaseModel, Field, computed_field, model_validator
-from typing_extensions import Self
+from pydantic import BaseModel, Field, computed_field
+
+from utils.helpers import format_datetime_to_record_name
 
 
 class TraceStats(BaseModel):
@@ -16,12 +15,9 @@ class TraceStats(BaseModel):
     location: str = ""
     station: str = ""
     channel: str = ""
-    starttime: datetime.datetime = Field(
-        default_factory=lambda: datetime.datetime(1970, 1, 1)
-    )
-    endtime: datetime.datetime = Field(
-        default_factory=lambda: datetime.datetime(1970, 1, 1)
-    )
+    component: str = " "
+    starttime: datetime = Field(default_factory=lambda: datetime(1970, 1, 1, 0, 0, 0))
+    endtime: datetime = Field(default_factory=lambda: datetime(1970, 1, 1, 0, 0, 0))
 
     @computed_field
     def duration(self) -> float:
@@ -29,32 +25,21 @@ class TraceStats(BaseModel):
         return self.npts / self.sampling_rate
 
     @computed_field
-    def component(self) -> str:
-        """Extract the component from the channel (last char of channel attribute)"""
-        if self.channel:
-            return self.channel[-1]
-        return "C"
-
-    @computed_field
-    def start_date(self) -> datetime.date:
+    def start_date(self) -> date:
         """Extract the date from the starttime"""
         return self.starttime.date()
 
     @computed_field
-    def start_time(self) -> datetime.time:
+    def start_time(self) -> time:
         """Extract the time from the starttime"""
         return self.starttime.time()
 
     @computed_field
     def record_name(self) -> str:
-        """Extract the record name from starttime"""
-        start_date_iso = self.start_date.isoformat()
-        start_time_iso = self.start_time.isoformat()
-        if self.station:
-            rec_name = f"{start_date_iso}_{start_time_iso}_{self.station}"
-        else:
-            rec_name = f"{start_date_iso}_{start_time_iso}"
-        return rec_name.replace(":", "").replace("-", "")
+        """Extract the record name from starttime and station"""
+        return format_datetime_to_record_name(
+            self.starttime.date(), self.starttime.time(), self.station
+        )
 
 
 class TraceParams(BaseModel):
@@ -62,11 +47,3 @@ class TraceParams(BaseModel):
     ydata: list[float] = Field(default_factory=list)
     xdata: list[float] = Field(default_factory=list)
     stats: TraceStats = Field(default_factory=TraceStats)
-
-    @model_validator(mode="after")
-    def verify_trace(self) -> Self:
-        try:
-            Trace(data=np.array(self.ydata), header=self.stats.model_dump())
-        except Exception as e:
-            raise ValueError(str(e)) from e
-        return self

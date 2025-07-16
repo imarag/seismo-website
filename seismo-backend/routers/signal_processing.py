@@ -1,56 +1,96 @@
 from fastapi import APIRouter
 
+from core.request_handler import RequestHandler
 from models.signal_processing_models import (
     DetrendParams,
     FilterParams,
-    FourierParams,
-    HVSRParams,
     TaperParams,
     TrimParams,
 )
-from services.signal_processing import (
-    compute_fourier_spectra,
-    compute_hvsr_spectra,
-    detrend_trace,
-    filter_trace,
-    taper_trace,
-    trim_trace,
-)
+from services.signal_processing.detrend import detrend_stream, detrend_trace
+from services.signal_processing.filter import filter_stream, filter_trace
+from services.signal_processing.taper import taper_stream, taper_trace
+from services.signal_processing.trim import trim_stream, trim_trace
+from utils.transformations import convert_dict_to_trace, convert_list_to_stream
 
 router = APIRouter()
 
 
-@router.post("/trim")
-async def trim(trim_params: TrimParams) -> list[dict]:
-    """Endpoint to trim seismic data."""
-    return trim_trace(trim_params)
-
-
 @router.post("/taper")
-async def taper(taper_params: TaperParams) -> list[dict]:
+async def taper(taper_params: TaperParams) -> dict | list[dict]:
     """Endpoint to taper seismic data."""
-    return taper_trace(taper_params)
+    options = taper_params.options.model_dump()
+    trace_data = taper_params.trace_data
+    if isinstance(trace_data, dict):
+        trace = convert_dict_to_trace(trace_data)
+        processed_data = taper_trace(trace, options)
+    elif isinstance(trace_data, list):
+        stream = convert_list_to_stream(trace_data)
+        processed_data = taper_stream(stream, options)
+    else:
+        error_message = (
+            "The input trace data must be a dictionary or a list of dictionary objects."
+        )
+        return RequestHandler.send_error(error_message, status_code=500)
+
+    return processed_data
+
+
+@router.post("/trim")
+async def trim(trim_params: TrimParams) -> dict | list[dict]:
+    """Endpoint to trim seismic data."""
+    options = trim_params.options.model_dump()
+    trace_data = trim_params.trace_data
+    if isinstance(trace_data, dict):
+        trace = convert_dict_to_trace(trace_data)
+        processed_data = trim_trace(trace, options)
+    elif isinstance(trace_data, list):
+        stream = convert_list_to_stream(trace_data)
+        processed_data = trim_stream(stream, options)
+    else:
+        error_message = (
+            "The input trace data must be a dictionary or a list of dictionary objects."
+        )
+        return RequestHandler.send_error(error_message, status_code=500)
+
+    return processed_data
 
 
 @router.post("/detrend")
-async def detrend(detrend_params: DetrendParams) -> list[dict]:
+async def detrend(detrend_params: DetrendParams) -> dict | list[dict]:
     """Endpoint to detrend seismic data."""
-    return detrend_trace(detrend_params)
+    options = detrend_params.options.model_dump()
+    trace_data = detrend_params.trace_data
+    if isinstance(trace_data, dict):
+        trace = convert_dict_to_trace(trace_data)
+        processed_data = detrend_trace(trace, options)
+    elif isinstance(trace_data, list):
+        stream = convert_list_to_stream(trace_data)
+        processed_data = detrend_stream(stream, options)
+    else:
+        error_message = (
+            "The input trace data must be a dictionary or a list of dictionary objects."
+        )
+        return RequestHandler.send_error(error_message, status_code=500)
+
+    return processed_data
 
 
 @router.post("/filter")
-async def filter(filter_params: FilterParams) -> list[dict]:  # noqa: A001
+async def filter(filter_params: FilterParams) -> dict | list[dict]:  # noqa: A001
     """Endpoint to filter seismic data."""
-    return filter_trace(filter_params)
+    options = filter_params.options.model_dump()
+    trace_data = filter_params.trace_data
+    if isinstance(trace_data, dict):
+        trace = convert_dict_to_trace(trace_data)
+        processed_data = filter_trace(trace, options)
+    elif isinstance(trace_data, list):
+        stream = convert_list_to_stream(trace_data)
+        processed_data = filter_stream(stream, options)
+    else:
+        error_message = (
+            "The input trace data must be a dictionary or a list of dictionary objects."
+        )
+        return RequestHandler.send_error(error_message, status_code=500)
 
-
-@router.post("/compute-fourier")
-async def compute_fourier(fourier_params: FourierParams) -> list[dict]:
-    """Endpoint to compute the fourier spectra."""
-    return compute_fourier_spectra(fourier_params)
-
-
-@router.post("/compute-hvsr")
-async def compute_hvsr(hvsr_params: HVSRParams) -> list[float]:
-    """Endpoint to compute the hvsr."""
-    return compute_hvsr_spectra(hvsr_params)
+    return processed_data

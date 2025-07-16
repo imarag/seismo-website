@@ -1,21 +1,23 @@
-from obspy.core import Trace
+from datetime import date, time
 
-from config import Settings
+from obspy.core import Stream, Trace, read
 
-settings = Settings()
+from config import settings
+
+
+def read_sample_mseed() -> Stream:
+    return read(settings.sample_mseed_file_path)
+
+
+def format_datetime_to_record_name(date: date, time: time, station: str = "") -> str:
+    """Convert date and time objects plus optional station into a record name string."""
+    station_suffix = f"_{station.strip()}" if station.strip() else ""
+    record_name = f"{date.isoformat()}_{time.isoformat()}{station_suffix}"
+    return record_name.replace(":", "").replace("-", "")
 
 
 def get_trace_name(trace: Trace) -> str:
-    """Generate a record name from the trace object"""
+    """Extract metadata from trace and generate record name."""
     starttime = trace.stats["starttime"]
     station = trace.stats["station"]
-
-    if (
-        not station
-    ):  # add the code "STATION" in case of empty station code, for consistency
-        station = "STATION"
-
-    rec_name = (
-        starttime.date.isoformat() + "_" + starttime.time.isoformat() + "_" + station
-    )
-    return rec_name.replace(":", "").replace("-", "")
+    return format_datetime_to_record_name(starttime.date, starttime.time, station)

@@ -12,15 +12,12 @@ class TomlParser:
             error_message = f"Missing TOML configuration file at: {self.file_path}"
             raise FileNotFoundError(error_message)
 
-        self.data = self.parse_file()
+        self.config_data = self.parse_file()
 
     def parse_file(self) -> dict:
         try:
             with self.file_path.open("rb") as fr:
                 return tomllib.load(fr)
-        except FileNotFoundError as exc:
-            error_message = f"TOML file not found: {self.file_path}"
-            raise FileNotFoundError(error_message) from exc
         except tomllib.TOMLDecodeError as exc:
             error_message = f"Failed to parse TOML file {self.file_path}: {exc}"
             raise ValueError(error_message) from exc
@@ -36,7 +33,7 @@ class TomlParser:
         Returns None if the section is not found.
         """
         path_segments = section_path.split(".")
-        value = self.data
+        value = self.config_data
         for seg in path_segments:
             if isinstance(value, dict) and seg in value:
                 value = value[seg]
