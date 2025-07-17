@@ -34,7 +34,7 @@ export const navLinks = [
     { label: "Tools", href: "/tools" },
     { label: "Donate", href: "/donation" },
     { label: "Contact", href: "/contact" },
-    { label: "Playground", href: "/playground" },
+    { label: "Live Map", href: "/live-map" },
 ]
 
 export const filterOptions = [

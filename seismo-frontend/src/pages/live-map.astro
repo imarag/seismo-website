@@ -1,0 +1,15 @@
+---
+import Section from "../components/utils/Section.astro";
+import Container from "../components/utils/Container.astro";
+import MainLayout from "../layouts/MainLayout.astro";
+import LiveMapPage from "../components/pages/LiveMapPage.astro";
+const pageTitle = "Live Earthquake Map";
+---
+
+<MainLayout pageTitle={pageTitle}>
+    <Section>
+        <Container>
+            <LiveMapPage />
+        </Container>
+    </Section>
+</MainLayout>

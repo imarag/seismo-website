@@ -1,0 +1,17 @@
+---
+import Img from "../ui/Img.astro";
+import PageTitle from "../utils/PageTitle.astro";
+import PageSubTitle from "../utils/PageSubTitle.astro";
+import EyeBrowText from "../utils/EyeBrowText.astro";
+import LiveMap from "../tools/LiveMap";
+---
+
+<div class="text-center">
+    <EyeBrowText text="seismology for everyone" class="mx-auto" />
+</div>
+<PageTitle class="text-center" text={"Interactive Earthquake Map"} />
+<PageSubTitle
+    class="text-center"
+    text={"Explore live earthquakes throughout the world"}
+/>
+<LiveMap client:only />
