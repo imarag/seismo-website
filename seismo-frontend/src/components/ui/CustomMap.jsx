@@ -93,8 +93,9 @@ export default function CustomMap({
   showCoordsOnHover = true,
   showLayersControl = true,
 }) {
+
   return (
-    <div className="h-96 z-40">
+    <div className="h-96 " style={{ "zIndex": "1" }}>
       <MapContainer center={center} zoom={zoom} style={{ height: "100%", width: "100%" }}>
         <TileLayer
           attribution="&copy; OpenStreetMap contributors"

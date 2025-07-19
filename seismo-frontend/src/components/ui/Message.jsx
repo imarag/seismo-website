@@ -9,7 +9,7 @@ export default function Message({
   type = "success", // 'success' | 'error'
   autoDismiss = 5000, // false or duration in ms
   showCloseButton = true, // true | false
-  onClose = () => {},
+  onClose = () => { },
   position = "bottom-right", // e.g. 'top-right', 'bottom-left', 'center'
 }) {
   useEffect(() => {
@@ -64,77 +64,3 @@ export default function Message({
     </div>
   );
 }
-
-// ************
-
-// <Message
-//   message="An error occurred"
-//   type="error"
-//   position="center"
-//   autoDismiss={false}
-//   showCloseButton={true}
-//   onClose={() => setShow(false)}
-// />;
-
-// export default function Message({
-//   message = null,
-//   type = "error",
-//   position = "bottom-right",
-//   autoDismiss = true,
-//   showCloseButton = true,
-//   onClose = null,
-// }) {
-//   const baseClass =
-//     "flex flex-row items-center gap-4 transition-all duration-250vlg:w-92 p-8 z-40";
-//   const positionMapping = {
-//     "bottom-right": `bottom-4 end-4 ${
-//       message ? "translate-y-0" : "-translate-y-80 lg:translate-y-80"
-//     }`,
-//   };
-//   const positionClass = `fixed ${positionMapping[position]}`;
-//   const textClass = `text-sm text-start font-semibold ${
-//     type === "error" ? "text-error/80" : "text-success/80"
-//   }`;
-//   const styleClass = `border border-neutral-500/20 rounded-lg bg-base-300 shadow-2xl opacity-100`;
-//   const globalClass = `${baseClass} ${positionClass} ${textClass} ${styleClass}`;
-
-//   return (
-//     <div
-//       className={globalClass}
-//       role="alert"
-//       aria-live="assertive"
-//       aria-atomic="true"
-//     >
-//       {showCloseButton && (
-//         <button
-//           className="btn btn-ghost btn-sm absolute end-1 top-1"
-//           onClick={() => {
-//             setError([]);
-//             setSuccess(null);
-//             if (successTimeoutRef.current) {
-//               clearTimeout(successTimeoutRef.current);
-//               successTimeoutRef.current = null;
-//             }
-//           }}
-//           aria-label="Close message"
-//         >
-//           <IoMdClose />
-//         </button>
-//       )}
-//       <div className="flex-grow-0 flex-shrink-0">
-//         {type === "error" ? (
-//           <MdError className="size-8 text-error" />
-//         ) : (
-//           <FaCheckCircle className="size-8 text-success" />
-//         )}
-//       </div>
-//       <div className="flex-grow">
-//         {type === "error" ? (
-//           error.map((msg, i) => <p key={i}>{msg}</p>)
-//         ) : (
-//           <p>{success}</p>
-//         )}
-//       </div>
-//     </div>
-//   );
-// }
