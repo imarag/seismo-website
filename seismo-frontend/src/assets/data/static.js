@@ -349,3 +349,19 @@ export const contactFormElements = [
         required: true,
     }
 ]
+
+
+export const magnitudeOptions = [
+    { label: "All Earthquakes", value: "all" },
+    { label: "Magnitude 1.0+", value: "1.0" },
+    { label: "Magnitude 2.5+", value: "2.5" },
+    { label: "Magnitude 4.5+", value: "4.5" },
+    { label: "Significant Earthquakes", value: "significant" },
+];
+
+export const timeRangeOptions = [
+    { label: "Past Hour", value: "hour" },
+    { label: "Past Day", value: "day" },
+    { label: "Past 7 Days", value: "week" },
+    { label: "Past 30 Days", value: "month" },
+];

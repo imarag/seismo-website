@@ -11,7 +11,6 @@ import {
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-
 // Fix Leaflet default icon issue (required for correct marker icons)
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -23,15 +22,24 @@ L.Icon.Default.mergeOptions({
     "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
 });
 
+
+const customMarkerIcon = L.icon({
+  iconUrl: "/public/red-dot.png",
+  iconSize: [55, 81],                      // size of the icon
+  iconAnchor: [12, 41],                    // point of the icon which will correspond to marker's location
+  popupAnchor: [0, -41],                   // point from which the popup should open relative to the iconAnchor
+  shadowSize: [41, 41],
+  shadowAnchor: [12, 41],
+});
+
+
 // Component to render an array of markers inside a LayerGroup
 function MarkersComponent({ markers }) {
   return (
     <LayerGroup>
       {markers.map((marker, idx) => (
-        <Marker key={idx} position={marker.position}>
-          <div className="max-h-52 overflow-scroll bg-amber-300">
-            {marker.popupText && <Popup>{marker.popupText}</Popup>}
-          </div>
+        <Marker key={idx} position={marker.position} icon={customMarkerIcon}>
+          {marker.popupText && <Popup>{marker.popupText}</Popup>}
         </Marker>
       ))}
     </LayerGroup>
@@ -93,8 +101,9 @@ export default function CustomMap({
   showCoordsOnHover = true,
   showLayersControl = true,
 }) {
-
   return (
+    // Using a dynamic `key` in GeoJson forces React to fully remount the GeoJSON layer
+    // This ensures Leaflet re-renders the updated data, which it doesn't do on its own
     <div className="h-96 " style={{ "zIndex": "1" }}>
       <MapContainer center={center} zoom={zoom} style={{ height: "100%", width: "100%" }}>
         <TileLayer
@@ -116,12 +125,13 @@ export default function CustomMap({
           </LayersControl>
         ) : (
           <>
-            {layerGroups.map(({ type, data, onEachFeature }, i) =>
-              type === "markers" ? (
+            {layerGroups.map(({ type, data, onEachFeature }, i) => {
+              return type === "markers" ? (
                 <MarkersComponent key={i} markers={data} />
               ) : type === "geojson" ? (
-                <GeoJSON key={i} data={data} onEachFeature={onEachFeature} />
+                <GeoJSON key={data?.metadata?.generated || Date.now()} data={data} onEachFeature={onEachFeature} />
               ) : null
+            }
             )}
           </>
         )}

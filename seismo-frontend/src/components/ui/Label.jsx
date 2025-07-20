@@ -1,5 +1,5 @@
 export default function Label({ className = "", children, ...attrs }) {
-  const baseClass = `label label-text px-0 py-1 ${className}`;
+  const baseClass = `label label-text block px-0 py-1 ${className}`;
 
   return (
     <label className={baseClass} {...attrs}>

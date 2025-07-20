@@ -2,7 +2,7 @@ import { IoMdClose } from "react-icons/io";
 import { MdError } from "react-icons/md";
 import { FaCheckCircle } from "react-icons/fa";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 export default function Message({
   message,
@@ -12,11 +12,17 @@ export default function Message({
   onClose = () => { },
   position = "bottom-right", // e.g. 'top-right', 'bottom-left', 'center'
 }) {
+  const intervalRef = useRef(null);
   useEffect(() => {
     if (autoDismiss) {
-      const timer = setTimeout(onClose, autoDismiss);
-      return () => clearTimeout(timer);
+      intervalRef.current = setTimeout(() => {
+        onClose();
+      }, autoDismiss);
     }
+
+    return () => {
+      clearTimeout(intervalRef.current);
+    };
   }, [autoDismiss, onClose]);
 
   const getPositionClasses = () => {
