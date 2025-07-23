@@ -3,7 +3,7 @@ import { MdArrowDropDown } from "react-icons/md";
 import Button from "./Button";
 import Symbol from "./Symbol";
 
-export default function MenuDropdown({ label, icon, position = "left", children }) {
+export default function MenuDropdown({ label, iconLabel, position = "left", children }) {
     const [showMenu, setShowMenu] = useState(false)
     const baseClass = "border border-white/20 rounded-md px-4 py-8 absolute top-full w-50  bg-base-300 z-50"
     const positionClass = {
@@ -15,8 +15,8 @@ export default function MenuDropdown({ label, icon, position = "left", children 
         <div className="relative z-50">
             <Button style="ghost" size="small" onClick={() => setShowMenu(!showMenu)} className="flex items-center gap-2">
                 <span>{label}</span>
-                <span>{<Symbol IconComponent={icon} />}</span>
-                <span>{<Symbol IconComponent={MdArrowDropDown} />}</span>
+                <span>{<Symbol iconLabel={iconLabel} />}</span>
+                <span>{<Symbol iconLabel={"arrow-dropdown"} />}</span>
             </Button>
             {
                 showMenu && (

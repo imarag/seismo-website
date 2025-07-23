@@ -94,13 +94,59 @@ function MouseTracker() {
  * - showCoordsOnHover: boolean, whether to display mouse coordinates (default true)
  * - showLayersControl: boolean, whether to show the LayersControl UI (default true)
  */
+
+import { useMap } from "react-leaflet";
+import { useEffect } from "react";
+
+function FlyToFeature({ flyToFirst, flyToLast, layerGroups }) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (!layerGroups || layerGroups.length === 0) return;
+
+    // Try to get last point from markers or geojson
+    let lastLatLng = null;
+    for (const group of layerGroups) {
+      if (group.type === "markers" && group.data.length > 0) {
+        let flyToMarker = null;
+        if (flyToFirst) {
+          flyToMarker = group.data[0]
+        }
+
+        if (flyToLast) {
+          flyToMarker = group.data[group.data.length - 1];
+        }
+        lastLatLng = flyToMarker.position;
+      } else if (group.type === "geojson" && group.data.features?.length > 0) {
+        // Last feature coordinates (assuming Point geometry)
+        const lastFeature = group.data.features[group.data.features.length - 1];
+        if (lastFeature.geometry.type === "Point") {
+          // GeoJSON coords are [lng, lat]
+          lastLatLng = [lastFeature.geometry.coordinates[1], lastFeature.geometry.coordinates[0]];
+        }
+      }
+    }
+
+    if (lastLatLng) {
+      map.flyTo(lastLatLng, 8); // 8 = zoom level, adjust as needed
+    }
+  }, [layerGroups, map]);
+
+  return null;
+}
+
+// TODO: fix the flytofirst or flytolast
 export default function CustomMap({
   center = [51.505, -0.09],
   zoom = 13,
   layerGroups = [],
   showCoordsOnHover = true,
   showLayersControl = true,
+  flyToFirst = true,
+  flyToLast = false,
 }) {
+
+
   return (
     // Using a dynamic `key` in GeoJson forces React to fully remount the GeoJSON layer
     // This ensures Leaflet re-renders the updated data, which it doesn't do on its own
@@ -135,6 +181,9 @@ export default function CustomMap({
             )}
           </>
         )}
+
+        {/* Fly to last feature */}
+        {flyToLast || flyToFirst && <FlyToFeature flyToFirst={flyToFirst} flyToLast={flyToLast} layerGroups={layerGroups} />}
 
         {/* Mouse position display */}
         {showCoordsOnHover && <MouseTracker />}

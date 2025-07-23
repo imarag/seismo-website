@@ -13,7 +13,7 @@ export const fastapiEndpoints = {
     "CALCULATE-DISTANCE": `${serverUrl}/core/calculate-distance`,
     "TRIANGULATE-STATIONS": `${serverUrl}/core/triangulate-stations`,
     "DOWNLOAD-TEST-FILE": `${serverUrl}/core/download-test-file`,
-    "DOWNLOAD-FILE": `${serverUrl}/core/download-file`,
+    "DOWNLOAD-FILE": `${serverUrl}/file-services/download-file`,
     "SAVE-ARRIVALS": `${serverUrl}/core/save-arrivals`,
     "GET-SAMPLE-TRACES": `${serverUrl}/core/get-sample-traces`,
     "UPLOAD-TRACE-DATA-SAMPLES": `${serverUrl}/handle-seismic-traces/upload-trace-data-samples`,

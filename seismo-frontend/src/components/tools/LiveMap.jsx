@@ -6,102 +6,19 @@ import MenuDropdown from "../ui/MenuDropdown";
 import Section from "../utils/Section";
 import Collapse from "../ui/Collapse";
 import ToolTip from "../ui/ToolTip";
+import Symbol from "../ui/Symbol";
 import Table from "../ui/Table";
-import { RxLapTimer } from "react-icons/rx";
-import { IoMdSettings } from "react-icons/io";
+import { downloadURI } from "../../assets/utils/utility-functions";
+import { fastapiEndpoints } from "../../assets/data/static";
 import Label from "../ui/Label";
 import Select from "../ui/Select";
 import { magnitudeOptions } from "../../assets/data/static";
 import { timeRangeOptions } from "../../assets/data/static";
+import Button from "../ui/Button";
 
-function MapOptions({
-    selectedMagnitude,
-    setSelectedMagnitude,
-    selectedTimeRange,
-    setSelectedTimeRange,
-}) {
-    return (
-        <>
-            <Label>Time range options</Label>
-            <Select
-                optionsList={timeRangeOptions}
-                value={selectedTimeRange}
-                size="medium"
-                onChange={(e) => setSelectedTimeRange(e.target.value)}
-            />
-            <Label>Magnitude options</Label>
-            <Select
-                optionsList={magnitudeOptions}
-                value={selectedMagnitude}
-                size="medium"
-                onChange={(e) => setSelectedMagnitude(e.target.value)}
-            />
-        </>
-    );
-}
+let STORAGE_KEY = "earthquake_data";
 
-function MapTopMenu({
-    earthquakeData,
-    selectedMagnitude,
-    setSelectedMagnitude,
-    selectedTimeRange,
-    setSelectedTimeRange,
-    remainSeconds,
-}) {
-    return (
-        <div className="flex flex-col md:flex-row items-center md:items-center justify-between gap-4">
-            <p className="text-center md:text-start">
-                {earthquakeData?.features?.length > 0
-                    ? `There are ${earthquakeData.features.length} recorded earthquakes for the selected options, globally.`
-                    : "No earthquakes found!"}
-            </p>
-            <div className="ms-auto">
-                <MenuDropdown icon={IoMdSettings} position="center">
-                    <MapOptions
-                        selectedMagnitude={selectedMagnitude}
-                        setSelectedMagnitude={setSelectedMagnitude}
-                        selectedTimeRange={selectedTimeRange}
-                        setSelectedTimeRange={setSelectedTimeRange}
-                    />
-                </MenuDropdown>
-            </div>
-            <div className="flex items-center gap-2">
-                <span>{Math.floor(remainSeconds)}</span>
-                <ToolTip toolTipText="Seconds until the map updates again!">
-                    <RxLapTimer />
-                </ToolTip>
-            </div>
-        </div>
-    );
-}
-
-function MapBottomInfo({ extractFeatureInfo, earthquakeData }) {
-    const features = earthquakeData?.features || [];
-    const tableRecords = features.map((feature) => extractFeatureInfo(feature));
-    return (
-        <Section>
-            <Collapse label="Show/Hide earthquake information">
-                {tableRecords.length > 0 ? (
-                    <Table records={tableRecords} />
-                ) : (
-                    <p>No properties found in the GeoJSON data!</p>
-                )}
-            </Collapse>
-            <p>
-                The earthquake data displayed on this map is retrieved from the official
-                USGS (United States Geological Survey) Earthquake Feed. You can explore
-                seismic activity from various time ranges, including the past hour, day,
-                week, or month. The data is updated automatically every minute using the
-                USGS GeoJSON feeds, which are refreshed approximately once per minute to
-                reflect the latest detected earthquakes around the world.
-            </p>
-        </Section>
-    );
-}
-
-const MemoisedMapBottomInfo = memo(MapBottomInfo);
-
-function EarthquakeMap({ extractFeatureInfo, earthquakeData }) {
+function EarthquakeMap({ earthquakeData, extractFeatureInfo }) {
     function onEachFeature(feature, layer) {
         const featureInfo = extractFeatureInfo(feature);
         const listItems = Object.entries(featureInfo)
@@ -115,6 +32,7 @@ function EarthquakeMap({ extractFeatureInfo, earthquakeData }) {
 
         layer.bindPopup(popupContent);
     }
+
     const layerGroups = [
         {
             name: "Latest earthquakes",
@@ -131,55 +49,188 @@ function EarthquakeMap({ extractFeatureInfo, earthquakeData }) {
             layerGroups={earthquakeData ? layerGroups : []}
             showLayersControl={false}
             showCoordsOnHover={true}
+            flyToFirst={true}
         />
     );
 }
 
-const MemoisedEarthquakeMap = memo(EarthquakeMap);
+function EarthquakeList({ earthquakeData, extractFeatureInfo, setShowMessage }) {
+    const features = earthquakeData?.features;
+    const tableRecords = features.map((feature) => extractFeatureInfo(feature));
+
+    async function downloadData() {
+        const { resData: blobData, error } = await apiRequest({
+            url: fastapiEndpoints["DOWNLOAD-FILE"],
+            method: "post",
+            requestData: {
+                data: earthquakeData,
+                file_name: "earthquakes",
+            },
+            setShowMessage: setShowMessage,
+            successMessage: "Data has been succesfully downloaded!",
+            errorMessage: "Cannot download the data",
+            responseType: "blob",
+        });
+        if (error) return;
+
+        const url = window.URL.createObjectURL(blobData);
+        downloadURI(url, "earthquakes.json");
+    }
+
+    return (
+        <Section>
+            <p className="text-center md:text-start text-sm">
+                {earthquakeData?.features.length > 0
+                    ? `There are ${earthquakeData.features.length} recorded earthquakes.`
+                    : "No earthquakes found!"}
+            </p>
+            <Collapse label="Show/Hide earthquakes">
+                <div className="flex items-center justify-end">
+                    <Button
+                        className="flex items-center gap-2"
+                        style="ghost"
+                        size="small"
+                        onClick={downloadData}
+                    >
+                        <Symbol iconLabel="download-file" />
+                        <span>download GeoJSON data (.json)</span>
+                    </Button>
+                </div>
+                {tableRecords.length > 0 ? (
+                    <Table records={tableRecords} />
+                ) : (
+                    <p>No properties found in the GeoJSON data!</p>
+                )}
+            </Collapse>
+            <p>
+                The earthquake data displayed on this map is streamed live from the SeismicPortal
+                WebSocket service, which provides near real-time updates of seismic events globally.
+                This live feed allows you to monitor earthquakes as they happen, ensuring you always
+                see the most current seismic activity without needing to refresh the page.
+            </p>
+        </Section>
+    );
+}
+
+function MapTopMenu() {
+    return <div></div>;
+}
 
 export default function LiveMap() {
     const [showMessage, setShowMessage] = useState({ message: "", type: "" });
-    const [earthquakeData, setEarthquakeData] = useState(null);
-    const [selectedTimeRange, setSelectedTimeRange] = useState("hour");
-    const [selectedMagnitude, setSelectedMagnitude] = useState("all");
-    const [remainSeconds, setRemainSeconds] = useState(0);
-    const intervalRef = useRef(null);
-
-    const fetchLatestEarthquakeData = useCallback(async () => {
-        const { resData } = await apiRequest({
-            url: `https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/${selectedMagnitude}_${selectedTimeRange}.geojson`,
-            method: "get",
-            setShowMessage,
-            successMessage: "Live earthquake data has been downloaded successfully.",
-            errorMessage: "Cannot get the latest earthquakes.",
-        });
-        setEarthquakeData(resData);
-    }, [selectedMagnitude, selectedTimeRange]);
+    const [earthquakeData, setEarthquakeData] = useState({ type: "FeatureCollection", features: [] });
+    const wsRef = useRef(null);
 
     useEffect(() => {
-        function handleStart() {
-            const now = new Date();
-            const utcSeconds = now.getUTCSeconds();
-            if (utcSeconds < 30) {
-                setRemainSeconds(30 - utcSeconds);
-            } else if (utcSeconds === 30) {
-                fetchLatestEarthquakeData();
-                setRemainSeconds(0);
-            } else {
-                setRemainSeconds(90 - utcSeconds);
+        const savedData = localStorage.getItem(STORAGE_KEY);
+        if (savedData) {
+            try {
+                setEarthquakeData(JSON.parse(savedData));
+            } catch {
+                console.log("removinggggggs");
+                localStorage.removeItem(STORAGE_KEY);
             }
         }
-
-        intervalRef.current = setInterval(handleStart, 1000);
-        return () => clearInterval(intervalRef.current);
-    }, [fetchLatestEarthquakeData]);
+    }, []);
 
     useEffect(() => {
-        fetchLatestEarthquakeData();
-    }, [fetchLatestEarthquakeData]);
+        if (earthquakeData?.features.length > 0) {
+            console.log(`setting local storage earthquake data: ${earthquakeData.features.length}`);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(earthquakeData));
+        }
+    }, [earthquakeData]);
+
+    useEffect(() => {
+        const ws = new WebSocket("wss://www.seismicportal.eu/standing_order/websocket");
+        wsRef.current = ws;
+
+        ws.onopen = () => {
+            console.log("WebSocket connected");
+            setShowMessage({ type: "success", message: "Real-time earthquake updates are now live!" });
+        };
+
+        ws.onmessage = (event) => {
+            try {
+                const { action: eventAction, data: eventData } = JSON.parse(event.data);
+                setEarthquakeData((prevData) => {
+                    let updatedData = { ...prevData };
+                    let userMessage = null;
+
+                    if (eventAction === "create") {
+                        updatedData = {
+                            ...prevData,
+                            features: [eventData, ...prevData.features].slice(0, 100),
+                        };
+                        userMessage = {
+                            type: "success",
+                            message: `New earthquake detected! Magnitude ${eventData.properties.mag} at ${eventData.properties.flynn_region}.`,
+                        };
+                    } else if (eventAction === "update") {
+                        const updatedFeatures = prevData.features.map((feature) =>
+                            feature.id === eventData.id ? eventData : feature
+                        );
+                        updatedData = {
+                            ...prevData,
+                            features: updatedFeatures,
+                        };
+                        userMessage = {
+                            type: "info",
+                            message: `Earthquake updated: Magnitude ${eventData.properties.mag} at ${eventData.properties.flynn_region}.`,
+                        };
+                    } else if (eventAction === "delete") {
+                        const filteredFeatures = prevData.features.filter(
+                            (feature) => feature.id !== eventData.id
+                        );
+                        updatedData = {
+                            ...prevData,
+                            features: filteredFeatures,
+                        };
+                        userMessage = {
+                            type: "warning",
+                            message: `Earthquake removed: ID ${eventData.id}.`,
+                        };
+                    }
+
+                    setShowMessage(userMessage);
+                    return updatedData;
+                });
+            } catch (err) {
+                console.error("Failed to parse WebSocket message", err);
+                setShowMessage({
+                    type: "error",
+                    message: "Oops! There was a problem receiving live earthquake updates. Please try refreshing the page.",
+                });
+            }
+        };
+
+        ws.onerror = (err) => {
+            console.error("WebSocket error:", err);
+            setShowMessage({
+                type: "error",
+                message: "Connection problem: live earthquake updates are temporarily unavailable.",
+            });
+        };
+
+        ws.onclose = () => {
+            console.warn("WebSocket closed");
+            setShowMessage({
+                type: "warning",
+                message: "Live earthquake updates connection was lost. Reloading...",
+            });
+
+            setTimeout(() => {
+                window.location.reload();
+            }, 3000); // optional delay to show the message before reload
+        };
+
+
+        return () => {
+            ws.close();
+        };
+    }, []);
 
     const handleClose = useCallback(() => {
-        setShowMessage(false);
+        setShowMessage({ message: "", type: "" });
     }, []);
 
     const extractFeatureInfo = useCallback((feature) => {
@@ -187,8 +238,8 @@ export default function LiveMap() {
         return {
             Magnitude: properties?.mag || "N/A",
             Date: properties?.time ? new Date(properties.time).toISOString() : "N/A",
-            Location: properties?.place.trim() || "N/A",
-            "Magnitude Type": properties?.magType.trim().toUpperCase() || "N/A",
+            Location: (properties?.flynn_region || "N/A").trim(),
+            "Magnitude Type": (properties?.magtype || "N/A").trim().toUpperCase(),
         };
     }, []);
 
@@ -201,21 +252,12 @@ export default function LiveMap() {
                     onClose={handleClose}
                 />
             )}
-            <MapTopMenu
+            <MapTopMenu />
+            <EarthquakeMap earthquakeData={earthquakeData} extractFeatureInfo={extractFeatureInfo} />
+            <EarthquakeList
                 earthquakeData={earthquakeData}
-                selectedMagnitude={selectedMagnitude}
-                selectedTimeRange={selectedTimeRange}
-                setSelectedMagnitude={setSelectedMagnitude}
-                setSelectedTimeRange={setSelectedTimeRange}
-                remainSeconds={remainSeconds}
-            />
-            <MemoisedEarthquakeMap
                 extractFeatureInfo={extractFeatureInfo}
-                earthquakeData={earthquakeData}
-            />
-            <MemoisedMapBottomInfo
-                extractFeatureInfo={extractFeatureInfo}
-                earthquakeData={earthquakeData}
+                setShowMessage={setShowMessage}
             />
         </Section>
     );

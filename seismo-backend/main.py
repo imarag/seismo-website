@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.exceptions import HTTPException as StarletteHTTPException
@@ -47,6 +48,17 @@ app.include_router(
     tags=["Trace Management"],
 )
 app.mount("/", StaticFiles(directory="dist", html=True), name="frontend")
+
+
+origins = ["http://0.0.0.0:8000", "http://127.0.0.1:8000", "http://localhost:4321"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 # this is for raising httpexception errors

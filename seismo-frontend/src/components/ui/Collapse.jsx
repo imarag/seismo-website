@@ -15,7 +15,7 @@ export default function Collapse({ label = "Collapse title", children }) {
                 {showContent ? <IoIosArrowUp /> : <IoIosArrowDown />}
             </button>
 
-            <div className={`${showContent ? "max-h-60" : "h-0 max-h-0"} px-4   overflow-auto transition-all duration-150`}>
+            <div className={`${showContent ? "max-h-60" : "h-0 max-h-0"} px-4 space-y-2 overflow-auto transition-all duration-150`}>
                 {children}
             </div>
         </div>
