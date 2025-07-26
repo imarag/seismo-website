@@ -4,6 +4,7 @@ import { IoMdClose } from "react-icons/io";
 import { RxLapTimer } from "react-icons/rx";
 import { MdArrowDropDown } from "react-icons/md";
 import { IoIosSettings } from "react-icons/io";
+import { TbMapSearch } from "react-icons/tb";
 
 export const iconsMapping = {
     "download-file": MdFileDownload,
@@ -11,5 +12,6 @@ export const iconsMapping = {
     "close-menu": IoMdClose,
     "timer": RxLapTimer,
     "arrow-dropdown": MdArrowDropDown,
-    "settings": IoIosSettings
+    "settings": IoIosSettings,
+    "map-search": TbMapSearch
 };

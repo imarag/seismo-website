@@ -351,17 +351,10 @@ export const contactFormElements = [
 ]
 
 
-export const magnitudeOptions = [
-    { label: "All Earthquakes", value: "all" },
-    { label: "Magnitude 1.0+", value: "1.0" },
-    { label: "Magnitude 2.5+", value: "2.5" },
-    { label: "Magnitude 4.5+", value: "4.5" },
-    { label: "Significant Earthquakes", value: "significant" },
-];
-
-export const timeRangeOptions = [
-    { label: "Past Hour", value: "hour" },
-    { label: "Past Day", value: "day" },
-    { label: "Past 7 Days", value: "week" },
-    { label: "Past 30 Days", value: "month" },
+export const liveMapSelectedViewOptions = [
+    { label: "Latest Earthquake", value: "latest-1" },
+    { label: "Latest 3 Earthquakes", value: "latest-3" },
+    { label: "Latest 5 Earthquakes", value: "latest-5" },
+    { label: "Latest 10 Earthquakes", value: "latest-10" },
+    { label: "Latest 100 Earthquakes", value: "latest-100" },
 ];
